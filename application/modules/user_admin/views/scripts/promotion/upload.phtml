@@ -1,0 +1,49 @@
+    <div class="box-header">
+        <i class="ion ion-clipboard"></i>
+        <h3 class="box-title">UP LOAD CHƯƠNG TRÌNH KHUYẾN MÃI</h3>
+    </div><!-- /.box-header -->
+    <form  name="data_frm" id="data_frm"   method="post" target="hiddenIF"   enctype="multipart/form-data">
+        <iframe  name="hiddenIF" style="display: none" scrolling="auto"></iframe>
+            <div class="form-group">
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label" style="color: red">File(.xls,.xlsx): </label>
+                <div class="input-group">
+                    <input type="file" name="file_upload" id="file_upload" />
+                </div>
+            </div>
+        <div class="box-footer">
+            <a  href="/uploads/Demo_Add_Ctkm.xlsx" id="file_mau" class="btn btn-danger"><i class="fa fa-download"> File mẫu</i></a>
+            <button type="submit" id="save" onclick="savess();"  class="btn btn-primary"><i class="fa fa-upload"> Upload</i></button>
+            <button style="display: none" type="button" id="wt" class="btn btn-primary"><i class="fa fa-spinner"> Đang xử lý</i></button>
+        </div>
+    </form>
+<script>
+    function showss(){
+        $('#save').show();
+        $('#wt').hide();
+    }
+    function hidess(){
+        $('#save').hide();
+        $('#wt').show();
+    }
+    function savess(){
+        $('#data_frm').submit();
+        hidess();
+    }
+    function notification (msg,id){
+        showss();
+        alert(msg);
+        $('.tb').html('');
+        $('#'+id).focus(); 
+        var msg_add = '<i class="fa fa-times-circle-o"> '+msg+' </i>';
+        $('#'+id+"_tb").html(msg_add);   
+//        location.reload();
+    }
+    function completes(msg){
+        showss();
+        $('.tb').html('');
+        var msg_add = '<i class="fa fa-check" aria-hidden="true"> </i>'+msg+'';
+        $('#complete').html(msg_add);
+        alert(msg);
+        window.location.reload(true);
+    }
+</script>

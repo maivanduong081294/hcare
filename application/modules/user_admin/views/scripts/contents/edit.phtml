@@ -1,0 +1,112 @@
+<?
+    $mail_config = $this->mail_config;
+    $contact_email = $this->contact_email;
+?>
+<table border="0" cellpadding="20" cellspacing="10" width="100%">
+  <tbody><tr>
+    <td style="padding: 5px;" align="center" valign="middle">
+    <table class="borderMain" border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tbody><tr valign="top">
+        <td><div class="header icon-48-article">Quản lý nội dung</div></td>
+        <td align="right"><div class="toolbar">
+            <table class="toolbar"><tbody><tr>
+                <td id="toolbar-new" class="button">
+                    <a class="toolbar" id="save" href="#">
+                    <span title="Save" class="icon-32-save"></span>
+                    Lưu</a>
+                </td>
+        </tr></tbody></table>
+        </div></td>
+      </tr>
+</tbody></table>
+<table class="borderMain spaceTop5px" border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tbody><tr>
+    <td>
+        
+<form name="frmPage" id="frmPage" method="post" enctype="multipart/form-data" action="/admin/user/contents/save?id=<?php echo $this->data["contentid"]; ?>">
+<input type="hidden" name="id" value="<?php echo $this->data["contentid"]; ?>" />
+	<table class="adminerror spaceTop10px" border="0" cellpadding="0" cellspacing="0" width="100%">
+	    </table>
+    <br>
+    <fieldset class="adminform"><legend>Thông tin chi tiết</legend>
+    <table class="spaceTop5px" border="0" width="100%">
+        <tbody>
+            
+        <tr id="serverTr">
+            <td align="right" width="110">Title<span style="color:#ff0000;">(*)</span></td>
+            <td style="padding-left: 5px;">
+                <input name="title" id="title" style="width: 200px;" value="<?php echo $this->data["title"]; ?>" type="text" />
+                </td>
+        </tr>
+        <tr id="serverTr">
+            <td align="right" width="110">Title_SEO<span style="color:#ff0000;">(*)</span></td>
+            <td style="padding-left: 5px;">
+                <input name="title_seo" id="title_seo" style="width: 200px;" value="<?php echo $this->data["title_seo"]; ?>" type="text" />
+                </td>
+        </tr>
+        <tr id="loginTr">
+            <td align="right" width="110" valign="top">
+                Nội dung chi tiết</td>
+            <td style="padding-left: 5px;">
+                <input type="hidden" name="fullcontent" id="fullcontent" value="<?php echo $this->data['fullcontent'];?>" />
+                <script type="text/javascript">
+                var sBasePath = "/fckeditor/" ;
+                var oFCKeditor_email_content = new FCKeditor( 'myFCKeditor_fullcontent' ) ;
+                oFCKeditor_email_content.BasePath	= sBasePath ;
+                oFCKeditor_email_content.Height	= "500" ;
+                oFCKeditor_email_content.Width	= "95%" ;
+                oFCKeditor_email_content.ToolbarSet = '' ;
+                oFCKeditor_email_content.Value	= document.getElementById("fullcontent").value ;
+                </script>
+                <div id="myFCKeditor_fullcontent"></div>
+                <script type="text/javascript">
+                var div = document.getElementById("myFCKeditor_fullcontent");
+                div.innerHTML = oFCKeditor_email_content.CreateHtml();
+                </script>
+            </td>
+        </tr>
+        <tr style="display:none;">
+             <td class="hligh2" width="20%"><label for="description">Thumb</label></td>
+             <td class="hligh2">
+                     <input type="file" name="thumb1" id="thumb1" >
+                    <input type="hidden" name="old_thumb1" id="old_thumb1" value="<?php echo $this->old_thumb1; ?>">
+                    <br>
+                    <div id="picholder"><?echo $this->img_thumb1;?>  <input type="checkbox" name="ck_delete_thumb1" id="ck_delete_thumb1" value="del"> Delete picture</div>
+              </td>
+        </tr>
+    </tbody></table>        
+	</fieldset>
+
+</form>
+        
+    </td>
+  </tr>
+</tbody></table>
+</td>
+  </tr>
+</tbody></table>
+<script type="text/javascript">
+function get_editor_data()
+{
+	document.getElementById('fullcontent').value = FCKeditorAPI.GetInstance('myFCKeditor_fullcontent').GetHTML();
+	return true;
+}
+function CheckForm()
+{
+	return true;
+}
+$().ready(function(){
+
+    $('#save').click(function(){
+        get_editor_data();
+        filter_array = new Array('fullcontent');
+        valid = new Array('required');
+        result = fsubmit('frmPage', filter_array, valid);
+        if(result){
+            
+            $('#frmPage').submit();
+        }
+    });
+});
+
+</script>

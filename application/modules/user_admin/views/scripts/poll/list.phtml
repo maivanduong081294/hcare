@@ -1,0 +1,162 @@
+<?php
+    $list_poll=$this->list_poll;
+?>
+<table border="0" cellpadding="20" cellspacing="10" width="100%">
+  <tbody><tr>
+    <td style="padding: 5px;" align="center" valign="middle">
+    <table cellspacing="0" cellpadding="0" border="0" width="100%" class="borderMain">
+    <tbody><tr valign="top">
+        <td><table cellspacing="0" cellpadding="0" border="0" width="100%">
+                <tbody><tr>
+                    <td><div class="header icon-48-categories"><a href="/admin/user/poll/list/">Danh sách Bình chọn</a></div></td>
+                           <td align="right"><div class="toolbar">
+                            <table class="toolbar">
+                                <tbody>
+                                    <tr>
+                                        <td id="toolbar-new" class="button"><a class="toolbar" href="/admin/user/poll/edit/"> <span title="New" class="icon-32-new"></span>Thêm mới</a></td>
+                                        <td id="toolbar-new" class="button"><a class="toolbar" href="#" id="delete"> <span title="Delete" class="icon-32-delete"></span>Xóa</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div></td>
+                                    </tr>
+            </tbody></table></td>
+    </tr>
+</tbody>
+</table>
+<BR>
+<div style="width:100%; text-align: right"><?echo $this->paging_template ?></div>
+<BR>
+<table cellpadding="0" border="0" width="100%" class="borderMain spaceTop5px">
+    <form method="post" name="frmPage" id="frmPage">
+        <input type="hidden" name="updateid" id="updateid" value="" />
+        <tbody>
+            <tr>
+                <td width="35" class="bgTitleadmin1"><input type="checkbox" onclick="checkme()" name="checkall"></td>
+                <td width="50" class="bgTitleadmin1">#</td>
+                <td class="bgTitleadmin2">Tên Bình chọn</td>
+                <td class="bgTitleadmin2">Hiển thị</td>
+                <td class="bgTitleadmin2">Vị trí</td>
+                <td class="bgTitleadmin2">Ngày tạo</td>
+                <td class="bgTitleadmin2" width="100">Tùy chọn</td>
+            </tr>
+            <?php
+            if(count($list_poll)>0 && is_array($list_poll))
+            {
+                $no=1;
+                foreach($list_poll as $item)
+                {
+                    if($no%2 == 0)
+                        $bgcolor = '#f2f4f5';
+                   else
+                       $bgcolor = '#ffffff';
+                   ($item['enabled'] == 0) ? $enabled = "<span class='red'>No</span>" : $enabled = "<span class='green'>Yes</span>";
+                ?>
+                    <tr bgcolor="<?echo $bgcolor; ?>">
+                        <td class="bgContentadmin1"><input type="checkbox" value="<?php echo $item['banners_id'];?>" name="check[]"></td>
+                        <td class="bgContentadmin1"><? echo $no++;?></td>
+                        <td class="bgContentadmin2"><?echo $item['title']?></td>
+                        <td class="bgContentadmin2"><a class="update" href="<?=Globals::getBaseUrl();?>admin/user/poll/status?itemid=<?=$item['item_id'];?>&act=enabled"><?=$enabled;?></a></td>
+                        <td class="bgContentadmin1" style="text-align:left;">
+                           <?php echo $this->formSelect("ordering".$item['item_id'], $item['ordering'], array('rel'=>$item['item_id'],"class"=>"ordering"), $this->orderlist); ?>
+                        </td>                        
+                        <td class="bgContentadmin2" style="width:120px;"><?echo date('d-m-Y H:i:s',strtotime($item['datetime']));?></td>
+                        <td class="bgContentadmin1">
+                            <a href="<?=Globals::getBaseUrl();?>admin/user/poll/edit/?poll_id=<?php echo $item['item_id'];?>"><img border="0" title="Edit" src="/user_admin/templates/images/edit.png"></a>
+                            <a href="#" rel="<?php echo $item['item_id'];?>" class="sdelete"><img border="0" alt="Delete" src="/user_admin/templates/images/trash.png"></a>
+                        </td>
+                    </tr>
+                <?php
+                }
+            }
+            ?>
+    </form>
+</table>
+</td>
+  </tr>
+</tbody></table>
+<div id="ddelete" style="display:none;"></div>
+<div id="dmyorder" style="display:none"></div>
+<script type="text/javascript">
+function CheckForm()
+{
+	return true;
+}
+
+function checkme()
+{
+    isCheck=document.frmPage.checkall.checked;
+    elts=document.frmPage.elements['check[]'];
+	if(!elts.length)
+	{
+            elts.checked = isCheck;
+	}
+    else
+    {
+       for(i=0;i<elts.length;i++)
+          elts[i].checked=isCheck;
+    }
+}
+
+function isCheckDetail(){
+    result = 0;
+    $('input:checkbox').each(function(){
+        if ($(this).attr('checked') == true)
+            result = 1;
+    });
+    return result;
+}
+
+$().ready(function(){
+    $('#delete').click(function(){
+        result = isCheckDetail();
+        if (result == 0) //ischeck
+        {
+            alert('Vui lòng chọn item để xóa');
+            return false;
+        }
+        result = confirm("Bạn có chắc chắn muốn xóa?");
+        if (result)
+        {
+            $('#frmPage').attr('action','/admin/user/poll/delete/');
+            $('#frmPage').submit();
+        }
+    });
+
+    $('.sdelete').click(function(){
+        id = $(this).attr('rel');
+        if (id != '')
+            result = confirm('Bạn chắc chắn muốn xóa?');
+            if (result)
+            $('#ddelete').load('<?=Globals::getBaseUrl();?>admin/user/poll/delete?rand='+Math.random()+'&item_id='+id, function (){
+                alert('Xóa thành công.');
+                window.location.reload(true);
+            });
+    });
+
+    $('.ordering').change(function(){
+        $('#updateid').val($(this).attr('rel'));
+        alert($(this).attr('rel'));
+        $('#frmPage').attr('action','<?=Globals::getBaseUrl();?>admin/user/poll/update-ordering/');
+        $('#frmPage').submit();
+    });
+
+});
+</script>
+<script>
+$().ready(function(){
+    $('#option_banner').change(function(){
+        $('#frmChange').submit();
+    });
+    //chagne newest or highlight
+    $('.update').click(function(e){
+        e.preventDefault();
+        var __url = $(this).attr('href')+"&"+Math.random();
+        $('#ddelete').load(__url, function(__data){
+	    //alert(__data);
+            window.location.reload();
+        });
+    });
+    
+});
+</script>

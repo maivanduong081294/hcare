@@ -1,0 +1,321 @@
+<link href="/backend/dist/css/fixtable.css" rel="stylesheet" type="text/css"/>
+<style>
+    @media (min-width: 1400px) {
+        .sheight{height: 400px !important;}
+    }
+    @media only screen and (max-width: 600px) {
+        .mwidth{
+            width: 50% !important;
+        }
+    } 
+    .form-group{
+        padding-left: 0px;
+    }
+    
+</style>
+
+<div class="box box-primary">
+    <div class="box-header">
+        <div class="col-md-9">
+            <h4 class="box-title"><span class="hidden-xs">Doanh số bán chi nhánh </span><?php echo $this->storename[$this->storeid] ?></h4>
+        </div>
+    </div><!-- /.box-header -->
+        <form role="form" id="frm" method="get"  class="frmReport">
+    <input type="hidden" name="cated_name" id="cated_name" value="<?php echo $this->cated_name ?>" />
+    <div class="col-md-2 col-xs-6">
+        <div class="form-group input-group-sm ">
+            <select  name="productsid" id="productsid" class="form-control">
+
+                <?php
+                foreach ($this->list_hnammobile as $key => $value) {
+                    $sl = '';
+                    if ($this->productsid == $key) {
+                        $sl = 'selected = selected';
+                    }
+                    ?>
+                    <option data="<?php echo $value ?>" <?php echo $sl ?> value="<?php echo $key ?>"> <?php echo $value ?></option>
+                <?php } ?>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-2 col-xs-6">
+        <div class="form-group  input-group-sm">
+            <select name="is_apple" id="is_apple" class="form-control">
+                <option value="">Apple/Khác</option>
+                <?php
+                foreach ($this->group_hnam as $key => $value) {
+                    $sl = '';
+                    if ($this->is_apple != null) {
+                        if ($this->is_apple == $key) {
+                            $sl = 'selected = selected';
+                        }
+                    }
+                    ?>
+                    <option data="<?php echo $value ?>" <?php echo $sl ?> value="<?php echo $key ?>"> <?php echo $value ?></option>
+                <?php } ?>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-2 col-xs-6">
+        <div class="form-group input-group-sm">
+            <select name="is_type" id="is_type" class="form-control">
+                <option value="">Loại</option>
+                <?php
+                foreach ($this->type_old as $key => $value) {
+                    $sl = '';
+                    if ($this->is_type != null) {
+                        if ($this->is_type == $key) {
+                            $sl = 'selected = selected';
+                        }
+                    }
+                    ?>
+                    <option data="<?php echo $value ?>" <?php echo $sl ?> value="<?php echo $key ?>"> <?php echo $value ?></option>
+                <?php } ?>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-2 col-xs-6">
+        <div class="form-group input-group-sm">
+            <select name="flag" id="flag" class="form-control">
+                <option value=""> Công ty/Hnam</option>
+                <?php
+                foreach ($this->list_flag as $key2 => $value2) {
+                    $sl2 = '';
+                    if ($this->flag == $key2) {
+                        $sl2 = 'selected = selected';
+                    }
+                    ?>
+                    <option data="<?php echo $value2 ?>" <?php echo $sl2 ?> value="<?php echo $key2 ?>"> <?php echo $value2 ?></option>
+                <?php } ?>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-2 col-xs-6 hidden">
+        <div class="form-group input-group-sm">
+            <select style="width: 100%" name="cated_id"  id="cated_id" class="selects form-control">
+                <option value="0"> Sản phẩm</option>
+                <?php
+                foreach ($this->menu as $items) {
+                    $sl = '';
+                    if ($this->itemid == $items["itemid"]) {
+                        $sl = 'selected = selected';
+                    }
+                    ?>
+                    <option data="<?php echo $items["title"] ?>" <?php echo $sl ?> value="<?php echo $items["itemid"] ?>"> <?php echo $items["title"] ?></option>
+                <?php } ?>
+
+            </select>
+        </div>
+    </div>
+    <div class="col-md-2 col-xs-6">
+        <div class="form-group input-group-sm ">
+            <select  name="type_ghn" id="type_ghn" class="form-control">
+                <option value="">Loại giao hàng</option>
+                <?php
+                foreach ($this->list_type_ghn as $key => $value) {
+                    $sl = '';
+                    if ($this->type_ghn == $key) {
+                        $sl = 'selected = selected';
+                    }
+                    ?>
+                    <option <?php echo $sl ?> value="<?php echo $key ?>"> <?php echo $value ?></option>
+                <?php } ?>
+            </select>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class=" col-md-4 col-xs-12">
+        <div class="input-group-sm">
+            <?php
+            $start_end = 'Date range picker';
+            if ($this->start_end != null) {
+                $start_end = $this->start_end;
+            }
+            ?>
+            <span class="input-group-btn">
+                <button class="btn btn-default pull-left" id="daterange-btn">
+                    <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                    <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                    <i class="fa fa-caret-down"></i>
+                </button>
+            </span>
+            <input type="hidden" name="iexport" id="iexport" value="<?php echo $this->iexport ?>" />
+            <span class="input-group-btn">
+                <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> </i><span class="hidden-xs"> Xem</span></button>
+            </span>
+        </div>
+    </div>
+</form>
+    <div class="clearfix"></div>
+    <div class="box-body">
+    <table class="table table-fixedheader table-bordered table-striped">
+        <thead>
+            <tr>
+                <th  width="50%" height="30">Loại Sản phẩm</th>
+                <th width="25%" height="30"> Doanh thu</th>
+                <th width="25%" height="30"> Số lượng</th>
+            </tr>
+        </thead>
+        <tbody class="sheight" style="height: 300px">
+            <?php
+            foreach ($this->menu as &$list1) {
+                $cateid1 = $list1["itemid"];
+                $__s1 = 0;
+                foreach ($this->list_vote as $items1) {
+                    $storeid1 = $items1["userid"];
+                    $__total1 = (int) $this->sums[$cateid1];
+                    $__s1 +=$__total1;
+                }
+                if (intval($__s1) == 0) {
+                    $list1["display"] = "display:none";
+                } else {
+                    $list1["display"] = "";
+                }
+            }
+            $no = 1;
+            foreach ($this->menu as $list) {
+                $no++;
+                $cateid = $list["itemid"];
+                if ($no % 2 == 0)
+//                            $bgcolor = '#DFDFDF';
+                    $bgcolor = '#F6F6EE';
+                else
+                    $bgcolor = '#ffffff';
+                ?>
+                <tr style="<?php echo $list["display"]; ?>">
+                    <td  width="50%"><a id="hrf_detail<?php echo $list["itemid"]; ?>" onclick="detailsales(<?php echo $list["itemid"]; ?>);return false;" href=""><?php echo $list["title"]; ?></a></td>
+                    <?php
+                    $__s = 0;
+                    $__c = 0;
+                    $__total = (int) $this->sums[$cateid] / 1000;
+                    $__count = (int) $this->count[$cateid];
+                    ?>
+                        
+                        <td width="25%">
+                            <?php echo number_format($__total); ?>
+                        </td>
+                        <td width="25%"><?php echo number_format($__count); ?></td>
+                </tr>
+                <?php
+                $ret_total += $__total;
+                $ret_count += $__count;
+                ?>
+                <?php }?>
+        </tbody> 
+        <tbody style="height: 30px">
+        <tr class="red">
+            <td width="50%"  height="30">Tổng</td>
+            <td  width="25%" height="30">
+                <?php echo number_format($ret_total) ?>
+            </td>
+            <td width="25%"><?php echo number_format($ret_count) ?></td>
+        </tr>
+        </tbody>
+    </table>
+    <b style="font-size: 14px;color: red;font-weight: bold">Tổng doanh số bán được: <?php echo number_format($__tong_products); ?>(Đơn vị x 1.000đ)</b>
+    </div>
+</div>
+</div>
+<script>
+    function export_by_cate() {
+        var catedid = $("#cated_id option:selected").val();
+        var productsid = $("#productsid option:selected").val();
+        var flag = $("#flag option:selected").val();
+        var is_apple = $("#is_apple option:selected").val();
+        var is_type = $("#is_type option:selected").val();
+        var storeid = $("#storeid option:selected").val();
+        var type_ghn = $("#type_ghn option:selected").val();
+        var start_end = $("#start_end").val();
+        var url = "/admin/user/export/exportbycated?cated_id=" + catedid + "&productsid=" + productsid + "&flag=" + flag + "&start_end=" + start_end + "&is_apple=" + is_apple + "&is_type=" + is_type + "&storeid=" + storeid+"&type_ghn="+type_ghn;
+        var cated_id = $('#cated_id').val();
+        if (cated_id == 0) {
+            alert('Vui lòng chọn loại để export');
+            return false;
+        } else {
+            window.open(url, '_blank');
+        }
+        
+    }
+    function export_all(id){
+        $('#iexport').val(id);
+        $("#frm").submit();
+    }
+
+    function views_report() {
+        $('#iexport').val(0);
+        $("#frm").attr("action", "/admin/user/report/sales");
+        $("#frm").submit();
+    }
+    function detailsales(catedid) {
+        var productsid = $("#productsid option:selected").val();
+        var flag = $("#flag option:selected").val();
+        var is_apple = $("#is_apple option:selected").val();
+        var is_type = $("#is_type option:selected").val();
+        var start_end = $("#start_end").val();
+        var type_ghn = $("#type_ghn option:selected").val();
+        $("#hrf_detail" + catedid).attr("href", "/admin/user/report/sales?cated_id=" + catedid + "&productsid=" + productsid + "&flag=" + flag + "&start_end=" + start_end+ "&is_apple=" + is_apple+ "&is_type=" + is_type+ "&storeid=167&type_ghn="+type_ghn );
+        var href = $("#hrf_detail" + catedid).attr('href');
+        window.location = href;
+    }
+    function hrf() {
+        var productsid = $("#productsid option:selected").val();
+        var flag = $("#flag option:selected").val();
+        var start_end = $("#start_end").val();
+        $("#hrf_detail").attr("href", "/admin/user/target/money-monthly?productsid=" + productsid + "&flag=" + flag + "&start_end=" + start_end);
+    }
+    $().ready(function () {
+        $('#cated_id').change(function (e) {
+            e.preventDefault();
+            var cated_name = $("#cated_id option:selected").text();
+            $('#cated_name').val(cated_name);
+        });
+
+
+        $('#productsid').change(function () {
+            var productsid = $('#productsid option:selected').val();
+            $('#cated_id').html('');
+            $('#cated_id').html('<option value="0"> Tất cả</option>');
+            var ajaxLink = '/admin/user/ajax/get-menu';
+            $.ajax({
+                method: 'get',
+                cache: false,
+                url: ajaxLink,
+                data: {productsid: productsid},
+                dataType: 'json',
+                success: function (resp) {
+                    console.log(resp);
+                    $.each(resp, function (i) {
+                        html_cated_id = '<option  value="' + resp[i].itemid + '">' + resp[i].title + '</option>';
+                        $('#cated_id').append(html_cated_id);
+                    });
+
+                }
+            });
+        });
+
+
+        $('#export').click(function (e) {
+            e.preventDefault();
+            var cated_id = $('#cated_id').val();
+            if (cated_id == 0) {
+                alert('Vui lòng chọn loại để export');
+                return false;
+            } else {
+                $("#frm").attr("action", "/admin/user/reportf/export-sales");
+            }
+            $("#frm").submit();
+        });
+        $('#export_lite').click(function (e) {
+            e.preventDefault();
+            var cated_id = $('#cated_id').val();
+            if (cated_id == 0) {
+                alert('Vui lòng chọn loại để export');
+                return false;
+            } else {
+                $("#frm").attr("action", "/admin/user/reportf/export-sales-lite");
+            }
+            $("#frm").submit();
+        });
+    });
+</script>

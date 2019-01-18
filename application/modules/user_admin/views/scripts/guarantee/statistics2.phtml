@@ -1,0 +1,235 @@
+<div class="box-header panel-default">
+    <div class="col-md-12">
+        <h3 class="box-title">(KẾ TOÁN)THỐNG KÊ BHSC</h3>
+    </div>
+    <div class="col-md-12">
+        <form id="frm">
+            <div class="form-group col-md-3">
+                <select class="form-control selects" name="ncc" id="ncc">
+                    <option value="0">Tất cả</option>
+                    <?php foreach ($this->slist_warranty as $val) { ?>
+                        <option value="<?php echo $val["id"] ?>"><?php echo $val["name"] ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="form-group col-md-3">
+                <select class="form-control selects" name="storeid" id="storeid">
+                    <option value="0">Tất cả chi nhánh</option>
+                    <?php foreach ($this->list_store as $val) { 
+                        $sl='';
+                        if($this->storeid == $val["userid"]){
+                            $sl ='selected="selected"';
+                        }
+                        ?>
+                        <option <?php echo $sl; ?> value="<?php echo $val["userid"] ?>"><?php echo $val["storename"] ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="form-group col-md-3">
+                <div class="input-group input-group-sm">
+                    <?php
+                    $start_end = 'Date range picker';
+                    if ($this->start_end != null) {
+                        $start_end = $this->start_end;
+                    }
+                    ?>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default pull-right" id="daterange-btn">
+                            <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                            <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                            <i class="fa fa-caret-down"></i>
+                        </button>
+                    </span>
+
+                </div>
+            </div>
+            <div class="clearfix" ></div>
+            <div class="col-md-12 col-xs-12">
+                <button type="submit" class="btn btn-info right"><i class="fa fa-search"> <span class="hidden-xs">Xem </span></i></button>
+            </div>
+
+        </form>
+
+    </div>
+
+    <div class="clear"></div>
+
+</div><!-- /.box-header -->
+<div class="box-body">
+    <div class="table-responsive">
+        <table id="f_tables" class="table table-condensed table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th width="10">Số phiếu</th>
+                    <th class="hidden-xs">Chi nhánh</th>
+                    <th>Máy</th>
+                    <th class="hidden-xs">Đvsc</th>
+                    <th>Hnam hỗ trợ</th>
+                    <th class="hidden-xs">Khuyến mãi</th>
+                    <th>Báo khách</th>
+                    <th width="170">Chi Tạm ứng</th>
+                    <th width="170">Tiền đã thu</th>
+                    <th>Tên ĐVSC</th>
+                    <th>Ngày chi</th>
+                    <th>Ngày nhận</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $stt = 0;
+                foreach ($this->list as $items) {
+                    if($this->bgd ==1 && $this->storeid >0 && $this->storeid != $items["storeid"]){
+                        continue;
+                    }
+                    
+                    $skey2="BHVT2016HNAM";
+                    $tokenss = md5($skey2 . $items["id"]);
+                    $tiendathu = 0;
+                    $tiendathu = $items["money_thu"];
+//                    if ((int) $items["money_dvsc"] == 0 && (int) $items["money_hnam"] == 0 && (int) $items["money"] == 0) {
+//                        continue;
+//                    }
+                    $flag = '';
+                    if ($items["flag"] == 1) {
+                        $flag = 'Công ty';
+                    }
+                    if ($items["flag"] == 2) {
+                        $flag = 'Hnam';
+                    }
+                    $dukienchi = $items["money_dvsc"] - $items["money_hnam"] - $items["money"] - $items["money_voucher"];
+                    $ngay_chi = '';
+                    if ($items["ngay_chi"] != "0000-00-00 00:00:00" && $items["ngay_chi"] != NULL) {
+                        $ngay_chi = date('d/m/Y', strtotime($items["ngay_chi"]));
+                    }
+                    $ngay_nhan = '';
+                    if ($items["ngay_nhan"] != "0000-00-00 00:00:00" && $items["ngay_nhan"] != NULL) {
+                        $ngay_nhan = date('d/m/Y', strtotime($items["ngay_nhan"]));
+                    }
+                    $token_thu = md5("THU" . $items["id"]);
+                    $token_chi = md5("CHI" . $items["id"]);
+                    if($this->storename[$items["storeid"]]==NULL){
+                        $this->storename[$items["storeid"]] ='KBH';
+                    }
+                    ?>
+
+                    <tr style="height: 50px">
+                        <td><a href="/admin/user/guarantee/detail?id=<?php echo $items["id"] ?>&token=<?php echo $tokenss; ?>" target="_blank">#<?php echo $items["id"]; ?></a></td>
+                        <td><?php echo $this->storename[$items["storeid"]]; ?></td>
+                        <td><?php echo $items["item_name"]; ?></td>
+                        <td><?php echo number_format($items["money_dvsc"]); ?></td>
+                        <td><?php echo number_format($items["money_hnam"]); ?></td>
+                        <td><?php echo number_format($items["money_voucher"]); ?></td>
+                        <td><?php echo number_format($items["money"]); ?></td>
+                        <td>
+                            <?php if ((int) $items["advance_payment"] == 0) { ?>
+                                <div class="input-group input-group-sm">
+                                    <input type="text" id="advance_payment<?php echo $items["id"] ?>" name="advance_payment<?php echo $items["id"] ?>" placeholder="Chi tạm ứng vào đây..." class="form-control pricing" >
+                                    <span class="input-group-btn">
+                                        <button  onclick="save_chi('<?php echo $items["id"] ?>', '<?php echo $token_chi ?>');" class="addsim btn btn-info btn-flat" type="button"><i class="fa fa-save"></i></button>
+                                    </span>
+                                </div>
+                            <?php
+                            } else {
+                                echo number_format($items["advance_payment"]);
+                            }
+                            ?></td> 
+                        <td>
+                            <?php if ((int) $tiendathu == 0) { ?>
+                                <div class="input-group input-group-sm">
+                                    <input type="text" id="money_thu<?php echo $items["id"] ?>" name="money_thu<?php echo $items["id"] ?>" placeholder="Nhập tiền đã thu vào đây..." class="form-control pricing" >
+                                    <span class="input-group-btn">
+                                        <button  onclick="save_thu('<?php echo $items["id"] ?>', '<?php echo $token_thu ?>');" class="addsim btn btn-info btn-flat" type="button"><i class="fa fa-save"></i></button>
+                                    </span>
+                                </div>
+                            <?php
+                            } else {
+                                echo number_format($tiendathu);
+                            }
+                            ?></td>
+                        <td>
+                            <?php foreach ($this->s_warranty[$items["id"]] as $_item) { ?> 
+                                <?php echo $this->name_producers[$_item["id_warranty"]]; ?> <br/>
+                            <?php } ?>
+                        </td>
+                        <td><?php echo $ngay_chi; ?></td>
+                        <td><?php echo $ngay_nhan; ?></td>
+                    </tr>
+                    <?php
+                    $total_dvsc +=$items["money_dvsc"];
+                    $total_price_tmp +=$items["price_tmp"];
+                    $total_money_hnam +=$items["money_hnam"];
+                    $total_money_voucher +=$items["money_voucher"];
+                    $total_money +=$items["money"];
+                    $total_advance_payment +=$items["advance_payment"];
+                    $total_tiendathu +=$tiendathu;
+                    $total_thucte +=$items["money"] - $items["money_dvsc"] - $items["money_voucher"];
+                    ?>
+                <?php } ?>
+
+            </tbody>
+
+        </table>
+    </div>
+</div>
+<div id="ddelete"></div>
+<script>
+    function save_chi(id, token) {
+        var price = $('#advance_payment' + id).val();
+        var result = confirm('Bạn chắc chắn muốn lưu lại?');
+        if (result)
+            $('#ddelete').load('/admin/user/guarantee/savechi?id=' + id + "&token=" + token + "&price=" + price, function () {
+                alert('Kích hoạt thành công.');
+                window.location.reload(true);
+            });
+    }
+    function save_thu(id, token) {
+        var price = $('#money_thu' + id).val();
+        var result = confirm('Bạn chắc chắn muốn lưu lại?');
+        if (result)
+            $('#ddelete').load('/admin/user/guarantee/savethu?id=' + id + "&token=" + token + "&price=" + price, function () {
+                alert('Kích hoạt thành công.');
+                window.location.reload(true);
+            });
+    }
+    function closess() {
+        showss();
+    }
+    function showss() {
+        $('#adds').show();
+        $('.frm_add').html('');
+        $('#closes').hide();
+    }
+    function hidess() {
+        $('#adds').hide();
+        $('#closes').show();
+    }
+
+    $().ready(function () {
+        $(".pricing").keyup(function () {
+            var price = this.value;
+            price = price.replace(/,/gi, "");
+            price = price + ".";
+            price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            var sprice = price.split(".");
+            $(this).val(sprice[0]);
+        });
+        $("#f_tables").DataTable(
+                {
+                    "pageLength": 50
+                }
+        );
+    });
+
+    function format_number(nStr)
+    {
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        return x1 + x2;
+    }
+</script>

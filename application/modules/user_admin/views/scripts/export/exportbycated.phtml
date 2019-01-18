@@ -1,0 +1,233 @@
+<script src="/backend/exporttable/dataTables.buttons.min.js" ></script>
+<script src="/backend/exporttable/jszip.min.js" ></script>
+<script src="/backend/exporttable/buttons.html5.min.js" ></script>
+
+<div class="panel-default">
+    <div class="col-md-12">
+        <i class="fa fa-home"></i>
+        <b> Export theo danh mục </b>
+    </div> 
+    <form role="form" id="frm" method="get"  class="frmReport">
+        <div class="col-md-2 col-xs-6">
+            <div class="form-group input-group-sm ">
+                <select  name="productsid" onchange="change_productsid_kmc();" id="productsid" class="form-control">
+                    <?php
+                    foreach ($this->list_hnammobile as $key => $value) {
+                        $sl = '';
+                        if ($this->productsid == $key) {
+                            $sl = 'selected = selected';
+                        }
+                        ?>
+                        <option data="<?php echo $value ?>" <?php echo $sl ?> value="<?php echo $key ?>"> <?php echo $value ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-2 col-xs-6">
+            <div class="form-group  input-group-sm">
+                <select name="is_apple" id="is_apple" class="form-control">
+                    <option value="">Apple/Khác</option>
+                    <?php
+                    foreach ($this->group_hnam as $key => $value) {
+                        $sl = '';
+                        if ($this->is_apple != null) {
+                            if ($this->is_apple == $key) {
+                                $sl = 'selected = selected';
+                            }
+                        }
+                        ?>
+                        <option data="<?php echo $value ?>" <?php echo $sl ?> value="<?php echo $key ?>"> <?php echo $value ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-2 col-xs-6">
+            <div class="form-group input-group-sm">
+                <select name="is_type" id="is_type" class="form-control">
+                    <option value="">Loại</option>
+                    <?php
+                    foreach ($this->type_old as $key => $value) {
+                        $sl = '';
+                        if ($this->is_type != null) {
+                            if ($this->is_type == $key) {
+                                $sl = 'selected = selected';
+                            }
+                        }
+                        ?>
+                        <option data="<?php echo $value ?>" <?php echo $sl ?> value="<?php echo $key ?>"> <?php echo $value ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-2 col-xs-6">
+            <div class="form-group input-group-sm">
+                <select name="flag" id="flag" class="form-control">
+                    <option value=""> Công ty/Hnam</option>
+                    <?php
+                    foreach ($this->list_flag as $key2 => $value2) {
+                        $sl2 = '';
+                        if ($this->flag == $key2) {
+                            $sl2 = 'selected = selected';
+                        }
+                        ?>
+                        <option data="<?php echo $value2 ?>" <?php echo $sl2 ?> value="<?php echo $key2 ?>"> <?php echo $value2 ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-2 col-xs-6">
+            <div class="form-group input-group-sm">
+                <select style="width: 100%" name="cated_id"  id="cated_id" class="selects form-control">
+                    <option value="0"> Sản phẩm</option>
+                    <?php
+                    foreach ($this->menu as $items) {
+                        $sl = '';
+                        if ($this->cated_id == $items["itemid"]) {
+                            $sl = 'selected = selected';
+                        }
+                        ?>
+                        <option data="<?php echo $items["title"] ?>" <?php echo $sl ?> value="<?php echo $items["itemid"] ?>"> <?php echo $items["title"] ?></option>
+                    <?php } ?>
+
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-2 col-xs-6">
+            <div class="form-group input-group-sm">
+                <select style="width: 100%" name="storeid"  id="storeid" class="selects form-control">
+                    <option value="0"> Tất cả chi nhánh</option>
+                    <?php
+                    foreach ($this->list_vote as $items) {
+                        if ($items["userid"] == 253 || $items["userid"] == 312) {
+                            continue;
+                        }
+                        $sl = '';
+                        if ($this->storeid == $items["userid"]) {
+                            $sl = 'selected = selected';
+                        }
+                        ?>
+                        <option <?php echo $sl ?> value="<?php echo $items["userid"] ?>"> <?php echo $items["storename"] ?></option>
+                    <?php } ?>
+
+                </select>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-2 col-xs-6">
+        <div class="form-group input-group-sm ">
+            <select  name="type_ghn" id="type_ghn" class="form-control">
+                <option value="">Loại giao hàng</option>
+                <?php
+                foreach ($this->list_type_ghn as $key => $value) {
+                    $sl = '';
+                    if ($this->type_ghn == $key) {
+                        $sl = 'selected = selected';
+                    }
+                    ?>
+                    <option <?php echo $sl ?> value="<?php echo $key ?>"> <?php echo $value ?></option>
+                <?php } ?>
+            </select>
+        </div>
+    </div>
+        <div class=" col-md-4 col-xs-12">
+            <div class="input-group-sm">
+                <?php
+                $start_end = 'Date range picker';
+                if ($this->start_end != null) {
+                    $start_end = $this->start_end;
+                }
+                ?>
+                <span class="input-group-btn">
+                    <button class="btn btn-default pull-left" id="daterange-btn">
+                        <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                        <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                </span>
+                <input type="hidden" name="iexport" id="iexport" value="<?php echo $this->iexport ?>" />
+                <span class="input-group-btn">
+                    <button type="submit" onclick="views_report();return false;" class="btn btn-info btn-flat"><i class="fa fa-search"> </i><span class="hidden-xs"> Xem</span></button>
+                </span>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="clearfix"></div>
+<div class="box-body">
+    <table id="export_table" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Mã ĐH</th>
+                <th>Tên sản phẩm</th>
+                <th>Tên kế toán</th>
+                <th>Imei</th>
+                <th>Giá gốc</th>
+                <th>Giá hoàn tiền KM</th>
+                <th>Giá bán</th>
+                <th>Ngày bán</th>
+                <th>Chi nhánh</th>
+                <th>Nhân viên</th>
+                <?php if($this->bgd==1){ ?>
+                <th>Tên khách hàng</th>
+                <th>Số điện thoại</th>
+                <th>Địa chỉ</th>
+                <?php }?>
+                <th>Voucher giảm giá</th>
+                <th>Tên chương trình voucher</th>
+                <th>Chương trình khuyến mãi</th>
+                <th>Trả góp</th>
+                <th>SHĐ Trả góp</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->list as $val) { 
+                $id_ctkm = $this->ctkm[$val["id_addon_user"]][$val["products_id"]];
+                if((int)$id_ctkm ==0){
+                    $name_ctkm ='Mặc định';
+                }else{
+                    $name_ctkm =$this->name_ctkm[$id_ctkm];
+                }
+                $id_voucher = strtoupper($val["id_voucher"]);
+                
+                ?>
+                <tr>
+                    <td><?php echo ++$stt; ?></td>
+                    <td><?php echo $val["id_addon_user"] ?></td>
+                    <td><?php echo $val["products_name"] ?></td>
+                    <td><?php echo $this->name_kt[$val["products_id"]][$val["colorid"]] ?></td>
+                    <td><?php echo $val["imes"]; ?></td>
+                    <td><?php echo number_format($val["products_price_cost"]); ?></td>
+                    <td><?php echo number_format($this->price_km[$val["id_addon_user"]]); ?></td>
+                    <td><?php echo number_format($val["products_price"] - $val["money_voucher"]); ?></td>
+                    <td><?php echo date('d/m/Y H:i', strtotime($val["create_date"])); ?></td>
+                    <td><?php echo $this->storename[$val["vote_id"]]; ?></td>
+                    <td><?php echo $this->usernames[$val["id_users"]]; ?></td>
+                    <?php if($this->bgd==1){ ?>
+                    <td><?php echo $val["fullname_addon"]; ?></td>
+                    <td><?php echo $val["phone_addon"]; ?></td>
+                    <td><?php echo $this->array_address[$val["id_customer"]]; ?></td>
+                    <?php }?>
+                    <td><?php if($val["id_voucher"]){ echo $val["id_voucher"]."-". number_format($val["money_voucher"]); }?></td>
+                    <td width="200"><?php echo $this->arr_voucher[$id_voucher] ?></td>
+                    <td><?php echo $name_ctkm; ?></td>
+                    <td><?php echo $val["contract"]; ?></td>
+                    <td><?php echo $val["installment_name"]; ?></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#export_table').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'excel'
+            ]
+        });
+    });
+</script>

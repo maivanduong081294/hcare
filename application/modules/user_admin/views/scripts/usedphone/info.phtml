@@ -1,0 +1,114 @@
+<!--<link type="text/css" href="http://www.hnammobile.com/v4/css/used_phone.css?v=1.1" media="screen" rel="stylesheet" />-->
+<!--<script type="text/javascript" src="http://www.hnammobile.com/hnamv2/js/print_1.js"></script>-->
+<div class="box box-primary">
+        <div class="box-header">
+        <i class="fa fa-desktop"></i>
+        <h3 class="box-title">PHẦN MỀM THU MÁY CŨ CHI NHÁNH: <?echo $this->storename;?></h3>
+    </div><!-- /.box-header -->
+    <div class="col-md-6">
+        <div class="panel panel-default panel-success">
+            <div class="panel-heading"><b>Cập nhật thông tin máy <?echo $this->detail2["name"];?></b></div>
+                 <div class="panel-body">
+                     <form action="/admin/user/usedphone/info" method="post" name="frmInfo" id="frmInfo">
+                        <input type="hidden" name="usedid" value="<?echo $this->usedid;?>" />
+                        <input type="hidden" name="used_cus_id" value="<?echo $this->used_cus_id;?>" />
+                        <span>Loại máy:</span>   
+                        <select name="product_cate" class="selects" style="width: 100%" id="product_cate">
+                            <option value="-1">Chọn máy công ty hoặc xách tay</option>
+                            <option value="0">Xách tay</option>
+                            <option value="1">Công ty</option>
+                        </select>
+                        <span>Màu sắc:</span>
+                        <input name="color" id="color" class="form-control" placeholder="Ví dụ: Đen, đỏ, trắng ..." />
+                        <span>Tình trạng:</span>
+                        <textarea class="form-control" name="info" rows="3" placeholder="Ví dụ: 99% mua 17 ngày, đã kích bảo hành, phụ kiện dơ, thân máy đẹp." id="info"></textarea>
+                        <span>Bảo hành:</span>
+                        <input name="warranty" id="warranty" type="number" placeholder="Số tháng bảo hành ..." />
+                        <span>Phụ kiện</span>
+                        <textarea class="form-control" rows="3" placeholder="Ví dụ: Sạc, cáp, tại nghe" name="accessory" id="accessory"></textarea>
+                        <div style="display: none">
+                            <span>Máy hàng công ty đã mua</span>
+                            <input type="radio" name="buy" class="form-control" value="0" style="width:20px;font-size:30px;"/> Trước 30 ngày
+                            <input type="radio" name="buy" value="1" class="form-control" style="width:20px;font-size:30px;"/> Sau 30 ngày <span style="color:red">(Nếu máy thu là hàng công ty thì chọn)</span>
+                        </div>
+                        <span>Đề xuất hình thức bán ra:</span>
+                        <select class="selects" style="width: 100%" name="sellout" id="sellout">
+                            <option value="-1">Chọn hình thức bán ra</option>
+                            <option value="0">Like new</option>
+                            <option value="1">Mới 100%</option>
+                            <option value="2">SR</option>
+                        </select>
+                        <span>Đề xuất giá bán ra:</span>
+                        <input placeholder="Đề xuất giá bán ra:" type="text" class="form-control" name="sellout_price" id="sellout_price" />
+                        <br/>
+                        <button onclick="save_info();return false;" class="btn btn-warning" type="button"><i class="fa fa-save"></i> Lưu</button>
+                     </form>
+                  </div>
+         </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<script>
+    <?php if ($this->ok == 1){?>
+        alert("Lưu thành công!");
+        window.location = "/admin/user/usedphone/print?id=<?echo $this->usedid2;?>&sendmail=1";
+    <?php }?>
+        function save_info(){
+            var color = $("#color").val();
+            var ptype = $("#product_cate").val();
+            var info = $("#info").val();
+            var warranty = $("#warranty").val();
+            var acc = $("#accessory").val();
+            var sellout = $("#sellout").val();
+            var sellout_price = $("#sellout_price").val();
+            
+            if (ptype == "-1") {
+                alert("Vui lòng chọn loại máy xách tay hoặc công ty");
+                $("#product_cate").focus();
+                return;
+            }
+            if (color == "") {
+                alert("Vui lòng nhập Màu của máy");
+                $("#color").focus();
+                return;
+            }
+            if (info == "") {
+                alert("Vui lòng nhập Tình trạng máy");
+                $("#info").focus();
+                return;
+            }
+            if (warranty == "") {
+                alert("Vui lòng nhập Thời gian bảo hành");
+                $("#warranty").focus();
+                return;
+            }
+            if (acc == "") {
+                alert("Vui lòng nhập Phụ kiện đi kèm");
+                $("#accessory").focus();
+                return;
+            }
+            if (sellout == "Chọn hình thức bán ra") {
+                alert("Vui lòng nhập Đề xuất hình thức bán ra");
+                $("#sellout").focus();
+                return;
+            }
+            if (sellout_price == "") {
+                alert("Vui lòng nhập giá bán ra");
+                $("#sellout_price").focus();
+                return;
+            }
+            
+            $("#frmInfo").submit();
+        }
+    $().ready(function(){
+        $("#sellout_price").keyup(function(){
+            var price = this.value;
+            price = price.replace(/,/gi,"");
+            price = price + ".";
+            price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            var sprice = price.split(".");
+            $(this).val(sprice[0]);
+        });
+    });
+</script>
+

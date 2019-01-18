@@ -1,0 +1,97 @@
+<div class="panel-default">
+<form  method="post">
+        <div class="box-header">
+            <div class="col-md-2">
+                <h3 class="box-title">LẤY VOUCHER ĐẠI LÝ</h3>
+            </div>
+            <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="input-group input-group-sm">
+                            <input min="0" minlength="4" type="text" required="required" class="form-control" name="id_addon_user" id="id_addon_user" value="<?php echo $this->id_addon_user ?>" placeholder="Nhập mã đơn hàng vào đây" />
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-info btn-flat"><span class="hidden-xs">Xem đơn hàng</span></button>
+                                </span>
+                          </div>
+                    </div>
+            </div>
+        </div><!-- /.box-header -->
+        
+        </form>
+</div>
+<div class="clearfix"></div>
+    <div class="box-body">
+    <form  name="data_frm" id="data_frm" method="post" target="hiddenIF"  enctype="multipart/form-data">
+    <iframe  name="hiddenIF" style="display: none" scrolling="auto"></iframe>
+        <!-- form start -->
+        <div class="col-md-offset-3 col-md-6">
+                <div class="alert alert_showvc alert-danger hidden alert-dismissible">
+                    <button type="button" class="close" aria-hidden="true">×</button>
+                <h4><i class="fa fa-info" aria-hidden="true"></i> Thông báo!</h4>
+                <span id="errvc"></span>
+              </div>
+            </div>
+        <div class="clearfix"></div>
+        <div class="table-responsive">
+        <table class="table table-bordered table-condensed table-striped">
+            <tr>
+                <th width="10">STT</th>
+                <th>Mã đơn hàng</th>
+                <th>SĐT</th>
+                <th>Khách hàng</th>
+                <th>Tên sản phẩm</th>
+                <th>Giá</th>
+                <th>Ngày tạo</th>
+                <th width="200"></th>
+            </tr>
+            <?php
+            $stt=0;
+            foreach ($this->list as $items){ ?>
+            <tr>
+                <td><?php echo ++$stt; ?></td>
+                <td><?php echo $items["id_addon_user"] ?></td>
+                <td><?php echo $items["phone_addon"] ?></td>
+                <td><?php echo $items["fullname_addon"] ?></td>
+                <td><?php echo $items["products_name"] ?></td>
+                <td><?php echo number_format($items["products_price"]-$items["reduction_money"]-$items["bonus_tech"]-$items["money_voucher"]) ?></td>
+                <td><?php echo date('d/m/Y H:i:s',  strtotime($items["create_date"])) ?></td>
+                <td>
+                    <div class="input-group input-group-sm">
+                        <input min="0" type="text" class="form-control pricing" name="price" id="price_<?php echo $items["id_addon_user"] ?>_<?php echo $items["products_id"] ?>" value="<?php echo $this->price ?>" placeholder="Nhập số tiền" />
+                            <span class="input-group-btn">
+                                <button onclick="getcodes('<?php echo $items["id_addon_user"] ?>','<?php echo $items["products_id"] ?>');return false;" type="button" class="btn btn-info btn-flat"><span class="hidden-xs">Lấy mã</span></button>
+                            </span>
+                      </div>
+                </td>
+            </tr>
+            <?php }?>
+        </table>
+</div>
+        </form>
+        </div><!-- /.box-body -->
+
+<div id="del" style="display:none;"></div>
+<script>
+    function getcodes(id_addon_user,products_id){
+        var price = $('#price_'+id_addon_user+'_'+products_id).val();
+        var url = '/admin/user/vouchers/getvoucherkd';
+            $.ajax
+            ({
+                method: "POST",
+                url: url,
+                data: {price: price,id_addon_user:id_addon_user,products_id:products_id},
+                dataType: "html",
+                success: function (data) {
+                    $('.alert_showvc').removeClass('hidden');
+                    $('#errvc').html(data);
+                }
+            });
+    }
+    $(".pricing").keyup(function () {
+        var price = this.value;
+        price = price.replace(/,/gi, "");
+        price = price + ".";
+        price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        var sprice = price.split(".");
+        $(this).val(sprice[0]);
+    });
+</script>

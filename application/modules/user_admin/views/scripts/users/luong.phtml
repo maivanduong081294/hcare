@@ -1,0 +1,243 @@
+<style>
+    .form-group{
+        padding-right: 15px;
+    }
+.datepicker{z-index:1151 !important;}
+.rowactived{
+    background: #D8CFCF;
+}
+</style>
+<div class="box box-primary">
+    <h3 class="box-title">THÔNG TIN LƯƠNG NHÂN VIÊN </strong></h3>
+    <form name="savepay" id="savepay" action="" method="">
+        <input type="hidden" value="<?php echo $this->userid; ?>" name="userid" id="userid" />
+        <input type="hidden" name="id" id="id"  />
+        <table class="table table-condensed table-bordered table-responsive addtable">
+            <tr>
+                <th width="10">STT</th>
+                <th>Họ tên</th>
+                <th width="150">Chức vụ</th>
+                <th width="70">BHXH</th>
+                <th width="70">Lương CB</th>
+                <th width="70">Tiền ăn</th>
+                <th width="70">Trợ cấp</th>
+                <th width="90">Thực lãnh</th>
+                <th width="70">Hiện tại</th>
+                <th width="90">Bắt đầu</th>
+                <th width="90">Kết thúc</th>
+                <th>Ghi chú</th>
+                <th width="80">Thác tác</th>
+            </tr>
+            <?php foreach ($this->list as $list){ ?>
+            <div class="money_<?php echo $list["id"] ?>" style="display:none"><?php echo number_format($list["money"]) ?></div>
+            <div class="des_<?php echo $list["id"] ?>" style="display:none"><?php echo $list["des"] ?></div>
+            <div class="startdate_<?php echo $list["id"] ?>" style="display:none"><?php echo date('Y/m/d',  strtotime($list["startdate"])) ?></div>
+            <div class="enddate_<?php echo $list["id"] ?>" style="display:none"><?php echo date('Y/m/d',  strtotime( $list["enddate"])) ?></div>
+            <div class="idregency_<?php echo $list["id"] ?>" style="display:none"><?php echo $list["idregency"] ?></div>
+            <div class="now_<?php echo $list["id"] ?>" style="display:none"><?php echo $list["now"] ?></div>
+            <div class="money_eat_<?php echo $list["id"] ?>" style="display:none"><?php echo number_format($list["money_eat"]) ?></div>
+            <div class="subsidize_<?php echo $list["id"] ?>" style="display:none"><?php echo number_format($list["subsidize"]) ?></div>
+            <div class="bhxh_<?php echo $list["id"] ?>" style="display:none"><?php echo number_format($list["bhxh"]) ?></div>
+            <tr onclick="selectrow(<?php echo $list["id"] ?>);" class="addrow_<?php echo $list["id"] ?> addrow2">
+                <td><?php echo ++$no; ?></td>
+                <td><?php echo $list["fullname"] ?></td>
+                <td><?php echo $list["name_regency"] ?></td>
+                <td><?php echo number_format($list["bhxh"]); ?></td>
+                <td><?php echo number_format($list["money"]); ?></td>
+                <td><?php echo number_format($list["money_eat"]); ?></td>
+                <td><?php echo number_format($list["subsidize"]); ?></td>
+                <td><?php echo number_format($list["money"]+$list["money_eat"]+$list["subsidize"]); ?></td>
+                <td><?php echo $list["now2"] ?></td>
+                <td><?php echo $list["startdate2"] ?></td>
+                <td><?php echo $list["end"] ?></td>
+                <td><?php echo $list["des"] ?></td>
+                <td><a class="btn btn-warning btn-sm" data-toggle="tooltip" onclick="editpay(<?php echo $list["id"] ?>);return false;"><i class="fa fa-edit"></i></a>
+                                <a class="btn btn-danger btn-sm" data-toggle="tooltip" onclick="delpay(<?php echo $list["id"]?>);return false;"><i class="fa fa-trash-o"></i></a></td>
+            </tr>
+            <?php }?>
+        </table>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Chức vụ: </label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </div>
+                            <select name="idregency" id="idregency" class="form-control" >
+                                <option value="0">Lựa chọn chức vụ</option>
+                                <?php foreach ($this->list_regency as $item) {
+                                    ?>
+                                    <option value="<?php echo $item["id"] ?>"><?php echo $item["name"] ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Thời gian: </label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </div>
+                            <input id="startdate" type="text" name="startdate" placeholder="Ngày bắt đầu..." class="date-picker form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Bảo hiểm xã hội: </label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-desktop"></i>
+                            </div>
+                            <input  type="text" class="form-control pricing" name="bhxh" id="bhxh" value="" placeholder="Ví dụ 3.320.000">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Lương cơ bản: </label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-desktop"></i>
+                            </div>
+                            <input  type="text" class="form-control pricing" name="money" id="money" value="" placeholder="Ví dụ 10.000.000">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Tiền ăn: </label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-desktop"></i>
+                            </div>
+                            <input  type="text" class="form-control pricing" name="money_eat" id="money_eat" value="" placeholder="Ví dụ 420.000">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Trợ cấp hoàn thành công việc: </label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-desktop"></i>
+                            </div>
+                            <input  type="text" class="form-control pricing" name="subsidize" id="subsidize" value="" placeholder="Ví dụ 820.000">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Lương hiện tại: </label>
+                        <div class="input-group">
+                            <label style="margin-right: 20px"> <input id="cke0" type="radio" name="now" value="0" checked="checked" placeholder="Không" /> Không</label>
+                            <label> <input type="radio" id="cke1" name="now" value="1" placeholder="Có" /> Có</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Ghi chú(nếu có): </label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-desktop"></i>
+                            </div>
+                            <textarea class="form-control" name="des" id="descript" placeholder="Mô tả thêm nếu có ..." > </textarea>
+                        </div>
+                    </div>
+
+                    <div class="box-footer">
+                        <div class="col-md-4">
+                            <button type="submit" id="btnSavePay" class="btn btn-primary">Lưu</button>
+                            <button style="display: none" type="submit" id="btnwtPay" class="btn btn-primary">Đang xử lý...</button>
+
+                        </div>
+                        <div class="col-md-8">
+                            <p id="err2" style="color: red;font-weight: bold"></p>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="ddelete" style="display:none;"></div>
+    </form>
+</div>
+<script>
+    $(document).ready(function () {
+        $(".date-picker").datepicker();
+    });
+    $().ready(function () {
+        $(".pricing").keyup(function () {
+            var price = this.value;
+            price = price.replace(/,/gi, "");
+            price = price + ".";
+            price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            var sprice = price.split(".");
+            $(this).val(sprice[0]);
+        });
+        
+        $('#btnSavePay').click(function (e) {
+            $('#btnSavePay').hide();
+            $('#btnwtPay').show();
+            e.preventDefault();
+            $.post("/admin/user/users/save-payroll", $('form').serialize(), function (resp) {
+                $('.errblock').remove();
+                $.each(resp, function (i, obj) {
+                    var id = obj.id;
+                    var msg = obj.msg;
+                    if (msg != "ok") {
+                        $('#btnSavePay').show();
+                        $('#btnwtPay').hide();
+                        $('#err2').html(msg);
+                        $('#' + id).focus();
+                        return false;
+                    } else {
+                        $('#btnSavePay').show();
+                        $('#btnwtPay').hide();
+                        $('#err2').html('Lưu thành công');
+                        window.location.reload(true);
+                    }
+
+                });
+            }, 'json');
+        });
+        
+    });
+    
+        
+        function selectrow(id){
+        editpay(id);
+    }
+    function editpay(id) {
+        
+    $( ".addrow2" ).removeClass( "rowactived");
+    $( ".addrow_"+id ).addClass( "rowactived");
+        var idregency = $('.idregency_'+id).html();
+        var money = $(".money_" + id).html();
+        var des = $(".des_" + id).html();
+        var startdate = $(".startdate_" + id).html();
+        var enddate = $(".enddate_" + id).html();
+        var money_eat = $(".money_eat_" + id).html();
+        var bhxh = $(".bhxh_" + id).html();
+        var subsidize = $(".subsidize_" + id).html();
+        var now = parseInt($(".now_" + id).html());
+        $('#idregency').val(idregency);
+        $('#id').val(id);
+        $('#money').val(money);
+        $('#descript').val(des);
+        $('#bhxh').val(bhxh);
+        $('#money_eat').val(money_eat);
+        $('#subsidize').val(subsidize);
+        
+        
+        $('#startdate').val(startdate);
+        if (now === 1) {
+            $("#cke1").prop("checked", true);
+        } else {
+            $("#cke0").prop("checked", true);
+        }
+    }
+    function delpay(id) {
+        var result = confirm('Bạn có chắc chắn muốn xóa');
+        if (result) {
+            $('#ddelete').load('/admin/user/users/del-payroll?&id=' + id, function () {
+                alert('Xóa thành công.');
+                window.location.reload(true);
+            });
+        }
+
+    }
+    </script>

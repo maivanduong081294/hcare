@@ -1,0 +1,189 @@
+<div class="box box-primary">
+    <div class="box-header">
+        <h3 class="box-title">Set Target đến các cửa hàng</h3>
+    </div><!-- /.box-header -->
+    <!-- form start -->
+    <form role="form" action="" class="frmReport">
+        <div class="box-body">
+            <div class="form-group">
+                <label for="warranty_info_id" class="col-sm-3 control-label"  id="text-align-label">Tên chi nhánh : </label>
+                <div  class="input-group" style="width:405px">
+                    <span class="input-group-addon"><i class="fa fa-plus-square"></i></span>
+                    <select name="storeid" <?php  echo $this->disabled; ?> id="storeid" class="form-control">
+                        <option value="0">Lựa chọn tên chi nhánh</option>
+                        <?php
+                        foreach ($this->list_store as $list) {
+                            $select0 = '';
+                            if ($this->detail["storeid"] == $list["userid"]) {
+                                $select0 = 'selected="selected"';
+                            }
+                            ?>
+                            <option <?php echo $select0; ?> value="<?php echo $list['userid'] ?>"><?php echo $list['storename'] ?></option>
+<?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Doanh số tháng : </label>
+                <div  class="input-group" style="width:405px">
+                    <span class="input-group-addon"><i class="fa fa-plus-square"></i></span>
+                    <select class="form-control" <?php  echo $this->disabled; ?> id="month" name="month" >
+                        <?php
+                        foreach ($this->months as $month) {
+                            $slected = '';
+                            if ($month == $this->detail["month"]) {
+                                $slected = 'selected="selected"';
+                            }
+                            ?>
+                            <option <?php echo $slected ?> value="<?php echo $month ?>">
+                                Tháng <?php echo $month ?>
+                            </option>
+<?php } ?>
+                    </select>
+                    <span class="input-group-addon"><i class="fa fa-plus-square"></i></span>
+                    <select class="form-control" <?php  echo $this->disabled; ?> id="year" name="year">
+                        <option value="<?php echo date('Y') ?>">
+                            Năm <?php echo date('Y') ?>
+                        </option>
+                    </select>
+                </div> 
+
+            </div>
+            <div class="form-group">
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Nhóm sản phẩm : </label>
+                <div  class="input-group" style="width:405px">
+                    <span class="input-group-addon"><i class="fa fa-plus-square"></i></span>
+                    <select name="flag" <?php  echo $this->disabled; ?> id="flag" class="form-control">
+                        <option value="0">Lựa chọn nhóm sản phẩm</option>
+                        <?php
+                        foreach ($this->flag as $items) {
+                            $select1 = '';
+                            if ($this->detail["flag"] == $items["id"]) {
+                                $select1 = 'selected="selected"';
+                            }
+                            ?>
+                            <option <?php echo $select1 ?> value="<?php echo $items['id'] ?>"><?php echo $items['cate_product_name'] ?></option>
+<?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Loại sản phẩm : </label>
+                <div  class="input-group" style="width:405px">
+                    <span class="input-group-addon"><i class="fa fa-plus-square"></i></span>
+                    <select name="type" <?php  echo $this->disabled; ?> id="type" class="form-control">
+                        <option value="0">Lựa chọn loại sản phẩm</option>
+                        <?php
+                        foreach ($this->list_type as $key => $items) {
+                            $select2 = '';
+                            if ($this->detail["type"] == $key) {
+                                $select2 = 'selected="selected"';
+                            }
+                            ?>
+                            <option <?php echo $select2; ?> value="<?php echo $key ?>"><?php echo $items ?></option>
+<?php } ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Tổng tiền : </label>
+                <div  class="input-group" style="width:405px">
+                    <span class="input-group-addon"><i class="fa fa-plus-square"></i></span>
+                    <input type="text" style="font-size: 17px;color: red;" class="form-control pricing" name="money" id="money" value="<?php echo number_format($this->detail["money"]); ?>" placeholder="Ví dụ : 250.000.000">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Số lượng : </label>
+                <div  class="input-group" style="width:405px">
+                    <span class="input-group-addon"><i class="fa fa-plus-square"></i></span>
+                    <input type="text" style="font-size: 17px;color: red;" class="form-control pricing" name="total" id="total" value="<?php echo number_format($this->detail["total"]); ?>" placeholder="Ví dụ : 250">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Tỷ lệ thưởng : </label>
+                <div  class="input-group" style="width:405px">
+                    <span class="input-group-addon"><i class="fa fa-plus-square"></i></span>
+                    <input type="text" style="font-size: 17px;color: red;" class="form-control" name="often" id="often" value="<?php echo $this->detail["often"]; ?>" placeholder="Ví dụ : Apple có tỷ lệ thưởng 0.00099">
+                </div>
+            </div>
+
+        </div><!-- /.box-body -->
+        <input type="hidden" id="sid" name="sid" value="<?= $this->detail["storeid"]; ?>" />
+        <input type="hidden" id="m" name="m" value="<?= $this->detail["month"]; ?>" />
+        <input type="hidden" id="y" name="y" value="<?php echo date('Y'); ?>" />
+        <div class="box-footer">
+            <button type="submit" id="btnAdd" class="btn btn-primary">Lưu</button>
+            <button type="button" id="btnWt" style="display: none;" class="btn btn-primary">Đang xử lý...</button>
+            <input type="hidden" name="id" id="id" value="<?= (int)$this->detail["id"]; ?>" />
+            <input type="hidden" name="isadmin" id="isadmin" value="1" />
+        </div>
+    </form>
+    <script>
+
+        $().ready(function () {
+            $('#storeid').change(function(){
+                var sid = $('#storeid option:selected').val();
+                $('#sid').val(sid);
+            });
+            $('#month').change(function(){
+                var m = $('#month option:selected').val();
+                $('#m').val(m);
+            });
+            $('#year').change(function(){
+                var y = $('#year option:selected').val();
+                $('#y').val(y);
+            });
+
+            $(".pricing").keyup(function () {
+                var price = this.value;
+                price = price.replace(/,/gi, "");
+                price = price + ".";
+                price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                var sprice = price.split(".");
+                $(this).val(sprice[0]);
+            });
+
+            $('#btnAdd').click(function (e) {
+                var ids = $('#id').val();
+                var storeid = $('#sid').val();
+                var month = $('#m').val();
+                var year = $('#y').val();
+                
+                $('#btnAdd').hide();
+                $('#btnWt').show();
+                e.preventDefault();
+                $.post("/admin/user/target/save", $('form').serialize(), function (resp) {
+                    $('.errblock').remove();
+                    $.each(resp, function (i, obj) {
+                        var id = obj.id;
+                        var msg = obj.msg;
+
+                        if (msg != "ok") {
+                            $('#btnAdd').show();
+                            $('#btnWt').hide();
+                            alert(msg);
+                            $('#' + id).focus();
+                            return false;
+                        } else {
+                            if(ids >0){
+                                alert('Thông báo!. Lưu thành công.');
+                                window.location = "/admin/user/target/list?&storeid="+storeid+"&month="+month+"&year="+year;
+                            }else{
+                                result = confirm('Thêm thành công, Bạn có muốn tiếp tục thêm không');
+                                if (result) {
+                                    $('#btnAdd').show();
+                                    $('#btnWt').hide();
+                                } else {
+                                    window.location = "/admin/user/target/list?&storeid="+storeid+"&month="+month+"&year="+year;
+                                }
+                            }
+                        }
+
+                    });
+                }, 'json');
+            });
+        });
+
+    </script>
+</div>

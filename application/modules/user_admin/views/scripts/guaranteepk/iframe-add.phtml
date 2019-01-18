@@ -1,0 +1,416 @@
+<style>
+    input[type="date"] {
+    position: relative;
+    /*width: 150px; height: 20px;*/
+    color: white;
+}
+input[type="date"]:before {
+    position: absolute;
+    top: 3px; left: 3px;
+    content: attr(data-date);
+    display: inline-block;
+    color: black;
+}
+
+input[type="date"]::-webkit-datetime-edit, input::-webkit-inner-spin-button, input::-webkit-clear-button {
+    display: none;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 3px;
+    right: 0;
+    color: black;
+    opacity: 1;
+}
+</style>
+
+<form  name="data_frm" id="data_frm" action="/admin/user/guaranteepk/add" method="post" target="hiddenIF"  enctype="multipart/form-data">
+        <iframe  name="hiddenIF" style="display: none" scrolling="auto"></iframe>
+        <div class="col-md-4">
+            <div class="panel panel-default panel-success">
+                <div class="panel-heading"><b>THÔNG TIN KHÁCH HÀNG, TIẾP NHẬN MÁY</b></div>
+                <div class="panel-body">
+                    <p>Họ Tên :<?php echo $this->detail_customer["fullname"] ?> [<?php echo $this->detail_customer["phone"] ?>]</p>
+                    <p>Địa chỉ : <?php echo $this->detail_customer["address"] ?></p>
+                    <span>Ngày hẹn:</span>
+                    <input type="text" class="form-control"  name="dealine" id="dealine"  data-inputmask="'alias': 'dd/mm/yyyy'"  data-mask="" placeholder="dd/mm/yyyy">
+                    
+                    <span>Nhận máy từ chi nhánh :</span>
+                    <select class="selects" style="width: 100%" name="storeid_in" id="storeid_in">
+                        <option value="">Chọn chi nhánh</option>
+                        <?php foreach ($this->list_store as $items){ ?>
+                        <option value="<?php echo $items["userid"] ?>"><?php echo $items["storename"] ?></option>
+                        <?php }?>
+                    </select>
+                
+                <span>Nhân viên nhận : </span>
+                <select onchange="change_receiver();" class="selects"  style="width: 100%"  name="receiver_id" id="receiver_id">
+                    <option value="">Chọn tên nhân viên</option>
+                    <?php foreach ($this->sreceiver as $items){ ?>
+                    <option value="<?php echo $items["userid"] ?>"><?php echo $items["fullname"] ?></option>
+                    <?php }?>
+                </select>
+                
+                <span>Số điện thoại : </span>
+                <input type="number" placeholder="Số điện thoại" name="phone" id="phone" class="form-control" />
+                
+                <span>Ghi chú:</span>
+                <textarea placeholder="Nhập ghi chú vào đây..." class="form-control" name="note" id="note" rows="3" ></textarea>
+            
+            <div class="frm_dvbh"></div>
+            <input type="hidden" name="receiver" id="receiver" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default panel-success">
+                <div class="panel-heading"><b>THÔNG TIN SẢN PHẨM</b></div>
+                <div class="panel-body">
+                    <span>Mã số hộp:</span>
+                    <input type="text" class="form-control"  name="id_box" id="id_box" value="<?php echo $this->detail["id_box"] ?>" placeholder="Nhập mã số hộp của sản phẩm...">
+                    <span>MODEL:</span>
+                    <select onchange="changes_product();return false;"  style="width: 100%" class="selects" required="required" name="itemid" id="itemid">
+                        <option value="">Lựa chọn sản phẩm</option>
+                        <?php foreach ($this->slist as $items){ ?>
+                        <option value="<?php echo $items ?>"><?php echo $items ?></option>
+                        <?php }?>
+                    </select>
+                    <span>MÀU:</span>
+                    <select name="pid_color" id="pid_color"  style="width: 100%" class="selects">
+                        <option value="0">Tất cả màu</option>
+                    </select>
+                    <span>CTY/HNAM:</span>
+                    <select class="form-control" onchange="change_price();return false;" style="width: 100%" required="required" name="flag" id="flag">
+                        <option value="0">Loại</option>
+                        <option value="1">Công ty</option>
+                        <option value="2">Hnam</option>
+                    </select>
+                    <span>IMEI:</span>
+                    <input type="text" class="form-control" onblur="bbmh_by_imei();set_flag_by_imei();return false;" required="required" name="imei" id="imei" value="<?php echo $this->detail["imei"] ?>" placeholder="Nhập số imei của sản phẩm...">
+                    
+                    <span>SERI:</span>
+                    <input type="text" class="form-control" name="seri" id="seri" value="<?php echo $this->detail["seri"] ?>" placeholder="Nhập số seri của sản phẩm vào đây...">
+                    
+                    <span>Ngày mua máy:</span>
+                        <input type="text" class="form-control"  name="purchase_date" id="purchase_date"  data-inputmask="'alias': 'dd/mm/yyyy'"  data-mask="" placeholder="dd/mm/yyyy">
+                        <span>Tình trạng hư hỏng:</span>
+                        <input placeholder="Tình trạng hư hỏng..." type="text" name="damages" id="damages" class="form-control" />
+                        <span>Tình trạng tiếp nhận:</span>
+                        <input placeholder="Tình trạng máy lúc tiếp nhận..." type="text" name="status_receive" id="status_receive" class="form-control" />
+                        <span>Phụ kiện kèm theo:</span>
+                        <input placeholder="phụ kiện kèm theo nếu có" type="text" name="acc_attach" id="acc_attach" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default panel-success">
+                <div class="panel-heading"><b>BÁO GIÁ VÀ BẢO HÀNH</b></div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <button onclick="bbmh_by_imei();return false;" class="btn btn-danger"><i class="fa fa-eye"></i> Xem có bao bể màn hình,bảo hành mở rộng không </button>
+                    </div>
+                    <div style="color: red;" class="bbhm_by_imei"></div>
+                    <div class="form-group">
+                        <label for="warranty_info_id" class="control-label" id="text-align-label">Trung tâm bảo hành : </label>
+                        <label onclick="change_price();"><input type="radio" name="ncc_ok" checked="" id="ncc_ok1" value="1"> Yes </label>
+                        <label onclick="change_price();"><input type="radio" name="ncc_ok" id="ncc_ok2" value="2"> No </label>
+                    </div>
+                    <div class="form-group">
+                        <?php
+                        $check1='';
+                        if($this->detail["status_guarantee"] ==1){ 
+                            $check1 = 'checked="checked"';
+                        } 
+
+                        $check2='';
+                        if($this->detail["status_guarantee"] ==2){ 
+                            $check2 = 'checked="checked"';
+                        } 
+                        ?>
+                        <label for="warranty_info_id" class="control-label" id="text-align-label">Tình trạng BH: </label>
+                        <label><input required="required" onclick="change_price();" type="radio" name="status_guarantee" id="status_guarantee1" <?php echo $check1; ?> value="1"  /> Còn bảo hành</label>
+                        <label><input required="required" onclick="change_price();" type="radio" name="status_guarantee" id="status_guarantee2" <?php echo $check2; ?> value="2" /> Hết bảo hành</label>
+                    </div>
+                    
+<!--                    <span>Đơn vị sửa chữa</span>
+                    <input type="text" min="0" onblur="change_price();return false;" class="form-control" onkeyup="format_price('money_dvsc');" id="money_dvsc" name="money_dvsc" value="" placeholder="Phí trung tâm sửa chữa">
+                    <span class="" style="color: red;" id="phi"></span><br/>
+                    <span>Tạm tính:</span>
+                    <input type="text" min="0" readonly="readonly"  class="form-control" onkeyup="format_price('price_tmp');" id="price_tmp" name="price_tmp" value="" placeholder="Phí sau khi charge">
+                    <span>Mã voucher:</span>
+                    <input type="text"  onblur="check_voucher();return false;" class="form-control" id="voucher" name="voucher" value="" placeholder="Voucher (nếu có)">
+                    <p class="show_err_vc" style="color: red"></p>
+                    <span>Hnam Hỗ trợ : </span>
+                    <input type="text" min="0" onblur="change_price();return false;" class="form-control" onkeyup="format_price('money_hnam');" id="money_hnam" name="money_hnam" value="0" placeholder="Phí hnam hỗ trợ">
+               <span>Báo giá cho khách:</span>
+                    <input type="text" disabled="" min="0" class="form-control"  id="money_ds" name="money_ds" value="" placeholder="Nhập giá báo khách">
+                    <input type="hidden" min="0" class="form-control"  id="money" name="money" value="" placeholder="Nhập giá báo khách">
+                    <hr/>-->
+                    <span>Tạm ứng(Nếu có)</span>
+                    <input type="text"  min="0" class="form-control" onkeyup="format_price('advance_payment');" id="advance_payment" name="advance_payment" value="" placeholder="Tiền tạm ứng">
+                <span>Ghi chú thêm (nội bộ):</span>
+                    <textarea placeholder="Nhập ghi chú vào đây..." class="form-control" name="note2" id="note2" rows="3" ></textarea>
+                    <input type="hidden" name="money_voucher" id="money_voucher" value="0" />
+                </div>
+            </div>
+        </div>
+        
+        <div class="clearfix"></div>
+        <div class="box-footer">
+            <input type="hidden" name="idcustomer" id="idcustomer" value="<?php echo $this->idcustomer ?>" />
+            <button type="submit" id="save" onclick="savess();return false;" class="btn btn-primary right"><i class="fa fa-floppy-o"> Lưu</i></button>
+            <!--<button style="display: none" type="button" id="wt" class="btn btn-primary right"><i class="fa fa-spinner"> Đang xử lý...</i></button>-->
+            <b id="complete"  class="color_red right size20"></b>
+        </div>
+    </form>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
+<script>
+    function set_flag_by_imei(){
+        var imei = $('#imei').val();
+        if(imei.length >0){
+            var url="/admin/user/guaranteepk/getimeibyflag";
+            $.ajax({
+                method: 'get',
+                cache: false,
+                url: url,
+                data: {imei: imei},
+                dataType: 'json',
+                success: function (resp) {
+                    if(resp !== null){
+                        $('#flag option[value=' + resp.flag + ']').attr('selected','selected');
+                    }
+                }
+            });
+        }
+    }
+    function change_price(){
+        var money_dvsc = $('#money_dvsc').val();
+        money_dvsc = replace_number(money_dvsc);
+        if(money_dvsc.length ==0){
+            money_dvsc =0;
+        }
+        add_money_voucher();
+        var money_voucher = $('#money_voucher').val();
+        var money_hnam = $('#money_hnam').val();
+        money_hnam = replace_number(money_hnam);
+        if(money_hnam.length ==0){
+            money_hnam =0;
+        }
+        var total=0;
+        var price_tmp = parseInt(money_dvsc);
+        var status_guarantee = $('input[name=status_guarantee]:checked').val();
+        var ncc_ok = $('input[name=ncc_ok]:checked').val();
+        var phi='';
+        $('#phi').html('');
+        var charges = parseInt(money_dvsc)*15/100;
+        if(charges>0 && charges<100000){
+            charges = 100000;
+        }
+        var flag = $('#flag').val();
+//        if(status_guarantee=="1" && ncc_ok =="1"){
+        if(status_guarantee=="1"){
+            total = price_tmp-parseInt(money_hnam)-money_voucher;
+            if(ncc_ok==2 && parseInt(flag)==2){
+                phi='changre 15%';
+                $('#phi').html(phi);
+                total = price_tmp-parseInt(money_hnam)-money_voucher+charges;
+                price_tmp = price_tmp+charges;
+            }
+        }else{
+            price_tmp = price_tmp+charges;
+            total = price_tmp-parseInt(money_hnam)-money_voucher;
+            phi='changre 15%';
+            $('#phi').html(phi);
+        }
+        $('#money_ds').val(total);
+        format_price3('#money_ds','');
+        if(total<0){
+            total=0;
+        }
+        $('#price_tmp').val(price_tmp);
+        format_price3('#price_tmp','');
+        $('#money').val(total);
+        
+        
+    }
+    function remove_day(){
+        $('.purchase_date').attr('data-date','');
+        $('.purchase_date').attr('value','');
+    }
+    function changes_product(){
+        var pid = $( "#itemid option:selected" ).val();
+            $('#pid_color').html('');
+            $('#pid_color').html("<option value='0'>Màu sản phẩm...</option>");
+            var url = '/admin/user/ajax/get-color-by-product-ids';
+            $.ajax({
+                method: 'get',
+                cache: false,
+                url: url,
+                data: {product_id: pid},
+                dataType: 'json',
+                success: function (resp) {
+                    $.each(resp, function (i) {
+                        var html = '<option  value="' + resp[i].colorid + '">' + resp[i].name_color + '</option>';
+                        $('#pid_color').append(html);
+                    });
+                }
+            });
+    }
+//$('#dealine').on("change", function() {
+//    this.setAttribute(
+//        "data-date",
+//        moment(this.value, "YYYY-MM-DD")
+//        .format( this.getAttribute("data-date-format") )
+//    )
+//}).trigger("change");
+//$('#purchase_date').on("change", function() {
+//    this.setAttribute(
+//        "data-date",
+//        moment(this.value, "YYYY-MM-DD")
+//        .format( this.getAttribute("data-date-format") )
+//    )
+//}).trigger("change");
+</script>
+<script>
+    function bbmh_by_imei(){
+        var imei = $('#imei').val();
+        if(imei.length >0){
+            var url="/admin/user/guaranteepk/get-imei-bbmh?imei="+imei;
+            $.get(url, {}, function(resp){
+                $(".bbhm_by_imei").html(resp);
+            });
+        }
+    }
+    function add_money_voucher(){
+        var money_dvsc = $('#money_dvsc').val();
+        money_dvsc = replace_number(money_dvsc);
+        if(money_dvsc.length ==0){
+            money_dvsc =0;
+        }
+        var money_voucher =0 ;
+        var code_value = $('#code_value').val();
+        if(parseInt(code_value)>0){
+            if(parseInt(code_value)>100){
+                code_value=100;
+            }
+            money_voucher = parseInt(code_value)/100*parseInt(money_dvsc);  
+            $('#money_voucher').val(money_voucher);
+        }
+
+    }
+    function check_voucher(){
+        var voucher = $('#voucher').val();
+//        if(voucher.length >0){
+            var url="/admin/user/guaranteepk/check-voucher?voucher="+voucher;
+            $.get(url, {}, function(resp){
+                $(".show_err_vc").html(resp);
+                change_price();
+            });
+            
+//        }
+    }
+    function showss(){
+        $('#save').show();
+        $('#wt').hide();
+    }
+    function hidess(){
+        $('#save').hide();
+        $('#wt').show();
+    }
+    
+    function notification (msg,id){
+        showss();
+        alert(msg);
+        $('.tb').html('');
+        $('#'+id).focus(); 
+        var msg_add = '<i class="fa fa-times-circle-o"> '+msg+' </i>';
+        $('#'+id+"_tb").html(msg_add);   
+    }
+    function completes(msg,id,token){
+        showss();
+        step_3();
+        $('.tb').html('');
+        var msg_add = '<i class="fa fa-check" aria-hidden="true"> </i>'+msg+'';
+        $('#complete').html(msg_add);
+        alert(msg);
+        window.location.href = '/admin/user/guaranteepk/detail?id='+id+'&token='+token+'';
+//        window.location.reload(true);
+    }
+    
+    function format_price(id){
+        var price = $("#"+id).val();
+        price = price.replace(/,/gi, "");
+        price = price + ".";
+        price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        var sprice = price.split(".");
+        $("#"+id).val(sprice[0]);
+    }
+    function save_warranty(){
+        $.post("/admin/user/guaranteepk/save-warranty", $('form').serialize(), function (resp) {
+                $('#wt_warranty').show();
+                $('#save_warranty').hide();
+                $.each(resp, function (i, obj) {
+                    var id = obj.id;
+                    var msg = obj.msg;
+                    var data = obj.data;
+                    if (msg != "ok") {
+                        alert(msg);
+                        $('#' + id).focus();
+                        $('#wt_warranty').hide();
+                        $('#save_warranty').show();
+                        return false;
+                    } else {
+                        alert('Lưu thành công');
+                        $('.dvbh').hide();
+                        $('#save_warranty').show();
+                        $('#wt_warranty').hide();
+                        $('#producers').html('');
+                        $('#producers').html('<option value =""> Lựa chọn hãng bảo hành</option>');
+                        $.each(data, function (y,objs) {
+                            var html = '<option value="' + objs.id + '">' + objs.name + '</option>';
+                            $('#producers').append(html);
+                        });
+                    }
+                });
+            }, 'json');
+    }
+    function add_warranty(){
+        $('.add_warranty').show();
+    }
+    $( document ).ready(function() {
+        step_2();
+        $('.selects').select2();
+    });
+    function change_receiver(){
+        var receiver = $("#receiver_id option:selected").text();
+        $('#receiver').val(receiver);
+    }
+    $(function(){
+    Test = {
+        UpdatePreview: function(obj){
+          // if IE < 10 doesn't support FileReader
+          if(!window.FileReader){
+             // don't know how to proceed to assign src to image tag
+          } else {
+             var reader = new FileReader();
+             var target = null;
+             
+             reader.onload = function(e) {
+              target =  e.target || e.srcElement;
+               $("#img_review").prop("src", target.result);
+             };
+              reader.readAsDataURL(obj.files[0]);
+          }
+        }
+    };
+});
+</script>
+<script src="/backend/plugins/input-mask/jquery.inputmask.js"></script>
+    <script src="/backend/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+    <script src="/backend/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+    <script>
+//        $("[data-mask]").inputmask();
+    $("#dealine").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+        $("#purchase_date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+        </script>

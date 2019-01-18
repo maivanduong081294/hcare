@@ -1,0 +1,72 @@
+
+<div class="row" >
+    <div class="col-md-12">
+
+
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="ion ion-clipboard"></i>
+                <h3 class="box-title">Thống kê trả góp sacombank</h3>
+            </div><!-- /.box-header -->
+            <form role="form" id="view-sales-day" method="get"  class="frmReport">
+                <div class="box-body">
+
+                    <div style="float: left;width: 600px">
+                        <input  type="text" class="form-control pull-right" name="day_created_end" value="<?php echo $this->days_created_end ?>" placeholder="Tìm kiếm theo ngày tháng năm ..." id="reservation"/>
+                    </div>
+                    <div style="float: left" class="form-group">
+                        <button type="button" id="btnView" class="btn btn-primary">Xem</button>
+                    </div>
+                </div><!-- /.box-body -->
+
+            </form>
+            <div class="box-body">
+                <div class="table-responsive">
+
+                    <table class="table table-data table-striped table-bordered table-hover">
+                        <tbody>
+
+                            <tr>
+                                <th><input name="select-all" type="checkbox" data-toggle="tooltip" title="Select All"/></th>
+                                <th>Tổng số tiền(chưa trừ khuyến mãi)</th>
+                                <th>Tổng số tiền(sau khi trừ khuyến mãi)</th>
+                                <th>Số lượng</th>
+                            </tr>
+                            <?php
+                            $no = 1;
+                            foreach ($this->list as $list) {
+                                ?>
+                                <tr bgcolor="<?echo $bgcolor; ?>" class="row-<?php echo $list["userid"]; ?>">
+                                    <? $no++;?>
+                                    <td><input type="checkbox" name="select-user[]" class="check-user minimal-red" value="<?php echo $list["userid"]; ?>"/></td>
+                                    <td><?php echo number_format($list["sum"]); ?></td>
+                                    <td><?php echo number_format($list["sum"]-$list["giamtien"]-$list["tienvoucher"]) ?></td>
+                                    <td><?php echo $list["total"] ?></td>
+                                </tr>
+                            <?php }?>
+                            <div id="ddelete" style="display:none;"></div>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div><!-- /.box-body -->
+
+        </div><!-- /.box -->
+
+
+
+
+    </div>
+</div>
+<script>
+    $().ready(function () {
+
+        $('#btnView').click(function (e) {
+            e.preventDefault();
+            $("#view-sales-day").attr("action", "/admin/user/app-services/list-sacombank");
+                $("#view-sales-day").submit();
+        });
+    });
+</script>
+</div>
+</div>

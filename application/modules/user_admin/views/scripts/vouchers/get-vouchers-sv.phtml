@@ -1,0 +1,26 @@
+<h3 style="font-weight: bold" class="box-title">LẤY VOUCHER : <?php echo $this->vouchers?></h3><hr/>
+<form  name="data_frm" id="data_frm" method="post" action="/admin/user/vouchers/getvoucherbybillsss" target="hiddenIF"  enctype="multipart/form-data">
+    <iframe  name="hiddenIF" style="display: none" scrolling="auto"></iframe>
+    <input type="hidden"   name="token" value="<?php echo $this->token?>">
+    <input type="hidden"   name="id" value="<?php echo $this->id?>">
+    <div class="form-group">
+        <span class="col-sm-offset-3 col-sm-9 color_red tb" id="id_addon_user_tb"></span>
+        <span>Mã đơn hàng : </span>
+            <input type="number" min="0" class="form-control" id="id_addon_user" name="id_addon_user" value="<?php echo $this->id_addon_user ?>" placeholder="Nhập mã đơn hàng vào đây nhé">
+            <div class="form-group">
+                <span>Trường đại học : </span>
+                <textarea style="width: 100%" id="note_school" name="note_school" placeholder="Đại học khoa học tự nhiên"></textarea>
+            </div>
+            <div class="form-group">
+                <span>Mã số sinh viên :</span>
+                <input class="form-control" type="text" name="note_mssv" id="note_mssv" placeholder="Mssv: 0846189" />
+            </div>
+            <input type="file" name="file_upload" id="file_upload" />
+            <hr/>
+            <span class="input-group-btn">
+                <button  type="submit" id="save"   class="btn btn-primary"><i class="fa fa-sign-in"> Send</i></button>
+                <button style="display: none" type="button" id="wt" class="btn btn-primary"><i class="fa fa-spinner"> Đang xử lý</i></button>
+            </span>
+    </div>
+    <b id="complete" align="center" class="color_red  size20"></b>
+</form>

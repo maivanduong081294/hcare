@@ -1,0 +1,620 @@
+<form  name="data_frm" id="data_frm" action="/admin/user/guarantee/add" method="post" target="hiddenIF"  enctype="multipart/form-data">
+        <iframe  name="hiddenIF" style="display: none" scrolling="auto"></iframe>
+        <div class="col-md-4">
+            <div class="panel panel-default panel-success">
+                <div class="panel-heading"><b>THÔNG TIN KHÁCH HÀNG, TIẾP NHẬN MÁY</b></div>
+                <div class="panel-body">
+                    <p>Họ Tên :<?php echo $this->detail_customer["fullname"] ?></p>
+                    <p>Địa chỉ : <?php echo $this->detail_customer["address"] ?></p>
+                    <p>Điện thoại : <?php echo $this->detail_customer["phone"] ?></p>
+                    <div class="form-group">
+                        <span>Ngày hẹn:</span>
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-addon">
+                                <i class="fa fa-text-width"></i>
+                            </div>
+                            <input type="text" class="form-control"  name="dealine" id="dealine"  data-inputmask="'alias': 'dd/mm/yyyy'"  data-mask="" placeholder="dd/mm/yyyy">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <span>Nhận máy từ chi nhánh :</span>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <select class="selects" name="storeid_in" id="storeid_in">
+                        <option value="">Chọn chi nhánh</option>
+                        <?php foreach ($this->list_store as $items){ ?>
+                        <option value="<?php echo $items["userid"] ?>"><?php echo $items["storename"] ?></option>
+                        <?php }?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <span>Nhân viên nhận : </span>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <select onchange="change_receiver();" class="selects"  name="receiver_id" id="receiver_id">
+                        <option value="">Chọn tên nhân viên</option>
+                        <?php foreach ($this->sreceiver as $items){ ?>
+                        <option value="<?php echo $items["userid"] ?>"><?php echo $items["fullname"] ?></option>
+                        <?php }?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <span>Số điện thoại : </span>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <input type="number" placeholder="Số điện thoại" name="phone" id="phone" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <span>Ghi chú thêm :</span>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <textarea placeholder="Nhập ghi chú vào đây..." class="form-control" required="required" name="note2" id="note2" rows="3" ></textarea>
+                </div>
+            </div>
+            <div class="frm_dvbh"></div>
+            <input type="hidden" name="receiver" id="receiver" />
+            <div class="form-group hidden">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="img_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Chọn Hình:</label>
+                <div class="input-group">
+                    <input  onchange='Test.UpdatePreview(this)' type="file" name="img" id="img" />
+                    <img id="img_review" src="/uploads/profile/<?php echo $this->detail["img"] ?>" alt="no-img" style="border: 1px solid #ccc;border-radius: 5px"  width="128" height="128" />
+                </div>
+            </div>
+                    
+                    
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default panel-success">
+                <div class="panel-heading"><b>THÔNG TIN SẢN PHẨM</b></div>
+                <div class="panel-body">
+                    <span>Mã số hộp:</span>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-text-width"></i>
+                        </div>
+                        <input type="text" class="form-control"  name="id_box" id="id_box" value="<?php echo $this->detail["id_box"] ?>" placeholder="Nhập mã số hộp của sản phẩm...">
+                    </div>
+                    <span>MODEL:</span>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-text-width"></i>
+                        </div>
+                        <select onchange="changes_product();return false;" class="selects" required="required" name="itemid" id="itemid">
+                            <option value="">Lựa chọn sản phẩm</option>
+                            <?php foreach ($this->slist as $items){ ?>
+                            <option value="<?php echo $items ?>"><?php echo $items ?></option>
+                            <?php }?>
+                        </select>
+                    </div>
+                    <span>CTY/HNAM:</span>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-text-width"></i>
+                        </div>
+                        <select class="selects" required="required" name="flag" id="flag">
+                            <option value="0">Loại</option>
+                            <option value="1">Công ty</option>
+                            <option value="2">Hnam</option>
+                        </select>
+                    </div>
+                    <span>IMEI:</span>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-text-width"></i>
+                        </div>
+                        <input type="text" class="form-control" required="required" name="imei" id="imei" value="<?php echo $this->detail["imei"] ?>" placeholder="Nhập số imei của sản phẩm...">
+                    </div>
+                    <span>SERI:</span>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-text-width"></i>
+                        </div>
+                        <input type="text" class="form-control" name="seri" id="seri" value="<?php echo $this->detail["seri"] ?>" placeholder="Nhập số seri của sản phẩm vào đây...">
+                    </div>
+                    <span>MÀU:</span>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-text-width"></i>
+                        </div>
+                        <select name="pid_color" id="pid_color"  class="selects">
+                            <option value="0">Tất cả màu</option>
+                        </select>
+                    </div>
+                    <span>Ngày mua máy:</span>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-text-width"></i>
+                        </div>
+                        <input type="text" class="form-control"  name="purchase_date" id="purchase_date"  data-inputmask="'alias': 'dd/mm/yyyy'"  data-mask="" placeholder="dd/mm/yyyy">
+                    </div>
+                    
+                    
+                    
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default panel-success">
+                <div class="panel-heading"><b>BÁO GIÁ VÀ BẢO HÀNH</b></div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <?php
+                        $check1='';
+                        if($this->detail["status_guarantee"] ==1){ 
+                            $check1 = 'checked="checked"';
+                        } 
+
+                        $check2='';
+                        if($this->detail["status_guarantee"] ==2){ 
+                            $check2 = 'checked="checked"';
+                        } 
+                        ?>
+                        <label for="warranty_info_id" class="control-label" id="text-align-label">Tình trạng : </label>
+                        <label><input required="required" onclick="change_price();" type="radio" name="status_guarantee" id="status_guarantee1" <?php echo $check1; ?> value="1"  /> Còn bảo hành</label>
+                        <label><input required="required" onclick="change_price();" type="radio" name="status_guarantee" id="status_guarantee2" <?php echo $check2; ?> value="2" /> Hết bảo hành</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="warranty_info_id" class="control-label" id="text-align-label">Nhà cung cấp : </label>
+                        <label onclick="change_price();"><input type="radio" name="ncc_ok" checked="" id="ncc_ok1" value="1"> Đồng ý </label>
+                        <label onclick="change_price();"><input type="radio" name="ncc_ok" id="ncc_ok2" value="2"> Không đồng ý </label>
+                    </div>
+                    <div class="form-group">
+                        <span>Tình trạng hư hỏng:</span>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-text-width"></i>
+                            </div>
+                            <input placeholder="Tình trạng hư hỏng..." type="text" name="damages" id="damages" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <span>Tình trạng tiếp nhận:</span>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-text-width"></i>
+                            </div>
+                            <input placeholder="Tình trạng máy lúc tiếp nhận..." type="text" name="status_receive" id="status_receive" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <span>Phụ kiện kèm theo:</span>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-text-width"></i>
+                            </div>
+                            <input placeholder="phụ kiện kèm theo nếu có" type="text" name="acc_attach" id="acc_attach" class="form-control" />
+                        </div>
+                    </div>
+            <div class="form-group">
+                <span>Ghi chú:</span>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <textarea placeholder="Nhập ghi chú vào đây..." class="form-control" required="required" name="note" id="note" rows="3" ></textarea>
+                </div>
+            </div>        
+                    
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <div class="col-md-6">
+            <div class="col-md-12">
+                <b style="font-size: 24px;color: red"><?php echo $this->detail_customer["fullname"] ?> -- <?php echo $this->detail_customer["phone"] ?></b>
+            </div>
+            
+            <div class="form-group">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="imei_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Mã số hộp : </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <input type="text" class="form-control"  name="id_box" id="id_box" value="<?php echo $this->detail["id_box"] ?>" placeholder="Nhập mã số hộp của sản phẩm...">
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="imei_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Số IMEI : </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <input type="text" class="form-control" required="required" name="imei" id="imei" value="<?php echo $this->detail["imei"] ?>" placeholder="Nhập số imei của sản phẩm...">
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="seri_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Số Seri : </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <input type="text" class="form-control" name="seri" id="seri" value="<?php echo $this->detail["seri"] ?>" placeholder="Nhập số seri của sản phẩm vào đây...">
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="itemid_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Model : </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <select onchange="changes_product();return false;" class="selects" required="required" name="itemid" id="itemid">
+                        <option value="">Lựa chọn sản phẩm</option>
+                        <?php foreach ($this->slist as $items){ ?>
+                        <option value="<?php echo $items ?>"><?php echo $items ?></option>
+                        <?php }?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="itemid_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">CTY/HNAM : </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <select class="selects" required="required" name="flag" id="flag">
+                        <option value="0">Loại</option>
+                        <option value="1">Công ty</option>
+                        <option value="2">Hnam</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="itemid_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Màu : </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <select name="pid_color" id="pid_color"  class="selects">
+                        <option value="0">Tất cả màu</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="itemid_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Ngày mua máy : </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <input type="text" class="form-control"  name="purchase_date" id="purchase_date"  data-inputmask="'alias': 'dd/mm/yyyy'"  data-mask="" placeholder="dd/mm/yyyy">
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="money_tb"></span>
+                <?php
+                $check1='';
+                if($this->detail["status_guarantee"] ==1){ 
+                    $check1 = 'checked="checked"';
+                } 
+                
+                $check2='';
+                if($this->detail["status_guarantee"] ==2){ 
+                    $check2 = 'checked="checked"';
+                } 
+                ?>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Tình trạng bảo hành : </label>
+                <label><input required="required" type="radio" name="status_guarantee" id="status_guarantee1" <?php echo $check1; ?> value="1"  /> Còn bảo hành</label>
+                <label><input required="required" type="radio" name="status_guarantee" id="status_guarantee2" <?php echo $check2; ?> value="2" /> Hết bảo hành</label>
+            </div>
+            
+            <div class="form-group">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="note_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Hư hỏng : </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <input placeholder="Tình trạng hư hỏng..." type="text" name="damages" id="damages" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="note_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Tình trạng tiếp nhận : </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <input placeholder="Tình trạng máy lúc tiếp nhận..." type="text" name="status_receive" id="status_receive" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="note_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Phụ kiện kèm theo : </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <input placeholder="phụ kiện kèm theo nếu có" type="text" name="acc_attach" id="acc_attach" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="note_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Ghi chú : </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <textarea placeholder="Nhập ghi chú vào đây..." class="form-control" required="required" name="note" id="note" rows="3" ></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="money_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Ngày hẹn : </label>
+                <div class="input-group input-group-sm">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <input type="text" class="form-control"  name="dealine" id="dealine"  data-inputmask="'alias': 'dd/mm/yyyy'"  data-mask="" placeholder="dd/mm/yyyy">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="receiver_id_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Nhận máy từ chi nhánh : </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <select class="selects" name="storeid_in" id="storeid_in">
+                        <option value="">Chọn chi nhánh</option>
+                        <?php foreach ($this->list_store as $items){ ?>
+                        <option value="<?php echo $items["userid"] ?>"><?php echo $items["storename"] ?></option>
+                        <?php }?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="receiver_id_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Nhân viên nhận : </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <select onchange="change_receiver();" class="selects"  name="receiver_id" id="receiver_id">
+                        <option value="">Chọn tên nhân viên</option>
+                        <?php foreach ($this->sreceiver as $items){ ?>
+                        <option value="<?php echo $items["userid"] ?>"><?php echo $items["fullname"] ?></option>
+                        <?php }?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="note_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Số điện thoại : </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <input type="number" placeholder="Số điện thoại" name="phone" id="phone" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="note_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Ghi chú thêm : </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <textarea placeholder="Nhập ghi chú vào đây..." class="form-control" required="required" name="note2" id="note2" rows="3" ></textarea>
+                </div>
+            </div>
+            <div class="frm_dvbh"></div>
+            <input type="hidden" name="receiver" id="receiver" />
+            <div class="form-group hidden">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="img_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Chọn Hình:</label>
+                <div class="input-group">
+                    <input  onchange='Test.UpdatePreview(this)' type="file" name="img" id="img" />
+                    <img id="img_review" src="/uploads/profile/<?php echo $this->detail["img"] ?>" alt="no-img" style="border: 1px solid #ccc;border-radius: 5px"  width="128" height="128" />
+                </div>
+            </div>
+            
+            
+        </div>
+        <div class="box-footer">
+            <input type="hidden" name="idcustomer" id="idcustomer" value="<?php echo $this->idcustomer ?>" />
+            <button type="submit" id="save" onclick="savess();return false;" class="btn btn-primary right"><i class="fa fa-floppy-o"> Lưu</i></button>
+            <button style="display: none" type="button" id="wt" class="btn btn-primary right"><i class="fa fa-spinner"> Đang xử lý...</i></button>
+            <b id="complete"  class="color_red right size20"></b>
+        </div>
+    </form>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
+<script>
+//    function remove_day(){
+//        $('.dealine').attr('data-date','');
+//        $('.dealine').attr('value','');
+//    }
+    function changes_product(){
+        var pid = $( "#itemid option:selected" ).val();
+            $('#pid_color').html('');
+            $('#pid_color').html("<option value='0'>Màu sản phẩm...</option>");
+            var url = '/admin/user/ajax/get-color-by-product-ids';
+            $.ajax({
+                method: 'get',
+                cache: false,
+                url: url,
+                data: {product_id: pid},
+                dataType: 'json',
+                success: function (resp) {
+                    $.each(resp, function (i) {
+                        var html = '<option  value="' + resp[i].colorid + '">' + resp[i].name_color + '</option>';
+                        $('#pid_color').append(html);
+                    });
+                }
+            });
+    }
+//$('#dealine').on("change", function() {
+//    this.setAttribute(
+//        "data-date",
+//        moment(this.value, "YYYY-MM-DD")
+//        .format( this.getAttribute("data-date-format") )
+//    )
+//}).trigger("change");
+//$('#purchase_date').on("change", function() {
+//    this.setAttribute(
+//        "data-date",
+//        moment(this.value, "YYYY-MM-DD")
+//        .format( this.getAttribute("data-date-format") )
+//    )
+//}).trigger("change");
+</script>
+<script>
+    function showss(){
+        $('#save').show();
+        $('#wt').hide();
+    }
+    function hidess(){
+        $('#save').hide();
+        $('#wt').show();
+    }
+    function savess(){
+        $('#data_frm').submit();
+        hidess();
+    }
+    function notification (msg,id){
+        showss();
+        alert(msg);
+        $('.tb').html('');
+        $('#'+id).focus(); 
+        var msg_add = '<i class="fa fa-times-circle-o"> '+msg+' </i>';
+        $('#'+id+"_tb").html(msg_add);   
+    }
+    function completes(msg,id,token){
+        showss();
+        step_3();
+        $('.tb').html('');
+        var msg_add = '<i class="fa fa-check" aria-hidden="true"> </i>'+msg+'';
+        $('#complete').html(msg_add);
+        alert(msg);
+        window.location.href = '/admin/user/guarantee/detail?id='+id+'&token='+token+'';
+//        window.location.reload(true);
+    }
+    
+    function format_price(id){
+        var price = $("#"+id).val();
+        price = price.replace(/,/gi, "");
+        price = price + ".";
+        price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        var sprice = price.split(".");
+        $("#"+id).val(sprice[0]);
+    }
+    function save_warranty(){
+        $.post("/admin/user/guarantee/save-warranty", $('form').serialize(), function (resp) {
+                $('#wt_warranty').show();
+                $('#save_warranty').hide();
+                $.each(resp, function (i, obj) {
+                    var id = obj.id;
+                    var msg = obj.msg;
+                    var data = obj.data;
+                    if (msg != "ok") {
+                        alert(msg);
+                        $('#' + id).focus();
+                        $('#wt_warranty').hide();
+                        $('#save_warranty').show();
+                        return false;
+                    } else {
+                        alert('Lưu thành công');
+                        $('.dvbh').hide();
+                        $('#save_warranty').show();
+                        $('#wt_warranty').hide();
+                        $('#producers').html('');
+                        $('#producers').html('<option value =""> Lựa chọn hãng bảo hành</option>');
+                        $.each(data, function (y,objs) {
+                            var html = '<option value="' + objs.id + '">' + objs.name + '</option>';
+                            $('#producers').append(html);
+                        });
+                    }
+                });
+            }, 'json');
+    }
+    function add_warranty(){
+        $('.add_warranty').show();
+    }
+    $( document ).ready(function() {
+        step_2();
+        $('.selects').select2();
+    });
+    function change_receiver(){
+        var receiver = $("#receiver_id option:selected").text();
+        $('#receiver').val(receiver);
+    }
+    $(function(){
+    Test = {
+        UpdatePreview: function(obj){
+          // if IE < 10 doesn't support FileReader
+          if(!window.FileReader){
+             // don't know how to proceed to assign src to image tag
+          } else {
+             var reader = new FileReader();
+             var target = null;
+             
+             reader.onload = function(e) {
+              target =  e.target || e.srcElement;
+               $("#img_review").prop("src", target.result);
+             };
+              reader.readAsDataURL(obj.files[0]);
+          }
+        }
+    };
+});
+</script>
+<script src="/backend/plugins/input-mask/jquery.inputmask.js"></script>
+    <script src="/backend/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+    <script src="/backend/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+    <script>
+//        $("[data-mask]").inputmask();
+    $("#dealine").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+        $("#purchase_date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+        </script>

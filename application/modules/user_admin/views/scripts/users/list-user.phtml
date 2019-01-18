@@ -1,0 +1,714 @@
+<style>
+    .form-group{
+        padding-right: 15px;
+    }
+    .datepicker{z-index:1151 !important;}
+    .rowactived{
+        background: #D8CFCF;
+    }
+</style>
+<div class="box-header with-border panel-default">
+    <form role="form" id="get-member" method="get"  class="frmReport">
+        <div class="col-md-11 col-xs-11">
+            <p style="font-weight: bold;font-size: 20px">DANH SÁCH NHÂN VIÊN</p>
+            <div class="col-md-3">
+                <select class="form-control" id="department" name="department" >
+                    <option value="0"> Nhóm phòng ban</option>
+                    <?php
+                    foreach ($this->list_department as $items) {
+                        $slected = '';
+                        if ($items["id"] == $this->department) {
+                            $slected = 'selected = selected';
+                        }
+                        ?>
+                        <option <?php echo $slected ?> value="<?php echo $items["id"] ?>">
+                            <?php echo $items["name"] ?>
+                        </option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" id="regency" name="regency" >
+                    <option value="0"> Nhóm chức vụ</option>
+                    <?php
+                    foreach ($this->list_regency as $items) {
+                        $slected2 = '';
+                        if ($items["id"] == $this->regency) {
+                            $slected2 = 'selected = selected';
+                        }
+                        ?>
+                        <option <?php echo $slected2 ?> value="<?php echo $items["id"] ?>"><?php echo $items["name"] ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select style="display: <?php echo $this->display ?>" class="form-control vid" id="vote_id" name="vote_id" >
+                    <option value="0"> Chọn chi nhánh</option>
+                    <?php
+                    if ($this->storeid > 0) {
+                        foreach ($this->list_vote as $items) {
+                            $slected3 = '';
+                            if ($items["userid"] == $this->storeid) {
+                                $slected3 = 'selected = selected';
+                            }
+                            ?>
+                            <option <?php echo $slected3 ?> value="<?php echo $items["userid"] ?>"><?php echo $items["storename"] ?></option>
+                        <?php } ?>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <? echo $this->formSelect("active", $this->active,array("class"=>"form-control"), $this->plist); ?>
+            </div>
+            <button  type="submit" class="btn btn-primary"><i class="fa fa-search"></i>  Xem</button>
+        </div>
+
+        <div class="col-md-1 col-xs-1">
+            <a  class="btn btn-primary btn-app" href="/admin/user/users/edit-member" ><i class="fa fa-plus"></i> Thêm nhân viên</a>
+        </div>
+    </form>
+</div><!-- /.box-header -->
+
+<div class="box-body">
+<div class="table-responsive">
+<table id="f_table" width="100%" class="table table-striped table-bordered">
+    <form method="post" name="frmPage" id="frmPage" action="" >
+        <input type="hidden" name="updateid" id="updateid" value="" />
+        <thead>
+            <tr>
+                <th width="5"><input type="checkbox" onclick="checkme()" name="checkall"></th>
+                <th width="10">#</th>
+                <th class="bgTitleadmin2">Tên nhân viên</th>
+                <th  width="50">Điện thoại</th>
+                <th width="60">Tên đăng nhập</th>
+                <th width="150">Chức vụ</th>
+                <th width="200">Chi nhánh </th>
+                <th width="80" class="bgTitleadmin1">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $skey = "DAYOFFHNAM2016";
+            $list = $this->items;
+            $no = 1;
+
+            if (count($list) > 0)
+                foreach ($list as $item) {
+                    $tken = md5($skey . $item["userid"]);
+                    $is_actived = $item["is_actived"];
+                    if ($no % 2 == 0)
+                        $bgcolor = '#f2f4f5';
+                    else
+                        $bgcolor = '#ffffff';
+                    ?>
+                    <tr bgcolor="<?echo $bgcolor; ?>" class="row-<?php echo $userid; ?>">
+                        <td class="bgContentadmin1"><input type="checkbox" value="<?php echo $item['userid']; ?>" name="check[]"></td>
+                        <td class="bgContentadmin1"><? echo $no++;?></td>
+                        <td class="bgContentadmin2"><b class="fullname_<?php echo $item['userid']; ?>"><?echo $item['fullname']?></b></td>
+                        <td class="bgContentadmin2"><b><?echo $item['phone']?></b></td>
+                        <td class="bgContentadmin2"><b><?echo $item['username']?></b></td>
+                        <td class="bgContentadmin2"><b><?echo $item['regency']?></b></td>
+                        <td class="bgContentadmin2"><b><?echo $item['vote_name']?></b></td>
+                        <td width="260">
+                            <div style="display: none" id="ips_<?php echo $item["userid"] ?>"><?php echo $item["ips"] ?></div>
+                            <div style="display: none" id="fullname_<?php echo $item["userid"] ?>"><?php echo $item["fullname"] ?></div>
+                            <a target="_blank" title="CheckIn" href="/admin/user/users/detail-check-in?&userid=<?php echo $item["userid"] ?>" class="btn btn-info btn-sm" data-toggle="tooltip" ><i class="fa fa-eye"></i></a>
+                            <a  title="Edit Ips" class="btn btn-primary btn-sm" data-toggle="tooltip" onclick="editip(<?php echo $item["userid"] ?>);return false;" ><i class="fa fa-inbox"></i></a>
+                            <a target="_blank" title="Chấm công" class="btn btn-primary btn-sm" data-toggle="tooltip" href="/admin/user/users/day-off?&userid=<?php echo $item["userid"] ?>&token=<?php echo $tken; ?>" ><i class="fa fa-calendar"></i></a>
+                            <a target="_blank" title="Lương" class="btn btn-warning btn-sm" data-toggle="tooltip" rels="" href="/admin/user/users/luong?&userid=<?php echo $item["userid"] ?>"><i class="fa fa-dollar"></i></a>
+                            <a title="Di chuyển" class="btn btn-success btn-sm" data-toggle="tooltip" rels="" onclick="moveDh('<?php echo $item["userid"] ?>', '<?php echo $item['fullname'] ?>', '<?php echo $item['vote_name']; ?>');return false;" href="#"><i class="fa fa-exchange"></i></a>
+                            <a id="edit-<?php echo $item["userid"] ?>" class="btn btn-primary btn-sm" data-toggle="tooltip" rels="<?php echo $item["userid"] ?>"  href="/admin/user/users/edit-member?id=<?php echo $item["userid"] ?>"><i class="fa fa-edit"></i></a>
+                            <a class="btn  btn-info btn-sm" title="reset password" data-toggle="tooltip" onclick="reset_pass(<?php echo $item["userid"] ?>);
+                                    return false;" href="#"><i class="fa fa-refresh"></i></a>
+                               <?php if ($is_actived == 0): ?>
+                                <a onclick="restores(<?php echo $item["userid"] ?>);return false;" class="btn btn-warning btn-sm" data-toggle="tooltip" href="#"><i class="fa fa-reply"></i></a>
+                            <?php else: ?>
+                                <input type="hidden" id="description" name="description" value=""/>
+                                <a onclick="del(<?php echo $item["userid"] ?>);return false;" class="btn btn-danger btn-sm" data-toggle="tooltip" href="#"><i class="fa fa-trash-o"></i></a>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php } ?>
+    </form>
+</table>
+</div>
+</div>
+<div id="ddelete" style="display:none;"></div>
+<div id="dmyorder" style="display:none"></div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#f_table").DataTable({
+            "pageLength": 100});
+
+        $('#department').change(function () {
+            var id_department = $("#department option:selected").val();
+            $('.vid').hide();
+            $('#vote_id').html('0');
+            $('#regency').html('');
+
+            var ajaxLink = '/admin/user/regency-department/get-regency';
+            $.ajax({
+                method: 'get',
+                cache: false,
+                url: ajaxLink,
+                data: {id_department: id_department},
+                dataType: 'json',
+                success: function (resp) {
+                    console.log(resp);
+                    $('#regency').html('<option value="' + resp[0].regency_all + '"> Nhóm chức vụ</option>');
+                    $.each(resp, function (i) {
+                        html_regency = '<option  value="' + resp[i].id_regency + '">' + resp[i].name + '</option>';
+                        $('#regency').append(html_regency);
+                    });
+
+                }
+            });
+        });
+
+        $('#regency').change(function () {
+            var id_regency = $("#regency option:selected").val();
+            if (id_regency == 42) {
+                $('.vid').show();
+                $('#vote_id').html('<option value="0"> Chi nhánh</option>');
+                var ajaxLink = '/admin/user/regency-department/get-storeid';
+                $.ajax({
+                    method: 'get',
+                    cache: false,
+                    url: ajaxLink,
+                    data: {id_regency: id_regency},
+                    dataType: 'json',
+                    success: function (resp) {
+                        console.log(resp);
+                        $.each(resp, function (i) {
+                            html_storeid = '<option  value="' + resp[i].userid + '">' + resp[i].storename + '</option>';
+                            $('#vote_id').append(html_storeid);
+                        });
+
+                    }
+                });
+            }
+        });
+
+
+        $('#active').change(function () {
+            var kword = $('#keyword').val();
+            var v_id = $('#vote_id').val();
+            var act = $('#active').val();
+            window.location = "/admin/user/users/index?active=" + act + "&vote_id=" + v_id;
+        });
+    });
+    function del(id) {
+        if (id != '')
+            result = confirm('Bạn chắc chắn muốn huỷ thông tin nhân viên ?');
+        if (result)
+            $('#ddelete').load('/admin/user/users/delete-member?&id=' + id, function () {
+                alert('Huỷ  thành công.');
+                window.location.reload(true);
+            });
+    }
+    function restores(id) {
+        if (id != '')
+            result = confirm('Bạn chắc chắn muốn kích hoạt thông tin nhân viên bán hàng ?');
+        if (result)
+            $('#ddelete').load('/admin/user/users/restore-member?&id=' + id, function () {
+                alert('Kích hoạt  thành công.');
+                window.location.reload(true);
+            });
+    }
+    function reset_pass(id) {
+        if (id != '')
+            result = confirm('Bạn chắc chắn muốn reset ?');
+        if (result)
+            $('#ddelete').load('/admin/user/users/reset?&userid=' + id, function () {
+
+                var ajaxLink = '/admin/user/users/get-pass';
+                $.ajax({
+                    method: 'get',
+                    cache: false,
+                    url: ajaxLink,
+                    data: {userid: id},
+                    dataType: 'json',
+                    success: function (resp) {
+                        console.log(resp.pass_show);
+                        $('#show_pass').html(resp.pass_show);
+                        $('#get_pass').modal('show');
+                    }
+                });
+
+                alert('Reset thành công.');
+//                window.location.reload(true);
+            });
+    }
+
+</script>
+<script type="text/javascript">
+
+
+    function get_editor_data()
+    {
+        document.getElementById('fullcontent').value = FCKeditorAPI.GetInstance('myFCKeditor_fullcontent').GetHTML();
+        return true;
+    }
+    function CheckForm()
+    {
+        return true;
+    }
+
+    function checkme()
+    {
+        isCheck = document.frmPage.checkall.checked;
+        elts = document.frmPage.elements['check[]'];
+        if (!elts.length)
+        {
+            elts.checked = isCheck;
+        } else
+        {
+            for (i = 0; i < elts.length; i++)
+                elts[i].checked = isCheck;
+        }
+    }
+
+    function isCheckDetail() {
+        result = 0;
+        $('input:checkbox').each(function () {
+            if ($(this).attr('checked') == true)
+                result = 1;
+        });
+        return result;
+    }
+
+    $().ready(function () {
+        $('.sdelete').click(function () {
+            id = $(this).attr('rel');
+            if (id != '')
+                result = confirm('Bạn chắc chắn muốn xóa?');
+            if (result)
+                $('#ddelete').load('/admin/user/members/delete?rand=' + Math.random() + '&userid=' + id, function () {
+                    alert('Xóa thành công.');
+                    window.location.reload(true);
+                });
+        });
+        $('.resetid').click(function () {
+            id = $(this).attr('rels');
+            if (id != '')
+                result = confirm('Bạn chắc chắn muốn reset ?');
+            if (result)
+                $('#ddelete').load('/admin/user/users/reset?&userid=' + id, function () {
+                    alert('Reset thành công.');
+                    window.location.reload(true);
+                });
+        });
+
+        $('.resetall').click(function () {
+            result = confirm('Bạn chắc chắn muốn reset tất cả ?');
+            if (result)
+                $('#ddelete').load('/admin/user/users/resetall', function () {
+                    alert('Reset thành công.');
+                    window.location.reload(true);
+                });
+
+        });
+
+        $('.myorder').change(function () {
+            $('#updateid').val($(this).attr('rel'));
+            $('#frmPage').attr('action', '/admin/user/products-size/update-order/');
+            $('#frmPage').submit();
+        });
+
+        $('.view').click(function (e) {
+            e.preventDefault();
+            url = $(this).attr('href');
+            tb_show('Xem thông tin thành viên', url + "&height=200&iframe=true");
+        });
+
+    });
+    $().ready(function () {
+
+        $('#btnView').click(function (e) {
+            e.preventDefault();
+            $("#get-member").attr("action", "/admin/user/users/list-user");
+            $("#get-member").submit();
+
+        });
+    });
+
+
+    function moveDh(id, fullname, vote_name) {
+        $('#myModal').modal('show');
+        $('#fullname').val(fullname);
+        $('#vote_old').val(vote_name);
+        $('#id_vote_old').val(id);
+
+    }
+</script>
+<div class="modal fade" id="get_pass">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" style="font-weight: bold">Pass mới là : <span id="show_pass"></span></h4>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" style="font-weight: bold">Luân chuyển nhân viên</h4>
+            </div>
+            <form name="movedonhangnhanh" id="movedonhangnhanh" action="" method="">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Nhân viên: </label>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-desktop"></i>
+                                </div>
+                                <input readonly="readonly" type="text" class="form-control" name="fullname" id="fullname" value="" placeholder="Nhập tên nhân viên vào đây nhé! ...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Đang ở chi nhánh: </label>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-desktop"></i>
+                                </div>
+                                <input readonly="readonly" type="text" class="form-control" name="vote_old" id="vote_old" value="" placeholder="Tên chi nhánh cũ ...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Chuyển tới chi nhánh: </label>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-desktop"></i>
+                                </div>
+                                <select class="form-control" name="vote_new" id="vote_new">
+                                    <option value="">Lựa chọn chi nhánh</option>
+                                    <?php foreach ($this->list_vote as $items) { ?>
+                                        <option data="<?php echo $items["abbreviation"] ?>" value="<?php echo $items["userid"] ?>">
+                                            <?php echo $items["storename"] ?>
+                                        </option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                            <div class="col-md-4">
+                                <button type="submit" id="btnSave" class="btn btn-primary">Lưu</button>
+                                <button style="display: none" type="submit" id="btnwting" class="btn btn-primary">Đang xử lý...</button>
+
+                            </div>
+                            <div class="col-md-8">
+                                <p id="err" style="color: red;font-weight: bold"></p>
+                            </div>
+                            <input type="hidden" name="id_vote_old" id="id_vote_old" />
+                            <input type="hidden" name="vote_name" id="vote_name" />
+                            <input type="hidden" name="abbreviation" id="abbreviation" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div class="modal fade" id="myModal5">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" style="font-weight: bold">Lịch sử lương nhân viên: <b id="fullnamenv"></b></h4>
+
+            </div>
+            <form name="savepay" id="savepay" action="" method="">
+                <input type="hidden" value="" name="userid" id="userid" />
+                <input type="hidden" name="pid" id="pid" />
+                <table class="table table-condensed table-bordered table-responsive addtable">
+                    <tr>
+                        <th>STT</th>
+                        <th>Họ tên</th>
+                        <th>Chức vụ</th>
+                        <th>Lương</th>
+                        <th>Lương hiện tại</th>
+                        <th>Bắt đầu</th>
+                        <th>Kết thúc</th>
+                        <th>Người tạo</th>
+                        <th width="80">Thác tác</th>
+                    </tr>
+                </table>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Chức vụ: </label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-calendar"></i>
+                                    </div>
+                                    <select name="idregency" id="idregency" class="form-control" >
+                                        <option value="0">Lựa chọn chức vụ</option>
+                                        <?php foreach ($this->list_regency as $item) {
+                                            ?>
+                                            <option value="<?php echo $item["id"] ?>"><?php echo $item["name"] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Thời gian: </label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-calendar"></i>
+                                    </div>
+<!--                                    <input id="startdate" type="text" name="startdate" placeholder="Ngày bắt đầu..." class="date-picker form-control" />
+                                    <div class="input-group-addon">
+                                        <i class="glyphicon glyphicon-calendar"></i>
+                                    </div>
+                                    <input id="enddate" name="enddate" type="text" placeholder="Ngày kết thúc..." class="date-picker form-control" />-->
+                                    <input  type="text" class="form-control pull-right day_ce" name="day_ce"  placeholder="Từ ngày bắt đầu đến ngày kết thúc" id="reservation"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Lương: </label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-desktop"></i>
+                                    </div>
+                                    <input  type="text" class="form-control pricing" name="money" id="money" value="" placeholder="Ví dụ 10.000.000">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Lương hiện tại: </label>
+                                <div class="input-group">
+                                    <label style="margin-right: 20px"> <input id="cke0" type="radio" name="now" value="0" checked="checked" placeholder="Không" /> Không</label>
+                                    <label> <input type="radio" id="cke1" name="now" value="1" placeholder="Có" /> Có</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Mô tả thêm(nếu có): </label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-desktop"></i>
+                                    </div>
+                                    <textarea class="form-control" name="des" id="descript" placeholder="Mô tả thêm nếu có ..." > </textarea>
+                                </div>
+                            </div>
+
+                            <div class="box-footer">
+                                <div class="col-md-4">
+                                    <button type="submit" id="btnSavePay" class="btn btn-primary">Lưu</button>
+                                    <button style="display: none" type="submit" id="btnwtPay" class="btn btn-primary">Đang xử lý...</button>
+
+                                </div>
+                                <div class="col-md-8">
+                                    <p id="err2" style="color: red;font-weight: bold"></p>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>
+    $('#vote_new').change(function () {
+        var vote_name2 = $("#vote_new option:selected").text();
+        var abbreviation = $("#vote_new option:selected").attr('data');
+        $('#vote_name').val(vote_name2);
+        $('#abbreviation').val(abbreviation);
+    });
+    $().ready(function () {
+        $(".pricing").keyup(function () {
+            var price = this.value;
+            price = price.replace(/,/gi, "");
+            price = price + ".";
+            price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            var sprice = price.split(".");
+            $(this).val(sprice[0]);
+        });
+
+
+        $('#btnSave').click(function (e) {
+            $('#btnSave').hide();
+            $('#btnwting').show();
+            var ids = $('#id_vote_old').val();
+            e.preventDefault();
+            $.post("/admin/user/users/save-move-user?userid=" + ids, $('form').serialize(), function (resp) {
+                $('.errblock').remove();
+                $.each(resp, function (i, obj) {
+                    var id = obj.id;
+                    var msg = obj.msg;
+                    if (msg != "ok") {
+                        $('#btnSave').show();
+                        $('#btnwting').hide();
+                        $('#err').html(msg);
+                        $('#' + id).focus();
+                        return false;
+                    } else {
+                        $('#btnSave').show();
+                        $('#btnwting').hide();
+                        $('#err').html('Chuyển thành công');
+                        window.location.reload(true);
+                    }
+
+                });
+            }, 'json');
+        });
+
+    });
+
+
+
+
+
+    function luong2(id) {
+        resets();
+        $('#userid').val(id);
+        var fullname = $(".fullname_" + id).text();
+        $('#fullnamenv').html(fullname);
+        var ajaxLink = '/admin/user/users/get-payroll';
+        $.ajax({
+            method: 'get',
+            cache: false,
+            url: ajaxLink,
+            data: {id: id},
+            dataType: 'json',
+            success: function (resp) {
+                console.log(resp);
+                $('.addrow2').html('');
+                $('#myModal5').modal('show');
+                var count = 0;
+                $.each(resp, function (i) {
+                    count++;
+                    var html2 = "<div class=\"money_" + resp[i].id + "\" style=\"display:none\">" + resp[i].money + "</div>\n\
+                                <div class=\"des_" + resp[i].id + "\" style=\"display:none\">" + resp[i].des + "</div>\n\
+                                <div class=\"startdate_" + resp[i].id + "\" style=\"display:none\">" + resp[i].startdate + "</div>\n\
+                                <div class=\"enddate_" + resp[i].id + "\" style=\"display:none\">" + resp[i].enddate + "</div>\n\
+                                <div class=\"idregency_" + resp[i].id + "\" style=\"display:none\">" + resp[i].idregency + "</div>\n\
+                                <div class=\"now_" + resp[i].id + "\" style=\"display:none\">" + resp[i].now + "</div>";
+                    var html = "<tr onclick=\"selectrow(" + resp[i].id + ");\" class=\"addrow_" + resp[i].id + " addrow2\"><td>" + count + "</td>\n\
+                            <td>" + resp[i].fullname + "</td>\n\
+                            <td>" + resp[i].name_regency + "</td>\n\
+                            <td>" + resp[i].money + "</td>\n\
+                            <td>" + resp[i].now2 + "</td>\n\
+                            <td>" + resp[i].startdate2 + "</td>\n\
+                            <td>" + resp[i].enddate2 + "</td>\n\
+                            <td>" + resp[i].creator + "</td>\n\
+                            <td><a class=\"btn btn-warning btn-sm\" data-toggle=\"tooltip\" onclick=\"editpay(" + resp[i].id + ");return false;\"><i class=\"fa fa-edit\"></i></a>\n\
+                                <a class=\"btn btn-danger btn-sm\" data-toggle=\"tooltip\" onclick=\"delpay(" + resp[i].id + ");return false;\"><i class=\"fa fa-trash-o\"></i></a></td></tr>";
+                    $('.addtable').append(html);
+                    $('.addtable').append(html2);
+                });
+
+            }
+        });
+
+    }
+
+
+    function resets() {
+        $('#pid').val(0);
+        $('#money').val('');
+        $('#descript').val('');
+        $('.day_ce').val('');
+        $("#cke0").prop("checked", true);
+    }
+    function editip(id) {
+        var ips = $('#ips_' + id).html();
+        var fullname = $('#fullname_' + id).html();
+        $('#ips').val(ips);
+        $('#uid').val(id);
+        $('#fullname2').val(fullname);
+        $('#myModal6').modal('show');
+    }
+    $().ready(function () {
+        $('#btnSaveIPS').click(function (e) {
+            $('#btnSaveIPS').hide();
+            $('#btnwtingIPS').show();
+            e.preventDefault();
+            $.post("/admin/user/users/save-ips", $('form').serialize(), function (resp) {
+                $('.errblock').remove();
+                $.each(resp, function (i, obj) {
+                    var id = obj.id;
+                    var msg = obj.msg;
+                    if (msg != "ok") {
+                        $('#btnSaveIPS').show();
+                        $('#btnwtingIPS').hide();
+                        $('#err3').html(msg);
+                        $('#' + id).focus();
+                        return false;
+                    } else {
+                        $('#btnSaveIPS').show();
+                        $('#btnwtingIPS').hide();
+                        $('#err3').html('Lưu thành công');
+                        window.location.reload(true);
+                    }
+
+                });
+            }, 'json');
+        });
+
+    });
+
+
+</script>
+<script>
+    $(document).ready(function () {
+        $(".date-picker").datepicker();
+    });
+</script>
+
+
+<div class="modal fade" id="myModal6">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" style="font-weight: bold">Edit Ips</h4>
+            </div>
+            <form name="editIp" id="editIp" action="" method="">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Nhân viên: </label>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-desktop"></i>
+                                </div>
+                                <input readonly="readonly" type="text" class="form-control" name="fullname2" id="fullname2" value="" placeholder="Nhập tên nhân viên vào đây nhé! ...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">IPS: </label>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-desktop"></i>
+                                </div>
+                                <input type="text" class="form-control" name="ips" id="ips" value="" placeholder="IP  ...">
+                            </div>
+                        </div>
+
+                        <div class="box-footer">
+                            <div class="col-md-4">
+                                <input type="hidden" name="uid" id="uid" value="" />
+                                <button type="submit" id="btnSaveIPS" class="btn btn-primary">Lưu</button>
+                                <button style="display: none" type="submit" id="btnwtingIPS" class="btn btn-primary">Đang xử lý...</button>
+
+                            </div>
+                            <div class="col-md-8">
+                                <p id="err3" style="color: red;font-weight: bold"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

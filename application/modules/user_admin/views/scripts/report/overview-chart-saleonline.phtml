@@ -1,0 +1,332 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script>
+$(function () {
+    $('#container2').highcharts({
+
+        chart: {
+            type: 'column'
+        },
+
+        title: {
+            text: 'Doanh số từng chi nhánh theo giá trị'
+        },
+
+        xAxis: {
+            categories: [<? echo $this->list_type_ghn3 ?>]
+        },
+
+        yAxis: {
+            allowDecimals: false,
+            min: 0,
+            title: {
+                text: 'Tiền (x 1.000)'
+            }
+        },
+
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.x + '</b><br/>' +
+                    this.series.name + ': ' + this.y + '<br/>' +
+                    'Total: ' + this.point.stackTotal;
+            }
+        },
+
+        plotOptions: {
+            column: {
+                stacking: 'normal'
+            }
+        },
+
+        series: [
+        {name: 'ĐT-old',
+            data: <? echo $this->phone_old ?>,
+            stack: 'dt'
+        },{
+            name: 'ĐT-Hnam',
+            data: <? echo $this->phone_hnam ?>,
+            stack: 'dt'
+        },
+        {
+            name: 'ĐT-Cty',
+            data: <? echo $this->phone_cty ?>,
+            stack: 'dt'
+        }, {
+            name: 'MTB-Cty',
+            data: <? echo $this->tablet_cty ?>,
+            stack: 'mtb'
+        }, {
+            name: 'MTB-Hnam',
+            data: <? echo $this->tablet_hnam ?>,
+            stack: 'mtb'
+        },{
+            name: 'MTB-old',
+            data: <? echo $this->tablet_old ?>,
+            stack: 'mtb'
+        }, {
+            name: 'Phụ kiện-Cty',
+            data: <? echo $this->acc_cty ?>,
+            stack: 'pk'
+        },{
+            name: 'Phụ kiện-Hnam',
+            data: <? echo $this->acc_hnam ?>,
+            stack: 'pk'
+        }, {
+            name: 'Laptop-Cty',
+            data: <? echo $this->laptop_cty ?>,
+            stack: 'lt'
+        }, {
+            name: 'Laptop-Hnam',
+            data: <? echo $this->laptop_hnam ?>,
+            stack: 'lt'
+        }, {
+            name: 'ĐHTM-Cty',
+            data: <? echo $this->watch_cty ?>,
+            stack: 'watch'
+        }, {
+            name: 'ĐHTM-Hnam',
+            data: <? echo $this->watch_hnam ?>,
+            stack: 'watch'
+        }]
+    });
+});
+$(function () {
+    $('#container').highcharts({
+
+        chart: {
+            type: 'column'
+        },
+
+        title: {
+            text: 'Doanh số từng chi nhánh theo số lượng'
+        },
+
+        xAxis: {
+            categories: [<? echo $this->list_type_ghn3 ?>]
+        },
+
+        yAxis: {
+            allowDecimals: false,
+            min: 0,
+            title: {
+                text: 'Số lượng'
+            }
+        },
+
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.x + '</b><br/>' +
+                    this.series.name + ': ' + this.y + '<br/>' +
+                    'Total: ' + this.point.stackTotal;
+            }
+        },
+
+        plotOptions: {
+            column: {
+                stacking: 'normal'
+            }
+        },
+
+        series: [
+        {name: 'ĐT-old',
+            data: <? echo $this->cphone_old;?>,
+            stack: 'dt'
+        },{
+            name: 'ĐT-Hnam',
+            data: <? echo $this->cphone_hnam ?>,
+            stack: 'dt'
+        },
+        {
+            name: 'ĐT-Cty',
+            data: <? echo $this->cphone_cty ?>,
+            stack: 'dt'
+        }, {
+            name: 'MTB-Cty',
+            data: <? echo $this->ctablet_cty ?>,
+            stack: 'mtb'
+        }, {
+            name: 'MTB-Hnam',
+            data: <? echo $this->ctablet_hnam ?>,
+            stack: 'mtb'
+        },{
+            name: 'MTB-old',
+            data: <? echo $this->ctablet_old ?>,
+            stack: 'mtb'
+        }, {
+            name: 'Phụ kiện-Cty',
+            data: <? echo $this->cacc_cty ?>,
+            stack: 'pk'
+        },{
+            name: 'Phụ kiện-Hnam',
+            data: <? echo $this->cacc_hnam ?>,
+            stack: 'pk'
+        }, {
+            name: 'Laptop-Cty',
+            data: <? echo $this->laptop_cty ?>,
+            stack: 'lt'
+        }, {
+            name: 'Laptop-Hnam',
+            data: <? echo $this->claptop_hnam ?>,
+            stack: 'lt'
+        }, {
+            name: 'ĐHTM-Cty',
+            data: <? echo $this->cwatch_cty ?>,
+            stack: 'watch'
+        }, {
+            name: 'ĐHTM-Hnam',
+            data: <? echo $this->cwatch_hnam ?>,
+            stack: 'watch'
+        }]
+    });
+});
+</script>
+<?php
+    foreach ($this->ptype as $key=> $items){
+        $sum += $this->sum_cty[$key]/1000;
+        $sum_hnam += $this->sum_hnam[$key]/1000;
+    }
+    ?>
+<div class="panel panel-default">
+                <div class="col-md-8">
+                    <i class="fa fa-home"></i> Báo cáo tổng quan
+                </div>
+                <div class="col-md-4">
+                <form >
+                <div class="input-group input-group-sm ">
+                            <?php 
+                                $start_end='Date range picker';
+                                if($this->start_end !=null){
+                                    $start_end = $this->start_end;
+                                }
+                                ?>
+                                <span class="input-group-btn">
+                                <button class="btn btn-default pull-right" id="daterange-btn">
+                                      <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                                      <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                                    <i class="fa fa-caret-down"></i>
+                                  </button>
+                                </span>
+
+                                <span class="input-group-btn">
+                                <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> Xem </i></button>
+                                </span>
+                        </div>
+                </form>
+            </div>
+</div>
+<div class="clearfix"></div>
+<div class="box-body">
+        <div class="col-md-12">
+            <div id="container2" style=" height: 350px; margin: 0 auto; margin-top:0px;"></div>
+        </div>
+    <div class="col-md-6">
+        <div class="col-md-12">
+            <b><p style="color: red;font-size: 20px">Doanh số: <?php echo number_format($sum + $sum_hnam) ?></p></b>
+        </div>        
+        <div class="col-md-12">
+            <table style="font-size: small;font-weight: bold" class="table-bordered table-condensed" >
+                <tr>
+                    <th></th>
+                    <th colspan="2">CTY</th>
+                    <th colspan="2">HNAM</th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Doanh số</td>
+                    <td>Số lượng</td>
+                    <td>Doanh số</td>
+                    <td>Số lượng</td>
+                </tr>
+                <?php foreach ($this->ptype as $key=> $items){
+                    $productsid ='';
+                    $is_type ='';
+                    $is_apple ='';
+                    $flag ='';
+                    switch ($key) {
+                        case 1:
+                            $productsid = 3;
+                            $is_apple =0;
+                            break;
+                        case 2:
+                            $productsid = 3;
+                            $is_apple =1;
+                            break;
+                        case 3:
+                            $productsid = 4;
+                            break;
+                        case 4:
+                            $productsid = 5;
+                            $is_apple =0;
+                            break;
+                        case 5:
+                            $productsid = 5;
+                            $is_apple =1;
+                            break;
+                        case 6:
+                            $is_type =4;
+                            break;
+                        case 7:
+                            $productsid = 6;
+                            break;
+                        case 8:
+                            $productsid = 8;
+                            break;
+                        case 9:
+                            $is_type =5;
+                            $productsid = 3;
+                            break;
+                        case 10:
+                            $is_type =6;
+                            $productsid = 3;
+                            break;
+                        case 11:
+                            $is_type =7;
+                            $productsid = 3;
+                            break;
+                        case 12:
+                            $productsid = 9;
+                            break;
+                        default:
+                            $productsid = 3;
+                    }
+                    ?>
+                <tr>
+                    <td><a target="_blank" href="#" id="hrf_detail<?php echo $productsid ?>" onclick="details('<?php echo $productsid ?>','','<?php echo $is_apple ?>','<?php echo $is_type ?>');return false;"><?php echo $items; ?></a></td>
+                    <td><a target="_blank" href="#" id="hrf_detail<?php echo $productsid?>1" onclick="details('<?php echo $productsid ?>',1,'<?php echo $is_apple ?>','<?php echo $is_type ?>');return false;"><?php echo number_format($this->sum_cty[$key]/1000);?></a></td>
+                    <td><a target="_blank" href="#" id="hrf_detail<?php echo $productsid?>1" onclick="details('<?php echo $productsid ?>',1,'<?php echo $is_apple ?>','<?php echo $is_type ?>');return false;"><?php echo number_format($this->totals_cty[$key]); ?></a></td>
+                    <td><a target="_blank" href="#" id="hrf_detail<?php echo $productsid ?>2" onclick="details('<?php echo $productsid ?>',2,'<?php echo $is_apple ?>','<?php echo $is_type ?>');return false;"><?php echo number_format($this->sum_hnam[$key]/1000); ?></a></td>
+                    <td><a target="_blank" href="#" id="hrf_detail<?php echo $productsid ?>2" onclick="details('<?php echo $productsid ?>',2,'<?php echo $is_apple ?>','<?php echo $is_type ?>');return false;"><?php echo number_format($this->totals_hnam[$key]); ?></a></td>
+                </tr>
+                <?php 
+                $totals_scty += $this->sum_cty[$key]/1000;
+                $totals_ccty += $this->totals_cty[$key];
+                $totals_shnam += $this->sum_hnam[$key]/1000;
+                $totals_chnam += $this->totals_hnam[$key];
+                
+                
+                ?>
+                <?php } ?>
+                <tr>
+                    <td>Tổng</td>
+                    <td><?php echo number_format($totals_scty) ?></td>
+                    <td><?php echo number_format($totals_ccty) ?></td>
+                    <td><?php echo number_format($totals_shnam) ?></td>
+                    <td><?php echo number_format($totals_chnam) ?></td>
+                </tr>
+            </table>
+            <p class="small" style="color:red"><i>(Đơn vị tính x 1.000)</i></p>
+        </div>
+        </div>
+    <div class="col-md-12">
+            <div id="container" style=" height: 350px; margin: 0 auto; margin-top:0px;"></div>
+        </div>
+    </div>
+<script >
+    function details(productsid,flag,is_apple,is_type){
+        var start_end = $( "#start_end" ).val();
+        $("#hrf_detail"+productsid+flag).attr("href", "/admin/user/report/sales-saleonline?storeid=167&productsid="+productsid+"&flag="+flag+"&start_end="+start_end+"&is_type="+is_type+"&is_apple="+is_apple);
+        var href = $("#hrf_detail"+productsid+flag).attr('href');
+        window.location = href;
+    }
+</script>

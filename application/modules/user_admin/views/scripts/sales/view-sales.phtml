@@ -1,0 +1,91 @@
+<!--<div class="row">
+    <div class="col-md-6">-->
+        <div class="box box-primary">
+                                <div class="box-header">
+                                    <h3 class="box-title">Xem</h3>
+                                </div><!-- /.box-header -->
+                                <!-- form start -->
+                                <form role="form" action="/admin/user/sales/view-details" class="frmReport">
+                                    <div class="box-body">
+                                        <div class="form-group" style="padding-top: 30px">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label"  id="text-align-label">Tên chi nhánh : </label>
+                                            <div class="col-sm-8">
+                                                <select name="vote-name" class="form-control">
+                                                    
+                                                    <?php foreach ($this->vote as $list) { ?>
+                                                    <option value="<?php echo $list['userid'] ?>"><?php echo $list['username'] ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="hidden" style="padding-top: 30px">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Nhập ngày : </label>
+                                            <div class="col-sm-8">
+                                                <? echo $this->formSelect("day", $this->cur_day, array("class"=>""), $this->days); ?>
+                                                <? echo $this->formSelect("month", $this->cur_month, array("class"=>""), $this->months); ?>
+                                                <? echo $this->formSelect("year", $this->cur_year, array("class"=>""), $this->years); ?>
+                                            </div>          
+                                        </div>
+                                        
+                                        
+                                    </div><!-- /.box-body -->
+
+                                    <div class="box-footer">
+                                        <button type="submit" id="btnView" class="btn btn-primary">Xem</button>
+                                        <!--<a href="#" id="btnView">Lưu</a>-->
+                                        
+                                        <input type="hidden" name="createdateVN" id="createdateVN" value="" />
+                                        <input type="hidden" name="enddateVN" id="enddateVN" value="" />
+                                        <input type="hidden" name="vipid" id="vipid" value="<?=$this->detail["id"];?>" />
+                                    </div>
+                                </form>
+            <script>
+                $().ready(function(){
+                    $('select').change(function(){
+                        var value = $('#day').val() + "/" + $('#month').val() + "/" + (parseInt($('#year').val()) +1);
+                        $('#endate').val(value);
+                    });
+                    $('#btnView').click(function(e){
+                        alert("1343324");
+                        e.preventDefault();            
+            //            var enddateVN = convertDate($('#enddate').val());
+            //            console.log(enddateVN);return;
+            //            $('#enddateVN').val(enddateVN);
+                        var createdateVN = $("#year").val() + "-" + $("#month").val() + "-" + $("#day").val(); 
+
+                        $('#createdateVN').val(createdateVN);
+                        $.post("user/admin/sales/",$('form').serialize(), function(resp){
+                            $('.errblock').remove();
+
+                            $.each(resp, function(i, obj){
+                                var id = obj.id; 
+                                var msg = obj.msg; 
+
+                                if (msg != "ok") {
+
+//                                    $('#'+id).parent().append(' <span class="errblock red" style="padding:3px 0 10px 0">'+msg+'</span>');
+                                    alert(msg);
+                                    return false;
+//                                    $('#'+id).focus();                   
+                                } else {
+                                    alert("Thêm thành công");
+                                    window.location = "/admin/";
+                                }
+
+                            });
+                        }, 'json');
+                    });
+                });
+                function convertDate(vnDate) {
+                    try {
+                        var vnDateArr = vnDate.split("/");
+                        var rDate = vnDateArr.reverse();
+                        return rDate.join("-");
+                    } catch (err){
+                        return vnDate;
+                    }
+                }
+            </script>
+        </div>
+<!--    </div>
+</div>-->

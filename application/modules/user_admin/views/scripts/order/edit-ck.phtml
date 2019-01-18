@@ -1,0 +1,316 @@
+<link rel="stylesheet" href="/backend/plugins/daterangepicker/daterangepicker-bs3.css">
+<div class="row" >
+    <div class="col-md-12">
+        <div class="box box-primary">
+            
+                <div class="box-header">
+        <div class="col-md-6">
+            <i class="ion ion-clipboard"></i>
+            <h3 class="box-title">DANH SÁCH CHIẾT KHẤU ĐẶT HÀNG HNAMMOBILE.COM</h3>
+        </div>
+        <div class="col-md-6 right">
+            <form role="form" id="view-sales-day" method="get"   class="frmReport">
+                <!--<div class="box-body">-->
+                    <div class="form-group">
+                        <div class="input-group input-group-sm">
+                            
+                            <select  name="idvendor" id="idvendor" class="col-xs-12 selects">
+                                <option value="0"> Nhà cung cấp</option>
+                                <?php
+                                foreach ($this->list_vendor as  $value2) {
+                                    $sl2 = '';
+                                    if ($this->idvendor == $value2["id"]) {
+                                        $sl2 = 'selected = selected';
+                                    }
+                                    ?>
+                                    <option  <?php echo $sl2 ?> value="<?php echo $value2["id"] ?>"> <?php echo $value2["name"] ?></option>
+                                <?php } ?>
+                            </select>
+                            
+                            <?php 
+                    $start_end='Date range picker';
+                    if($this->start_end !=null){
+                        $start_end = $this->start_end;
+                    }
+                    ?>
+                    <span class="input-group-btn">
+                    <button class="btn btn-default pull-right" id="daterange-btn">
+                          <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                          <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                        <i class="fa fa-caret-down"></i>
+                      </button>
+                    </span>
+                    
+                    <span class="input-group-btn">
+                        <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> Xem </i></button>
+                        </span>
+                            
+                        </div><!-- /.input group -->
+                    </div>
+                <div class="form-group">
+                    <div class="input-group input-group-sm">
+                    <span class="input-group-btn">
+                                <a class="btn btn-primary" onclick="adds();return false;" href="/admin/user/order/edit?ack=1"> <i class="fa fa-plus"> Thêm</i></a>
+                            </span>
+                    <span class="input-group-btn">
+                            <i class="fa fa-plus"></i>
+                        </span>
+                        <select name="iht" id="iht" class="form-control">
+                            <option value="0"> Chưa thao tác</option>
+                            <?php foreach ($this->ht as $key=> $_items){ 
+                                $sl='';
+                                if($this->iht == $key){
+                                   $sl= 'selected="selected"'; 
+                                }
+                                ?>
+                    <option <?php echo $sl; ?> value="<?php echo $key;  ?>"><?php echo $_items ?></option>
+                            <?php }?>
+                    </select>
+                    <span class="input-group-btn">
+                            <i class="fa fa-plus"></i>
+                        </span>
+                        <select name="ack" id="ack" class="form-control">
+                            <option value="0"> Loại chiết khấu</option>
+                            <?php foreach ($this->list_cks as $key=> $_items){ 
+                                $sl='';
+                                if($this->ack == $key){
+                                   $sl= 'selected="selected"'; 
+                                }
+                                ?>
+                    <option <?php echo $sl; ?> value="<?php echo $key;  ?>"><?php echo $_items ?></option>
+                            <?php }?>
+                    </select>
+                </div>
+                </div>
+                <!--</div> /.box-body -->
+            </form>
+        </div>
+    </div><!-- /.box-header -->
+                
+            
+            <div class="box-body">
+                <div class="table-responsives">
+                    <table id="f_table" class="table table-striped table-bordered table-hover table-responsive">
+                        <thead>
+                            <tr>
+                                <th width="5"></th>
+                                <th width="50">Mã PO</th>
+                                <th  width="50">NCC</th>
+                                <th width="50">Mã Hóa đơn</th>
+                                <th>Nội dung</th>
+                                <th  width="20">Hết hạn</th>
+                                <th width="100">Hoàn tất</th>
+                                <!--<th width="100">Thành công</th>-->
+                                <th>Ghi chú</th>
+                                <th width="200">Hợp đồng</th>
+                                <th width="70">Tổng tiền ck</th>
+                                <th width="50">Tiền thực thu</th>
+                                <th width="50">Đã xem</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $stt=0;
+                            $_secKey = "HNAM_ORDER_2016";
+                            $no = 1;
+                            foreach ($this->list as $list) {
+                                if($this->ack ==1){
+                                    if($list["ack"] != 0){
+                                        continue;
+                                    }
+                                }
+                                if($this->ack ==2){
+                                    if($list["ack"] != 1){
+                                        continue;
+                                    }
+                                }
+                                $id = $list["id"];
+                                
+                                $__orderid = $list["orderid"];
+                                $stoken = md5($__orderid.$_secKey);
+                                
+                                $token = md5($list["id"].$_secKey);
+                                if ($no % 2 == 0)
+                                    $bgcolor = '#ccc';
+                                else
+                                    $bgcolor = '#ffffff';
+                                $is_actived = $list["enabled"];
+                                $enabled = $list["enabled"];
+                                
+                                $slink ="/admin/user/order/edit-vendor?id=$__orderid&token=$stoken";
+                                ?>
+                        
+                                <tr bgcolor="<?echo $bgcolor; ?>" class="row-<?php echo $list["id"]; ?>">
+                                    <form role="form" id="data_<?php echo $list["id"]; ?>" name="data_<?php echo $list["id"]; ?>" method="get">
+                                    <input type="hidden" name="idsk<?php echo $id; ?>" id="idsk<?php echo $id; ?>" value="<?php echo $list["id"] ?>" />
+                                    <td><?php echo ++$stt; ?></td>
+                                    <td ><a href="<?php echo $slink; ?>" target="_blank" ><?php echo $this->name_po[$list["orderid"]] ?></a></td>
+                                    <td ><?php echo $this->name_vendor[$list["supplier_id"]] ?></td>
+                                    <td><input style="width: 95px" class="form-control" name="idhd<?php echo $id; ?>" value="<?php echo $list["idhd"]; ?>" id="idhd<?php echo $id; ?>" placeholder="Nhập mã hóa đơn vào đây..." /></td></td>
+                                    
+                                    <td>
+                                        <textarea style="width: 100%" class="form-control" rows="3" name="note<?php echo $id; ?>" id="note<?php echo $id; ?>"  placeholder="Nhập nội dung ghi chú vào đây..."><?php echo $list["note"] ?></textarea>
+                                    </td>
+                                    <?php
+                                    $end_datetime = '';
+                                    if($list["end_datetime"] !=null){
+                                            if($list["end_datetime"] != "0000-00-00 00:00:00"){
+                                               $end_datetime = date('d/m/Y',  strtotime($list["end_datetime"]));
+                                            }
+                                        }
+                                     ?>
+                                    <td>
+                                        <input style="width: 95px" type="text" class="form-control" name="end_datetime<?php echo $id; ?>" id="end_datetime<?php echo $id; ?>" placeholder="dd/mm/yyyy" value="<?php  echo $end_datetime ; ?>" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                                    </td>
+                                    
+                                    <td>
+                                        <select name="ht<?php echo $id; ?>" id="ht<?php echo $id; ?>" class="form-control">
+                                            <option value="0">Lưa chọn...</option>
+                                            <?php foreach ($this->ht as $key=> $_items){ 
+                                                $sl='';
+                                                if($list["ht"] == $key){
+                                                   $sl= 'selected="selected"'; 
+                                                }
+                                                ?>
+                                    <option <?php echo $sl; ?> value="<?php echo $key;  ?>"><?php echo $_items ?></option>
+                                            <?php }?>
+                                    </select>
+                                    </td>
+<!--                                    <td>
+                                        <select name="completes<?php echo $id; ?>" id="completes<?php echo $id; ?>" class="form-control">
+                                            <option value="0">Lưa chọn...</option>
+                                            <?php foreach ($this->completes as $key=> $_items){ 
+                                                $sl='';
+                                                if($list["completes"] == $key){
+                                                   $sl= 'selected="selected"'; 
+                                                }
+                                                ?>
+                                    <option <?php echo $sl; ?> value="<?php echo $key;  ?>"><?php echo $_items ?></option>
+                                            <?php }?>
+                                    </select>
+                                    </td>-->
+                                    <td>
+                                        <textarea style="width: 100%" class="form-control" rows="3" name="note2<?php echo $id; ?>" id="note2<?php echo $id; ?>"  placeholder="Nhập ghi chú vào đây..."><?php echo $list["note2"] ?></textarea>
+                                    </td>
+                                    <td width="200">
+                                        <select style="width: 200px" name="hd<?php echo $id; ?>" id="hd<?php echo $id; ?>" class="selects">
+                                            <option value="0">Chưa thao tác</option>
+                                            <?php foreach ($this->list_hds as $key=> $_items){ 
+                                                $sl='';
+                                                if($list["hd"] == $key){
+                                                   $sl= 'selected="selected"'; 
+                                                }
+                                                ?>
+                                    <option <?php echo $sl; ?> value="<?php echo $key;  ?>"><?php echo $_items ?></option>
+                                            <?php }?>
+                                    </select>
+                                    </td>
+                                    
+                                    <td><?php echo number_format($list["money_ack"]) ?></td>
+                                    <?php
+                                    $moneys=$list["money"];
+                                    if($moneys ==0){
+                                        $moneys = $list["money_ack"];
+                                    }
+                                    ?>
+                                    
+                                    <td> <input style="width: 95px" class="form-control pricing" name="money<?php echo $id; ?>" value="<?php echo number_format($moneys); ?>" id="money<?php echo $id; ?>" placeholder="Nhập số tiền vào đây" /></td>
+                                    <td>
+                                        <?php if($list["views"]==0){ ?>
+                                        <a  class="btn btn-danger btn-sm" data-toggle="tooltip" title="Chưa xem" onclick="views(<?php echo $list["id"] ?>);return false;"  href="#"><i class="fa fa-eye"></i></a>
+                                        <?php } else {?>
+                                        <a  class="btn btn-success btn-sm" data-toggle="tooltip" title="Đã xem"   href="#"><i class="fa fa-eye"></i></a>
+                                        <?php }?>
+                                        <button  type="button" id="save" onclick="saves(<?php echo $list["id"] ?>);return false;" class="btn btn-primary right"><i class="fa fa-floppy-o"></i></button>
+                                        <button style="display: none" type="button" id="wt" class="btn btn-primary right"><i class="fa fa-spinner"> Loadding</i></button>
+                                    </td>
+                                    </form>
+                                </tr>
+                            
+                        <?php } ?>
+
+                        </tbody>
+
+                    </table>
+                </div>
+            </div><!-- /.box-body -->
+<!--            <div class="box box-footer">
+                    <button  type="button" id="save" onclick="saves();return false;" class="btn btn-primary right"><i class="fa fa-floppy-o"> Lưu</i></button>
+                    <button style="display: none" type="button" id="wt" class="btn btn-primary right"><i class="fa fa-spinner"> Đang xử lý</i></button>
+            </div>-->
+        
+
+</div><!-- /.box -->
+<div id="del" style="display:none;"></div>
+    </div>
+</div>
+<script src="/backend/plugins/input-mask/jquery.inputmask.js"></script>
+<script src="/backend/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script src="/backend/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+<script>
+    $("[data-mask]").inputmask();
+    $("#datemask").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+</script>
+<script>
+    function views(id){
+        var result = confirm('Bạn chắc chắn muốn xác nhận đã xem đơn hàng này không?');
+        if (result)
+            $('#del').load('/admin/user/order/save-views-ck?id=' + id, function () {
+                alert('Kích hoạt thành công.');
+                window.location.reload(true);
+            });
+    }
+    function saves(ids){
+//        $('#save').hide();
+//            $('#wt').show();
+            $.post("/admin/user/order/save-ck2?ids="+ids, $('form').serialize(), function (resp) {
+//                $.each(resp, function (i, obj) {
+//                    var id = obj.id;
+//                    var msg = obj.msg;
+//                    if (msg != "ok") {
+//                        alert(msg);
+//                        $('#save').show();
+//                        $('#wt').hide();
+//                        $('#' + id).focus();
+//                        return false;
+//                    } else {
+                        alert('Lưu thành công');
+//                        $('#save').show();
+//                        $('#wt').hide();
+                        location.reload();
+//                    }
+//
+//                });
+            }, 'json');
+    }
+    $().ready(function () {
+        $("#f_table").DataTable();
+        function keys(e)
+        {
+            var keyword = null;
+            if (window.event)
+            {
+                keyword = window.event.keyCode;
+            } else
+            {
+                keyword = e.which; //NON IE;
+            }
+            if (keyword < 48 || keyword > 57)
+            {
+                if (keyword == 48 || keyword == 127)
+                {
+                    return;
+                }
+                return false;
+            }
+        }
+        $(".pricing").keyup(function () {
+            var price = this.value;
+            price = price.replace(/,/gi, "");
+            price = price + ".";
+            price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            var sprice = price.split(".");
+            $(this).val(sprice[0]);
+        });
+    });
+</script>

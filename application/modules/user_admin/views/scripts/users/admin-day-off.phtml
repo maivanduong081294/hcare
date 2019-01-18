@@ -1,0 +1,347 @@
+<link rel="stylesheet" href="/backend/dist/css/style_calendar.css">
+<style>
+    .bghalf{
+        background: #6dafbf;
+        color:white;
+        background:-webkit-linear-gradient(left, #6dafbf 50%, white 50%);
+        background: -moz-linear-gradient(left, #6dafbf 50%, white 50%);
+        background: -ms-linear-gradient(left, #6dafbf 50%, white 50%);
+        background: linear-gradient(left, #6dafbf 50%, white 50%);
+    }
+    .bgfull{
+        background: #6dafbf;
+        color:white
+    }
+    .bgnohalf{
+        background: red;
+        color:white;
+        background:-webkit-linear-gradient(left, red 50%, white 50%);
+        background: -moz-linear-gradient(left, red 50%, white 50%);
+        background: -ms-linear-gradient(left, red 50%, white 50%);
+        background: linear-gradient(left, red 50%, white 50%);
+    }
+    .bgnofull{
+        background: red;
+        color:white
+    }
+    .modal-dialog{
+        width: 30%;
+    }
+</style>
+<form role="form" id="get-member" method="get"  class="frmReport">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="ion ion-clipboard"></i>
+                <h3 class="box-title">Lịch chấm công nhân viên <?php echo $this->detail_user["fullname"]; ?></h3>
+            </div><!-- /.box-header -->
+            <div style="float: left" class="form-group">
+                <div class="input-group" style="max-width: 400px">
+                    <div class="input-group-addon">
+                        <i class="fa fa-laptop"></i>
+                    </div>
+                    <select name="month" id="month" class="form-control">
+                        <?php foreach ($this->months as $items){
+                            $select0 = '';
+                            if($this->month == $items){
+                                $select0 = ' selected ="selected"';
+                            }
+                            ?>
+                        <option <?php echo $select0; ?> value="<?php echo $items; ?>">Tháng <?php echo $items; ?></option>
+                        <?php }?>
+                    </select>
+                    <div class="input-group-addon">
+                        <i class="fa fa-laptop"></i>
+                    </div>
+                    <select name="year" id="year" class="form-control">
+                        <?php foreach ($this->years as $items){ 
+                            $select1 = '';
+                            if($this->year == $items){
+                                $select1 = ' selected ="selected"';
+                            }
+                            ?>
+                        <option <?php echo $select1; ?> value="<?php echo $items; ?>">Năm <?php echo $items; ?></option>
+                        <?php }?>
+                    </select>
+                </div><!-- /.input group -->
+            </div>
+            
+            
+            
+            <div style="float: left" class="form-group">
+                <button type="submit" id="btnView" class="btn btn-primary">Xem</button>
+            </div>
+
+            <div class="box-body">
+                <div class="col-md-5">
+                <table class=" table table-data table-condensed table-bordered">
+                    <tr>
+                        <th>STT</th>
+                        <th colspan="2">Thông tin</th>
+                    </tr>
+                    <tr>
+                        <td>1.</td>
+                        <td>Họ tên</td>
+                        <td><?php echo $this->detail_user["fullname"]; ?></td>
+                    </tr>
+                    <tr>
+                        <td>2.</td>
+                        <td>Mức lương hiện tại</td>
+                        <td><?php echo number_format($this->detail_payroll_now["money"]+$this->detail_payroll_now["money_eat"]+$this->detail_payroll_now["subsidize"]); ?></td>
+                    </tr>
+                    <tr>
+                        <td>3.</td>
+                        <td>Ngày bắt đầu làm việc</td>
+                        <td><?php echo date('d/m/Y',  strtotime($this->detail_payroll["startdate"])); ?></td>
+                    </tr>
+                    <?php $nbtn = ($this->ytn *12)+$this->mth;  ?>
+                    <tr>
+                        <td>4.</td>
+                        <td>Làm việc thâm niên</td>
+                        <td><?php echo $this->ytn; ?> Năm <?php echo $this->mtn; ?> Tháng (<?php echo $this->nbtn ?> Tháng)</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>5.</td>
+                        <td>Ngày bắt đầu vị trí mới</td>
+                        <td><?php echo date('d/m/Y',  strtotime($this->startdate)); ?></td>
+                    </tr>
+                    
+                    <tr>
+                        <td>6.</td>
+                        <td>Chức vụ hiện tại</td>
+                        <td><?php echo $this->name_regency[$this->idregency_now]; ?></td>
+                    </tr>
+                    <tr>
+                        <td>7.</td>
+                        <td>Số ngày nghỉ</td>
+                        <td class="bgfull"><?php echo $this->dayoff; ?>/Ngày</td>
+                    </tr>
+                    <tr>
+                        <td>8.</td>
+                        <td>Số ngày nghỉ chưa duyệt</td>
+                        <td class="bgnofull"><?php echo $this->daynooff; ?>/Ngày</td>
+                    </tr>
+                    <tr>
+                        <td>9.</td>
+                        <td>Số tháng làm việc(ví trị mới)</td>
+                        <td style="background-color: <?php echo $this->color; ?>"><?php echo $this->stime; ?> Tháng</td>
+                    </tr>
+                </table>
+            </div>
+                
+                <div class="col-md-6">
+                    <table class="table-data table-condensed table-bordered cal">
+                        <caption>
+<!--                            <span class="prev"><a>&larr;</a></span>
+                            <span class="next"><a>&rarr;</a></span>-->
+                            <?php echo $this->name_month; ?> <?php echo $this->year; ?>
+                        </caption>
+                        <thead>
+                            <tr>
+                                <th>Mon</th>
+                                <th>Tue</th>
+                                <th>Wed</th>
+                                <th>Thu</th>
+                                <th>Fri</th>
+                                <th>Sat</th>
+                                <th>Sun</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                            <?php for($i = 1;$i<=$this->number;$i++){
+                                $bg ='';
+                                if(in_array($i, $this->dayfull)){
+                                    $bg='class="bgfull"';
+                                }
+                                if(in_array($i, $this->dayhalf)){
+                                    $bg='class="bghalf"';
+                                }
+                                if(in_array($i, $this->daynofull)){
+                                    $bg='class="bgnofull"';
+                                }
+                                if(in_array($i, $this->daynohalf)){
+                                    $bg='class="bgnohalf"';
+                                }
+                                if($i>7) continue;
+                                ?>
+                                <td <?php echo $bg; ?> onclick="sel(<?php echo $i; ?>);return false;" class="off"><?php echo $i ?></td>
+                            <?php }?>
+                            </tr>
+                            <tr>
+                            <?php for($i = 1;$i<=$this->number;$i++){
+                                $bg ='';
+                                if(in_array($i, $this->dayfull)){
+                                    $bg='class="bgfull"';
+                                }
+                                if(in_array($i, $this->dayhalf)){
+                                    $bg='class="bghalf"';
+                                }
+                                if(in_array($i, $this->daynofull)){
+                                    $bg='class="bgnofull"';
+                                }
+                                if(in_array($i, $this->daynohalf)){
+                                    $bg='class="bgnohalf"';
+                                }
+                                if($i<8 || $i>14) continue;
+                                ?>
+                                <td <?php echo $bg; ?> onclick="sel(<?php echo $i; ?>);return false;" class="off"><?php echo $i ?></td>
+                            <?php }?>
+                            </tr>
+                            <tr>
+                            <?php for($i = 1;$i<=$this->number;$i++){
+                                $bg ='';
+                                if(in_array($i, $this->dayfull)){
+                                    $bg='class="bgfull"';
+                                }
+                                if(in_array($i, $this->dayhalf)){
+                                    $bg='class="bghalf"';
+                                }
+                                if(in_array($i, $this->daynofull)){
+                                    $bg='class="bgnofull"';
+                                }
+                                if(in_array($i, $this->daynohalf)){
+                                    $bg='class="bgnohalf"';
+                                }
+                                if($i<15 || $i >21) continue;
+                                ?>
+                                <td <?php echo $bg; ?> onclick="sel(<?php echo $i; ?>);return false;" class="off"><?php echo $i ?></td>
+                            <?php }?>
+                            </tr>
+                            <tr>
+                            <?php for($i = 1;$i<=$this->number;$i++){
+                                $bg ='';
+                                if(in_array($i, $this->dayfull)){
+                                    $bg='class="bgfull"';
+                                }
+                                if(in_array($i, $this->dayhalf)){
+                                    $bg='class="bghalf"';
+                                }
+                                if(in_array($i, $this->daynofull)){
+                                    $bg='class="bgnofull"';
+                                }
+                                if(in_array($i, $this->daynohalf)){
+                                    $bg='class="bgnohalf"';
+                                }
+                                if($i<22 || $i>28) continue;
+                                ?>
+                                <td <?php echo $bg; ?> onclick="sel(<?php echo $i; ?>);return false;" class="off"><?php echo $i ?></td>
+                            <?php }?>
+                            </tr>
+                            <tr>
+                            <?php for($i = 1;$i<=$this->number;$i++){
+                                $bg ='';
+                                if(in_array($i, $this->dayfull)){
+                                    $bg='class="bgfull"';
+                                }
+                                if(in_array($i, $this->dayhalf)){
+                                    $bg='class="bghalf"';
+                                }
+                                if(in_array($i, $this->daynofull)){
+                                    $bg='class="bgnofull"';
+                                }
+                                if(in_array($i, $this->daynohalf)){
+                                    $bg='class="bgnohalf"';
+                                }
+                                if($i<29 || $i>31) continue;
+                                ?>
+                                <td <?php echo $bg; ?> onclick="sel(<?php echo $i; ?>);return false;" class="off"><?php echo $i ?></td>
+                            <?php }?>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+        <div id="ddelete" style="display:none;"></div>
+        <div id="load" style="display:none;"></div>
+  
+<script>
+    function save(){
+        $('#btnSave').hide();
+                 $('#btnwting').show();
+                 $.post("/admin/user/users/save-day-off2", $('form').serialize(), function (resp) {
+                     $('.errblock').remove();
+                     $.each(resp, function (i, obj) {
+                         var id = obj.id;
+                         var msg = obj.msg;
+                         if (msg != "ok") {
+                             $('#btnSave').show();
+                             $('#btnwting').hide();
+                             $('#err').html(msg);
+                             $('#' + id).focus();
+                             return false;
+                         } else {
+                             $('#btnSave').show();
+                             $('#btnwting').hide();
+                             $('#err').html('Lưu thành công');
+                             window.location.reload(true);
+                         }
+
+                     });
+                 }, 'json');
+    }
+    function sel(id){
+        $('#day').val(id);
+        $.post("/admin/user/users/get-day-off", $('form').serialize(), function (resp) {
+            $('.errblock').remove();
+            $.each(resp, function (i, obj) {
+                var msg = obj.msg;
+                if (msg == "insert") {
+                    $('#myModal5').modal('show');
+                    return false;
+                } else {
+                    var result;
+                    if(msg =="update2"){
+                        result = confirm('Bạn có chắc muốn duyệt');
+                    }else{
+                        result = confirm('Bạn có chắc chắn muốn xóa không');
+                    }
+                    if(result){
+                        save();
+                    }
+                }
+
+            });
+        }, 'json');
+    }
+    
+</script>
+<div class="modal fade" id="myModal5">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" style="font-weight: bold">Thời gian nghỉ: <b id="fullnamenv"></b></h4>
+
+            </div>
+                <input type="hidden" name="day" value="" id="day" />
+               
+                <input type="hidden" name="userid" value="<?php echo $this->userid; ?>" id="userid" />
+                <input type="hidden" name="token" value="<?php echo $this->token; ?>" id="token" />
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Thời gian nghỉ: </label>
+                            <div class="input-group">
+                                <label style="margin-right: 20px"><input type="radio" checked="checked" name="half" id="half1" value="0" />  Nguyên ngày</label>
+                                <label><input type="radio" name="half" id="half2" value="1" />  Nửa ngày</label>
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                            <div class="col-md-4">
+                                <button type="button" id="btnSave" onclick="save();return false;" class="btn btn-primary">Lưu</button>
+                                <button style="display: none" type="button" id="btnwting" class="btn btn-primary">Đang xử lý...</button>
+
+                            </div>
+                            <div class="col-md-8">
+                                <p id="err" style="color: red;font-weight: bold"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</form>

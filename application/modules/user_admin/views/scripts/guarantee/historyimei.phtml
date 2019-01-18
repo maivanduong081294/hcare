@@ -1,0 +1,206 @@
+<style>
+    /*.bs-wizard {margin-top: 40px;}*/
+
+/*Form Wizard*/
+
+</style>
+    <div class="box-header panel-default">
+        <div class="col-md-12">
+                <h3 class="box-title">Kết quả tìm kiếm phiếu bảo hành</h3>
+                <div class="col-md-3">
+                <form target="_blank" class="form-inline" action="/redirect/billbh" >
+                    <span>Xem nhanh phiếu</span>
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" id="billid" name="billid" placeholder="Nhập mã bill để xem">
+                        <span class="input-group-btn">
+                            <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> </i></button>
+                    </div>
+                </form>
+                </div>
+                <div class="col-md-3">
+                <form target="_blank" class="form-inline" action="/admin/user/guarantee/historyimei" >
+                        <span>Tìm kiếm imei hoặc mã phiếu</span>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" value="<?php echo $_REQUEST["imei"] ?>" name="imei" placeholder="Nhập mã bill hoặc imei để xem">
+                            <span class="input-group-btn">
+                                <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> </i></button>
+                        </div>
+                    </form>
+                </div>
+        </div>
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        <div class="">
+        <table id="f_tables" class="table table-condensed table-striped table-bordered">
+            <thead>
+            <tr>
+                <th width="80">Số phiếu</th>
+                <th class="hidden-xs">Imei</th>
+                <th class="hidden-xs">Seri</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            $stt=0;
+            foreach ($this->list as $items){
+                ?>
+                
+                <tr style="height: 50px">
+                    
+                    <td><a href="/admin/user/guarantee/detail?id=<?php echo $items["id"] ?>&token=<?php echo $items["token"]; ?>">#<?php echo $items["id"]; ?></a></td>
+                <td><?php echo $items["imei"]; ?></td>
+                <td><?php echo $items["seri"]; ?></td>
+            </tr>
+            <?php }?>
+            </tbody>
+        </table>
+    </div>
+    </div>
+<div class="modal fade" id="updates">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div class="show_frm"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="history">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div class="history"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="ddelete"></div>
+<script>
+    function change_ok(id){
+        var ok = $('#ok'+id+' option:selected').val();
+        var result = confirm('Bạn chắc chắn muốn thực hiện ?');
+        if (result)
+            $('#ddelete').load('/admin/user/guarantee/ok-customer?id=' + id+"&ok="+ok, function () {
+                alert('Lưu thành công.');
+                window.location.reload(true);
+            });
+    }
+    function bhang(id){
+        var result = confirm('Bạn chắc chắn muốn thực hiện ?');
+        if (result)
+            $('#ddelete').load('/admin/user/guarantee/bhang?id=' + id, function () {
+                alert('Lưu thành công.');
+                window.location.reload(true);
+            });
+    }
+    function history(id){
+        $.ajax
+        ({
+           method: "POST",
+           url: "/admin/user/guarantee/history",
+           data: { id_guarantee:id},
+           dataType: "html",
+            success: function(data){
+              $('.history').html(data);
+              $('#history').modal('show');
+            }
+        });
+    }
+    function del_enabled(id,token){
+       var result = confirm('Bạn chắc chắn muốn hủy ?');
+        if (result)
+            $('#ddelete').load('/admin/user/guarantee/del-enabled?id=' + id+"&token="+token, function () {
+                alert('Hủy thành công.');
+                window.location.reload(true);
+            });
+   }
+    
+    function transfers(id,transfers,token){
+        var result = confirm('Bạn chắc chắn xác nhận?');
+        if (result)
+            $('#ddelete').load('/admin/user/guarantee/transfers?id=' + id+"&transfers="+transfers+"&token="+token, function () {
+                alert('Kích hoạt thành công.');
+                window.location.reload(true);
+            });
+    }
+   function actives(id,status_where,token){
+       var result = confirm('Bạn chắc chắn muốn kích hoạt xác nhận?');
+        if (result)
+            $('#ddelete').load('/admin/user/guarantee/active?id=' + id+"&status_where="+status_where+"&token="+token, function () {
+                alert('Kích hoạt thành công.');
+                window.location.reload(true);
+            });
+   }
+    function closess(){
+        showss();
+    }
+    function showss(){
+       $('#adds').show();
+       $('.frm_add').html('');
+       $('#closes').hide(); 
+    }
+    function hidess(){
+       $('#adds').hide(); 
+       $('#closes').show(); 
+    }
+    function adds(){
+        step_1();
+        hidess();
+        $.ajax
+        ({
+           method: "POST",
+           url: "/admin/user/guarantee/search",
+           data: {},
+           dataType: "html",
+            success: function(data){
+              $('.frm_add').html(data);
+            }
+        });
+    }
+    function updates(id,token){
+        $.ajax
+        ({
+           method: "POST",
+           url: "/admin/user/guarantee/update",
+           data: { id:id, token:token },
+           dataType: "html",
+            success: function(data){
+                console.log(data);
+              $('.show_frm').html(data);
+              $('#updates').modal('show');
+            }
+        });
+    }
+    function prints(id,token){
+        $.ajax
+        ({
+           method: "POST",
+           url: "/admin/user/guarantee/print",
+           data: { id:id, token:token },
+           dataType: "html",
+            success: function(data){
+                console.log(data);
+              $('.show_frm').html(data);
+              $('#updates').modal('show');
+            }
+        });
+    }
+    $().ready(function () {
+        $("#f_tables").DataTable();
+    });
+    
+function format_number(nStr)
+{
+	nStr += '';
+	x = nStr.split('.');
+	x1 = x[0];
+	x2 = x.length > 1 ? '.' + x[1] : '';
+	var rgx = /(\d+)(\d{3})/;
+	while (rgx.test(x1)) {
+		x1 = x1.replace(rgx, '$1' + ',' + '$2');
+	}
+	return x1 + x2;
+}
+</script>

@@ -1,0 +1,248 @@
+<?
+if (in_array($this->menuname,array('menu_store','menu_about','menu_promotion','menu_career'))){
+    $display = "none";
+}else{
+    $display= "";
+}
+?>
+<table border="0" cellpadding="20" cellspacing="10" width="100%">
+  <tbody><tr>
+    <td style="padding: 5px;" align="center" valign="middle">
+    <table class="borderMain" border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tbody><tr valign="top">
+        <td><div class="header icon-48-article">Quản lý cửa hàng, liên hệ...</div></td>
+        <td align="right"><div class="toolbar">
+            <table class="toolbar"><tbody><tr>
+                <td id="toolbar-new" class="button">
+                    <a class="toolbar" id="save" href="#">
+                    <span title="Save" class="icon-32-save"></span>
+                    Lưu</a>
+                </td>
+                 <td id="toolbar-cancel" class="button">
+                    <a class="toolbar" onclick="javascript:window.location='/admin/user/news/list/'" href="#">
+                    <span title="Cancel" class="icon-32-back"></span>Quay lại</a>
+                </td>
+        </tr></tbody></table>
+        </div></td>
+      </tr>
+</tbody></table>
+<table class="borderMain spaceTop5px" border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tbody><tr>
+    <td>
+
+<form name="frmPage" id="frmPage" method="post" enctype="multipart/form-data" action="/admin/user/news/save?id=<?php echo $this->data["itemid"]; ?>">
+<input type="hidden" name="id" value="<?php echo $this->data["itemid"]; ?>" />
+    <br>
+    <fieldset class="adminform"><legend>Thông tin chi tiết</legend>
+    <table class="spaceTop5px" border="0" width="50%" style="float:left">
+        <tbody>
+
+        <tr id="serverTr">
+            <td align="right" width="110">Danh mục<span style="color:#ff0000;">(*)</span></td>
+            <td style="padding-left: 5px;">
+            <?if (count($this->submenu)>0){?>
+                <? echo $this->formSelect("cateid", $this->cateid, array("class"=>"menuname","class"=>"frm"), $this->submenu); ?>
+            <?}?>
+            </td>
+        </tr>
+        
+        <tr id="serverTr">
+            <td align="right" width="110">Tiêu đề tin<span style="color:#ff0000;">(*)</span></td>
+            <td style="padding-left: 5px;">
+                <input name="title" id="title" style="width: 200px;" value="<?php echo $this->data["title"]; ?>" type="text" />
+                </td>
+        </tr>
+        <tr id="loginTr"  style="display:<?=$display;?>;">
+            <td align="right" width="110" valign="top">
+                Mô tả ngắn</td>
+            <td style="padding-left: 5px;">
+                <input type="hidden" name="shortcontent" id="shortcontent" value="<?php echo $this->data['shortcontent'];?>" />
+                <script type="text/javascript">
+                var sBasePath = "/fckeditor/" ;
+                var oFCKeditor_email_content = new FCKeditor( 'myFCKeditor_shortcontent' ) ;
+                oFCKeditor_email_content.BasePath	= sBasePath ;
+                oFCKeditor_email_content.Height	= "200" ;
+                oFCKeditor_email_content.Width	= "95%" ;
+                oFCKeditor_email_content.ToolbarSet = '' ;
+                oFCKeditor_email_content.Value	= document.getElementById("shortcontent").value ;
+                </script>
+                <div id="myFCKeditor_shortcontent"></div>
+                <script type="text/javascript">
+                var div = document.getElementById("myFCKeditor_shortcontent");
+                div.innerHTML = oFCKeditor_email_content.CreateHtml();
+                </script>
+            </td>
+        </tr>
+        <tr id="loginTr">
+            <td align="right" width="110" valign="top">
+                Mô tả chi tiết</td>
+            <td style="padding-left: 5px;">
+                <input type="hidden" name="fullcontent" id="fullcontent" value="<?php echo $this->data['fullcontent'];?>" />
+                <script type="text/javascript">
+                var sBasePath = "/fckeditor/" ;
+                var oFCKeditor_email_content2 = new FCKeditor( 'myFCKeditor_fullcontent' ) ;
+                oFCKeditor_email_content2.BasePath	= sBasePath ;
+                oFCKeditor_email_content2.Height	= "350" ;
+                oFCKeditor_email_content2.Width	= "95%" ;
+                oFCKeditor_email_content2.ToolbarSet = '' ;
+                oFCKeditor_email_content2.Value	= document.getElementById("fullcontent").value ;
+                </script>
+                <div id="myFCKeditor_fullcontent"></div>
+                <script type="text/javascript">
+                var div = document.getElementById("myFCKeditor_fullcontent");
+                div.innerHTML = oFCKeditor_email_content2.CreateHtml();
+                </script>
+            </td>
+        </tr>
+
+
+        
+        <?
+        //if ( in_array($this->menuname, array('menu_news','menu_products')) ){ ?>
+
+        <tr id="serverTr">
+            <td align="right" width="110">Hình ảnh (149x92):</td>
+            <td style="padding-left: 5px;">
+                <input name="thumb1" id="thumb1" style="width: 200px;" value="" type="file" />
+           </td>
+        </tr>
+        <?php
+        if(isset($this->data['itemid']))
+        {
+        ?>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <img src="/uploads/news/<?php echo json_decode($this->data['thumb'])->thumb1; ?>" height="70" width="100" />
+                </td>
+            </tr>
+        <?php
+        }
+        ?>
+        <? //} ?>
+
+        <? if ( in_array($this->menuname, array('menu_store')) ){ ?>
+            <tr id="serverTr">
+            <td align="right" width="110">Hình ảnh lớn:</td>
+            <td style="padding-left: 5px;">
+                <input name="thumb2" id="thumb2" style="width: 200px;" value="" type="file" />
+           </td>
+        </tr>
+        <?php
+        if(isset($this->data['itemid']))
+        {
+        ?>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <img src="/uploads/news/<?php echo json_decode($this->data['thumb'])->thumb2; ?>" height="70" width="100" />
+                </td>
+            </tr>
+        <?php
+        }
+        ?>
+
+        <? } ?>
+    </tbody></table>
+        <table class="spaceTop5px" border="0" width="50%" style="float:left; display:none;">
+            <tbody>
+                <tr id="serverTr">
+                    <td align="right" width="110">Tiêu đề tin (EN)<span style="color:#ff0000;">(*)</span></td>
+                    <td style="padding-left: 5px;">
+                        <input name="title_en" id="title_en" style="width: 200px;" value="<?php echo $this->data["title_en"]; ?>" type="text" />
+                        </td>
+                </tr>
+                <tr id="loginTr" style="display:<?=$display;?>;">
+                    <td align="right" width="110" valign="top">
+                        Mô tả ngắn (EN)</td>
+                    <td style="padding-left: 5px;">
+                        <input type="hidden" name="shortcontent_en" id="shortcontent_en" value='<?php echo $this->data['shortcontent_en'];?>' />
+                        <script type="text/javascript">
+                        var sBasePath = "/fckeditor/" ;
+                        var oFCKeditor_email_content_en = new FCKeditor( 'myFCKeditor_shortcontent_en' ) ;
+                        oFCKeditor_email_content_en.BasePath	= sBasePath ;
+                        oFCKeditor_email_content_en.Height	= "200" ;
+                        oFCKeditor_email_content_en.Width	= "95%" ;
+                        oFCKeditor_email_content_en.ToolbarSet = '' ;
+                        oFCKeditor_email_content_en.Value	= document.getElementById("shortcontent_en").value ;
+                        </script>
+                        <div id="myFCKeditor_shortcontent_en"></div>
+                        <script type="text/javascript">
+                        var div = document.getElementById("myFCKeditor_shortcontent_en");
+                        div.innerHTML = oFCKeditor_email_content_en.CreateHtml();
+                        </script>
+                    </td>
+                </tr>
+                <tr id="loginTr">
+                    <td align="right" width="110" valign="top">
+                        Mô tả chi tiết (EN)</td>
+                    <td style="padding-left: 5px;">
+                        <input type="hidden" name="fullcontent_en" id="fullcontent_en" value='<?php echo str_replace("'", "&prime;", $this->data['fullcontent_en']);?>' />
+                        <script type="text/javascript">
+                        var sBasePath = "/fckeditor/" ;
+                        var oFCKeditor_email_content2_en = new FCKeditor( 'myFCKeditor_fullcontent_en' ) ;
+                        oFCKeditor_email_content2_en.BasePath	= sBasePath ;
+                        oFCKeditor_email_content2_en.Height	= "350" ;
+                        oFCKeditor_email_content2_en.Width	= "95%" ;
+                        oFCKeditor_email_content2_en.ToolbarSet = '' ;
+                        oFCKeditor_email_content2_en.Value	= document.getElementById("fullcontent_en").value ;
+                        </script>
+                        <div id="myFCKeditor_fullcontent_en"></div>
+                        <script type="text/javascript">
+                        var div = document.getElementById("myFCKeditor_fullcontent_en");
+                        div.innerHTML = oFCKeditor_email_content2_en.CreateHtml();
+                        </script>
+                    </td>
+                </tr>
+
+                <tr id="serverTr" style="display:none;">
+                    <td align="right" width="110">Hiển thị trang chủ:</td>
+                    <td style="padding-left: 5px;">
+                        <? echo $this->formCheckbox("ishot", 1, array('checked' => $this->data['ishot']));?> Chọn để kích hoạt
+                   </td>
+                </tr>
+            </tbody>
+        </table>
+</fieldset>
+
+</form>
+
+    </td>
+  </tr>
+</tbody></table>
+</td>
+  </tr>
+</tbody></table>
+<script type="text/javascript">
+function get_editor_data()
+{
+	document.getElementById('fullcontent').value = FCKeditorAPI.GetInstance('myFCKeditor_fullcontent').GetHTML();
+        document.getElementById('shortcontent').value = FCKeditorAPI.GetInstance('myFCKeditor_shortcontent').GetHTML();
+	document.getElementById('fullcontent_en').value = FCKeditorAPI.GetInstance('myFCKeditor_fullcontent_en').GetHTML();
+        document.getElementById('shortcontent_en').value = FCKeditorAPI.GetInstance('myFCKeditor_shortcontent_en').GetHTML();
+	return true;
+}
+
+$().ready(function(){
+
+    $('#save').click(function(){
+        get_editor_data();
+        filter_array = new Array('title');
+        valid = new Array('required');
+        result = fsubmit('frmPage', filter_array, valid);
+        if(result){
+
+            $('#frmPage').submit();
+        }
+    });
+
+    $('#cateid').find('option').each(function(){
+        id = $(this).val();
+
+        if (id == <?echo (int)$this->cateid;?>){
+            $(this).attr('selected','selected');
+        }
+    });
+});
+
+</script>

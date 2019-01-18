@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title><?php echo SEOPlugin::getTitle(); ?> </title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="/backend/all.min.css?v=c123_<?php echo date('Ymd'); ?>" />
+    <script src="/backend/all.min.js?v=c12_<?php echo date('Ymd'); ?>"></script>
+    <?php
+    function minify_output2($content){
+        //remove redundant (white-space) characters
+        $replace = array(
+            //remove tabs before and after HTML tags
+            '/\>[^\S ]+/s'   => '>',
+            '/[^\S ]+\</s'   => '<',
+            //shorten multiple whitespace sequences; keep new-line characters because they matter in JS!!!
+            '/([\t ])+/s'  => ' ',
+            //remove leading and trailing spaces
+            '/^([\t ])+/m' => '',
+            '/([\t ])+$/m' => '',
+            // remove JS line comments (simple only); do NOT remove lines containing URL (e.g. 'src="http://server.com/"')!!!
+            '~//[a-zA-Z0-9 ]+$~m' => '',
+            //remove empty lines (sequence of line-end and white-space characters)
+            '/[\r\n]+([\t ]?[\r\n]+)+/s'  => "\n",
+            //remove empty lines (between HTML tags); cannot remove just any line-end characters because in inline JS they can matter!
+            '/\>[\r\n\t ]+\</s'    => '><',
+            //remove "empty" lines containing only JS's block end character; join with next line (e.g. "}\n}\n</script>" --> "}}</script>"
+            '/}[\r\n\t ]+/s'  => '}',
+            '/}[\r\n\t ]+,[\r\n\t ]+/s'  => '},',
+            //remove new-line after JS's function or condition start; join with next line
+            '/\)[\r\n\t ]?{[\r\n\t ]+/s'  => '){',
+            '/,[\r\n\t ]?{[\r\n\t ]+/s'  => ',{',
+            //remove new-line after JS's line end (only most obvious and safe cases)
+            '/\),[\r\n\t ]+/s'  => '),',
+            //remove quotes from HTML attributes that does not contain spaces; keep quotes around URLs!
+            '~([\r\n\t ])?([a-zA-Z0-9]+)="([a-zA-Z0-9_/\\-]+)"([\r\n\t ])?~s' => '$1$2=$3$4', //$1 and $4 insert first white-space character found before/after attribute
+        );
+        $content=  preg_replace(array_keys($replace), array_values($replace), $content);
+    
+        $remove = array(
+            '</option>', '</li>', '</dt>', '</dd>', '</tr>', '</th>', '</td>'
+        );
+        $content = str_ireplace($remove, '', $content);
+        return $content;
+    }
+    ?> 
+  </head>
+<body class="skin-blue sidebar-mini fixed sidebar-collapse nonscrolls">
+    <div class="click_tmp hidden" id="click_tmp"></div><div class="wrapper"><div class="row"><div class="col-md-7"><div style="top:0px;position: fixed;z-index: 9999999999999"><?php $footer = $this->layout()->_section["footer"];echo minify_output2($footer);?></div></div><div class="col-md-5"><div style="top:0px;position: fixed;z-index: 99999"><div style="height: 55px;min-width: 200px;" class="alert alert_show alert-danger hidden alert-dismissible"><button type="button" class="close" onclick="hidden_alert2('.alert_show');return false;"  aria-hidden="true">×</button><i class="fa fa-warning"></i>  <span id="err" class="err">Hướng dẫn nhập chênh lệch trả góp đã có ở phần trả góp. Mọi người vào xem và thực hiện. Nếu không rõ vui lòng liên hệ ITXem chi tiết</span></div></div></div></div>
+        <?php $header = $this->layout()->_section["header"]; echo minify_output2($header);?>
+        <?php echo isset($this->layout()->_section["left"]) ? $this->layout()->_section["left"] : ''; ?>
+        <div class="content-wrapper"><section class="content"><div class="row"><div class="box box-primary"><div class="overlay loading hidden"><i class="fa fa-refresh fa-spin"> <span style="font-size: 14px">đang xử lý... </span></i></div><?php $content = $this->layout()->content; echo minify_output2($content);?></div></div></section></div>
+      <footer class="main-footer"><div class="pull-right hidden-xs"><b>Version</b> 2.2.0</div><strong>Copyright &copy; 2014-2015 Hnammobile.</strong> All rights reserved.</footer>
+      <div class="control-sidebar-bg"></div></div><!-- ./wrapper -->
+    <div class="modal fade" id="get_voucher"><div class="modal-dialog" style="margin: 140px auto"><div class="modal-content col-md-offset-3 col-xs-12 col-md-6"><div class="modal-header"><button type="button" class="close close_voucher" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><div class="show_voucher"></div></div></div></div></div>
+    <div class="modal fade" id="show_alert_v2">
+    <div class="modal-dialog"><div class="modal-content"><div style="height: 100%" class="modal-body"><div class="modal-header" style="font-weight: bold;font-size: 30px;">THÔNG BÁO NGÀY MAI 28/12/2016 CHẠY PHẦN MỀM BÁN HÀNG VESION II</div><br/>
+    <div class="show_print"><p>Quy trình bán hàng có cập nhật, anh/chị vui lòng nhấn vào xem chi tiết để xem hướng dẫn</p></div></div></div></div></div>
+<script>
+    $().ready(function() {
+     $('#reservation').daterangepicker();
+        $('#reservationtime').daterangepicker({timePicker: true,format: 'YYYY/MM/DD HH:mm',use24hours: true  });
+        var startDate='<?php echo $this->start ?>';
+        var endDate='<?php echo $this->end ?>';
+        $('#daterange-btn').daterangepicker(
+            {
+             startDate: startDate,
+            endDate: endDate,
+            dateLimit: { days: 365 },
+            showDropdowns: true,
+            showWeekNumbers: true,
+            timePicker: false,
+            timePickerIncrement: 1,
+            timePicker12Hour: true,   
+              ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+              },
+            },
+        function (start, end) {
+          $('#showdate').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+          $('#start_end').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+          startDate = start;
+            endDate = end;
+        }
+        );
+    });
+//    
+//$(window).resize(function(){
+//        var pn =0;
+//        if (($(".panel-default").length > 0)){
+//            pn = $(".panel-default").css("height");
+//         }
+//         pn = parseInt(pn);
+//         var h = pn+120;
+//        var height = $(window).height()-h;
+//        $(".box-body").css("height",height+"px");
+//    });
+//    $(window).resize();
+</script>
+  </body>
+</html>

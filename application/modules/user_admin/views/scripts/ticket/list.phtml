@@ -1,0 +1,200 @@
+<div class="box-header with-border">
+    <div class="col-md-10"><h3><i class="fa fa-table"></i> Yêu cầu hỗ trợ</h3></div>
+    <div class="col-md-2"><a href="/admin/user/ticket/edit" class="btn btn-primary right"><i class="fa fa-plus-circle"></i> Tạo yêu cầu</a></div>
+</div><!-- /.box-header -->
+<!-- form start -->
+<div class="clearfix"></div>
+<div class="box-bodys">
+    <form>
+    <div class="col-md-3">
+        <div class="form-group">
+    <select name="regencyid" id="regencyid" onchange="change_status();" class="selects" style="width:100%">
+            <option value="0">Tất cả chức vụ</option>
+            <?php foreach ($this->list_regency as $val){ 
+                $sl='';
+                if($this->regencyid == $val["id"]){
+                   $sl='selected="selected"'; 
+                }
+                ?>
+            <option <?php echo $sl; ?> value="<?php echo $val["id"] ?>"><?php echo $val["name"] ?></option>
+            <?php }?>
+        </select>
+    </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+                <select style="width: 100%" onchange="change_status();" class="selects"  name="status" id="status">
+                    <option value="0">Hiển thị toàn bộ</option>
+                    <?php
+                    foreach ($this->list_status as $key=> $items) {
+                        $sl = '';
+                        if ($key == $this->status) {
+                            $sl = 'selected="selected"';
+                        }
+                        ?>
+                        <option <?php echo $sl ?> value="<?php echo $key ?>"><?php echo $items ?></option>
+<?php } ?>
+                </select>
+        </div>
+        </div>
+        <div class="col-md-1">
+            <label style="color: red">Quá hạn dealine <input type="checkbox" name="dealine" <?php if($this->dealine >0){ ?> checked="checked" <?php }?> id="dealine" value="1" /></label>
+        </div>
+    <div class="col-md-4">
+        <div class="input-group-sm">
+            <?php
+            $start_end = 'Date range picker';
+            if ($this->start_end != null) {
+                $start_end = $this->start_end;
+            }
+            ?>
+            <span class="input-group-btn">
+                <button class="btn btn-default pull-left" id="daterange-btn">
+                    <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                    <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                    <i class="fa fa-caret-down"></i>
+                </button>
+            </span>
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-info btn-flat"><i class="fa fa-search"> </i><span class="hidden-xs"> Xem</span></button>
+            </span>
+        </div>
+    </div>
+</form>
+    <div class="clearfix"></div>
+    <div class="table-responsive">
+        <table class="table table-bordered table-condensed table-striped">
+            <tr>
+                <th class="hidden-xs" width="10">STT</th> 
+                <th>Nhân viên yêu cầu</th>
+                <th>Tiêu đề</th>
+                <th class="hidden-xs">Ngày khởi tạo</th>
+                <th class="hidden-xs">Nhân viên tiếp nhận</th>
+                <th class="hidden-xs">Ngày tiếp nhận</th>
+                <th>Mong muốn hoàn thành</th>
+                <th style="color: red">Dealine dự kiến</th>
+                <th>Tình trạng</th>
+                <th width="10">#</th>
+            </tr>
+            <?php foreach ($this->list as $val){
+                $id = $val["id"];
+                $token = $val["token"];
+                
+                ?>
+            <tr>
+                <td class="hidden-xs"><?php echo ++$stt ?></td>
+                <td><?php echo $this->array_fullname[$val["userid"]] ?></td>
+                <td><a href="/admin/user/ticket/view?id=<?php echo $id ?>&token=<?php echo $token ?>" target="_blank"><?php echo $val["name"] ?></a></td>
+                <td class="hidden-xs"><?php echo date('d/m/Y H:i',  strtotime($val["datetime"])); ?></td>
+                <td class="hidden-xs"><?php echo $this->array_fullname[$val["receiver"]] ?></td>
+                <td class="hidden-xs"><?php if($val["datetime_receiver"]){  echo date('d/m/Y H:i',  strtotime($val["datetime_receiver"]));  }?></td>
+                <td><?php echo date('d/m/Y',  strtotime($val["dealine"])); ?></td>
+                <td style="color: red">
+                    <?php  if(strtotime($val["dealine_edit"]) != FALSE){
+                        echo date('d/m/Y',  strtotime($val["dealine_edit"])); 
+                    }else{
+                        echo date('d/m/Y',  strtotime($val["dealine"])); 
+                    } 
+                    ?>
+                </td>
+                <td>
+                  <?php
+                  if($this->userid == $val["receiver"] || $this->bgd==1){
+                      echo $this->list_status[$val["status"]]; 
+                      ?>
+                    <?php
+                  if($val["status"]<3){?>
+                    <select name="status2<?php echo $id ?>" id="status2<?php echo $id ?>"  onchange="change_status2(<?php echo $id ?>);">
+                        <option value="0">Trạng thái</option>
+                        <?php foreach ($this->list_status as $key=> $st){
+                            $s='';
+                            if($val["status"]>= $key){
+                                continue ;
+                            }
+                            ?>
+                        <option <?php echo $sl ?> value="<?php echo $key ?>"><?php echo $st ?></option>
+                        <?php }?>
+                    </select>
+                  <?php }?>
+                  <?php }else{
+                     echo $this->list_status[$val["status"]]; 
+                  }
+                  ?>  
+                </td>
+                <td  width="10">
+                    <?php if($val["status"]==1 && $this->userid == $val["receiver"]){ ?>
+                    <button onclick="del(<?php echo $val["id"] ?>);return false;" title="Được hủy khi chưa xử lý" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                    <?php }?>
+                </td>
+            </tr>
+            <?php }?>
+        </table>
+    </div>
+    <div class="clearfix"></div>
+    <?php if($this->list_assign){ ?>
+    <h2>Các Ticket đã được asign và forward cho bạn</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered table-condensed table-striped">
+            <tr>
+                <th class="hidden-xs" width="10">STT</th> 
+                <th>Nhân viên yêu cầu</th>
+                <th>Tiêu đề</th>
+                <th class="hidden-xs">Ngày khởi tạo</th>
+                <th class="hidden-xs">Nhân viên tiếp nhận</th>
+                <th class="hidden-xs">Ngày tiếp nhận</th>
+                <th>Mong muốn hoàn thành</th>
+                <th style="color: red">Dealine dự kiến</th>
+                <th>Tình trạng</th>
+            </tr>
+            <?php foreach ($this->list_assign as $val){
+                $id = $val["id"];
+                $token = $val["token"];
+                
+                ?>
+            <tr>
+                <td class="hidden-xs"><?php echo ++$stt2 ?></td>
+                <td><?php echo $this->array_fullname[$val["userid"]] ?></td>
+                <td><a href="/admin/user/ticket/view?id=<?php echo $id ?>&token=<?php echo $token ?>" target="_blank"><?php echo $val["name"] ?></a></td>
+                <td class="hidden-xs"><?php echo date('d/m/Y H:i',  strtotime($val["datetime"])); ?></td>
+                <td class="hidden-xs"><?php echo $this->array_fullname[$val["userid"]] ?></td>
+                <td class="hidden-xs"><?php if($val["datetime_receiver"]){  echo date('d/m/Y H:i',  strtotime($val["datetime_receiver"]));  }?></td>
+                <td><?php echo date('d/m/Y',  strtotime($val["dealine"])); ?></td>
+                <td style="color: red">
+                    <?php  if(strtotime($val["dealine_edit"]) != FALSE){
+                        echo date('d/m/Y',  strtotime($val["dealine_edit"])); 
+                    }else{
+                        echo date('d/m/Y',  strtotime($val["dealine"])); 
+                    } 
+                    ?>
+                </td>
+                <td>
+                  <?php
+                      echo $this->list_status[$val["status"]]; 
+                      ?>
+                </td>
+            </tr>
+            <?php }?>
+        </table>
+    </div>
+    <?php }?>
+</div>
+<div id="url_list" class="hidden"><?php echo $this->url_list ?></div>
+<script>
+    function del(id){
+        var url = '/admin/user/ticket/del?id='+id;
+        window.location.href=url;
+    }
+    function change_status2(id){
+        var status = $('#status2'+id+' option:selected').val();
+        var url = '/admin/user/ticket/changestatus?id='+id+'&status='+status;
+        window.location.href=url;
+    }
+    function change_status(){
+        var regencyid = $('#regencyid option:selected').val();
+        var status = $('#status option:selected').val();
+        var start_end = $('#start_end').val();
+        var dealine = $('#dealine').val();
+        var url_list = $('#url_list').html();
+        window.location.href = url_list+"?status="+status+'&regencyid='+regencyid+'&start_end='+start_end;
+    }
+    </script>

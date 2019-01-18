@@ -1,0 +1,85 @@
+<?
+?>
+<table border="0" cellpadding="20" cellspacing="10" width="100%">
+    <tbody>
+        <tr>
+            <td style="padding: 5px;" align="center" valign="middle">
+                <table class="borderMain" border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tbody><tr valign="top">
+                            <td><div class="header icon-48-article">Chi tiết bình chọn</div></td>
+                            <td align="right"><div class="toolbar">
+                                    <table class="toolbar">
+                                        <tbody>
+                                            <tr>
+                                                <td id="toolbar-new" class="button">
+                                                    <a class="toolbar" id="save" href="#">
+                                                        <span title="Save" class="icon-32-save"></span>Lưu</a>
+                                                </td>
+                                                <td id="toolbar-cancel" class="button">
+                                                    <a class="toolbar" onclick="javascript:window.location='/admin/user/poll/list/'" href="#">
+                                                        <span title="Cancel" class="icon-32-back"></span>
+                                                        Quay lại</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="borderMain spaceTop5px" border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tbody><tr>
+                            <td>
+                                <form name="frmPage" id="frmPage" method="post" enctype="multipart/form-data" action="/admin/user/poll/save/">
+                                    <input type="hidden" name="id" value="<?php echo $this->data["item_id"]; ?>" />
+                                    <table class="adminerror spaceTop10px" border="0" cellpadding="0" cellspacing="0" width="100%">
+                                    </table>
+                                    <br>
+                                    <fieldset class="adminform"><legend>Chi tiết bình chọn</legend>
+                                        <table class="spaceTop5px" border="0" width="100%">
+                                            <tbody>
+                                                <tr>
+                                                   <td align="right" class="hligh2" width="110"><label for="title">Tên Bình chọn:</label></td>
+                                                   <td class="hligh2"><input type="text" name="title" id="title" value="<?php echo $this->data['title']; ?>" style="width: 800px; padding: 5px;" ></td>
+                                                </tr>
+                                                <?for($i=0; $i<10; $i++){
+                                                    if ((int)$this->data["item_id"] > 0 && $this->pollData[$i]['question'] == '') continue;
+                                                    ?>
+                                                    <tr>
+                                                        <td align="right" class="hligh2" width="110"><label for="description">Câu hỏi <?=($i+1)?>:</label></td>
+                                                        <td class="hligh2"><input type="text" name="question[<?=$this->pollData[$i]['item_id']?>]" id="<?=$this->pollData[$i]['item_id'];?>" style="width:300px; line-height: 5px;" value="<?=$this->pollData[$i]['question'];?>"/>
+                                                            lần bình chọn (<span style="color:#999999"><?=(int)$this->pollData[$i]['total_poll']?></span>)
+                                                        </td>                                                        
+                                                    </tr>
+                                                <?}?>
+                                            </tbody>
+                                        </table>
+                                    </fieldset>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<script type="text/javascript">
+    function CheckForm()
+    {
+        return true;
+    }
+    $().ready(function(){
+
+        $('#save').click(function(){
+            filter_array = new Array('title');
+            valid = new Array('required');
+            result = fsubmit('frmPage', filter_array, valid);
+            if(result)
+            {
+                $('#frmPage').submit();
+            }
+        });
+    });
+
+</script>

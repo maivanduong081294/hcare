@@ -1,0 +1,376 @@
+<?php
+$ps_phone =0;
+$ps_pk =0;
+$tg_pk_cty = 0;
+$tg_pk_hnam = 0;      
+    foreach ($this->ptype as $key => $items) {
+        if($key ==3){
+            $tg_pk_cty += $this->money_cty[$key];
+            $tg_pk_hnam += $this->money_hnam[$key];
+            $sales_pk_hnam += $this->sum_hnam[$key];
+            $sales_pk_cty += $this->sum_cty[$key];
+        }else{
+            $tg_cty +=$this->money_cty[$key];
+            $sales_cty += $this->sum_cty[$key];
+        }
+    }
+    $_percent_phone = round($sales_cty/$tg_cty*100,2);
+    $_percent_pk = round(($sales_pk_hnam + $sales_pk_cty)/($tg_pk_cty+$tg_pk_hnam)*100,2);
+    
+    $number_phone =0.15/100;
+    if($_percent_phone >80){
+        $number_phone = 0.25/100;
+    }
+    $number_pk =0;
+    if( $_percent_pk >=70 && $_percent_pk <=80){
+        $number_pk = 1/100;
+    }
+    if( $_percent_pk >=80 ){
+        $number_pk = 2/100;
+    }
+    if($_percent_phone >80){
+       $ps_phone = 500000;
+       if($_percent_phone >100){
+           $them_phone = $_percent_phone-100;
+           if($them_phone >=10){
+               $_thuongthem += floor($them_phone/10)*500000;
+           }
+       }
+    }
+    if($_percent_pk >85){
+        $ps_pk = 500000;
+    }
+    if($_percent_pk >100){
+        $ps_pk = 1000000;
+    }
+?>
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="ion ion-clipboard"></i>
+        <h3 class="box-title">Target chi nhánh VIVO</h3>
+    </div><!-- /.box-header -->
+    <form role="form" id="view-sales-day" method="get"  class="frmReport">
+                <div class="box-body">
+                    <div class="col-md-6">
+                <div class="form-group">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <select onchange="hrf();return false;" class="form-control" name="month" id="month">
+                            <?php
+                            foreach ($this->months as $m) {
+                                $selected = '';
+                                if ($this->month == $m) {
+                                    $selected = ' selected ="selected"';
+                                }
+                                ?>
+                                <option <?php echo $selected ?> value="<?php echo $m; ?>"> Tháng <?php echo $m; ?></option>
+    <?php } ?>
+                        </select>
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <select onchange="hrf();return false;" class="form-control" name="year" id="year">
+                            <?php
+                            foreach ($this->years as $y) {
+                                $selected2 = '';
+                                if ($this->year == $y) {
+                                    $selected2 = ' selected ="selected"';
+                                }
+                                ?>
+                                <option <?php echo $selected2 ?> value="<?php echo $y; ?>"> Năm <?php echo $y; ?></option>
+    <?php } ?>
+                        </select>
+                        <span class="input-group-btn">
+                            <button  type="submit" class="btn btn-info btn-flat"><i class="fa fa-search"> Xem</i></button>
+                        </span>
+                    </div><!-- /.input group -->
+
+                </div>
+            </div>
+            <div class="col-md-3 ">
+                <a  class="btn btn-info btn-sm" href="/admin/user/target/listmb" ><i class="fa fa-plus"></i> Target từng nhân viên</a>
+            </div>
+                </div><!-- /.box-body -->
+
+            </form>
+    
+    <div class="box-body">
+        <div class="table-responsive">
+                <table class="table table-data table-striped table-bordered table-hover">
+                        <tr>
+                            <!--Target-->
+                            <th width="150"></th>
+                            <th colspan="3">Công ty(Target)</th>
+                            <th colspan="3">Hnam(Target)</th>
+                            <!--Doanh số-->
+                            <th width="20">-</th>
+                            <th colspan="3">Công ty(Doanh số)</th>
+                            <th colspan="3">Hnam(Doanh số)</th>
+                        </tr>
+                        <tr>
+                            <!--Target-->
+                            <th width="150"></th>
+                            <th>Tiền</th>
+                            <th width="40">SL</th>
+                            <th width="40"></th>
+                            <th>Tiền</th>
+                            <th width="40">SL</th>
+                            <th width="40"></th>
+                            
+                            <!--Doanh số-->
+                            <td></td>
+                            <th>Tiền</th>
+                            <th>Tỷ lệ</th>
+                            <th width="40">SL</th>
+                            <th>Thưởng</th>
+                            <th>Tiền</th>
+                            <th>Tỷ lệ</th>
+                            <th width="40">SL</th>
+                            <th>Thưởng</th>
+                        </tr>
+                        <?php
+                        $seckey ="TARGET2016HNAMMOBILE";
+                        foreach ($this->ptype as $key=> $items){ 
+                            $token_cty = md5($seckey.$this->id_cty[$key]);
+                            $token_hnam = md5($seckey.$this->id_hnam[$key]);
+                            
+                            //Doanh số
+                            $_phantram_cty = round($this->sum_cty[$key]/$this->money_cty[$key]*100,2);
+                            $_phantram_hnam = round($this->sum_hnam[$key]/$this->money_hnam[$key]*100,2);
+                            $bgcolor1 ='';
+                            $bgcolor2 ='';
+                            if($_phantram_cty >=75){
+                                $bgcolor1 = 'class="dat"';
+                            }else{
+                                $bgcolor1 = 'class="nodat"';
+                            }
+                            if($_phantram_hnam >=75){
+                                $bgcolor2 = 'class="dat"';
+                            }else{
+                                $bgcolor2 = 'class="nodat"';
+                            }
+                            $___often = 0;
+                            $___often_hnam = 0;
+                            if($key==3){
+                                $___often_hnam = $this->sum_cty[$key] *$number_pk;
+                            }else{
+                                $___often = $this->sum_cty[$key] *$number_phone;
+                            }
+                            ?>
+                        <tr>
+                            <td><?php echo $items; ?></td>
+                            <!--Target-->
+                            <td><?php echo number_format($this->money_cty[$key]);?></td>
+                            <td><?php echo number_format($this->total_cty[$key]); ?></td>
+                            <td width="40"><a  title="Lịch sử chỉnh sửa" data-toggle="tooltip" onclick="history(<?php echo (int)$this->id_cty[$key]; ?>,'<?php echo $token_cty;?>');return false;" class="btn btn-sm btn-warning" >
+                                    <i class="fa fa-eye"></i></a>
+                            </td>
+                            <td><?php echo number_format($this->money_hnam[$key]); ?></td>
+                            <td><?php echo number_format($this->total_hnam[$key]); ?></td>
+                            <td width="40"><a  title="Lịch sử chỉnh sửa" data-toggle="tooltip" onclick="history(<?php echo (int)$this->id_hnam[$key]; ?>,'<?php echo $token_hnam;?>');return false;" class="btn btn-sm btn-warning" >
+                                    <i class="fa fa-eye"></i></a>
+                            </td>
+                            
+                            <td></td>
+                            <!--Doanh số-->
+                            <td><?php echo number_format($this->sum_cty[$key]);?></td>
+                            <td <?php echo $bgcolor1; ?>><?php echo $_phantram_cty;?>%</td>
+                            <td><?php echo number_format($this->totals_cty[$key]); ?></td>
+                            <td><?php echo number_format($___often);?></td>
+                            <td><?php echo number_format($this->sum_hnam[$key]); ?></td>
+                            <td <?php echo $bgcolor2; ?>><?php echo $_phantram_hnam;?>%</td>
+                            <td><?php echo number_format($this->totals_hnam[$key]); ?></td>
+                            <td><?php echo number_format($___often_hnam);?></td>
+                        </tr>
+                        <?php $money_cty +=  $this->money_cty[$key];
+                            $total_cty +=  $this->total_cty[$key];
+                            $money_hnam +=  $this->money_hnam[$key];
+                            $total_hnam +=  $this->total_hnam[$key];
+//                            if($key !=3){
+                                $totals_hnam+=  $this->totals_hnam[$key];
+//                            }
+                            $sum_cty +=  $this->sum_cty[$key];
+                            $totals_cty +=  $this->totals_cty[$key];
+                            $sum_hnam +=  $this->sum_hnam[$key];
+                            
+                            $_soften +=$___often;
+                            $_soften_hnam +=$___often_hnam;
+                            ?>
+                        <?php }?>
+                        
+                        <!--Tổng-->
+                        <tr style="color: white;background: #090;font-weight: bold">
+                            <td>Tổng cộng</td>
+                            <td><?php echo number_format($money_cty);?></td>
+                            <td><?php echo number_format($total_cty);?></td>
+                            <td></td>
+                            <td><?php echo number_format($money_hnam);?></td>
+                            <td><?php echo number_format($total_hnam);?></td>
+                            <td></td>
+                            
+                            <td></td>
+                            
+                            <td><?php echo number_format($sum_cty);?></td>
+                            <td></td>
+                            <td><?php echo number_format($totals_cty);?></td>
+                            <td><?php echo number_format($_soften);?></td>
+                            <td><?php echo number_format($sum_hnam);?></td>
+                            <td></td>
+                            <td><?php echo number_format($totals_hnam);?></td>
+                            <td><?php echo number_format($_soften_hnam);?></td>
+                        </tr>
+                </table>
+        </div>
+        <div class="row">
+        <div class="col-md-6">
+            <div class="btn btn-sm dat"> <i class="fa fa-thumbs-up"> Đạt</i></div>
+            <div class="btn btn-sm nodat"><i class="fa fa-thumbs-down"> Không đạt </i></div>
+            <div style="color: red"><b> Hiển thị Push sale Máy</b></div><br/>
+            <table class="table table-bordered table-condensed table-striped">
+                <tr>
+                    <th>STT</th>
+                    <th>Doanh số</th>
+                    <th>Tỷ lệ(%)</th>
+                </tr>
+                <tr>
+                    <td>Tổng</td>
+                    <td><?php echo number_format($sales_cty); ?></td>
+                    <td><?php echo $_percent_phone ?>%</td>
+                    <!--<td><?php // echo ($_percent_apple + $_percent_other)/2 ?>%</td>-->
+                </tr>
+                <tr>
+                    <td colspan="3" style="color: red"><b>Tiền cộng cho quản lý : <?php echo number_format($ps_phone); ?></b></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold" colspan="3">Ghi chú:<br/>
+                     
+                    Tỉ lệ < hoặc = 80%: doanh thu thực tế * 0,15% ( tỉ lệ thưởng bị  cắt 50%)<br/>
+                    Tỉ lệ > 80%: doanh thu thực tế * 0,25%<br/>
+                    ·       PS:<br/>
+
+                    Tỉ lệ < hoặc =80%: không có PS<br/>
+                    80%< tỉ lệ <100%: PS 500.000đ<br/>
+                    Từ >100% trở đi: cứ 10% PS tăng thêm 500.000đ
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <div style="color: red"><b> Hiển thị Push sale Phụ kiện</b></div><br/>
+            <table class="table table-bordered table-condensed table-striped">
+                <tr>
+                    <th>STT</th>
+                    <th>Doanh số</th>
+                    <th>Tỷ lệ(%)</th>
+                </tr>
+                
+                <tr>
+                    <td>Tổng</td>
+                    <td><?php echo number_format($sales_pk_cty+$sales_pk_hnam); ?></td>
+                    <td><?php echo $_percent_pk ?>%</td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="color: red"><b>Tiền cộng cho quản lý : <?php echo number_format($ps_pk); ?></b></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold" colspan="3">Ghi chú:<br/>
+                     Tỉ lệ <70% : không có thưởng<br/>
+                    Tỉ lệ > hoặc =70% đến 80%: doanh thu thực tế *1%<br/>
+                    Tỉ lệ >80%: doanh thu thực tế * 2%<br/>
+                    ·       PS<br/>
+
+                    85% <  tỉ lệ< 100%: 500.000đ<br/>
+                    Tỉ lệ >100% : 1.000.000đ
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    </div><!-- /.box-body -->
+</div><!-- /.box -->
+<div id="ddelete" style="display:none;"></div>
+<script>
+    function history(id,token){
+        var ajaxLink = '/admin/user/target/get-history';
+        $.ajax({
+            method: 'get',
+            cache: false,
+            url: ajaxLink,
+            data: {id: id,token:token},
+            dataType: 'json',
+            success: function (resp) {
+                console.log(resp);
+                $('.addrow').html('');
+                $('#myModal3').modal('show');
+                var count =0;
+                $.each(resp, function (i) {
+                    count ++;
+                    html = "<tr class='addrow'><td>"+count+"</td>\n\
+                            <td>"+resp[i].name_flag+"</td>\n\
+                            <td>"+resp[i].name_type+"</td>\n\
+                            <td>"+resp[i].money+"</td>\n\
+                            <td>"+resp[i].total+"</td>\n\
+                            <td>"+resp[i].datetime+"</td>\n\
+                            <td>"+resp[i].creator+"</td></tr>";
+                    $('.addtable').append(html);    
+                });
+
+            }
+        });
+    }
+    $().ready(function () {
+        function keys(e)
+        {
+            var keyword = null;
+            if (window.event)
+            {
+                keyword = window.event.keyCode;
+            } else
+            {
+                keyword = e.which; //NON IE;
+            }
+            if (keyword < 48 || keyword > 57)
+            {
+                if (keyword == 48 || keyword == 127)
+                {
+                    return;
+                }
+                return false;
+            }
+        }
+        $(".pricing").keyup(function () {
+            var price = this.value;
+            price = price.replace(/,/gi, "");
+            price = price + ".";
+            price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            var sprice = price.split(".");
+            $(this).val(sprice[0]);
+        });
+        
+    });
+</script>
+<div class="modal fade" id="myModal3">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="color: red"><b>Lịch sử chỉnh sửa target <span id="title"></span></b></h4>
+      </div>
+        <div class="modal-body">
+            <table class="table table-condensed table-bordered table-responsive addtable">
+                <tr>
+                    <th>STT</th>
+                    <th>Nhóm sản phẩm</th>
+                    <th>Loại sản phẩm</th>
+                    <th>Tổng tiền</th>
+                    <th>Số lượng</th>
+                    <th>Ngày tạo</th>
+                    <th>Người tạo</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+  </div>
+</div>

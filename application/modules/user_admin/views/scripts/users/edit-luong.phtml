@@ -1,0 +1,123 @@
+<div class="box-header with-border">
+    <div class="col-md-10"><h3><i class="fa fa-plus-circle"></i> Chỉnh sửa thông tin lương của <?php echo $this->detail["username"] ?></h3></div>
+    <div class="col-md-2"><a href="/admin/user/users/listluong" class="btn btn-primary right"><i class="fa fa-table"></i> Danh sách lương</a></div>
+</div><!-- /.box-header -->
+<!-- form start -->
+<div class="box-body">
+    <form  name="data_frm" id="data_frm"  method="post"  target="hiddenIF"  enctype="multipart/form-data">
+    <input type="hidden" name="id" id="id" value="<?php echo $this->detail["id"] ?>" />
+    <input type="hidden" name="token" id="token" value="<?php echo $this->token ?>" />
+    <iframe  name="hiddenIF" style="display: none" scrolling="auto"></iframe>
+    <div class="col-md-3">
+        
+        <span>Họ tên nhân viên:</span>
+        <div class="form-group">
+            <input class="form-control" name="fullname" value="<?php echo $this->detail["fullname"] ?>" id="fullname" placeholder="Vui lòng nhập họ tên nhân viên" />
+        </div>
+        <span>Lương từ ngày:</span>
+        <div class="form-group">
+            <input class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" value="<?php echo date('d/m/Y',  strtotime($this->detail["from"])) ?>"  data-mask="" placeholder="dd/mm/yyyy" name="from" id="from"  />
+        </div>
+        <span>Lương đến ngày:</span>
+        <div class="form-group">
+            <input class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" value="<?php echo date('d/m/Y',  strtotime($this->detail["to"])) ?>"  data-mask="" placeholder="dd/mm/yyyy" name="to" id="to"  />
+        </div>
+        <span>Ngày vào làm việc:</span>
+        <div class="form-group">
+            <input class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'"  value="<?php echo date('d/m/Y',  strtotime($this->detail["create_date"])) ?>" data-mask="" placeholder="dd/mm/yyyy" name="create_date" id="create_date"  />
+        </div>
+        <span>Chức vụ:</span>
+        <div class="form-group">
+            <input class="form-control" name="regency" id="regency" value="<?php echo $this->detail["regency"] ?>" placeholder="Vui lòng nhập chức vụ nhân viên" />
+        </div>
+        <span>Chi nhánh:</span>
+        <div class="form-group">
+            <input class="form-control" name="storename" id="storename" value="<?php echo $this->detail["storename"] ?>" placeholder="Vui lòng nhập chi nhánh nhân viên" />
+        </div>
+        <span>Số tài khoản ngân hàng:</span>
+        <div class="form-group">
+            <input class="form-control" name="stk" id="stk" value="<?php echo $this->detail["stk"] ?>" placeholder="Vui lòng nhập số tài khoản ngân hàng" />
+        </div>
+    </div>
+    <div class="col-md-3">
+        <span>Số ngày công:</span>
+        <div class="form-group">
+            <input class="form-control" name="ngay_cong" id="ngay_cong" value="<?php echo $this->detail["ngay_cong"] ?>" placeholder="Vui lòng nhập số ngày công" />
+        </div>
+        <span>Số giờ tăng ca:</span>
+        <div class="form-group">
+            <input class="form-control" name="gio_tangca" id="gio_tangca" value="<?php echo $this->detail["gio_tangca"] ?>" placeholder="Vui lòng nhập số giờ tăng ca" />
+        </div>
+        <span>Tiền tăng ca:</span>
+        <div class="form-group">
+            <input class="form-control pricing" name="tien_tangca" id="tien_tangca" value="<?php echo number_format($this->detail["tien_tangca"]) ?>" placeholder="Vui lòng nhập tiền tăng ca" />
+        </div>
+        <span>Thâm niên:</span>
+        <div class="form-group">
+            <input class="form-control" name="tham_nien" id="tham_nien" value="<?php echo $this->detail["tham_nien"] ?>" placeholder="Vui lòng nhập thâm niên" />
+        </div>
+        <span>Lương bảo hiểm xã hội:</span>
+        <div class="form-group">
+            <input class="form-control pricing" name="luong_bhxh" id="luong_bhxh" value="<?php echo number_format($this->detail["luong_bhxh"]) ?>" placeholder="Vui lòng nhập lương" />
+        </div>
+        <span>Trách nhiệm:</span>
+        <div class="form-group">
+            <input class="form-control pricing" name="trach_nhiem" id="trach_nhiem" value="<?php echo number_format($this->detail["trach_nhiem"]) ?>" placeholder="Vui lòng nhập lương" />
+        </div>
+    </div>
+    <div class="col-md-3">
+        <span>Lương:</span>
+        <div class="form-group">
+            <input class="form-control pricing" name="luong" id="luong" value="<?php echo number_format($this->detail["luong"]) ?>" placeholder="Vui lòng nhập lương" />
+        </div>
+        
+        <span>Lương cơ bản:</span>
+        <div class="form-group">
+            <input class="form-control pricing" name="co_ban" id="co_ban" value="<?php echo number_format($this->detail["co_ban"]) ?>" placeholder="Vui lòng nhập lương" />
+        </div>
+        <span>Thành tiền:</span>
+        <div class="form-group">
+            <input class="form-control pricing" name="thanh_tien" id="thanh_tien" value="<?php echo number_format($this->detail["thanh_tien"]) ?>" placeholder="Vui lòng nhập lương" />
+        </div>
+        <span>Tiền tạm ứng:</span>
+        <div class="form-group">
+            <input class="form-control pricing" name="tam_ung" id="tam_ung" value="<?php echo number_format($this->detail["tam_ung"]) ?>" placeholder="Vui lòng nhập tiền tạm ứng" />
+        </div>
+        <span>Tiền giảm trừ bhxh:</span>
+        <div class="form-group">
+            <input class="form-control pricing" name="giam_tru_bhxh" id="giam_tru_bhxh" value="<?php echo number_format($this->detail["giam_tru_bhxh"]) ?>" placeholder="Vui lòng nhập tiền giảm trừ bhxh" />
+        </div>
+        <span>Tiền thực lãnh:</span>
+        <div class="form-group">
+            <input class="form-control pricing" name="thuc_lanh" id="thuc_lanh" value="<?php echo number_format($this->detail["thuc_lanh"]) ?>" placeholder="Vui lòng nhập tiền thực lãnh" />
+        </div>
+    </div>
+    <div class="col-md-3">
+        <span>Ghi chú</span>
+        <textarea placeholder="Ghi chú..." class="form-control" name="note" id="note"><?php echo $this->detail['note']; ?></textarea>
+    </div>
+    
+    <div class="clearfix"></div>
+    <br/>
+    <button type="submit" id="save" onclick="savess();
+                            return false;" class="btn btn-primary right"><i class="fa fa-floppy-o"></i>  Lưu</button>
+    </form>
+</div>
+<div class="hidden" id="url_change"><?php echo $this->url_change_regencyid ?></div>
+<script src="/backend/ckeditor/ckeditor.js?vs=<?php echo rand() ?>" type="text/javascript"></script>
+<script>
+    $("#from").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+    $("#to").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+    $("#create_date").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+$(function () {
+        CKEDITOR.replace('note', {height: 250});
+    });
+    $(".pricing").keyup(function () {
+        var price = this.value;
+        price = price.replace(/,/gi, "");
+        price = price + ".";
+        price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        var sprice = price.split(".");
+        $(this).val(sprice[0]);
+    });
+</script>

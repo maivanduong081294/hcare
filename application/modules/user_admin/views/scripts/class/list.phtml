@@ -1,0 +1,84 @@
+<table border="0" cellpadding="20" cellspacing="10" width="100%">
+  <tbody><tr>
+    <td style="padding: 5px;" align="center" valign="middle">
+    <table cellspacing="0" cellpadding="0" border="0" width="100%" class="borderMain">
+    <tbody><tr valign="top">
+        <td><table cellspacing="0" cellpadding="0" border="0" width="100%">
+                <tbody><tr>
+                    <td><div class="header icon-48-categories"><a href="/admin/user/class/list">Quản lý lớp học</a></div></td>
+                           <td align="right"><div class="toolbar">
+                                   <table class="toolbar">
+                                <tbody>
+                                    <tr>                                        
+                                        <td id="toolbar-new" class="button"><a class="toolbar" href="#" id="export"> <span title="Export Excel" class="" style="background:url(/user_admin/images/excel.png)"></span>Export excel</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div></td>
+                                    </tr>
+            </tbody></table></td>
+    </tr>
+</tbody>
+</table>
+<div style="width:100%; text-align: right; margin:10px 0;">
+    <form action="" name="frmChange" id="frmChange" method="post">
+        Chọn lớp <? echo $this->formSelect("classid", $this->classid, array("class"=>"menuname","class"=>"frm"), $this->list_class); ?>
+        
+    </form>
+</div>
+<div style="width:100%; text-align: right; margin: 5px 0"><?echo $this->paging_template ?></div>
+<table cellpadding="0" border="0" width="100%" class="borderMain spaceTop5px">
+    <form method="post" name="frmPage" id="frmPage">
+        <input type="hidden" name="updateid" id="updateid" value="" />
+        <tbody>
+            <tr>
+                <td width="35" class="bgTitleadmin1"><input type="checkbox" onclick="checkme()" name="checkall"></td>
+                <td width="50" class="bgTitleadmin1">#</td>
+                <td class="bgTitleadmin1">Họ tên</td>
+                <td class="bgTitleadmin1" width="200">Điện thoại</td>
+                <td class="bgTitleadmin1" width="200">Email</td>
+                <td class="bgTitleadmin1" width="200">Thời gian đăng ký</td>
+            </tr>
+            <?php
+            if(count($this->list)>0 && is_array($this->list))
+            {
+                foreach($this->list as $item)
+                {
+                    if($no%2 == 0)
+                        $bgcolor = '#f2f4f5';
+                   else
+                       $bgcolor = '#fff';
+                ?>
+                    <tr bgcolor="<?echo $bgcolor; ?>">
+                        <td class="bgContentadmin1"><input type="checkbox" value="<?php echo $item['id'];?>" name="check[]"></td>
+                        <td class="bgContentadmin1"><? echo ++$no;?></td>
+                        <td class="bgContentadmin2"><?echo $item['fullname']?></td>
+                        <td class="bgContentadmin2"><?echo $item['phone']?></td>
+                        <td class="bgContentadmin2"><?echo $item['email']?></td>
+                        <td class="bgContentadmin2"><?echo date("d/m/Y H:i:s", strtotime($item['datetime']));?></td>
+                    </tr>
+                <?php
+                }
+            }
+            ?>
+    </form>
+</table>
+</td>
+  </tr>
+</tbody></table>
+<div id="ddelete" style="display:none;"></div>
+<div id="dmyorder" style="display:none"></div>
+<script type="text/javascript">
+
+$().ready(function(){
+    
+    $('#classid').change(function(){
+        window.location = "/admin/user/class/list?classid=" + $(this).val();
+    });
+    
+    $("#export").click(function(){
+        var classid = $('#classid').val();
+        window.location = "/admin/user/class/export?classid="+classid;
+    });
+});
+</script>

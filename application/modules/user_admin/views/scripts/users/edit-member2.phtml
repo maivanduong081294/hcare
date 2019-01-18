@@ -1,0 +1,343 @@
+<link rel="stylesheet" href="/backend/plugins/daterangepicker/daterangepicker-bs3.css">      
+<div class="col-md-6">
+    <div class="box box-primary">
+        <div class="box-header">
+            <h3 class="box-title">Thông tin nhân viên</h3>
+        </div><!-- /.box-header -->
+        <!-- form start -->
+        <form role="form" action="" class="frmReport">
+            <div class="box-body">
+                <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Chức vụ : </label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-laptop"></i>
+                        </div>
+                        <select class="form-control" name="idregency" id="idregency" >
+                            <option value="0">Lựa chọn loại nhân viên</option>
+                            <?php
+                            foreach ($this->list_regency as $items) {
+                                $selectd = '';
+                                if ($this->detail["idregency"] == $items["id"]) {
+                                    $selectd = ' selected = selected';
+                                }
+                                ?>
+                                <option <?php echo $selectd ?> value="<?php echo $items["id"] ?>"><?php echo $items["name"] ?></option>
+<?php } ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Tên đầy đủ : </label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-laptop"></i>
+                        </div>
+                        <input type="text" class="form-control" name="fullname" id="fullname" value="<?php echo $this->detail["fullname"] ?>" placeholder="Nhập tên nhân viên">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Số điện thoại : </label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-laptop"></i>
+                        </div>
+                        <input type="text" class="form-control" name="phone" id="phone" value="<?php echo $this->detail["phone"] ?>" placeholder="Nhập số điện thoại">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Địa chỉ : </label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-laptop"></i>
+                        </div>
+                        <input type="text" class="form-control" name="address" id="address" value="<?php echo $this->detail["address"] ?>" placeholder="Nhập địa chỉ cửa hàng">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Email : </label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-laptop"></i>
+                        </div>
+                        <input type="text" class="form-control" name="email" id="email" value="<?php echo $this->detail["email"] ?>" placeholder="Nhập địa chỉ email nhân viên">
+                    </div>
+                </div>
+                <div class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Ngày tháng năm sinh : </label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                            <input placeholder="dd/mm/yyyy" type="text" name="birthday" id="birthday" class="form-control" value="<?php if(!empty($this->detail))  echo date('d/m/Y',  strtotime($this->detail["birthday"])); ?>" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                        </div>
+                    </div>
+                <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">CMND : </label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-laptop"></i>
+                        </div>
+                        <input type="text" class="form-control" name="cmnd" id="cmnd" value="<?php echo $this->detail["cmnd"] ?>" placeholder="Nhập chứng minh nhân dân">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Địa chỉ thường trú : </label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-laptop"></i>
+                        </div>
+                        <input type="text" class="form-control" name="resident_address" id="resident_address" value="<?php echo $this->detail["resident_address"] ?>" placeholder="Nhập địa chỉ thường trú">
+                    </div>
+                </div>
+                <div class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Địa chỉ tạm trú: </label>
+                        <div class="input-group add_district">
+                            <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                            <select class="form-control" name="city" id="city">
+                                <!--<option value="0">Chọn Thành phố, Huyện</option>-->
+                                    <?php foreach ($this->list_city as $items){
+                                        $sl = '';
+                                        if($this->detail["city"] == $items["id"]){
+                                            $sl = ' selected = selected';
+                                        }
+                                        ?>
+                                    <option <?php echo $sl ?> value="<?php echo $items["id"] ?>"><?php echo $items["name"] ?></option>
+                                    <?php }?>
+                            </select>
+                            <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                             <select class="form-control" name="district" id="district">
+                                    <option value="">Chọn khu vực</option>
+                                    <?php foreach ($this->list_district as $items){ 
+                                        
+                                        $sl2 = '';
+                                        if($this->detail["district"] == $items["id"]){
+                                            $sl2 = ' selected = selected';
+                                        }
+                                        ?>
+                                    <option <?php echo $sl2 ?> value="<?php echo $items["id"] ?>"><?php echo $items["name"] ?></option>
+                                    <?php }?>
+                             </select>                   
+                        </div>
+                    </div>
+                <script>
+                        $('#city').change(function(){
+                            var _idcity = $('#city').val();
+                            var ajaxLink = '/ajax/get-district';
+                            $('#district').html('');
+                            if($('#city').val() == 0){
+                                $('#district').html('');
+                                html_dis = ' <option value="">Chọn khu vực</option>';
+                                $('#district').append(html_dis);
+                            }
+                                    $.ajax({
+                                        method: 'get',
+                                        cache: false,
+                                        url: ajaxLink,
+                                        data: {city: _idcity},
+                                        dataType: 'json',
+                                        success: function (resp) {
+                                            console.log(resp);
+                                            $.each(resp, function (i) {
+                                                html_district = '<option  value="'+resp[i].id+'">'+resp[i].name+'</option>';
+                                                $('#district').append(html_district);    
+                                            });
+                                            
+                                        }
+                                    });
+                        })
+                        </script>
+                <div class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Ngày bắt đầu làm việc : </label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                            <input placeholder="dd/mm/yyyy" type="text" name="startdate" id="startdate" value="<?php if(!empty($this->detail)) echo date('d/m/Y',  strtotime($this->detail["startdate"])); ?>" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                        </div>
+                    </div>
+                <div class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Số tài khoản ngân hàng : </label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                            <input placeholder="Nhập số tài khoản ngân hàng vào." type="text" name="bank" id="bank" value="<?php if(!empty($this->detail)) echo $this->detail["bank"]; ?>" class="form-control">
+                        </div>
+                    </div>
+                <div id="show_sc" class="form-group" style="display: none">
+                    <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Tên bảo vệ : </label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-laptop"></i>
+                        </div>
+                        <input type="text" class="form-control" name="security_name" id="security_name" value="<?php echo $this->detail["security_name"] ?>" placeholder="Nhập bảo vệ của chi nhánh ...">
+                    </div>
+                </div>
+            </div><!-- /.box-body -->
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="box box-primary">
+        <div class="box-header">
+            <h3 class="box-title">Thông tin tài khoản</h3>
+        </div><!-- /.box-header -->
+        <!-- form start -->
+        <form role="form" action="" class="frmReport">
+            <div class="box-body">
+                <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Tài khoản : </label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-laptop"></i>
+                        </div>
+                        <input  type="text" <?php echo $this->disabled ?> class="form-control" name="username" id="username" value="<?php echo $this->detail["username"] ?>" placeholder="Nhập tên tài khoản">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Mật khẩu : </label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-laptop"></i>
+                        </div>
+                        <input type="password" <?php echo $this->disabled ?> class="form-control" name="password" id="password" value="<?php echo $this->detail["pass_show"] ?>" placeholder="Nhập mật khẩu của nhân viên">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Xác nhận mật khẩu : </label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-laptop"></i>
+                        </div>
+                        <input type="password" <?php echo $this->disabled ?> class="form-control" name="r-password" id="r-password" value="<?php echo $this->detail["pass_show"] ?>" placeholder="Xác nhận mật khẩu của nhân viên">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Chi nhánh : </label>
+                    <div  class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-laptop"></i></span>
+                        <select class="form-control" name="storeid" id="storeid">
+                            <option value="0"> Chọn chi nhánh</option>
+                            <?php
+                            foreach ($this->items1 as $list_vote) {
+                                $selected = '';
+                                if ($this->detail["parentid"] == $list_vote["userid"]) {
+                                    $selected = ' selected = "selected"';
+                                }
+                                ?>
+                                    <option <?php echo $selected ?> value="<?php echo $list_vote["userid"] ?>"><?php echo $list_vote["vote_name"] ?></option>
+<?php } ?>
+                        </select>
+                    </div>
+                </div>
+            </div><!-- /.box-body -->
+
+            <div class="box-footer">
+                <button type="submit" id="btnadd" class="btn btn-primary">Lưu</button>
+                <button style="display: none" type="submit" id="btndxl" class="btn btn-primary">Đang xử lý</button>
+                <input type="hidden" name="vote_name" id="vote_name" value="" />
+                <input type="hidden" name="id" id="id" value="<?= $this->detail["userid"]; ?>" />
+            </div>
+        </form>
+        <script>
+            $('#type_member').change(function(){
+                var tmember = $('#type_member').val();
+                if(tmember == 6){
+                    $('#show_sc').show();
+                }else{
+                    $('#show_sc').hide();
+                    $('#security_name').val('');
+                }
+                var storename = $('#vote_id option:selected').text();
+                $('#vote_name').val(storename);
+            });
+            $('#vote_id').change(function(){
+                var storename = $('#vote_id option:selected').text();
+                $('#vote_name').val(storename);
+            });
+            
+            $().ready(function () {
+                $('#btnadd').click(function (e) {
+                    $('#btnadd').hide();
+                    $('#btndxl').show();
+                    var uname = $("#username").val();
+                    var pass = $("#password").val();
+                    var check   = $('#id').val();
+                    e.preventDefault();
+                    $.post("/admin/user/users/save-member", $('form').serialize(), function (resp) {
+                        $('.errblock').remove();
+                        $.each(resp, function (i, obj) {
+                            var id = obj.id;
+                            var msg = obj.msg;
+                            var type_member = $('#type_member').val();
+                            if (msg != "ok") {
+                                alert(msg);
+                                $('#btnadd').show();
+                                $('#btndxl').hide();
+                                $('#' + id).focus();
+                                return false;
+                            } else {
+                                if (type_member == 6) {
+                                    if(check != ""){
+                                        alert("Lưu thành công \n Tài khoản là : " + uname + '\n password : ' + pass);
+                                    }else{
+                                        alert("Lưu thành công \n Tài khoản là : vote_" + uname + '\n password : ' + pass);
+                                    }
+                                }
+                                if (type_member == 4) {
+                                    if(check != ""){
+                                        alert("Lưu thành công \n Tài khoản là : " + uname + '\n password : ' + pass);
+                                    }else{
+                                        alert("Lưu thành công \n Tài khoản là : mb_" + uname + '\n password : ' + pass);
+                                    }
+                                }
+                                if (type_member == 7) {
+                                    if(check != ""){
+                                        alert("Lưu thành công \n Tài khoản là : " + uname + '\n password : ' + pass);
+                                    }else{
+                                        alert("Lưu thành công \n Tài khoản là : mbk_" + uname + '\n password : ' + pass);
+                                    }
+                                }
+                                if (type_member == 8) {
+                                    if(check != ""){
+                                        alert("Lưu thành công \n Tài khoản là : " + uname + '\n password : ' + pass);
+                                    }else{
+                                        alert("Lưu thành công \n Tài khoản là : kinhdoanh_" + uname + '\n password : ' + pass);
+                                    }
+                                }
+                                if (type_member == 9) {
+                                    if(check != ""){
+                                        alert("Lưu thành công \n Tài khoản là : " + uname + '\n password : ' + pass);
+                                    }else{
+                                        alert("Lưu thành công \n Tài khoản là : services_" + uname + '\n password : ' + pass);
+                                    }
+                                }
+                                if (type_member == 5) {
+                                    if(check != ""){
+                                        alert("Lưu thành công \n Tài khoản là : " + uname + '\n password : ' + pass);
+                                    }else{
+                                        alert("Lưu thành công \n Tài khoản là : qlkt_" + uname + '\n password : ' + pass);
+                                    }
+                                }
+                                
+                                window.location = "/admin/user/users/list-user";
+                            }
+
+                        });
+                    }, 'json');
+                });
+            });
+            function convertDate(vnDate) {
+                try {
+                    var vnDateArr = vnDate.split("/");
+                    var rDate = vnDateArr.reverse();
+                    return rDate.join("-");
+                } catch (err) {
+                    return vnDate;
+                }
+            }
+        </script>
+    </div>
+</div>
+<script src="/backend/plugins/input-mask/jquery.inputmask.js"></script>
+    <script src="/backend/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+    <script src="/backend/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+    <script>
+        $("[data-mask]").inputmask();
+    $("#datemask").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+        $("#datemask2").inputmask("mm/dd/yyyy", {"placeholder": "mm/dd/yyyy"});
+        </script>

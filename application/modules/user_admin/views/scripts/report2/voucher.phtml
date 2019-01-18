@@ -1,0 +1,119 @@
+<div class="box box-primary">
+    <div class="box-header">
+        <div class="col-md-6">
+            <i class="ion ion-clipboard"></i>
+            <h4 class="box-title">BÁO CÁO VOUCHER HNAMMOBILE </h4>
+        </div>
+        <form role="form" id="data_frm" name="data_frm" method="get"  class="frmReport">
+        <div class="col-md-6">
+            <div class="row">
+            <div class="form-group col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-addon">
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <select style="width: 100%" name="cated_voucher"  id="cated_voucher" class="form-control input-sm">
+                            <?php
+                            foreach ($this->list_cated_voucher as $key=> $items) {
+                                $sl = '';
+                                if ($this->cated_voucher == $key) {
+                                    $sl = 'selected = selected';
+                                }
+                                ?>
+                                <option  <?php echo $sl ?> value="<?php echo $key ?>"> <?php echo $items ?></option>
+                            <?php } ?>
+
+                        </select>
+                    </div>
+                </div>
+            <div class="form-group col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-addon">
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <select style="width: 100%" name="sectionid_voucher"  id="sectionid_voucher" class="selects input-sm">
+                            <option value="0"> Chương trình</option>
+                            <?php
+                            foreach ($this->list_sectionid_voucher as $key=> $items) {
+                                $sl = '';
+                                if ($this->sectionid_voucher == $items["id"]) {
+                                    $sl = 'selected = selected';
+                                }
+                                ?>
+                                <option  <?php echo $sl ?> value="<?php echo $items["id"] ?>"> <?php echo $items["note"] ?></option>
+                            <?php } ?>
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+            <div class="form-group col-md-6">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-addon">
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <select style="width: 100%" name="storeid"  id="storeid" class="selects input-sm">
+                            <option value="0"> Tất cả chi nhánh</option>
+                            <?php
+                            foreach ($this->list_vote as $items) {
+                                $sl = '';
+                                if ($this->storeid == $items["userid"]) {
+                                    $sl = 'selected = selected';
+                                }
+                                ?>
+                                <option <?php echo $sl ?> value="<?php echo $items["userid"] ?>"> <?php echo $items["storename"] ?></option>
+                            <?php } ?>
+
+                        </select>
+                    </div>
+                </div>
+            <div class="form-group col-md-6">
+                    <div class="input-group input-group-sm">
+                        <?php
+                        $start_end = 'Date range picker';
+                        if ($this->start_end != null) {
+                            $start_end = $this->start_end;
+                        }
+                        ?>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default pull-right" id="daterange-btn">
+                                <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                                <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                        </span>
+
+                        <span class="input-group-btn">
+                            <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> Xem </i></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </form>
+    </div><!-- /.box-header -->
+    <table class="table table-fixedheader table-bordered table-striped">
+        <tr>
+            <th width="10">STT</th>
+            <th>Loại sản phẩm</th>
+            <th>Chương trình</th>
+            <th>Tổng số tiền bán</th>
+            <th>Tổng số tiền voucher</th>
+            <th>Số lượng voucher</th>
+        </tr>
+        <?php
+        $stt=0;
+        foreach ($this->list as $list){ ?>
+        <tr>
+            <td><?php echo ++$stt; ?></td>
+            <td><?php echo $this->cate_hnam[$list["productsid"]]; ?></td>
+            <td><?php echo $this->name_sectionid[$list["sectionid_voucher"]] ?></td>
+            <td><?php echo number_format($list["sum"]) ?></td>
+            <td><?php echo number_format($list["money_vouchers"]) ?></td>
+            <td><?php echo number_format($list["total"]) ?></td>
+        </tr>
+        <?php }?>
+    </table>
+    </div>
+</div>

@@ -1,0 +1,161 @@
+<script src="/backend/exporttable/dataTables.buttons.min.js" ></script>
+<script src="/backend/exporttable/jszip.min.js" ></script>
+<script src="/backend/exporttable/buttons.html5.min.js" ></script>
+
+<div class="panel panel-default">
+    <div class="col-md-12">
+        <i class="fa fa-home"></i>
+        <b>DÁNH SÁCH SẢN PHẨM KHÔNG BÁN ĐƯỢC TRONG THỜI GIAN TỪ <?php echo date('d/m/Y',  strtotime($this->start)) ?> ĐẾN <?php echo date('d/m/Y',  strtotime($this->end)) ?> </b>
+    </div>
+    <form role="form" id="frm" method="get"  class="frmReport">
+        <div class="col-md-2 col-xs-6">
+            <div class="form-group input-group-sm ">
+                <select  name="productsid" onchange="change_productsid_kmc();" id="productsid" class="form-control">
+                    <?php
+                    foreach ($this->list_hnammobile as $key => $value) {
+                        $sl = '';
+                        if ($this->productsid == $key) {
+                            $sl = 'selected = selected';
+                        }
+                        ?>
+                        <option data="<?php echo $value ?>" <?php echo $sl ?> value="<?php echo $key ?>"> <?php echo $value ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-2 col-xs-6">
+            <div class="form-group input-group-sm">
+                <select style="width: 100%" name="cated_id"  id="cated_id" class="selects form-control">
+                    <option value="0"> Sản phẩm</option>
+                    <?php
+                    foreach ($this->menu as $items) {
+                        $sl = '';
+                        if ($this->cated_id == $items["itemid"]) {
+                            $sl = 'selected = selected';
+                        }
+                        ?>
+                        <option data="<?php echo $items["title"] ?>" <?php echo $sl ?> value="<?php echo $items["itemid"] ?>"> <?php echo $items["title"] ?></option>
+                    <?php } ?>
+
+                </select>
+            </div>
+        </div>
+
+        <div class=" col-md-4 col-xs-12">
+            <div class="input-group-sm">
+                <?php
+                $start_end = 'Date range picker';
+                if ($this->start_end != null) {
+                    $start_end = $this->start_end;
+                }
+                ?>
+                <span class="input-group-btn">
+                    <button class="btn btn-default pull-right" id="daterange-btn">
+                        <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                        <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                </span>
+                <span class="input-group-btn">
+                    <button type="submit" onclick="views_report();return false;" class="btn btn-info btn-flat"><i class="fa fa-search"> </i><span class="hidden-xs"> Xem</span></button>
+                </span>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="clearfix"></div>
+<div class="box-body">
+    <table id="export_table" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th width="10">STT</th>
+                <th>Tên sản phẩm</th>
+				<th>Số lượng tồn</th>
+                <th>Giá bán</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->list as $val){ 
+				$sl_ton = intval($val["sl_ton"]);
+                $price = (int)$val["original_price"];
+                if($price==0){
+                    $price = (int)$val["price"];
+                }
+                ?>
+            <tr>
+                <td><?php echo ++$stt; ?></td>
+                <td><a target="_blank" href="http://www.hnammobile.com/dien-thoai/apple-iphone-7-plus-128gb-red.<?php echo $val["itemid"]; ?>.html"><?php echo $val["title"] ?></a></td>
+                <td>
+                <?php if($sl_ton>0){ ?>
+                    <a onclick="show_tonkho_new(<?php echo $val["itemid"] ?>);" href="#">
+                    <?php echo number_format($sl_ton) ?>
+                    </a><br/>
+                    <div class="frms frm_show_tonkho_new<?php echo $val["itemid"] ?>" style="display: none">
+                        <table class="table table-bordered table-condensed">
+                            <tr>
+                                <th>Imei</th>
+                                <th>Bộ phận</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        <?php foreach ($this->array_itemid[$val["itemid"]] as $tkho){ 
+                            
+                            if((int)$this->array_check_imei[$tkho["ma_lo"]] >0){
+                                $ok='Đã đồng bộ';
+                                $bgcolor='#fff';
+                            }else{
+                                $ok='Chưa đồng bộ đồng bộ';
+                                $bgcolor='style="background:#red;color:#fff"';
+                            }
+                            ?>
+                            <tr>
+                                <td><?php echo $tkho["ma_lo"]; ?></td>
+                                <td><?php echo $tkho["ma_bp"]; ?></td>
+                                <td <?php echo $bgcolor ?> ><?php echo $ok ?></td>
+                            </tr>
+                        <?php }?>
+                        </table>
+                    </div>
+                    <?php } else { echo '0'; }?>
+                
+                </td>
+				<td><?php echo number_format($price); ?></td>
+            </tr>
+            <?php }?>
+        </tbody>
+    </table>
+</div>
+<script>
+    function show_tonkho_new(id){
+            $('.frm_show_tonkho_new'+id).toggle();
+    }
+   $(document).ready(function() {
+    $('#export_table').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'excel'
+        ]
+    } );
+} );
+function change_productsid_kmc(){
+            var productsid = $('#productsid option:selected').val();
+            $('#cated_id').html('');
+            $('#cated_id').html('<option value="0"> Tất cả</option>');
+            var ajaxLink = '/admin/user/ajax/get-menu';
+            $.ajax({
+                method: 'get',
+                cache: false,
+                url: ajaxLink,
+                data: {productsid: productsid},
+                dataType: 'json',
+                success: function (resp) {
+                    console.log(resp);
+                    $.each(resp, function (i) {
+                        html_cated_id = '<option  value="' + resp[i].itemid + '">' + resp[i].title + '</option>';
+                        $('#cated_id').append(html_cated_id);
+                    });
+
+                }
+            });
+        }
+</script>

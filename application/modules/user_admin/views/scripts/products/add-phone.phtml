@@ -1,0 +1,109 @@
+<table border="0" cellpadding="20" cellspacing="10" width="100%">
+    <tbody><tr>
+            <td style="padding: 5px;" align="center" valign="middle">
+                <table class="borderMain" border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tbody><tr valign="top">
+                            <td><div class="header icon-48-article">Thêm sản phẩm tương thích vào sản phẩm <? echo $this->product["title"]; ?></div></td>
+                            <td align="right"><div class="toolbar">
+                                    <table class="toolbar"><tbody><tr>
+                                                <td id="toolbar-new" class="button">
+                                                    <a class="toolbar" id="save" href="#">
+                                                        <span title="Save" class="icon-32-save"></span>
+                                                        Lưu</a>
+                                                </td>
+                                                <td id="toolbar-cancel" class="button">
+                                                    <a class="toolbar" onclick="javascript:if(confirm('Bạn đã lưu thông tin và chắc chắn đóng?')) window.close()" href="#">
+                                                        <span title="Cancel" class="icon-32-delete"></span>
+                                                        Đóng</a>
+                                                </td>
+                                            </tr></tbody></table>
+                                </div></td>
+                        </tr>
+                    </tbody></table>
+                <table class="borderMain spaceTop5px" border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tbody><tr>
+                            <td>
+
+                                <form name="frmPage" id="frmPage" method="post" action="">    
+                                    <br>
+                                    <fieldset class="adminform"><legend>Chọn sản phẩm để thêm vào sản phẩm <? echo $this->product["title"]; ?></legend>
+                                        <table class="spaceTop5px" border="0" width="100%">
+                                            <tbody id="mainbody">
+                                                <tr id="serverTr" width="100%" valign="top">
+                                                    <td width="50%">
+                                                        <input type="text" name="acc-name" value="" id="acc-name" style="font-size:14px; padding:5px;width:200px;"/>
+                                                        <input type="button" name="acc-add" id="acc-add" value="Tìm kiếm" style="font-size:14px; padding:5px;cursor:pointer"/>                                                       
+                                                        <h3 style="padding:20px 0">Sản phẩm đã được thêm</h3>
+                                                        <div id="accBlock">
+                                                            <ul>
+                                                                <? foreach ($this->accList as $acc) { ?>
+                                                                    <li>
+                                                                        <p><img src="<? echo $acc["thumb_home"]; ?>" /></p>
+                                                                        <a href="<? echo $acc["link"]; ?>"><? echo $acc["title"]; ?></a>
+                                                                        <p><a href="#" class="remove btn-red" rel="<? echo $acc["itemid"]; ?>">Xóa</a></p>
+                                                                    </li>
+                                                                <? } ?>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                    <td width="50%" valign="top">
+                                                        <h3 style="padding:0 0 20px 0">Kết quả tìm kiếm</h3>
+                                                        <div id="result">
+
+                                                        </div>
+                                                    </td>
+                                                </tr>  
+
+                                            </tbody>
+                                        </table>
+                                    </fieldset>
+
+                                </form>
+
+                            </td>
+                        </tr>
+                    </tbody></table>
+            </td>
+        </tr>
+    </tbody></table>
+<script type="text/javascript">
+
+    $().ready(function(){
+        $("#acc-add").click(function(){
+            var key = $("#acc-name").val();
+            var url = "/admin/user/products/search-phone?key=" + key;
+            $.get(url, function(resp){
+                $("#result").html(resp);
+            },'html');
+        });
+        $(".remove").click(function(){
+            var result = confirm("Bạn có chắc chắn muốn xóa?");
+            if (result) {
+                var itemid = $(this).attr("rel");
+                var url = "/admin/user/products/remove-phone-ajax?accitemid=" + itemid + "&pitemid=<? echo $this->product["itemid"]; ?>";
+                $.get(url, function(resp){
+                    window.location.reload();
+                },'html'); 
+            }
+        });
+        $('#acc-name').keypress(function(event){
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if(keycode == '13'){
+               $("#acc-add").click();  
+               return false;
+            }
+        });
+    });
+    
+    function additem(itemid) {
+        var url = "/admin/user/products/add-phone-ajax?accitemid=" + itemid + "&pitemid=<? echo $this->product["itemid"]; ?>";
+        $.get(url, function(resp){
+            window.location.reload();
+        },'html');
+    }    
+</script>
+<style>
+    ul#acc-block,#accBlock ul{list-style: none;}
+    ul#acc-block li,#accBlock ul li{float:left; width:120px; margin:3px; height:200px; text-align: center}
+    .btn-red{padding:2px 4px; background-color: red !important; color:#ffffff!important;}
+</style>

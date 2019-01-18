@@ -1,0 +1,154 @@
+<table border="0" cellpadding="20" cellspacing="10" width="100%">
+  <tbody><tr>
+    <td style="padding: 5px;" align="center" valign="middle">
+    <table cellspacing="0" cellpadding="0" border="0" width="100%" class="borderMain">
+    <tbody><tr valign="top">
+        <td><table cellspacing="0" cellpadding="0" border="0" width="100%">
+                <tbody><tr>
+                    <td><div class="header icon-48-categories"><a href="/admin/user/tin-khuyen-mai/list/">Danh sách tin khuyến mãi</a></div></td>
+                           <td align="right"><div class="toolbar">
+                            <table class="toolbar">
+                                <tbody>
+                                    <tr>
+                                        <td id="toolbar-new" class="button"><a class="toolbar" href="/admin/user/tin-khuyen-mai/edit/"> <span title="New" class="icon-32-new"></span>Thêm mới</a></td>
+                                        <td id="toolbar-new" class="button"><a class="toolbar" href="#" id="delete"> <span title="Delete" class="icon-32-delete"></span>Xóa</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div></td>
+                                    </tr>
+            </tbody></table></td>
+    </tr>
+</tbody>
+</table>
+<table cellpadding="0" border="0" width="100%" class="borderMain spaceTop5px">
+    <form method="post" name="frmPage" id="frmPage">
+        <input type="hidden" name="updateid" id="updateid" value="" />
+        <tbody>
+            <tr>
+                <td width="35" class="bgTitleadmin1"><input type="checkbox" onclick="checkme()" name="checkall"></td>
+                <td width="50" class="bgTitleadmin1">#</td>
+                <td class="bgTitleadmin2">Tiêu đề tin</td>
+                <td class="bgTitleadmin2">Ngày đăng</td>
+                <td class="bgTitleadmin2">Vị trí</td>
+                <td width="80" class="bgTitleadmin1">Thao tác</td>
+            </tr>
+            <?php
+            if(count($this->list)>0 && is_array($this->list))
+            {
+                $no=1;
+                foreach($this->list as $item)
+                {
+                    if($no%2 == 0)
+                        $bgcolor = '#f2f4f5';
+                   else
+                       $bgcolor = '#ffffff';
+                ?>
+                    <tr bgcolor="<?echo $bgcolor; ?>">
+                        <td class="bgContentadmin1"><input type="checkbox" value="<?php echo $item['itemid'];?>" name="check[]"></td>
+                        <td class="bgContentadmin1"><? echo $no++;?></td>
+                        <td class="bgContentadmin2"><?echo $item['title']?></td>
+                        <td class="bgContentadmin2"><?echo $item['posteddate']?></td>
+                        <td class="bgContentadmin1" style="text-align:left;">
+                           <? echo $this->formSelect("myorder".$item['itemid'], $item['myorder'], array('rel'=>$item['itemid'],"class"=>"myorder"), $this->myorderlist); ?>
+                        </td>
+                        <td class="bgContentadmin1">
+                            <a href="/admin/user/tin-khuyen-mai/edit/?itemid=<?php echo $item['itemid'];?>"><img border="0" title="Edit" src="/user_admin/templates/images/edit.png"></a>
+                            <a href="#" rel="<?php echo $item['itemid'];?>" class="sdelete"><img border="0" alt="Delete" src="/user_admin/templates/images/trash.png"></a>
+                        </td>
+                    </tr>
+                <?php
+                }
+            }
+            ?>
+    </form>
+</table>
+</td>
+  </tr>
+</tbody></table>
+<div id="ddelete" style="display:none;"></div>
+<div id="dmyorder" style="display:none"></div>
+<script type="text/javascript">
+function get_editor_data()
+{
+	document.getElementById('fullcontent').value = FCKeditorAPI.GetInstance('myFCKeditor_fullcontent').GetHTML();
+	return true;
+}
+function CheckForm()
+{
+	return true;
+}
+
+function checkme()
+{
+    isCheck=document.frmPage.checkall.checked;
+    elts=document.frmPage.elements['check[]'];
+	if(!elts.length)
+	{
+            elts.checked = isCheck;
+	}
+    else
+    {
+       for(i=0;i<elts.length;i++)
+          elts[i].checked=isCheck;
+    }
+}
+
+function isCheckDetail(){
+    result = 0;
+    $('input:checkbox').each(function(){
+        if ($(this).attr('checked') == true)
+            result = 1;
+    });
+    return result;
+}
+
+$().ready(function(){
+    $('#delete').click(function(){
+        result = isCheckDetail();
+        if (result == 0) //ischeck
+        {
+            alert('Vui lòng chọn items để xóa');
+            return false;
+        }
+        result = confirm("Bạn có chắc muốn xóa?");
+        if (result)
+        {
+            $('#frmPage').attr('action','/admin/user/tin-khuyen-mai/delete/');
+            $('#frmPage').submit();
+        }
+    });
+
+    $('.sdelete').click(function(){
+        id = $(this).attr('rel');
+        if (id != '')
+            result = confirm('Bạn có chắc chắn muốn xóa?');
+            if (result)
+            $('#ddelete').load('/admin/user/tin-khuyen-mai/delete?rand='+Math.random()+'&itemid='+id, function (){
+                alert('Xóa thành công.');
+                window.location.reload(true);
+            });
+    });
+
+    $('.myorder').change(function()
+    {
+        $('#updateid').val($(this).attr('rel'));
+        $('#frmPage').attr('action','/admin/user/tin-khuyen-mai/update-my-order/');
+        $('#frmPage').submit();
+    });
+
+    $('.view').click(function(e){
+        e.preventDefault();
+        url = $(this).attr('href');
+        tb_show('Xem thÃ´ng tin thÃ nh viÃªn',url+"&height=200&iframe=true");
+    });
+
+});
+</script>
+<script>
+$().ready(function(){
+    $('#option_banner').change(function(){
+        $('#frmChange').submit();
+    });
+});
+</script>

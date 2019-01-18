@@ -1,0 +1,69 @@
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <div class="col-md-6">
+            <i class="ion ion-clipboard"></i>
+            <h3 class="box-title">CHUYỂN TIỀN CHO NHÂN VIÊN VỀ KBH</h3>
+        </div>
+    </div>
+    <div class="box-body">
+        <br/>
+<form  name="data_frm" id="data_frm"  method="post" target="hiddenIF"  enctype="multipart/form-data">
+    <iframe  name="hiddenIF" style="display: none" scrolling="auto"></iframe>
+    <input id="id" name="id" type="hidden" value="<?php echo $this->idguarantee ?>" >
+    <div class=" col-md-offset-3 col-xs-12 col-md-6">
+        <div class="form-group">
+            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">CHỌN NHÂN VIÊN : </label>
+            <div class="input-group input-group-sm">
+                <div class="input-group-addon">
+                    <i class="fa fa-text-width"></i>
+                </div>
+                <select name="receiverid" class="selects" id="receiverid">
+                    <option value="0">Chọn nhân viên</option>
+                    <?php foreach ($this->sreceiver as $us){ ?>
+                    <option value="<?php echo $us["userid"]; ?>"> <?php echo $us["fullname"] ?></option>
+                    <?php }?>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Số tiền chuyển về : </label>
+            <div class="input-group input-group-sm">
+                <div class="input-group-addon">
+                    <i class="fa fa-text-width"></i>
+                </div>
+                <input type="text" class="form-control pricing" required="required" name="money" id="money" value="<?php echo $this->phone ?>" placeholder="Số tiền chuyển về...">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-info btn-flat"><i class="fa fa-send"> <span class="hidden-xs">Gửi </span></i></button>
+                </span>
+            </div>
+        </div>
+    </div>
+</form>
+</div>
+</div>
+<script>
+    $().ready(function () {
+    $(".pricing").keyup(function () {
+            var price = this.value;
+            price = price.replace(/,/gi, "");
+            price = price + ".";
+            price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            var sprice = price.split(".");
+            $(this).val(sprice[0]);
+        });
+    });
+    function notification (msg,id){
+        $('#'+id).focus(); 
+        alert(msg);
+        var msg_add = '<i class="fa fa-times-circle-o"> '+msg+' </i>';
+        $('#'+id+"_tb").html(msg_add);   
+//        location.reload();
+    }
+    function completes(msg){
+        $('.tb').html('');
+        var msg_add = '<i class="fa fa-check" aria-hidden="true"> </i>'+msg+'';
+        $('#complete').html(msg_add);
+        alert(msg);
+        window.location.reload(true);
+    }
+</script>

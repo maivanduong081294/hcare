@@ -1,0 +1,76 @@
+<link href="/backend/dist/css/fixtable.css" rel="stylesheet" type="text/css"/>
+<style>
+   @media (min-width: 1400px) {
+        .sheight{height: 500px !important;}
+    }
+    @media only screen and (max-width: 450px) {
+        .mwidth{
+            width: 50% !important;
+        }
+    } 
+</style>
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="ion ion-clipboard"></i>
+        <h4 class="box-title">Export Charge Card </h4>
+    </div><!-- /.box-header -->
+    <form role="form" id="frm" method="get"  class="frmReport">
+        <div class="box-body">
+            <div class="form-group right">
+                <div class="input-group input-group-sm">
+                    <?php 
+                    $start_end='Date range picker';
+                    if($this->start_end !=null){
+                        $start_end = $this->start_end;
+                    }
+                    ?>
+                    <span class="input-group-btn">
+                    <button class="btn btn-default pull-right" id="daterange-btn">
+                          <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                          <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                        <i class="fa fa-caret-down"></i>
+                      </button>
+                    </span>
+                    
+                    <span class="input-group-btn">
+                        <?php if($this->dplay1 ==1){ ?>
+                        <button type="button" onclick="export_charge_card();return false;"  class="btn btn-info btn-flat"><i class="fa fa-book"> Export Charge card</i></button>
+                        <?php }?>
+                        <?php if($this->dplay2 ==1){ ?>
+                        <button style="margin-left: 10px"  type="button" onclick="export_detail_charge_card();return false;"  class="btn btn-info btn-flat"><i class="fa fa-book"> Export Detail Charge card</i></button>
+                        <?php }?>
+                        <?php if($this->dplay3 ==1){ ?>
+                        <button style="margin-left: 10px"  type="button" onclick="export_installment();return false;"  class="btn btn-info btn-flat"><i class="fa fa-book"> Export Trả góp</i></button>
+                        <?php }?>
+                    </span>
+                    
+                  </div>
+            </div>
+<!--            <div class="form-group col-md-4 right">
+                <button type="button" id="export" class="btn btn-primary"><i class="fa fa-book"> Export </i></button>
+                <button type="button" id="export_lite" class="btn btn-primary"><i class="fa fa-book"> Export Lite </i></button>
+            </div>-->
+            
+            
+        </div><!-- /.box-body -->
+
+    </form>
+</div>
+<script>
+    function export_charge_card(){
+//        $("#frm").attr("action", "/admin/user/report/export-charge-card");
+        $("#frm").attr("action", "/admin/user/export/ex-chargecard");
+        $("#frm").submit();
+    }
+</script>
+<script>
+    function export_detail_charge_card(){
+        $("#frm").attr("action", "/admin/user/report/export-detail-charge-card");
+        $("#frm").submit();
+    }
+    function export_installment(){
+        $("#frm").attr("action", "/admin/user/report/export-installment");
+        $("#frm").submit();
+    }
+</script>

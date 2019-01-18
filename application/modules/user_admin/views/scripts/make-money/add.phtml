@@ -1,0 +1,267 @@
+<!--<style>
+    .ui-front{z-index: 99; background-color: #cccccc;}
+</style>-->
+<script>
+    availableTags = [ <?php echo SEOPlugin::getAllTagsByCateid2(); ?> ];</script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var baseURL = "<?echo Globals::getBaseUrl();?>";
+            $("#products_id").autocomplete({
+                source: availableTags,
+                select: function(a, b) {
+                    $(this).val(b.item.value);
+                }
+            });
+            
+            
+        });
+    </script>
+
+
+
+
+
+
+<form role="form" action="" target="_blank" id="add_member" name="add_member" method="get" class="frmReport">
+    <!--<div class="col-md-8">-->
+    <div class="box box-primary">
+        <div class="box-header">
+            <h3 class="box-title">Tiền thưởng make-money</h3>
+        </div><!-- /.box-header -->
+        <!-- form start -->
+        <!--<div style="margin-top: 30px"></div><hr/>-->
+        <div class="box-body">
+            <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label"  id="text-align-label">Loại chọn loại chương trình : </label>
+                    <div  class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-list"></i></span>
+                        <? echo $this->formSelect("menuname", $this->menuname,array("class"=>"form-control"), $this->productstype); ?>
+                    </div>
+                </div>
+            <?php if($this->menuname != 1) { ?>
+                <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label"  id="text-align-label">Tên loại sản phẩm : </label>
+                    <div  class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                        <select id="cated_id" name="cated_id" class="form-control">
+                            <option value="">Chọn</option>
+                            <?php foreach ($this->menu_items as $list) { ?>
+                            <option data-name="<?php echo $list['title'] ?>" value="<?php echo $list['itemid'] ?>"><?php echo $list['title'] ?> </option>
+
+                                <?php } ?>
+                        </select>
+                    </div>
+                </div>
+            <?php }?>
+            <?php if($this->menuname == 1) { ?>
+            <div  id="group0">
+            <div  class="form-group" id="group1">
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Mã sản phẩm: </label>
+                <div  class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-list"></i>
+                    </div>
+                    <input style="width: 90%" type="text" class="form-control productsid" name="products_id[]" id="products_id" value="<?php echo $this->products_id ?>" placeholder="Mã sản phẩm ....">
+                    <button type="button" class="btn btn-primary" name="btn_add" id="btn_add"> Thêm </button>
+                    <button type="button" style="display: none" name="btn_hide" id="btn_hide" class="btn btn-primary" name=""> Ẩn</button>
+                </div>
+            </div>
+            </div>
+            <script type="text/javascript">
+                $('#btn_add').click(function(){
+                    html = '<div  class="form-group">\n\
+            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">\n\
+Mã sản phẩm: </label>\n\
+<div  class="input-group">\n\
+<div class="input-group-addon">\n\
+<i class="fa fa-list"></i></div><input type="text" class="form-control productsid" name="products_id[]" id="products_id" value="<?php echo $this->products_id ?>" placeholder="Mã sản phẩm ...."></div></div>';
+                    $('#group1').append(html);
+                    $(".productsid").each(function(i,obj){
+//                        alert($(obj).html());
+                        $(obj).autocomplete({
+                            source: availableTags,
+                            select: function(a, b) {
+                                $(this).val(b.item.value);
+                            }
+                        });
+                    });
+                });
+            </script>
+            
+            <?php }?>
+            <div class="form-group">
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Tên chương trình: </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-list"></i>
+                    </div>
+                    <input type="text" class="form-control" id="make_money_name" value="<?php echo $this->make_money_name ?>" name="make_money_name" placeholder="Tên chương trình" />
+                </div>
+            </div>
+            <div  class="form-group">
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Áp dụng tất cả cửa hàng: </label>
+                <div class="input-group">
+                    <label><input type="checkbox" name="vote_all" value="1" id="vote_all"> Tất cả các chi nhánh</label><br/>
+                </div>
+            </div>
+            <div  class="form-group">
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Áp dụng theo nhóm cửa hàng: </label>
+                <div class="input-group">
+                    <?php foreach ($this->items as $list) { ?>
+                        <?php if ($list["userid"] != 14) { ?>
+                    <label><input id="vote_check_<?php echo $list["userid"] ?>" name="vote_check_<?php echo $list["userid"] ?>" type="checkbox" value="<?php echo $list["userid"] ?>">     <?php echo $list["storename"] ?></label><br/>
+                        <?php } ?>
+                    <?php } ?>
+                    
+                </div>
+            </div>
+            <input type="hidden" name="vote_name" id="vote_name" value="" />
+            <div class="form-group">
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label"> Số lượng đạt target </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-list"></i>
+                    </div>
+                    <input type="text" class="form-control pricing" id="quantity" value="<?php echo $this->bonus_price ?>" name="quantity" placeholder="Nhập vào số lượng đạt target make-money" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Thời gian: </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-list"></i>
+                    </div>
+                    <input  type="text" class="form-control pull-right" name="day_created_end" value="<?php echo $this->days_created_end ?>" placeholder="Ngày tháng" id="reservation"/>
+                </div><!-- /.input group -->
+
+            </div>
+            <div class="form-group">
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Thưởng tiền/sản phẩm</label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-list"></i>
+                    </div>
+                    <input type="text" class="form-control pricing" id="bonus_money" value="<?php echo $this->bonus_money ?>" name="bonus_money" placeholder="Số tiền thưởng ..." />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label"> Tiêu chí thưởng </label>
+                <div class="input-group">
+                    <label> <input type="radio" checked="checked" name="cate_bonus" id="cate_bonus1" value="1" > Thưởng theo số liệu bán được </label>
+                    <label> <input type="radio" name="cate_bonus" id="cate_bonus2" value="2" > Thưởng theo mức target </label>
+                </div><!-- /.input group -->
+
+            </div>
+            <div class="box-footer">
+                <button type="submit" id="btnView" class="btn btn-primary">Lưu</button>
+                <input type="hidden" name="id" id="id" value="<?php echo $this->id ?>" />
+            </div>
+
+
+
+        </div><!-- /.box-body -->
+
+    </div>
+    <!--</div>-->
+
+
+
+    <script>
+        function keys(e)
+        {
+            var keyword = null;
+            if (window.event)
+            {
+                keyword = window.event.keyCode;
+            } else
+            {
+                keyword = e.which; //NON IE;
+            }
+            if (keyword < 48 || keyword > 57)
+            {
+                if (keyword == 48 || keyword == 127)
+                {
+                    return;
+                }
+                return false;
+            }
+        }
+
+        $(".pricing").keyup(function() {
+            var price = this.value;
+            price = price.replace(/,/gi, "");
+            price = price + ".";
+            price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            var sprice = price.split(".");
+            $(this).val(sprice[0]);
+        });
+
+
+    </script>
+
+</form>                          
+
+<script>
+    function number_format(price) {
+        price = price.replace(/,/gi, "");
+        price = price + ".";
+        price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        return price;
+    }
+</script>
+<script>
+    $().ready(function() {
+            $('#menuname').change(function(){
+//                            if($('#menuname').val() == 0 || $('#menuname').val() ==1){
+//                                
+//                            }else{
+                                window.location = "<?=Globals::getBaseUrl();?>/admin/user/make-money/add?menuname="+$('#menuname').val();
+//                                }
+                        });
+        $('select').change(function() {
+            var value = $('#day').val() + "/" + $('#month').val() + "/" + (parseInt($('#year').val()) + 1);
+            $('#endate').val(value);
+        });
+
+
+        $('#btnView').click(function(e) {
+
+            e.preventDefault();
+            var createdateVN = $("#year").val() + "-" + $("#month").val() + "-" + $("#day").val();
+            var months_createVN = $("#month").val();
+            var name = $('#cated_id option:selected').data("name") ;
+            $('#createdateVN').val(createdateVN);
+            $('#months_createVN').val(months_createVN);
+            $.post("/admin/user/make-money/save?cated_pname="+name, $('form').serialize(), function(resp) {
+                $('.errblock').remove();
+                $.each(resp, function(i, obj) {
+//                                alert('dsadas');return false;
+                    var id = obj.id;
+                    var msg = obj.msg;
+                    if (msg != "ok") {
+                        alert(msg);
+                        $('#'+id).focus();
+                        return false;
+                    } else {
+                        var result = confirm('Lưu thành công \nBạn có muốn tiếp tục thêm không\nChọn OK để tiếp tục thêm\nChọn Cancel trở về trang trước')
+                        if (result) {
+//                            window.location.reload(true);
+                        } else {
+                            window.location = "/admin/user/make-money/";
+                        }
+                    }
+
+                });
+            }, 'json');
+        });
+    });
+    function convertDate(vnDate) {
+        try {
+            var vnDateArr = vnDate.split("/");
+            var rDate = vnDateArr.reverse();
+            return rDate.join("-");
+        } catch (err) {
+            return vnDate;
+        }
+    }
+</script>

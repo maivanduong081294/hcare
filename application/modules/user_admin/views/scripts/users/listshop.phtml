@@ -1,0 +1,145 @@
+<div class="box box-primary">
+    <div class="row">
+        <div class="col-md-8">
+            <h3 class="box-title">Reset mật khẩu cửa hàng </strong></h3>
+        </div>
+    </div>
+    <table cellpadding="0" border="0" width="100%" class=" table table-bordered table-hover table-condensed">
+    <form method="post" name="frmPage" id="frmPage" action="/admin/user/users/reset" >
+        <input type="hidden" name="updateid" id="updateid" value="" />
+        <tbody>
+            <tr>
+                <td width="35" class="bgTitleadmin1"><input type="checkbox" onclick="checkme()" name="checkall"></td>
+                <td width="50" class="bgTitleadmin1">#</td>
+                <td class="bgTitleadmin2">Tên đăng nhập</td>
+                <td >Chi nhánh</td>
+                <td width="80" class="bgTitleadmin1">Thao tác</td>
+            </tr>
+            <?php
+                $list = $this->list;
+                $no = 1;
+                if(count($list)>0)
+                    foreach($list as $item){
+                   if ($no % 2 ==0)
+                       $bgcolor = '#f2f4f5';
+                   else
+                       $bgcolor = '#ffffff';
+                
+            ?>
+            <tr bgcolor="<?echo $bgcolor; ?>">
+                <td class="bgContentadmin1"><input type="checkbox" value="<?php echo $item['userid'];?>" name="check[]"></td>
+                <td class="bgContentadmin1"><? echo $no++;?></td>
+                <td class="bgContentadmin2"><b><?echo $item['username']?></b></td>
+                <td class="bgContentadmin2"><b><?echo $item['storename']?></b></td>
+                
+
+                <td class="bgContentadmin1">                    
+                    <a href="#" rels="<?php echo $item['userid'];?>" class="resetid" >
+                        <img border="0" title="Reset" src="/user_admin/templates/images/edit.png">
+                    </a>
+<!--                    <a href="#" rel="<?php //echo $item['userid'];?>" class="sdelete"><img border="0" alt="Delete" src="/user_admin/templates/images/trash.png"></a>-->
+                </td>
+            </tr>
+            <?php } ?>
+    </form>
+</table>
+</div>
+<div id="ddelete" style="display:none;"></div>
+<div id="dmyorder" style="display:none"></div>
+<script type="text/javascript">
+function get_editor_data()
+{
+	document.getElementById('fullcontent').value = FCKeditorAPI.GetInstance('myFCKeditor_fullcontent').GetHTML();
+	return true;
+}
+function CheckForm()
+{
+	return true;
+}
+
+function checkme()
+{
+    isCheck=document.frmPage.checkall.checked;
+    elts=document.frmPage.elements['check[]'];
+	if(!elts.length)
+	{
+            elts.checked = isCheck;
+	}
+    else
+    {
+       for(i=0;i<elts.length;i++)
+          elts[i].checked=isCheck;
+    }
+}
+
+function isCheckDetail(){
+    result = 0;
+    $('input:checkbox').each(function(){
+        if ($(this).attr('checked') == true)
+            result = 1;
+    });
+    return result;
+}
+
+$().ready(function(){
+//    $('#delete').click(function(){
+//        result = isCheckDetail();
+//        if (result == 0) //ischeck
+//        {
+//            alert('Vui lòng chọn item để xóa');
+//            return false;
+//        }
+////        window.location = '/admin/user/products-size/delete/';
+//        result = confirm("Bạn có chắc chắn muốn xóa?");
+//        if (result){
+//            $('#frmPage').attr('action','/admin/user/members/delete/');
+//            $('#frmPage').submit();
+//        }
+//    });
+
+    $('.sdelete').click(function(){
+        id = $(this).attr('rel');        
+        if (id != '')
+            result = confirm('Bạn chắc chắn muốn xóa?');
+            if (result)
+            $('#ddelete').load('/admin/user/members/delete?rand='+Math.random()+'&userid='+id, function (){
+                alert('Xóa thành công.');
+                window.location.reload(true);
+            });
+    });
+    $('.resetid').click(function(){
+        id = $(this).attr('rels');        
+        if (id != '')
+            result = confirm('Bạn chắc chắn muốn reset ?');
+            if (result)
+            $('#ddelete').load('/admin/user/users/reset?&userid='+id, function (){
+                alert('Reset thành công.');
+                window.location.reload(true);
+            });
+    });
+
+  $('.resetall').click(function(){
+            result = confirm('Bạn chắc chắn muốn reset tất cả ?');
+            if (result)
+            $('#ddelete').load('/admin/user/users/resetall', function (){
+                alert('Reset thành công.');
+                window.location.reload(true);
+            });
+            
+    });
+    
+    $('.myorder').change(function(){
+        $('#updateid').val($(this).attr('rel'));
+        $('#frmPage').attr('action','/admin/user/products-size/update-order/');
+        $('#frmPage').submit();
+    });
+
+    $('.view').click(function(e){
+        e.preventDefault();
+        url = $(this).attr('href');
+        tb_show('Xem thông tin thành viên',url+"&height=200&iframe=true");
+    });
+
+});
+
+</script>

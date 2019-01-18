@@ -1,0 +1,136 @@
+<!--<div class="row">
+    <div class="col-md-6">-->
+        <div class="box box-primary">
+                                <div class="box-header">
+                                    <h3 class="box-title">Nhập liệu</h3>
+                                </div><!-- /.box-header -->
+                                <!-- form start -->
+                                <form role="form" action="" class="frmReport">
+                                    <div class="box-body">
+                                        <div class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label"  id="text-align-label">Tên chi nhánh : </label>
+                                            <div  class="input-group" style="width:405px">
+                                                <span class="input-group-addon"><i class="fa fa-list"></i></span>
+                                                <select name="vote-name" class="form-control">
+                                                    <option value="0">Lựa chọn tên chi nhánh</option>
+                                                    <?php foreach ($this->vote as $list) { ?>
+                                                    <?php if($list["userid"] != 14){ ?>
+                                                    <option value="<?php echo $list['userid'] ?>"><?php echo $list['vote_name'] ?></option>
+                                                    <?php } ?>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        
+                                         <div class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Doanh số tháng : </label>
+                                            <div  class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                <select style="width: 180px;height:34px" id="month_create" name="month_create" >
+                                                    <?php foreach ($this->months as  $month) { 
+                                                        $slected ='';
+                                                        if($month == date('m')){
+                                                            $slected ='selected = selected';
+                                                        }
+                                                        ?>
+                                                    <option <?php echo $slected ?> value="<?php echo $month ?>">
+                                                        Tháng <?php echo $month ?>
+                                                    </option>
+                                                    <?php } ?>
+                                                </select>
+                                                <select style="width: 185px;height:34px" id="year_create" name="year_create">
+                                                    <option value="<?php echo date('Y') ?>">
+                                                        Năm <?php echo date('Y') ?>
+                                                    </option>
+                                                </select>
+                                            </div> 
+                                           
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label"  id="text-align-label">Danh sách : </label>
+                                            <div  class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-list"></i></span>
+                                                <? echo $this->formSelect("menuname", $this->menuname,array("style"=>"width:365px;height:34px"), $this->productstype); ?>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label"  id="text-align-label">Tên loại sản phẩm : </label>
+                                            <div  class="input-group" style="width:405px">
+                                                <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                                                <select id="cated-name" name="cated-name" class="form-control">
+                                                    <option value="-1">Tất cả</option>
+                                                    <?php foreach ($this->items as $list) { ?>
+                                                    <option data-name="<?php echo $list['title'] ?>" value="<?php echo $list['itemid'] ?>"><?php echo $list['title'] ?> </option>
+                                                    
+                                                        <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                      
+                                        <div class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Tỷ lệ phần trăm : </label>
+                                            <div  class="input-group" style="width:405px">
+                                                <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                                                    <input type="text" class="form-control" name="tyle" id="tyle" value="" placeholder="Nhập tỷ lệ">
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                    </div><!-- /.box-body -->
+
+                                    <div class="box-footer">
+                                        <button type="submit" id="btnAdd" class="btn btn-primary">Lưu</button>
+                                        <!--<a href="#" id="btnView">Lưu</a>-->
+                                        <input type="hidden" name="vipid" id="vipid" value="" />
+                                    </div>
+                                </form>
+            <script>
+                $().ready(function(){
+                  $('#menuname').change(function(){
+                        window.location = "<?=Globals::getBaseUrl();?>/admin/user/sales/add-proportion?menuname="+$('#menuname').val();
+                    });
+                    $('#btnAdd').click(function(e){
+                        e.preventDefault();
+                        var name = $('#cated-name option:selected').data("name") ;
+                        $.post("/admin/user/sales/save-proportion?cated_pname="+name,$('form').serialize(), function(resp){
+                            $('.errblock').remove();
+//                            alert(name);return false;
+                            $.each(resp, function(i, obj){
+                                var id = obj.id; 
+                                var msg = obj.msg; 
+
+                                if (msg != "ok") {
+
+//                                    $('#'+id).parent().append(' <span class="errblock red" style="padding:3px 0 10px 0">'+msg+'</span>');
+                                    alert(msg);
+                                    return false;
+//                                    $('#'+id).focus();                   
+                                } else {
+                                    result = confirm('Thêm thành công, Bạn có muốn tiếp tục thêm không');
+                                    if(result){
+                                        
+                                    }else{
+                                            window.location = "/admin/user/sales/list-proportion";
+                                        }
+                                    
+//                                    
+                                }
+
+                            });
+                        }, 'json');
+                    });
+                });
+                function convertDate(vnDate) {
+                    try {
+                        var vnDateArr = vnDate.split("/");
+                        var rDate = vnDateArr.reverse();
+                        return rDate.join("-");
+                    } catch (err){
+                        return vnDate;
+                    }
+                }
+            </script>
+        </div>
+<!--    </div>
+</div>-->

@@ -1,0 +1,253 @@
+<table border="0" cellpadding="20" cellspacing="10" width="100%">
+    <tbody><tr>
+            <td style="padding: 5px;" align="center" valign="middle">
+                <table cellspacing="0" cellpadding="0" border="0" width="100%" class="borderMain">
+                    <tbody><tr valign="top">
+                            <td><table cellspacing="0" cellpadding="0" border="0" width="100%">
+                                    <tbody><tr>
+                                            <td><div class="header icon-48-categories"><a href="/admin/user/quickorder/list/">Đặt hàng nhanh</a></div></td>
+                                            <td align="right">
+                                                <div class="toolbar">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody></table></td>
+                        </tr>
+                    </tbody></table>
+                <table cellpadding="0" border="0" width="100%" class="borderMain spaceTop5px">
+                    <form method="post" name="frmPage" id="frmPage">
+                        <input type="hidden" name="updateid" id="updateid" value="" />
+                        <tbody>
+                            <tr>
+                                <td width="35" class="bgTitleadmin1"><input type="checkbox" onclick="checkme()" name="checkall"></td>
+                                <td width="50" class="bgTitleadmin1">#</td>
+                                <td width="120" class="bgTitleadmin2">Tên sản phẩm</td>
+                                <td width="120" class="bgTitleadmin2">Màu sản phẩm</td>
+                                <td width="120" class="bgTitleadmin2">Họ tên</td>
+                                <td width="*" class="bgTitleadmin2">Điện thoại</td>
+                                <td width="80" class="bgTitleadmin2">Email</td>
+                                <td width="120" class="bgTitleadmin1">Ngày tháng</td>
+                                <td width="260" class="bgTitleadmin1">Ghi chú</td>
+                            </tr>
+                            <?php
+                            $list = $this->list;
+                            $no = 1;
+                            if (count($list) > 0)
+                                foreach ($list as $item) {
+                                $title = Business_Common_Utils::adaptTitleLinkURLSEO($item["product_name"]);
+                                $link = SEOPlugin::getProductDetailLink($item["productsid"], $title);
+                                    
+                                    if ($no % 2 == 0)
+                                        $bgcolor = '#f2f4f5';
+                                    else
+                                        $bgcolor = '#ffffff';
+
+                                    if ((int)$item["seen"]==0) {
+                                        $class_bold="bold-all";
+                                    } else {
+                                        $class_bold="";
+                                    }
+                                    ?>
+                                    <tr class="<?echo $class_bold;?>" bgcolor="<? echo $bgcolor; ?>">
+                                        <td class="bgContentadmin1"><input type="checkbox" value="<?php echo $item['id']; ?>" name="check[]"></td>
+                                        <td class="bgContentadmin1"><? echo $no++; ?></td>
+                                        <td class="bgContentadmin2">
+                                            <a target="_blank" href="<?echo $link;?>" style="color:blue"><?echo $item["product_name"];?></a>
+                                        </td>
+                                        <td class="bgContentadmin2">
+                                            <?echo $item["color"];?>
+                                        </td>
+                                        <td class="bgContentadmin2" style="line-height: 1.3em; font-size: 12px;">
+                                            <? echo $item['name'] ?> 
+                                        </td>
+                                        <td class="bgContentadmin2">
+                                            <? echo $item['phone'] ?> 
+                                        </td>
+                                        <td class="bgContentadmin2">
+                                            <? echo $item['email'] ?>
+                                        </td>
+                                        <td class="bgContentadmin2">
+                                            <? echo $item['datetime'] ?>
+                                        </td>
+                                        <td class="bgContentadmin2">
+                                            <textarea style="width:200px; height:50px; padding:3px;float:left;" type="text" id="note<?echo $item["id"];?>" name="note<?echo $item["id"];?>"><?echo $item["note"];?></textarea> <a href="#" onclick="savenote(<?echo $item["id"];?>);return false;" style="float:left; background-color: #CCCCCC; color:#000000; padding:2px 4px; margin:1px 0 0 3px; ">Lưu</a>
+                                        </td>
+                                    </tr>
+                                <? } ?>
+                    </form>
+                </table>
+            </td>
+        </tr>
+    </tbody></table>
+<div id="ddelete" style="display:none;"></div>
+
+<script type="text/javascript">
+    
+    function checkme()
+    {
+        isCheck=document.frmPage.checkall.checked;
+        elts=document.frmPage.elements['check[]'];
+        if(!elts.length)
+        {
+            elts.checked = isCheck;
+        }
+        else
+        {
+            for(i=0;i<elts.length;i++)
+                elts[i].checked=isCheck;
+        }
+    }
+
+    function isCheckDetail(){
+        result = 0;
+        $('input:checkbox').each(function(){
+            if ($(this).attr('checked') == true)
+                result = 1;
+        });
+        return result;
+
+    }
+
+    function updateSearch(){
+        val = $('#key').val();
+        if (val == 'Nhập mã đơn hàng'){
+            $('#key').val('');
+        }
+    }
+
+function savenote(id) {
+    var note = $("#note"+id).val();
+    note = encodeURIComponent(note);
+    $('#ddelete').load('/admin/user/quickorder/update-note?itemid='+id+"&note="+note+"&rand="+Math.random(), function(data){
+            alert("Thành công");
+            window.location.reload();
+        });
+}
+
+    $().ready(function(){
+        
+        _URL = $(location).attr('href');
+        $('#key').click(function(){
+            $(this).select();
+        });
+
+        //    $('#key').mouseout(function(){
+        //        var val = $(this).val();
+        //        if (val == ''){
+        //            $(this).val('Nhập mã đơn hàng');
+        //        }
+        //    });
+
+        $('#search').click(function(){
+            updateSearch();
+            $('#frmChange').submit();
+        });
+    
+        $('#source').change(function(){
+            updateSearch();
+            $('#frmChange').submit();
+        });
+
+        $('#btnreset').click(function(){
+            updateSearch();
+            $('#valreset').val('1');
+            $('#frmChange').submit();
+        });
+
+        $('#menuname').change(function(){
+            updateSearch();
+            $('#frmChange').submit();
+        });
+
+        $('#cateid').change(function(){
+            updateSearch();
+            $('#frmChange').submit();
+        });
+
+        $('#payment').change(function(){
+            updateSearch();
+            $('#frmChange').submit();
+        });
+
+        $('select[class^="cart_status"]').change(function(){
+            var status = $(this).val();
+            var cartid = $(this).attr('rel');
+            $('select[rel^="'+cartid+'"]').hide();
+            $('select[rel^="'+cartid+'"]').next().show();
+            //        update_url = '/admin/user/tragop/update-status?cartid='+cartid+'&status='+status+"&rand="+Math.random();
+            $('#ddelete').load('/admin/user/tragop/update-status?cartid='+cartid+'&cart_status='+status+"&rand="+Math.random(), function(data){
+                alert("Thành công");
+                window.location = _URL+"?act=Completed";
+            });
+        
+            //window.location.reload();
+        
+        });
+
+        $('select[class^="cart_payment"]').change(function(){
+            var payment = $(this).val();
+            var cartid = $(this).attr('rel');
+
+            //        update_url = '/admin/user/tragop/update-status?cartid='+cartid+'&status='+status+"&rand="+Math.random();
+            $('#ddelete').load('/admin/user/tragop/update-payment?cartid='+cartid+'&cart_payment='+payment+"&rand="+Math.random(), function(data){
+                alert("Thành công");
+                window.location = _URL+"?act=Completed";
+            });
+            //        window.location.reload();
+        
+        });
+        
+        $('select[class^="status"]').change(function(){
+            var status = $(this).val();
+            var rid = $(this).attr('rel');
+            $('select[rel^="'+rid+'"]').hide();
+            $('select[rel^="'+rid+'"]').next().show();
+            $('#ddelete').load('/admin/user/tragop/update-status?rid='+rid+'&status='+status+"&rand="+Math.random(), function(data){
+                alert("Thành công");
+                window.location = _URL+"?act=Completed";
+            });
+            //        window.location.reload();
+        
+        });
+
+        $('#cateid').find('option').each(function(){
+            var id = $(this).val();
+
+            if (id == '<? echo $this->cateid; ?>'){
+                $(this).attr('selected','selected');
+            }
+        });
+    
+//        $('#delete').click(function(){
+//            var result = isCheckDetail();
+//            if (result == 0) //ischeck
+//            {
+//                alert('Vui lòng chọn item để xóa');
+//                return false;
+//            }
+//            //        window.location = '/admin/user/products-size/delete/';
+//            var result = confirm("Bạn có chắc chắn muốn xóa?");
+//            if (result){
+//                $('#frmPage').attr('action','/admin/user/tragop/delete/');
+//                $('#frmPage').submit();
+//            }
+//        });
+//
+//        $('.sdelete').click(function(){
+//            var id = $(this).attr('rel');
+//            if (id != '')
+//                var result = confirm('Bạn chắc chắn muốn xóa?');
+//            if (result)
+//                $('#ddelete').load('/admin/user/tragop/delete?rand='+Math.random()+'&cartid='+id, function (data){
+//                    alert('Xóa thành công.');
+//                    window.location = _URL+"?act=Completed";
+//                });
+//        });
+
+    });
+
+</script>
+<style>
+    .discount{background-color: RED; color:#ffffff; padding: 1px;}
+    tr.bold-all td{font-weight: bold;}
+</style>

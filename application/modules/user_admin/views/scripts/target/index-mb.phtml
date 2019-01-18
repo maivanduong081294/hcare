@@ -1,0 +1,466 @@
+<?php
+$userid = $this->userid;
+$_scty =0;
+$_tl =1;
+    foreach ($this->ptype as $key => $items) {
+        if($key ==1 || $key ==4){
+            $others +=  $this->sum_cty[$key];
+            $others_tg +=  $this->money_cty[$key];
+        }
+        if($key ==2 || $key ==5){
+            $apples +=  $this->sum_cty[$key];
+            $apples_tg +=  $this->money_cty[$key];
+        }
+        if($key ==1 || $key ==2 || $key ==4 || $key ==5){
+            $_scty +=  $this->sum_cty[$key];
+            $_mcty +=  $this->money_cty[$key];
+            $_pt_phone_other = round($this->sum_cty[$key]/$this->money_cty[$key]*100,2);
+//            if($_pt_phone_other <75){
+//               $_tl =0; 
+//            }
+        }
+        if($key==3 || $key==9 || $key ==6 || $key ==10 || $key ==12){
+            continue;
+        } else {
+            $m_hnam +=$this->totals_hnam[$key];
+            $tg_hnam += $this->total_hnam[$key];
+            
+        }
+    }
+    if(round($others/$others_tg*100,2) < 75 || round($apples/$apples_tg*100,2) <75){
+        $_tl =0; 
+    }
+
+        $_thuongthem = 0;
+        $_percent = round($_scty/$_mcty * 100, 2);
+        if ($_tl == 1 && $_percent >= 80) {
+            if ($_percent >= 80) {
+                $_thuongthem = 1000000;
+            }
+            $_them = $_percent - 100;
+            if ($_them >= 5) {
+                $_thuongthem += floor($_them / 5) * 500000;
+            }
+        }
+        //
+        if ($m_hnam/$tg_hnam * 100 >= 120) {
+            $number = 8000;
+        } else {
+            $number = 4000;
+        }
+        $_percent_other =  round($others/$others_tg*100,2);
+        $_percent_apple =  round($apples/$apples_tg*100,2);
+?>
+
+
+<?php
+$_other_target = $this->money_cty[1] + $this->money_cty[4];
+$_apple_target = $this->money_cty[2] + $this->money_cty[5];
+$_target = $_other_target + $_apple_target;
+
+$_other_sales = $this->sum_cty[1] + $this->sum_cty[4];
+$_apple_sales = $this->sum_cty[2] + $this->sum_cty[5];
+$_sales = $_other_sales + $_apple_sales;
+
+$pk_sales_hnam = $this->sum_hnam[3];
+$pk_target_hnam = $this->money_hnam[3];
+
+$pk_sales_cty = $this->sum_cty[3];
+$pk_target_cty = $this->money_cty[3];
+
+
+foreach ($this->ptype as $key => $items) {
+    foreach ($this->member as  $_items) {
+        $___often[$_items["userid"]][$key] = 0;
+        $___often_hnam[$_items["userid"]][$key] = 0;
+        if ($key == 1 || $key == 2 || $key == 4 || $key == 5) {
+            if ($key == 1 || $key == 4) { // khác
+                if($_other_sales / $_other_target * 100 >= 80){ //khác
+                    $often = 0.3;
+                }else{
+                    $often = 0.15;
+                }
+                $_____often_khac = $this->sum_cty[1] * $often / 100 + $this->sum_cty[4] * $often / 100;
+            }else{ // apple
+                if($_apple_sales / $_apple_target * 100 >= 80){ //apple
+                    $often = 0.1;
+                }else{
+                    $often = 0.05;
+                }
+                $_____often_apple = $this->sum_cty[2] * $often / 100 + $this->sum_cty[5] * $often / 100;
+            }
+
+            $___often[$_items["userid"]][$key] = $this->scty[$_items["userid"]][$key] * $often / 100;
+            $___often_hnam[$_items["userid"]][$key] = $this->tt_hnam[$_items["userid"]][$key] * $number;
+        }
+        
+//        if ($key == 10) {
+//            $___often[$_items["userid"]][$key] = floor($this->scty[$_items["userid"]][$key] / 1000000) * 10000;
+//            $___often_hnam[$_items["userid"]][$key] = floor($this->shnam[$_items["userid"]][$key] / 1000000) * 10000;
+//        }
+//        if ($key == 6) {
+//            $___often[$_items["userid"]][$key] = $this->scty[$_items["userid"]][$key]*0.75/100;
+//            $___often_hnam[$_items["userid"]][$key] = $this->shnam[$_items["userid"]][$key]*0.75/100;
+//        }
+        
+        
+        if ($key == 7 || $key == 8 || $key == 11) {
+            $___often[$_items["userid"]][$key] = $this->tt_cty[$_items["userid"]][$key] * 4000;
+            $___often_hnam[$_items["userid"]][$key] = $this->tt_hnam[$_items["userid"]][$key] * $number;
+        }
+        if($key ==3){
+            if($pk_sales_hnam/$pk_target_hnam*100 >=70 && $pk_sales_hnam/$pk_target_hnam*100 <=80){
+                $___often_hnam[$_items["userid"]][$key] = $this->shnam[$_items["userid"]][3] *1.5/100;
+            }else{
+                if($pk_sales_hnam/$pk_target_hnam*100 >80){
+                    $___often_hnam[$_items["userid"]][$key] = $this->shnam[$_items["userid"]][3] *3/100;
+                }
+            }
+        }
+
+    }
+    
+}
+
+ foreach ($this->slist_reciped as $key => $items) {
+                        
+                        $link = '';
+                        
+                        if ($items["idregency"] == 10) {
+//                            $link ='<a target="_blank" href="/admin/user/target/listmb">Xem chi tiết</a>';
+                            $this->arr_mb[$items["idregency"]] = $this->number_mb;
+                            $of = $items["tytrong"] / 100;
+                        }
+                        $money = ($this->total_money * $items["tytrong"] / 100) / $this->arr_mb[$items["idregency"]];
+                        $often_store = 0;
+                        $dh='';
+                        if ($items["idregency"] == 11) {
+                            $often_store = $this->detail_recipe["often_store"];
+                            $dh='(Đã cộng Tiền PS '.number_format($often_store).')';
+                        }
+                        
+                        $moneys_member = number_format($money+$often_store);
+                        if($items["idregency"] == 10){
+                            $moneys_member = '<a onclick="views(1);return false;" id="show1" >Xem chi tiết</a><a style="display:none" id="show0" onclick="views(0);return false;" >Ẩn</a>';
+                        }
+                        
+                        
+ } 
+ //line new và sr
+ $tyle_ln_sr = 0.75/100;
+ $tien_thuong_ln_sr = (($this->sum_cty[6] + $this->sum_hnam[6])*$tyle_ln_sr)*40/100;
+ // số lượng ln_sr
+ $sl_sr_userid = $this->tt_hnam[$this->userid][6] + $this->tt_cty[$this->userid][6];
+ $sl_sr_tong = $this->totals_hnam[6] + $this->totals_cty[6];
+ $tien_ln_sr = $sl_sr_userid/$sl_sr_tong*$tien_thuong_ln_sr;
+ // 99%
+$tyle_99 = $this->detail_recipe["tyle_may99"];
+ $tien_thuong_99 = (($this->sum_cty[10]+ $this->sum_hnam[10])*$tyle_99)*40/100;
+ // số lượng ln_sr
+ $sl_99_userid = $this->tt_hnam[$this->userid][10] + $this->tt_cty[$this->userid][10];
+ $sl_99_tong = $this->totals_hnam[10] + $this->totals_cty[10];
+ $tien_99 = $sl_99_userid/$sl_99_tong*$tien_thuong_99;
+ $ppp = $_REQUEST["pppp"];
+ if($this->userid==328 && $ppp==1){
+     var_dump($sl_99_userid,$sl_99_tong,$tien_thuong_99,$tyle_99);
+     die();
+ }
+ 
+ ?>
+
+<div class="box-header panel-default">
+    <div class="col-md-5">
+        <h2 style="font-weight: bold">Target  của <?php echo $this->detail_user["fullname"] ?></h2>
+    </div>
+    <form role="form" id="view-sales-day" method="get"  class="frmReport">
+        <div class="col-md-3">
+            <select class="form-control input-group-sm" name="month" id="month">
+<?php
+for($m=1;$m<= 12;$m++) {
+    $selected = '';
+    if ($this->month == $m) {
+        $selected = ' selected ="selected"';
+    }
+    ?>
+                            <option <?php echo $selected ?> value="<?php echo $m; ?>"> Tháng <?php echo $m; ?></option>
+                        <?php } ?>
+                    </select>
+        </div>
+        <div class="col-md-3">
+            <select class="form-control input-group-sm" name="year" id="year">
+                    <?php
+                    for($y=2014;$y<= date('Y') + 5;$y++) {
+                        $selected2 = '';
+                        if ($this->year == $y) {
+                            $selected2 = ' selected ="selected"';
+                        }
+                        ?>
+                        <option <?php echo $selected2 ?> value="<?php echo $y; ?>"> Năm <?php echo $y; ?></option>
+                    <?php } ?>
+                </select>
+        </div>
+        <?php if($this->suserid >0){ ?>
+        <input type="hidden" name="token" value="<?php echo $this->token ?>" />
+        <input type="hidden" name="userid" value="<?php echo $this->userid ?>" />
+        <input type="hidden" name="sync" value="1" />
+        <?php }?>
+        <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> Xem </i></button>
+         
+    </form>
+</div><!-- /.box-header -->
+<div class="box-body">
+    <div class="table-responsive">
+        <table class="table table-data table-striped table-bordered table-hover">
+            <tr>
+                <td>Gói cài đặt ios</td>
+                <td><?php echo number_format($this->money_ios) ?></td> 
+            </tr>
+            <tr>
+                <td>Gói cài đặt android</td>
+                <td><?php echo number_format($this->money_android) ?></td>
+            </tr>
+            <tr>
+                <td>Gói bao bể màn hình</td>
+                <td><?php echo number_format($this->money_bbmh) ?></td>
+            </tr>
+            <tr>
+                <td>Gói bảo hành mở rộng 24</td>
+                <td><?php echo number_format($this->money_bhmr24) ?></td>
+            </tr>
+            <tr>
+                <td>Gói bảo hành máy cũ</td>
+                <td><?php echo number_format($this->money_bhmc) ?></td>
+            </tr>
+            <tr>
+                <td>Máy LINE NEW & SR</td>
+                <td><?php echo number_format($tien_ln_sr) ?></td>
+            </tr>
+            <tr>
+                <td>Máy 99%</td>
+                <td><?php echo number_format($tien_99) ?></td>
+            </tr>
+        </table>
+    </div>
+    <!--doanh số-->
+    <div class="views">
+        <div class="col-md-12">
+            <b class="size30" style="color: red"> CTY</b>
+            <table class="table table-bordered table-striped table-condensed">
+                <tr>
+                    <th width="200"></th>
+                    <?php
+                    foreach ($this->member as $_items) {
+                        $fullname = $_items["fullname"];
+                        if ($fullname == null) {
+                            $fullname = $_items["username"];
+                        }
+                        ?>
+                        <th><?php echo $fullname ?></th>
+                <?php } ?>
+                </tr>
+                <?php
+                $ret2 = array();
+                foreach ($this->ptype as $key => $items) {
+                    if($key ==3 || $key==6){
+                        continue;
+                    }
+                    ?>
+                    <tr>
+                        <td><?php echo $items ?></td>
+                        <?php foreach ($this->member as  $_items) { 
+                           
+                            ?>
+                            <td>
+                                <?php // echo $of; ?>
+                                <?php // echo "thuong- ".$___often[$key]; ?> 
+                                <?php // echo "sum all- ".$this->sum_cty[$key] ?>
+                                <?php // echo "nhan vien- ".$this->scty[$_items["userid"]][$key]; ?> 
+                                <?php echo number_format($___often[$_items["userid"]][$key] * $of); ?>
+                                <?php
+                                    $ret2[$key] = $___often[$_items["userid"]][$key] * $of;
+                                ?>
+                            </td>
+
+                        <?php 
+                        } ?>
+
+                    </tr>
+
+                <?php 
+                        } ?>
+                    <?php foreach ($this->ptype as $key => $items) { 
+                        $kh += $ret2[$key]; 
+                        ?>
+                    <?php }?>
+                <tr>
+                    <td>Tổng</td>
+                    <td>
+                        <?php echo number_format($kh); ?>
+                     </td>
+                </tr>
+            </table>
+        </div>
+        
+       
+        <div class="col-md-12">
+            <b class="size30" style="color: red"> HNAM</b>
+            <table class="table table-bordered table-striped table-condensed">
+                <tr>
+                    <th width="200"></th>
+                    <?php
+                    foreach ($this->member as $_items) {
+                        $fullname = $_items["fullname"];
+                        if ($fullname == null) {
+                            $fullname = $_items["username"];
+                        }
+                        ?>
+                        <th><?php echo $fullname ?></th>
+                <?php } ?>
+                </tr>
+                <?php
+                $i=$j=0;
+                foreach ($this->ptype as $key => $items) { 
+                    if($key ==3 || $key==6){
+                        continue;
+                    }
+                    ?>
+                    <tr>
+                        <td><?php echo $items ?></td>
+                        <?php foreach ($this->member as  $_items) { 
+                            ?>
+                            <td>
+                                <?php // echo $of; ?>
+                                <?php // echo "thuong- ".$___often_hnam[$key]; ?>
+                                <?php // echo "sum all- ".$this->sum_hnam[$key] ?>
+                                <?php // echo "nhan vien- ".$this->shnam[$_items["userid"]][$key]; ?>
+                                <?php echo number_format($___often_hnam[$_items["userid"]][$key] * $of); ?>
+                                <?php
+                                    $ret3[$key] = $___often_hnam[$_items["userid"]][$key] * $of;
+                                ?>
+                            </td>
+
+                        <?php 
+                        } ?>
+                    </tr>
+                <?php 
+                        } ?>
+                    
+                    <?php foreach ($this->ptype as $key => $items) { 
+                        $kh2 += $ret3[$key]; 
+                        ?>
+                    <?php }?>
+                <tr>
+                    <td>Tổng</td>
+                    <td>
+                        <?php echo number_format($kh2); ?>
+                     </td>
+                </tr>
+            </table>
+            <?php  
+                $__sum +=$kh + $kh2;
+                ?>
+            <b class="size30 hidden" style="color: red"> TỔNG</b>
+            <table class="table table-condensed table-bordered table-striped hidden">
+                <tr>
+                    <th width="200">Nhân viên</th>
+                    <?php foreach ($this->member as $key=> $items){
+                        $_color='';
+                        if($items["is_actived"]==1){
+                            $_color = '#090;color:#fff';
+                        }else{
+                            $_color = 'red;color:#fff';
+                        }
+                        $fullname = $items["fullname"];
+                        if($fullname == null){
+                            $fullname = $items["username"];
+                        }
+                        
+                        $phtr = ($kh[$key] + $kh2[$key])/$__sum;
+                        ?>
+                    <th style="background: <?php echo $_color;?>"><?php echo $fullname ?> (<?php echo round($phtr * 100, 2); ?>%)->(<?php echo $this->storename[$items["parentid"]] ?>)</th>
+                    <?php }?>
+                </tr>
+                <tr>
+                    <td>Tổng</td>
+                    <td><?php echo number_format($__sum) ?></td>
+                </tr>
+            </table>
+        </div>
+        </div>
+    
+    <div class="col-md-12 hidden">
+                <b style="color: red;font-size: 15px">Tổng tiền doanh số là <?php echo number_format($this->total_money2); ?></b><br/>
+                <b style="color: red;font-size: 15px">Tổng tiền thưởng PS <?php echo number_format($this->detail_recipe["often_store_pk"]); ?></b>
+                    <?php
+                    $money =0;
+                    foreach ($this->slist_reciped2 as $key => $items) {
+                        if($items["idregency"] == 10){
+                            $tytrongbanhang = $items["tytrong"];
+                        }
+                        
+                        ?>
+                        
+                    <?php } ?>
+        </div>
+    <div class="views" style="display: block">
+        <?php
+            $userid = $this->userid;
+            ?>
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Số lượng phụ kiện trên bill</th>
+                        <th>Doanh số bán</th>
+                        <th>Tỷ lệ thưởng trên doanh số</th>
+                        <th>Thưởng</th>
+                    </tr>
+               <?php foreach ($this->list_sum_pk[$this->storeid][$userid] as $key=> $val){ 
+        $_____stotal_doanh_so_pk +=$val;
+
+        ?> 
+                <tr>
+                    <td><?php echo $key; ?></td>
+                    <td><?php echo number_format($val) ?></td>
+                    <td><?php echo $this->list_tyle[$this->storeid][$key] ?>%</td>
+                    <td><?php echo number_format($this->list_thuong_pk[$this->storeid][$userid][$key]*$tytrongbanhang/100) ?></td>
+                </tr>
+               <?php } ?>
+            <tr>
+                    <td>Total:</td>
+                    <td><?php echo number_format($_____stotal_doanh_so_pk) ?></td>
+                    <td></td>
+                    <td style="color: red"><b><?php echo number_format($this->sum_vote_pk[$this->storeid][$userid]*$tytrongbanhang/100); ?></b></td>
+                </tr>
+
+            </table>
+        </div>
+    
+    <div class="col-md-12">
+        <?php
+        $money = $tien_99+$tien_ln_sr+$this->sum_vote_pk[$this->storeid][$userid]*$tytrongbanhang/100 + $__sum + $this->money_ios + $this->money_android + $this->money_bbmh + $this->money_bhmr24 + $this->money_bhmc;
+        if($_REQUEST["sync"]==1 && (int)$_REQUEST["userid"]>0 && $_REQUEST["month"] >0 && $_REQUEST["year"] >0){
+            $userid = $_REQUEST["userid"];
+            $month = $_REQUEST["month"];
+            $year = $_REQUEST["year"];
+            $detail = Business_Addon_Totaltarget::getInstance()->get_detail_by_userid_month_year($userid, $month, $year);
+            $data["userid"] = $userid;
+            $data["month"] = $month;
+            $data["year"] = $year;
+            $data["money"] = $money;
+            $data["storeid"] = $this->storeid;
+            if($detail){ // update
+                $data["end_datetime"] = date('Y-m-d H:i:s');
+                Business_Addon_Totaltarget::getInstance()->update($detail["id"],$data);
+            }else{ // insert
+                $data["datetime"] = date('Y-m-d H:i:s');
+                Business_Addon_Totaltarget::getInstance()->insert($data);
+            }
+        }
+        ?>
+        <p style="color: red;font-size: 25px">TỔNG TIỀN THƯỞNG : <?php echo number_format($money) ?></p>
+    </div>
+</div><!-- /.box-body -->
+<script>
+function show_sv(userid){
+    $('.frm_show_sv'+userid).toggle();
+}
+</script>

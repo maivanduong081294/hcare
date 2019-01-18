@@ -1,0 +1,166 @@
+<form id="frm_target">
+<div class="panel-default">
+    <br/>
+   
+        <div class="col-md-2 col-xs-6">
+            <div class="form-group input-group-sm ">
+                <select  name="productsid" onchange="change_productsid_kmc();" id="productsid" class="form-control">
+                    <?php
+                    foreach ($this->list_hnammobile as $key => $value) {
+                        $sl = '';
+                        if ($this->productsid == $key) {
+                            $sl = 'selected = selected';
+                        }
+                        ?>
+                        <option data="<?php echo $value ?>" <?php echo $sl ?> value="<?php echo $key ?>"> <?php echo $value ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3 col-xs-6">
+            <div class="form-group input-group-sm">
+                <select style="width: 100%" name="cated_id" onchange="change_cate();"  id="cated_id" class="selects form-control">
+                    <option value="0"> Brand</option>
+                    <?php
+                    foreach ($this->menu as $items) {
+                        $sl = '';
+                        if ($this->cated_id == $items["itemid"]) {
+                            $sl = 'selected = selected';
+                        }
+                        
+                        ?>
+                        <option data="<?php echo $items["title"] ?>" <?php echo $sl ?> value="<?php echo $items["itemid"] ?>"> <?php echo $items["title"] ?></option>
+                    <?php } ?>
+
+                </select>
+            </div>
+        </div>
+    <div class="col-md-2 col-xs-6">
+            <div class="form-group input-group-sm ">
+                <select  name="month" id="month" class="form-control">
+                    <?php
+                    for ($i = 1; $i <= 12; $i++) {
+                        $sl = '';
+                        if ($this->month == $i) {
+                            $sl = ' selected="selected"';
+                        }
+                        ?>
+                        <option <?php echo $sl ?> value="<?php echo $i ?>">Tháng <?php echo $i ?></option>
+<?php } ?>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-2 col-xs-6">
+            <div class="form-group input-group-sm ">
+                <select  name="year" id="year" class="form-control">
+                    <?php
+                    for ($i = 2017; $i <= 2020; $i++) {
+                        $sl = '';
+                        if ($this->year == $i) {
+                            $sl = ' selected="selected"';
+                        }
+                        ?>
+                        <option <?php echo $sl ?> value="<?php echo $i ?>">Năm <?php echo $i ?></option>
+<?php } ?>
+                </select>
+            </div>
+        </div>
+        
+        <button onclick="xem_target();return false;" class="btn btn-primary btn-sm"><i class="fa fa-search"></i> Xem</button>
+        <div class="clearfix"></div>
+        <div class="col-md-2 col-xs-6">
+            <div class="form-group input-group-sm ">
+                <input type="number" min="0" value=""  id="money" class="form-control pricing" placeholder="Nhập số tiền..." />
+            </div>
+        </div>
+        <button onclick="fill_money();return false;" class="btn btn-danger btn-sm"><i class="fa fa-copy"></i> Fill tất cả</button>
+</div>
+<div class="clearfix"></div>
+<div class="box-body">
+    <button onclick="luu_target();return false;" class="btn btn-danger" style="float: right"><i class="fa fa-save"></i> Save</button>
+    <table class="table table-bordered table-condensed table-striped">
+        <tr>
+            <th width="20">STT</th>
+            <th>Tên sản phẩm</th>
+            <th width="50">ID web</th>
+            <th width="100">Ngày tạo</th>
+            <th>Sét cho thời gian</th>
+            <th width="200">Tiền thưởng</th>
+        </tr>
+        <?php foreach ($this->list as $val){ ?>
+        <tr>
+            <td  width="20"><?php echo ++$stt ?></td>
+            <td><a href="https://www.hnammobile.com/dien-thoai/dt-.<?php echo $val["itemid"] ?>.html"><?php echo $val["title"] ?></a></td>
+            <td><?php echo $val["itemid"] ?></td>
+            <td><?php echo date('d/m/Y H:i:s',  strtotime($this->array_datetime[$val["itemid"]])) ?></td>
+            <td><?php echo $this->array_month[$val["itemid"]]."/".$this->array_year[$val["itemid"]] ?></td>
+            <td  width="200"><input type="hidden" name="array_itemid[]" value="<?php echo $val["itemid"] ?>" /><input name="<?php echo $val["itemid"] ?>" id="<?php echo $val["itemid"] ?>" onkeyup="format_price(<?php echo $val["itemid"] ?>);return false;" value="<?php echo number_format($this->array_p[$val["itemid"]]) ?>" class="form-control fill_all_money" placeholder="Nhập số tiền vào đây" /></td>
+        </tr>
+        <?php }?>
+    </table>
+
+</div>
+</form>
+<script>
+    function fill_money(){
+        var money = $('#money').val();
+        if(money){
+            $('.fill_all_money').val(money);
+        }
+        
+    }
+    function format_price(id){
+        var price = $("#"+id).val();
+        price = price.replace(/,/gi, "");
+        price = price + ".";
+        price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        var sprice = price.split(".");
+        $("#"+id).val(sprice[0]);
+    }
+    function change_cate(){
+        var cated_id = $('#cated_id option:selected').val();
+        xem_target();
+    }
+    function xem_target(){
+        $('#ids').val(0);
+        $("#frm_target").attr("action", "/admin/user/target/settargetproductsbybrand");
+        $("#frm_target").submit();
+    }
+    function luu_target(){
+        $.post("/admin/user/target/savesettargetproductsbybrand", $('#frm_target').serialize(), function (resp) {
+            $.each(resp, function (i, obj) {
+                 var id = obj.id;
+                var msg = obj.msg;
+                var url = obj.url;
+                if (msg != "ok") {
+                    alert(msg);
+                    $('#' + id).focus();
+                    return false;
+                }else{
+                    alert('Đặt target thành công');
+                    window.location = url;
+                }
+            });
+        }, 'json');
+    }
+    function change_productsid_kmc() {
+        var productsid = $('#productsid option:selected').val();
+        $('#cated_id').html('');
+        $('#cated_id').html('<option value="0"> Tất cả</option>');
+        var ajaxLink = '/admin/user/ajax/get-menu';
+        $.ajax({
+            method: 'get',
+            cache: false,
+            url: ajaxLink,
+            data: {productsid: productsid},
+            dataType: 'json',
+            success: function (resp) {
+                console.log(resp);
+                $.each(resp, function (i) {
+                    html_cated_id = '<option  value="' + resp[i].itemid + '">' + resp[i].title + '</option>';
+                    $('#cated_id').append(html_cated_id);
+                });
+            }
+        });
+    }
+</script>

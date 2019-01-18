@@ -1,0 +1,25 @@
+<form name="frmBlock" id="frmBlock" method="post" action=""> 
+<strong>List of category '<?php echo $this->catename; ?>' </strong>
+<br>
+<?
+echo $this->content
+?>
+
+<br />
+<p>
+	<input type="button" class="button" value="Create New Parent Node" onclick="window.location.href='<?php echo $this->create_url;?>'">
+</p>
+
+
+<!-- 
+<ul>
+	<li>1</li>
+	<li>2
+		<ul>
+			<li>2.1</li>
+			<li>2.2</li>
+		</ul>
+	</li>
+	<li>3</li>
+</ul>
+ -->

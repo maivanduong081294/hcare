@@ -1,0 +1,154 @@
+<?
+    $mail_config = $this->mail_config;
+    $contact_email = $this->contact_email;
+?>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tbody><tr>
+    <td style="padding: 5px;" align="center" valign="middle">
+    <table class="borderMain" border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tbody><tr valign="top">
+        <td><div class="header icon-48-config">Thiết lập cấu hình mail</div></td>
+        <td align="right"><div class="toolbar">
+            <table class="toolbar"><tbody><tr>
+                <td id="toolbar-new" class="button">
+                    <a class="toolbar" id="save" href="#">
+                    <span title="Save" class="icon-32-save"></span>
+                    Lưu</a>
+                </td>
+        </tr></tbody></table>
+        </div></td>
+      </tr>
+</tbody></table>
+<table class="borderMain spaceTop5px" border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tbody><tr>
+    <td>
+   	<form name="frmPage" id="frmPage" method="post" enctype="multipart/form-data">
+	<table class="adminerror spaceTop10px" border="0" cellpadding="0" cellspacing="0" width="100%">
+	    </table>
+    <br>
+    <fieldset class="adminform"><legend>Mail Settings</legend>
+    <table class="spaceTop5px" border="0" width="100%">
+        <tbody><tr>
+            <td align="right" width="110">Protocol</td>
+            <td style="padding-left: 5px;">
+                smtp
+            </td>
+        </tr>
+        <tr id="serverTr">
+            <td align="right" width="110">Smtp server<span style="color:#ff0000;">(*)</span></td>
+            <td style="padding-left: 5px;">
+                <input name="mailServer" id="mailServer" style="width: 200px;" value="<? echo $mail_config[0]?>" type="text">
+                &nbsp;Smtp Port<span style="color:#ff0000;">(*)</span>&nbsp;
+                <input name="mailServerPort" id="mailServerPort" style="width: 50px;" value="<? echo $mail_config[1]?>" type="text"></td>
+        </tr>
+        <tr id="loginTr">
+            <td align="right" width="110">
+                Username</td>
+            <td style="padding-left: 5px;">
+                <input name="defaultMailBoxUserName" id="defaultMailBoxUserName" style="width: 200px;" value="<? echo $mail_config[2]?>" type="text">
+                &nbsp;Password&nbsp;
+                <input class="required" name="defaultMailBoxPassword" id="defaultMailBoxPassword" style="width: 200px;" value="<? echo $mail_config[3]?>" type="password">
+            </td>
+        </tr>
+        <tr>
+            <td align="right" width="110">&nbsp;</td>
+            <td style="padding-left: 5px;">&nbsp;</td>
+        </tr>
+<!--        <tr>
+            <td align="right" width="110">Email Contact<span style="color:#ff0000;">(*)</span></td>
+            <td style="padding-left: 5px;"><input name="defaultMailBox" id="defaultMailBox" style="width: 400px;" value="<? echo $contact_email;?>" type="text"></td>
+        </tr>
+        <tr>
+            <td align="right" width="110">Online Yahoo<span style="color:#ff0000;">(*)</span></td>
+            <td style="padding-left: 5px;"><input name="yahoo" id="yahoo" style="width: 400px;" value="<? echo $this->online_yahoo;?>" type="text"></td>
+        </tr>
+        <tr>
+            <td align="right" width="110">Online Skype<span style="color:#ff0000;">(*)</span></td>
+            <td style="padding-left: 5px;"><input name="skype" id="skype" style="width: 400px;" value="<? echo $this->online_skype;?>" type="text"></td>
+        </tr>
+        <tr>
+            <td align="right" width="110">Online Phone<span style="color:#ff0000;">(*)</span></td>
+            <td style="padding-left: 5px;"><input name="phone" id="phone" style="width: 400px;" value="<? echo $this->online_phone;?>" type="text"></td>
+        </tr>
+        <tr>
+            <td align="right" width="110">Online Fax<span style="color:#ff0000;">(*)</span></td>
+            <td style="padding-left: 5px;"><input name="fax" id="fax" style="width: 400px;" value="<? echo $this->online_fax;?>" type="text"></td>
+        </tr>
+        <tr>
+            <td align="right" width="110">Email nhắc nhở<span style="color:#ff0000;">(*)</span></td>
+            <td style="padding-left: 5px;"><input name="warning_email" id="warning_email" style="width: 400px;" value="<? echo $this->warning_email;?>" type="text"></td>
+        </tr>-->
+    </tbody></table>
+	</fieldset>
+
+	</form>
+    </td>
+  </tr>
+</tbody></table>
+<script type="text/javascript">
+    jQuery("#frmmain").validate({
+        rules: {
+            mailServerPort:{
+                digits:true
+            }
+        }
+    });
+    function actionSmtp(){
+        if(jQuery("#protocol").val()=="mail"){
+            jQuery("#serverTr").hide();
+            jQuery("#loginTr").hide();
+        }else{
+            jQuery("#serverTr").show();
+            jQuery("#loginTr").show();
+        }
+    }
+    actionSmtp();
+</script>    </td>
+  </tr>
+</tbody></table>
+<script type="text/javascript">
+function checkme()
+{
+    isCheck=document.frmmain.checkall.checked;
+    elts=document.frmmain.elements['check[]'];
+	if(!elts.length)
+	{
+		elts.checked = isCheck;
+	}
+    else
+    {
+       for(i=0;i<elts.length;i++)
+          elts[i].checked=isCheck;
+    }
+}
+
+function jsSubmit()
+{
+	document.frmmain.submit();
+}
+
+function new_window(url,width, height){
+		window.open (url, "new_window", "width="+ width + ", height="+ height +", resizable=1,scrollbars=yes");
+	}
+
+function confirmSubmit(){
+	var agree=confirm("Bạn có chắc không?");
+	if (agree)
+		return true ;
+	else
+		return false ;
+}
+
+$().ready(function(){
+//    
+    $('#save').click(function(){
+        filter_array = new Array('mailServer','mailServerPort','defaultMailBoxUserName','defaultMailBoxPassword','defaultMailBox');
+        valid = new Array('required','number','required','required','email');
+        result = fsubmit('frmPage', filter_array, valid);
+        if(result){
+            $('#frmPage').submit();
+        }
+    });
+});
+
+</script>

@@ -1,0 +1,71 @@
+<script type="text/javascript" src="/hnamv2/js/print_1.js"></script>
+<div id="usedphone" style="margin-left:10px;">
+    <p style="padding:10px 0"><a href="/admin/user/usedphone2/list">Back</a></p>
+    <h1>Phần mềm thu máy cũ</h1>
+    <p>
+        <input class="btn2" style="margin:10px; padding:10px; color:#ffffff; background-color: orange" type="button" value="IN PHIẾU" name="in" id="in"/>
+    </p> 
+    <div id="frmBG" style="font-family:arial;margin-left:100px;width:600px;">
+            <p style="font-size:15px;padding:40px 0 30px 0;border-bottom:1px solid #CCCCCC;">
+                Mã voucher: <strong><?echo $this->detail["id"];?></strong>
+            </p>
+            <p style="text-align:center;font-size:20px;padding:10px;">
+                Voucher tiền mặt khi mua điện thoại tri giá                        
+            </p>
+            <p style="text-align:center;font-size:20px;padding:10px;border-bottom:1px solid #CCCCCC;">
+                <b style="font-size:30px;"><?echo number_format($this->detail["price"]);?>đ</b>                     
+            </p>
+            <p style="padding:20px 0 10px 10px;">
+                <span style="font-size:15px;float:left;width:100px">Họ tên</span>
+                <b style="font-size:15px;font-weight:normal"><?echo $this->detail["fullname"];?></b>
+            </p>
+            <p style="padding:10px;">
+                <span style="font-size:15px;float:left;width:100px">Địa chỉ</span>
+                <b style="font-size:15px;font-weight:normal"><?echo $this->detail["address"];?></b>
+            </p>
+            <p style="padding:10px;">
+                <span style="font-size:15px;float:left;width:100px">Email</span>
+                <b style="font-size:15px;font-weight:normal"><?echo $this->detail["email"];?></b>
+            </p>
+            <p style="padding:10px;">
+                <span style="font-size:15px;float:left;width:100px">Điện thoại</span>
+                <b style="font-size:15px;font-weight:normal"><?echo $this->detail["phone"];?></b>
+            </p>
+            <p style="padding:10px;">
+                <span style="font-size:15px;float:left;width:100px">Ngày hết hạn</span>
+                <b style="font-size:15px;font-weight:normal"><?echo $this->detail["datetime_expired"];?></b>
+            </p>
+            <p style="padding:10px;border-top:1px solid #CCCCCC;font-size:13px;">
+                &nbsp;
+            </p>
+            <p style="padding:10px;font-size:13px;line-height:2em">
+                <b>QUY ĐỊNH SỬ DỤNG</b><br />
+                - Voucher chỉ áp dụng khi mua điện thoại hoặc máy tính bảng.<br />
+-	Có giá trị sử dụng 01 voucher/sản phẩm.<br />
+-	Không áp dụng đồng thời các khuyến mại khác và không hoàn tiền thừa. <br />
+-	Voucher chỉ có giá trị khi có mộc cửa hàng Hnammobile.<br />
+-	Được quyền chuyển nhượng voucher cho người sử dụng khác.<br />
+-	Mỗi mã Voucher tương thích với 01 lần sử dụng.<br />
+-	Hnam có quyền từ chối nhận voucher khi phát hiện mã voucher đã được sử dụng trước đó.
+
+            </p>
+    </div>
+           
+</div>
+
+<script>
+    $().ready(function(){
+         $("#in").click(function(e){
+            var divContents = $("#frmBG").html();
+            var printWindow = window.open('', '', 'height=600,width=1000');
+            printWindow.document.write('<html><head><title>DIV Contents</title>');
+            printWindow.document.write('</head><body >');
+            printWindow.document.write(divContents);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+             
+         });
+    });
+</script>
+

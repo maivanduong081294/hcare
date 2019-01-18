@@ -1,0 +1,560 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    
+<!-- Susucess -->
+    <meta charset="UTF-8">
+    <title>Hnammobile.com-App | Hệ thống bán lẻ điện thoại,laptop, máy tính bảng</title>
+    <!-- Tell the browser to be responsive to screenwidth -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.4 -->
+    <link rel="stylesheet" href="/backend/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/backend/bootstrap/css/font-awesome.min.css">
+    <!-- Ionicons 2.0.0 -->
+    <link rel="stylesheet" href="/backend/bootstrap/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/backend/dist/css/AdminLTE.min.css?vesion=15">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="/backend/dist/css/skins/_all-skins.min.css">
+    <!-- iCheck -->
+	
+	
+<!--    <link rel="stylesheet" href="/backend/plugins/iCheck/flat/blue.css">
+     Morris chart 
+    <link rel="stylesheet" href="/backend/plugins/morris/morris.css">-->
+    <!-- jvectormap -->
+    <!--<link rel="stylesheet" href="/backend/plugins/jvectormap/jquery-jvectormap-1.2.2.css">-->
+    <!-- Date Picker -->
+    <link rel="stylesheet" href="/backend/plugins/datepicker/datepicker3.css">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="/backend/plugins/daterangepicker/daterangepicker-bs3.css">
+    <link rel="stylesheet" href="/backend/plugins/timepicker/bootstrap-timepicker.min.css">
+        <link rel="stylesheet" href="/backend/plugins/select2/select2.min.css">
+    <!-- bootstrap wysihtml5 - text editor -->
+    <!--<link rel="stylesheet" href="/backend/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">-->
+    <!--<link rel="stylesheet" href="/backend/autocomplete/jquery.auto.css" type="text/css" media="all" />-->
+    
+    
+    <!--<script type="text/javascript" src="/user_admin/js/form_validation.js"></script>-->
+    <!-- jQuery 2.1.4 -->
+    <script src="/backend/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="/fckeditor/fckeditor.js"></script>
+    <script src="/backend/plugins/ckeditor/ckeditor.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="/backend/bootstrap/js/jquery-ui.min.js"></script>
+    <!--<script src="/backend/dist/js/jquery-1.9.1.js"></script>-->
+    <!-- Bootstrap 3.3.4 -->
+    <script src="/backend/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/backend/plugins/datatables/dataTables.bootstrap.css">
+    <script src="/backend/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/backend/plugins/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="/backend/plugins/select2/select2.full.min.js"></script>
+    <link href="/backend/dist/css/fixtable.css" rel="stylesheet" type="text/css"/>
+    <!--<script src="/backend/plugins/morris/morris.min.js"></script>-->
+    <script>
+      $.widget.bridge('uibutton', $.ui.button);
+      
+    </script>
+    
+    <!-- Morris.js charts -->
+    <!--<script src="/backend/bootstrap/js/raphael-min.js"></script>-->
+    
+    <!-- Sparkline -->
+    <!--<script src="/backend/plugins/sparkline/jquery.sparkline.min.js"></script>-->
+    <!-- jvectormap -->
+    <!--<script src="/backend/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>-->
+    <!--<script src="/backend/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>-->
+    <!-- jQuery Knob Chart -->
+    <!--<script src="/backend/plugins/knob/jquery.knob.js"></script>-->
+    <!-- daterangepicker -->
+    <!--<script src="/backend/bootstrap/js/moment.min.js"></script>-->
+    <script src="/backend/plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- datepicker -->
+    <script src="/backend/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <!-- Bootstrap WYSIHTML5 -->
+    <!--<script src="/backend/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.js"></script>-->
+    <!-- Slimscroll -->
+    <script src="/backend/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <!-- FastClick -->
+    <!--<script src="/backend/plugins/fastclick/fastclick.min.js"></script>-->
+    <!-- AdminLTE App -->
+    <script src="/backend/dist/js/app.min.js"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <!--<script src="/backend/dist/js/pages/dashboard.js"></script>-->
+    <!-- AdminLTE for demo purposes -->
+    <!--<script src="/backend/dist/js/demo.js"></script>-->
+    <script>
+        function format_price3(cl,id){
+            var price = $(cl+id).val();
+            price = price.replace(/,/gi, "");
+            price = price + ".";
+            price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            var sprice = price.split(".");
+            $(cl+id).val(sprice[0]);
+        }
+        function replace_number(str){
+            var strs = str.replace(/,/gi,"");
+            return strs;
+         }
+        
+ $().ready(function() {
+     $('#reservation').daterangepicker();
+        $('#reservationtime').daterangepicker({timePicker: true,format: 'YYYY/MM/DD HH:mm',use24hours: true  });
+     
+        var startDate='<?php echo $this->start ?>';
+        var endDate='<?php echo $this->end ?>';
+        $('#daterange-btn').daterangepicker(
+            {
+             startDate: startDate,
+            endDate: endDate,
+            dateLimit: { days: 365 },
+            showDropdowns: true,
+            showWeekNumbers: true,
+            timePicker: false,
+            timePickerIncrement: 1,
+            timePicker12Hour: true,   
+              ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+//                '6 Month': [moment().subtract(6, 'month').startOf('month'), moment()],
+//                '12 Month': [moment().subtract(12, 'month').startOf('month'), moment()],
+              },
+            },
+        function (start, end) {
+          $('#showdate').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+          $('#start_end').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+          startDate = start;
+            endDate = end;
+        }
+        );
+    });
+    
+    $(function () {
+//        $("#f_table").DataTable();
+//        CKEDITOR.replace('textarea');
+        $('.selects').select2();
+      });
+      function step_1(){
+          $(".step_1").removeClass("disabled").addClass("active");
+      }
+      function step_2(){
+          $(".step_1").removeClass("disabled").addClass("active");
+          
+          $(".step_1").removeClass("active").addClass("complete");
+          $(".step_2").removeClass("disabled").addClass("active");
+      }
+      function step_3(){
+          $(".step_1").removeClass("disabled").addClass("active");
+          $(".step_1").removeClass("active").addClass("complete");
+          $(".step_2").removeClass("disabled").addClass("active");
+          
+            $(".step_2").removeClass("active").addClass("complete");
+            $(".step_3").removeClass("disabled").addClass("active");
+      }
+      function step_4(){
+          $(".step_1").removeClass("disabled").addClass("active");
+          
+          $(".step_1").removeClass("active").addClass("complete");
+          $(".step_2").removeClass("disabled").addClass("active");
+          
+            $(".step_2").removeClass("active").addClass("complete");
+            $(".step_3").removeClass("disabled").addClass("active");
+            
+            $(".step_3").removeClass("active").addClass("complete");
+            $(".step_4").removeClass("disabled").addClass("active");
+      }
+      
+    function show_loading() {
+        $('.loading').removeClass('hidden');
+    }
+    function hidden_loading() {
+        $('.loading').removeClass('hidden').addClass('hidden');
+    }
+    function remove_alert() {
+        $('.alert_show').removeClass('alert-success');
+        $('.alert_show').removeClass('alert-danger');
+        $('.alert_show').removeClass('hidden');
+    }
+        function show_voucher(voucher){
+            alert(voucher);
+            hidden_loading();
+            $('#err').html(voucher);
+            $('.alert_show').removeClass('alert-danger');
+            $('.alert_show').removeClass('hidden');
+            $('.alert_show').addClass('alert-success');
+            $('.close_voucher').click();
+            show_btn();
+            
+        }
+        function resert_show_voucher_hvip(){
+            $('.s_voucher').html('');
+            $('#total').html(0);
+            $('#type_name').html('');
+        }
+        function show_voucher_hvip (msg,total,type){
+            var phone = $('#sphone').val();
+            resert_show_voucher_hvip();
+            $('#total').html(total);
+            $('#type_name').html(type);
+            show_btn();
+           $.ajax
+            ({
+                method: "POST",
+                url: "/admin/user/vouchers/iframe-show",
+                data: {st: msg,phone:phone},
+                dataType: "html",
+                success: function (data) {
+                    console.log(data);
+                    $('.s_voucher').html(data);
+                }
+            });
+        }
+        function hidden_alert (){
+            $('.alert_show').addClass('hidden');
+        }
+        function hidden_alert2 (classs){
+            $(classs).addClass('hidden');
+        }
+        function myFunction() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
+        function hidden_btn() {
+            $('#save').hide();
+        }
+        function savess() {
+            this.disabled=true; 
+            this.value='Đang xử lý…';
+            $('#tmp').val(0);
+            $("#data_frm").submit();
+            hidden_btn();
+            show_loading();
+        }
+        function submit_form(thamso) {
+            var result = confirm('Bạn có chắc chắn muốn lưu đơn hàng này');
+            if(result){
+                this.disabled=true; 
+                this.value='Đang xử lý…';
+                $('#tmp').val(0);
+                $(thamso).submit();
+                hidden_btn();
+                show_loading();
+            }
+        }
+        function save_tmp(tmp) {
+            this.disabled=true; 
+            this.value='Đang xử lý…';
+            $('#tmp').val(1);
+            $("#data_frm").submit();
+            hidden_btn();
+            show_loading();
+        }
+        function save_new() {
+            $('#id_new').val(0);
+            this.disabled=true; 
+            this.value='Đang xử lý…';
+            $("#data_frm").submit();
+            hidden_btn();
+            show_loading();
+        }
+        
+        function show_msg(msg, id) {
+            show_btn();
+            $('#err').html(msg);
+            remove_alert();
+            $('.alert_show').addClass('alert-danger');
+            $('.icon_alert').removeClass('fa-check').addClass('fa-info');
+            $('#' + id + '').focus();
+    //        alert(msg);
+            hidden_loading();
+        }
+        function show_msg_noaccess(msg, url) {
+            show_btn();
+            $('#err').html(msg);
+            remove_alert();
+            $('.alert_show').addClass('alert-danger');
+            $('.icon_alert').removeClass('fa-check').addClass('fa-info');
+            hidden_loading();
+            settimouts(msg,url);
+        }
+        function settimouts(msg,url){
+            var delay = 1000; //Your delay in milliseconds
+            setTimeout(function(){ 
+                if (url === null) {
+                    window.location.reload(true);
+                } else {
+                    redirect_url(url);
+                }
+            }, delay);
+        }
+        function show_msg_alert (msg,id){
+            $('#err').html(msg);
+            $('.alert-danger').removeClass('hidden');
+            $('.alert_show').removeClass('alert-success');
+            $('#'+id+'').focus();
+            alert(msg);
+            show_btn();
+            hidden_loading();
+        }
+        function islogin(msg, id) {
+            $('#err').html(msg);
+            remove_alert();
+            $('.alert_show').addClass('alert-danger');
+            $('#' + id + '').focus();
+            $('#shows').modal('show');
+            show_btn();
+            return false;
+        }
+        function show_success(msg, id, url) {
+                show_btn();
+                this.disabled=true; 
+                this.value='Đang xử lý…';
+                $('#err').html(msg);
+                remove_alert();
+                $('.alert_show').addClass('alert-success');
+                $('.icon_alert').removeClass('fa-info').addClass('fa-check');
+                settimouts(msg,url);
+                hidden_loading();
+                document.getElementById("data_frm").reset();
+            }
+        function show_nologin() {
+            var msg ='Thời gian đăng nhập hết hiệu lực. Vui lòng đăng nhập lại. Đang chuyển hướng';
+            var url ='/admin';
+            $('#err').html(msg);
+            remove_alert();
+            alert(msg);
+            $('.alert_show').addClass('alert-danger');
+            $('.icon_alert').removeClass('fa-check').addClass('fa-info');
+            settimouts(msg,url);
+//            hidden_loading();
+        }
+        function redirect_url(url){
+            window.location.replace(url);
+        }
+        function show_btn() {
+            $('#save').show();
+        }
+    function get_voucher_web(id,token){
+        var phone = $('#ssphone').val();
+        $.ajax
+        ({
+           method: "POST",
+           url: "/admin/user/vouchers/get-vouchers",
+           data: { id:id, token:token,phone:phone },
+           dataType: "html",
+            success: function(data){
+                console.log(data);
+              $('.show_voucher').html(data);
+              $('#get_voucher').modal('show');
+            }
+        });
+    }
+    $(function () {
+    var onSampleResized = function (e) {
+        var columns = $(e.currentTarget).find("td");
+        var rows = $(e.currentTarget).find("tr");
+        var Cloumnsize;
+        var rowsize;
+        columns.each(function () {
+            Cloumnsize += $(this).attr('id') + "" + $(this).width() + "" + $(this).height() + ";";
+        });
+        rows.each(function () {
+            rowsize += $(this).attr('id') + "" + $(this).width() + "" + $(this).height() + ";";
+        });
+        document.getElementById("hf_columndata").value = Cloumnsize;
+        document.getElementById("hf_rowdata").value = rowsize;
+    };
+    $("#MatrixTable tr").resizable();
+    $("#MatrixTable td").resizable();
+    });
+    
+    </script>
+    <!-- CSS & JS moduel IMPORT -->
+    <?php echo ProfilerPlugin::getImportStatic();?>
+    <?php
+
+    function minify_output($content) {
+//remove redundant (white-space) characters
+        $replace = array(
+            //remove tabs before and after HTML tags
+            '/\>[^\S ]+/s' => '>',
+            '/[^\S ]+\</s' => '<',
+            //shorten multiple whitespace sequences; keep new-line characters because they matter in JS!!!
+            '/([\t ])+/s' => ' ',
+            //remove leading and trailing spaces
+            '/^([\t ])+/m' => '',
+            '/([\t ])+$/m' => '',
+            // remove JS line comments (simple only); do NOT remove lines containing URL (e.g. 'src="http://server.com/"')!!!
+            '~//[a-zA-Z0-9 ]+$~m' => '',
+            //remove empty lines (sequence of line-end and white-space characters)
+            '/[\r\n]+([\t ]?[\r\n]+)+/s' => "\n",
+            //remove empty lines (between HTML tags); cannot remove just any line-end characters because in inline JS they can matter!
+            '/\>[\r\n\t ]+\</s' => '><',
+            //remove "empty" lines containing only JS's block end character; join with next line (e.g. "}\n}\n</script>" --> "}}</script>"
+            '/}[\r\n\t ]+/s' => '}',
+            '/}[\r\n\t ]+,[\r\n\t ]+/s' => '},',
+            //remove new-line after JS's function or condition start; join with next line
+            '/\)[\r\n\t ]?{[\r\n\t ]+/s' => '){',
+            '/,[\r\n\t ]?{[\r\n\t ]+/s' => ',{',
+            //remove new-line after JS's line end (only most obvious and safe cases)
+            '/\),[\r\n\t ]+/s' => '),',
+            //remove quotes from HTML attributes that does not contain spaces; keep quotes around URLs!
+            '~([\r\n\t ])?([a-zA-Z0-9]+)="([a-zA-Z0-9_/\\-]+)"([\r\n\t ])?~s' => '$1$2=$3$4', //$1 and $4 insert first white-space character found before/after attribute
+        );
+        $content = preg_replace(array_keys($replace), array_values($replace), $content);
+        $remove = array(
+            '</option>', '</li>', '</dt>', '</dd>', '</tr>', '</th>', '</td>'
+        );
+        $content = str_ireplace($remove, '', $content);
+        return $content;
+    }
+    ?> 
+  </head>
+    
+<body class="skin-blue sidebar-mini fixed sidebar-collapse nonscroll">
+        
+<!--<body class="skin-blue sidebar-mini fixed">-->
+    <div class="wrapper">
+        <div class="row">
+            <div class="col-md-7">
+                <div style="top:0px;position: fixed;z-index: 99999999999999999;">
+                    <?php $footer = $this->layout()->_section["footer"];echo $footer;?>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div style="top:0px;position: fixed;z-index: 99999999999999999;">
+                    <div style="height: 67px;min-width: 400px;" class="alert alert_show alert-danger hidden alert-dismissible">
+                        <button type="button" class="close" onclick="hidden_alert2('.alert_show');return false;"  aria-hidden="true">×</button>
+                        <i class="fa fa-warning"></i>  <span id="err">Hướng dẫn nhập chênh lệch trả góp đã có ở phần trả góp. Mọi người vào xem và thực hiện. Nếu không rõ vui lòng liên hệ ITXem chi tiết</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php $header = $this->layout()->_section["header"];echo $header;?>
+        <?php echo isset($this->layout()->_section["left"]) ? $this->layout()->_section["left"] : ''; ?>
+      <div class="content-wrapper">
+        
+        <section class="content">
+            <div class="box box-primary">
+                <div class="overlay loading hidden">
+                      <i class="fa fa-refresh fa-spin"> <span style="font-size: 14px">đang xử lý... </span></i>
+                  </div> 
+                <!-- Small boxes (Stat box) -->
+                <!--<div class="scroll2">-->
+                <?php $content = $this->layout()->content;echo $content;?>
+                <!--</div>-->
+            </div>
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+      <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+          <b>Version</b> 2.2.0
+        </div>
+          <strong>Copyright &copy; 2014-2015 Hnammobile.</strong> All rights reserved.
+      </footer>
+<!-- /.control-sidebar -->
+      <!-- Control Sidebar -->
+      <!-- Add the sidebar's background. This div must be placed
+           immediately after the control sidebar -->
+      <div class="control-sidebar-bg"></div>
+    </div><!-- ./wrapper -->
+
+    
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    
+    <div class="modal fade" id="get_voucher">
+        <div class="modal-dialog" style="margin: 140px auto">
+        <div class="modal-content col-md-offset-3 col-xs-12 col-md-6">
+            <div class="modal-header">
+                <button type="button" class="close close_voucher" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div class="show_voucher"></div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="modal fade" id="show_alert_v2">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div style="height: 100%" class="modal-body">
+                <div class="modal-header" style="font-weight: bold;font-size: 30px;">THÔNG BÁO NGÀY MAI 28/12/2016 CHẠY PHẦN MỀM BÁN HÀNG VESION II</div><br/>
+                <div class="show_print">
+                    <p>Quy trình bán hàng có cập nhật, anh/chị vui lòng nhấn vào xem chi tiết để xem hướng dẫn,</p>
+                    <p>Quy trình bao gồm bán hàng bằng barcode hoặc imei của sản phẩm</p>
+                    <p>+ Bán các gói dịch vụ : IOS, Bảo bể màn hình, bảo hành mở rộng, sim ...</p>
+                    <p>+ Có hướng dẫn mua hàng ký gửi, đồng bộ mua hàng ký gửi để có thể bán hàng được</p>
+                    <p><b>Lưu ý:</b> Mọi thao tác bán hàng đều phải nhập IMEI, hoặc bắn barcode .Khi có thông báo lỗi thì các chi nhánh báo đúng chính xác lổi về phòng IT</p>
+                    <p> Mọi thắc mắc vui lòng liên hệ bộ phận IT.</p>
+                    <p>Các ưu đãi khi mua combo thì nhập như sau: Ví dụ combo có 3 món thì nhập 3 sản phẩm -> Lưu BILL. </p>
+                    <p>Sau khi lưu bill xong thì vào danh sách voucher lấy mã giảm giá để giảm nha. <a class="btn btn-primary btn-lg" href="http://app.hnammobile.com/document/list?id=44">Xem chi tiết</a></p>
+                    <p>Download tài liệu hướng dẫn tại đây <a class="btn btn-danger btn-lg" href="http://app.hnammobile.com/uploads/document/c19ad1d7fc21b0c4bcbfbe2fc3b1d833-Huong-dan-ban-hang-V2.docx">Tài liệu</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <style>
+        .selects{
+            width: 100% !important;
+        }
+        .select2 select2-container select2-container--default{
+            width: 100% !important;
+        }
+    .select2-selection__choice{
+        background-color: #3c8dbc !important;
+        border-color: #367fa9 !important;
+    }
+    .select2-container--default .select2-selection--multiple .select2-selection__choice__remove{
+        color: #FFFFFF !important;
+    }
+    .select2-container--default .select2-selection--multiple{
+        height: auto !important;
+    }
+    .select2-container--default .select2-selection--multiple{
+            border-radius: 1px !important;
+    }
+    #daterange-btn{
+        width: 100%;
+    }
+    .bg-red, .callout.callout-danger, .alert-danger, .alert-error, .label-danger, .modal-danger .modal-body {
+        background-color: #f2dede!important;
+        color: #a94442!important;
+    }
+    .panel-success>.panel-heading {
+        font-weight: bold;
+    }
+    .panel-danger>.panel-heading{
+        font-weight: bold;
+    }
+    .alert-danger, .alert-error {
+         border-color: #f2dede!important; 
+    }
+    .bg-green, .callout.callout-success, .alert-success, .label-success, .modal-success .modal-body {
+        background-color: #dff0d8!important;
+        color: #3c763d!important;
+        border-color: #dff0d8!important; 
+    }
+</style>
+<script>
+$(window).resize(function(){
+        var pn =0;
+        if (($(".panel-default").length > 0)){
+            pn = $(".panel-default").css("height");
+         }
+         pn = parseInt(pn);
+         var h = pn+120;
+//         if(h<121){
+//             h=250;
+//         }
+        var height = $(window).height()-h;
+        $(".box-body").css("height",height+"px");
+//        $(".fixed_headers tbody").css("height",height+"px");
+    });
+    $(window).resize();
+</script>
+  </body>
+</html>

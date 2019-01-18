@@ -1,0 +1,279 @@
+<style>
+            #paging_klinen{
+                height: 23px;
+                width: 600px;
+            }
+            #paging_klinen img {
+                height: 25px;
+                width: 28px;
+                margin-top: -3px;
+            }
+            #paging_klinen span{
+                /*font-size: 20px;*/
+                background: #f05920;
+                color: #ffffff;
+                padding :4px 10px;
+            }
+            .pagingItems{
+                background: #f3f3f3;
+                padding :4px 10px;
+                color: #777777;
+                font-weight: bold;
+                margin-top: 5px;
+            }
+            .pagingItems hover {
+                background: #f05920;
+            }
+        </style>
+<div class="row" >
+    <div class="col-md-12">
+
+
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="ion ion-clipboard"></i>
+                <h3 class="box-title">DANH SÁCH SIM SỐ HNAMMOBILE.COM</h3>
+            </div><!-- /.box-header -->
+            <form role="form" id="view-sales-day" method="get"  class="frmReport">
+                <div class="box-body">
+                    <div style="float: left" class="form-group">
+                        <div class="input-group" style="width: 370px">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text" class="form-control" name="title" id="title" value="<?php echo $this->title ?>" placeholder="Nhập số sim" />
+                        </div><!-- /.input group -->
+
+                    </div>
+
+                    <div style="float: left;">
+                        <select name="cateid" id="cateid" class="form-control">
+                            <option value="0">Tất cả</option>
+                            <?php foreach ($this->items as $list){ 
+                                $selected = '';
+                                if($this->cateid == $list["itemid"]){
+                                    $selected = 'selected = "selected"';
+                                }
+                                
+                                ?>
+                            <option <?php echo $selected ?> value="<?php echo $list["itemid"] ?>">
+                                <?php echo $list["title"] ?>
+                            </option>
+                            <?php }?>
+                        </select>
+                    </div>
+                    <div style="float: left;">
+                        <? echo $this->formSelect("check_sim", $this->check_sim,array("class"=>"form-control"), $this->plist); ?>
+                    </div>
+                    <div style="float: left" class="form-group">
+                        <button type="button" id="btnView" class="btn btn-primary">Xem</button>
+                    </div>
+                </div><!-- /.box-body -->
+
+            </form>
+            <br/>
+            <br/>
+            <div class="row">
+                    <div class="col-md-12">
+                        <div><?php echo $this->paging_template ?></div>
+                    </div>
+                </div>
+            <div class="box-body">
+                <div class="table-responsive">
+
+                    <table class="table table-data table-striped table-bordered table-hover">
+                        <tbody>
+
+                            <tr>
+                                <th><input name="select-all" type="checkbox" data-toggle="tooltip" title="Select All"/></th>
+                                <th>STT</th>
+                                <th>Sim số</th>
+                                <th>Giá</th>
+                                <th>Danh mục</th>
+                                <th>Thao tác</th>
+                            </tr>
+                            <?php
+                            $no = 1;
+                            foreach ($this->items2 as $list) {
+                                if ($no % 2 == 0)
+                                    $bgcolor = '#ccc';
+                                else
+                                    $bgcolor = '#ffffff';
+                                $is_actived = $list["enabled"];
+                                $enabled = $list["enabled"];
+                                ?>
+                                <?php if($list["username"] !="vote_all"){ ?>
+                                <tr bgcolor="<?echo $bgcolor; ?>" class="row-<?php echo $list["itemid"]; ?>">
+                                    
+                                    <td width="20"><input type="checkbox" name="select-user[]" class="check-user minimal-red" value="<?php echo $list["itemid"]; ?>"/></td>
+                                    <td width="30"><?php echo $no ?></td>
+                                    <td width="120"><?php echo $list["title"] ?></td>
+                                    <td>
+                                        <input class="form-control pricing" onkeypress="return keys(event)" style="width: 90%;float: left" type="text" name="price" id="price-<?php echo $list["itemid"]?>" value="<?php echo number_format($list["price"]) ?>" />
+                                        <a style="float: right" id="edit-<?php echo $list["itemid"] ?>" class="btn btn-flat btn-info btn-sm" data-toggle="tooltip" rels=""  href="#"><i class="fa fa-pencil-square-o"></i></a>
+                                    </td>
+                                    <td >
+                                        <select style="width:85%;float: left" name="cateid2" id="cateid2" class="form-control">
+                                            <?php foreach ($this->items as $plist){ 
+                                                $selected = '';
+                                                if($list["cateid"] == $plist["itemid"]){
+                                                    $selected = 'selected = "selected"';
+                                                }
+
+                                                ?>
+                                            <option <?php echo $selected ?> value="<?php echo $plist["itemid"] ?>">
+                                                <?php echo $plist["title"] ?>
+                                            </option>
+                                            <?php }?>
+                                        </select>
+                                        <a id="edit2-<?php echo $list["itemid"] ?>"style="float: right" class="btn btn-flat btn-info btn-sm" data-toggle="tooltip" rels=""  href="#"><i class="fa fa-pencil-square-o"></i></a>
+                                    </td>
+                                    <td>
+                                        <!--<a class="btn btn-flat btn-info btn-sm" data-toggle="tooltip" id="copy"  href="/admin/user/app-services/by-vote?vote_id=<?php // echo $list["userid"]; ?>&month=<?php // echo $this->months ?>" target="_blank"><i class="fa fa-eye"></i></a>-->
+                                        <?php if ($enabled == 0): ?>
+                                        <a id="restore-<?php echo $list["itemid"]; ?>" class="btn btn-flat btn-warning btn-sm" data-toggle="tooltip" rels="<?php echo $list["itemid"] ?>"  href="#"><i class="fa fa-reply"></i></a>
+                                        <?php else: ?>
+                                        <a id="delete-<?php echo $list["itemid"]; ?>" class="btn btn-danger btn-sm" data-toggle="tooltip" rels="<?php echo $list["itemid"] ?>"  href="#"><i class="fa fa-trash-o"></i></a>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                                <? $no++;?>
+                                <?php }?>
+                            <div id="ddelete" style="display:none;"></div>
+                            <script type="text/javascript">
+                                $().ready(function(){
+                                    $('#delete-<?php echo $list["itemid"]?>').click(function(){ 
+                                    id = $(this).attr('rels');
+                                    if (id != '')
+                                        result = confirm('Bạn chắc chắn muốn hủy sim?');
+                                        if (result)
+                                        $('#ddelete').load('/admin/user/sim/delete?id='+id, function (){
+                                            alert('Kích hoạt  thành công.');
+                                            window.location.reload(true);
+                                            });
+                                        });
+                                });
+                                $().ready(function(){
+                                    $('#restore-<?php echo $list["itemid"]?>').click(function(){ 
+                                    id = $(this).attr('rels');
+                                    if (id != '')
+                                        result = confirm('Bạn chắc chắn muốn kích hoạt sim?');
+                                        if (result)
+                                        $('#ddelete').load('/admin/user/sim/restore?id='+id, function (){
+                                            alert('Kích hoạt  thành công.');
+                                            window.location.reload(true);
+                                            });
+                                        });
+                                });
+                                $().ready(function(){
+                                    $('#edit-<?php echo $list["itemid"]?>').click(function(){ 
+                                    id = <?php echo $list["itemid"]?>;
+                                    price = $('#price-<?php echo $list["itemid"]?>').val();
+                                    flag = "price";
+                                    if (id != '')
+                                        result = confirm('Bạn chắc chắn muốn sửa giá?');
+                                        if (result)
+                                        $('#ddelete').load('/admin/user/sim/save?itemid='+id+"&price="+price+"&flag="+flag, function (){
+                                            result2 = confirm('Bạn chắc chắn muốn tiếp tục sửa giá tiếp\nBấm OK để tiếp tục và Cancel để xem thay đổi?');
+                                            if(result2){
+                                            }else{
+                                                window.location.reload(true);
+                                            }
+                                            });
+                                        });
+                                });
+                                $().ready(function(){
+                                    $('#edit2-<?php echo $list["itemid"]?>').click(function(){ 
+                                    id = <?php echo $list["itemid"]?>;
+                                    cateid = $('#cateid2').val();
+                                    flag = "cateid";
+                                    if (id != '')
+                                        result = confirm('Bạn chắc chắn muốn chuyển danh mục?');
+                                        if (result)
+                                        $('#ddelete').load('/admin/user/sim/save?itemid='+id+"&cateid="+cateid+"&flag="+flag, function (){
+                                                result2 = confirm('Bạn chắc chắn muốn tiếp tục chỉnh sửa\nBấm OK để tiếp tục và Cancel để xem thay đổi?');
+                                                if(result2){
+                                                }else{
+                                                    window.location.reload(true);
+                                                }
+                                            });
+                                        });
+                                });
+                            </script>
+                            
+                            
+                            <?php
+//                            $sum +=$list["countApp"];
+//                            $sum2 +=$list["countApple"];
+                            ?>
+                        <?php } ?>
+
+<!--                        <tr style="color: red ;font-size: 15px">
+                            <th><input onclick="checkme()" name="checkall" type="checkbox" data-toggle="tooltip" title="Select All"/></th>
+                            <th colspan="1">Tổng cộng</th>
+                            <th colspan="1"><strong>Tính đến <?php // echo date("d-m-Y H:i:s"); ?>  </strong></th>
+                            <th colspan="1"><strong><?php // echo $sum2 ?> SP Bán ra </strong></th>
+                            <th colspan="1"><strong><?php // echo $sum ?> lượt cài </strong></th>
+                            <th colspan="1"></th>
+                        </tr>     -->
+                        </tbody>
+
+                    </table>
+                </div>
+            </div><!-- /.box-body -->
+
+        </div><!-- /.box -->
+
+
+
+
+    </div>
+</div>
+<script>
+    $().ready(function () {
+        function keys(e)
+        {
+            var keyword = null;
+            if (window.event)
+            {
+                keyword = window.event.keyCode;
+            } else
+            {
+                keyword = e.which; //NON IE;
+            }
+            if (keyword < 48 || keyword > 57)
+            {
+                if (keyword == 48 || keyword == 127)
+                {
+                    return;
+                }
+                return false;
+            }
+        }
+        $(".pricing").keyup(function () {
+            var price = this.value;
+            price = price.replace(/,/gi, "");
+            price = price + ".";
+            price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            var sprice = price.split(".");
+            $(this).val(sprice[0]);
+        });
+        $('#check_sim').change(function(){
+            window.location = "<?=Globals::getBaseUrl();?>/admin/user/sim/list?check_sim="+$('#check_sim').val()+"&cateid="+$('#cateid').val();
+        });
+        $('#btnView').click(function (e) {
+            e.preventDefault();
+            var vote_id = $('#vote_id').val();
+            if(vote_id == 0){
+                $("#view-sales-day").attr("action", "/admin/user/sim/list");
+                $("#view-sales-day").submit();
+            }else{
+                $("#view-sales-day").attr("action", "/admin/user/sim/list");
+                $("#view-sales-day").submit();
+            }
+            
+        });
+    });
+</script>
+</div>
+</div>

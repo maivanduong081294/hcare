@@ -1,0 +1,107 @@
+<div class="box-header">
+    <div class="col-md-4">
+    </div>
+    <form  name="data_frm" id="data_frm" method="get">
+    <div class="col-md-4">
+        <select style="width: 100%" name="storeid" class="selects">
+                <?php
+                foreach ($this->list_store as $items) {
+                    $sll = '';
+                    if ($this->storeid == $items["userid"]) {
+                        $sll = 'selected="selected"';
+                    }
+                    ?>
+                    <option <?php echo $sll; ?> value="<?php echo $items["userid"]; ?>"><?php echo $items["storename"]; ?></option>
+            <?php } ?>
+            </select>
+    </div>
+    <div class="col-md-4 right">
+        
+            <div class="form-group">
+                <div class="input-group input-group-sm">
+                    <?php
+                    $start_end = 'Date range picker';
+                    if ($this->start_end != null) {
+                        $start_end = $this->start_end;
+                    }
+                    ?>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default pull-right" id="daterange-btn">
+                            <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                            <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                            <i class="fa fa-caret-down"></i>
+                        </button>
+                    </span>
+                    <span class="input-group-btn">
+                        <input type="hidden" name="iexport" id="iexport" value="<?php echo $this->iexport ?>" />
+                        <button type="button" onclick="views_report();return false;" class="btn btn-info btn-flat"><i class="fa fa-search"> Xem </i></button>
+                        <button type="button" onclick="exports();return false;" class="btn btn-primary "><i class="fa fa-file-excel-o"> Export</i></button>
+                    </span>
+
+                </div>
+            </div>
+        
+    </div>
+</form>
+    
+</div>
+<div class="box-body" id="dvContainer" style="display: block">
+    <table id="f_table2" width="100%" class="table table-data table-striped table-bordered ">
+        <thead>
+            <tr>
+                <th>Tên chi nhánh</th>
+                <th>Số lượng món trên bill</th>
+                <th>Tổng Số lượng</th>
+                <th>Tổng tiền</th>
+                <th>Người bán</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $storeid = $this->storeid;
+            for($i=1;$i<20;$i++) {
+                foreach ($this->list_user as $k=> $list) {
+                    $userid = $list["userid"];
+                    if($this->total[$storeid][$userid][$i] ==0){
+                        continue;
+                    }
+                    
+                    ?>
+                    <tr>
+                        <td><?php echo $this->storename[$storeid] ?></td>
+                        <td><?php echo $i ?></td>
+                        <td><?php echo number_format($this->total[$storeid][$userid][$i]) ?></td>
+                        <td><?php echo number_format($this->sum[$storeid][$userid][$i]) ?></td>
+                        <td><?php echo $this->uname[$userid] ?></td>
+                </tr>
+            <?php } ?>
+        <?php } ?>
+
+
+            
+        </tbody>
+    </table>
+</div>
+<div id="ddelete" style="display:none;"></div>
+<input type="hidden" name="days" id="days" value="<?php echo date('d/m/Y', strtotime($this->end)) ?>" />
+<input type="hidden" name="storename_sort" id="storename_sort" value="<?php echo $this->storename_sort ?>" />
+</div>
+<script src="/backend/plugins/input-mask/jquery.inputmask.js"></script>
+<script src="/backend/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script src="/backend/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+<script>
+    function views_report(){
+        $('#iexport').val(0);
+        $("#data_frm").submit();
+    }
+    function exports(){
+        $('#iexport').val(1);
+        $("#data_frm").submit();
+    }
+$( document ).ready(function() {
+    $("#f_table2").DataTable({
+        "pageLength": 100
+
+    });
+    })
+</script>

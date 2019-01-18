@@ -1,0 +1,72 @@
+<h3 style="font-weight: bold" class="box-title">CẬP NHẬT THÔNG TIN IMEI: <?php echo $this->detail["imei"] ?> -- <?php echo $this->detail["item_name"] ?></h3>
+<form  name="data_frm" id="formData" method="post" action="/admin/user/guarantee/save-info" target="hiddenIF"  enctype="multipart/form-data">
+    <iframe  name="hiddenIF" style="display: none" scrolling="auto"></iframe>
+    <input type="hidden"   name="token" value="<?php echo $this->token?>">
+    <input type="hidden"   name="id" value="<?php echo $this->detail["id"]?>">
+    <input type="hidden"   name="t" value="<?php echo $this->viewss ?>">
+    <div class="form-group">
+        <span class="col-sm-offset-3 col-sm-9 color_red tb" id="receiver_id_tb"></span>
+        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Nhân viên nhận : </label>
+        <div class="input-group col-md-6">
+            <div class="input-group-addon">
+                <i class="fa fa-text-width"></i>
+            </div>
+            <select style="width: 100%" required="required" onchange="change_receiver();" class="selects"  name="receiver_id" id="receiver_id">
+                <option value="">Chọn tên nhân viên</option>
+                <?php foreach ($this->sreceiver as $items){ ?>
+                <option value="<?php echo $items["userid"] ?>"><?php echo $items["fullname"] ?></option>
+                <?php }?>
+            </select>
+        </div>
+    </div>
+    <div class="box-footer">
+            <input type="hidden" name="idcustomer" id="idcustomer" value="<?php echo $this->idcustomer ?>" />
+            <button type="submit" id="save" class="btn btn-primary right"><i class="fa fa-floppy-o"> Lưu</i></button>
+            <b id="complete"  class="color_red right size20"></b>
+        </div>
+    <input type="hidden" name="receiver" id="receiver" />
+</form>
+<script>
+    function change_receiver(){
+        var receiver = $("#receiver_id option:selected").text();
+        $('#receiver').val(receiver);
+    }
+    function format_price(id){
+        var price = $("#"+id).val();
+        price = price.replace(/,/gi, "");
+        price = price + ".";
+        price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        var sprice = price.split(".");
+        $("#"+id).val(sprice[0]);
+    }
+    function shows(){
+        $('#save').hide();
+        $('#wt').show();
+    }
+    function hides(){
+        $('#save').show();
+        $('#wt').hide();
+    }
+    $( document ).ready(function() {
+        $('.selects').select2();
+//        $('#save').click(function(){
+//            shows();
+//        });
+    });
+    function notification (msg,id){
+        alert(msg);
+        $('.tb').html('');
+        $('#'+id).focus(); 
+        var msg_add = '<i class="fa fa-times-circle-o"> '+msg+' </i>';
+        $('#'+id+"_tb").html(msg_add); 
+        hides();
+//        location.reload();
+    }
+    function completes(msg){
+        $('.tb').html('');
+        var msg_add = '<i class="fa fa-check" aria-hidden="true"> </i>'+msg+'';
+        alert(msg);
+        $('#complete').html(msg_add);
+        window.location.reload(true);
+    }
+</script>

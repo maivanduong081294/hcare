@@ -1,0 +1,59 @@
+
+<div id="centerCont">
+<form name="frmBlock" id="frmBlock" method="post" action="<?php echo $this->form_action; ?>" enctype="multipart/form-data"> 
+<strong>Add category node for '<?php echo $this->catename; ?>' </strong>
+<br><br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="mainTab">
+<tr>
+ <td class="hligh2" width="20%"><label for="description">Title</label></td>
+ <td class="hligh2">
+	<input type="text" name="title" id="title" 
+   value="<?php echo $this->data["title"]; ?>" style="width:400px" maxlength="100"> 
+  </td>
+</tr>
+<tr>
+ <td class="hligh1" width="20%"><label for="description">Link path</label></td>
+ <td class="hligh1">
+	<input type="text" name="linkpath" id="linkpath" 
+   value="<?php echo $this->data["linkpath"]; ?>" style="width:400px" maxlength="100"> 
+  </td>
+</tr>
+<tr>
+ <td class="hligh2" width="20%"><label for="description">Short description</label></td>
+ <td class="hligh2">
+	<input type="text" name="shortdes" id="shortdes" 
+   value="<?php echo $this->data["shortdes"]; ?>" style="width:400px" maxlength="100"> 
+  </td>
+</tr>
+<tr>
+ <td class="hligh1" width="20%"><label for="description">Picture</label></td>
+ <td class="hligh1">
+	<input type="file" name="picfile" id="picfile" > 
+	<br>
+	<div id="picholder"><?echo $this->img;?></div>
+  </td>
+</tr>
+<tr>
+ <td class="hligh2"><label for="status">Parent cate</label></td>
+ <td class="hligh2">   
+<?php
+echo $this->formSelect('pid', $this->pid, array(
+			'style'=>'width:100px'					
+			), $this->parentlink) 
+   ?>
+  </td>
+</tr>  
+</table>
+<br />
+<input type="submit" name="submit" value="Submit" class="button"/>
+</form>
+</div>
+
+<script>
+
+function selectParent(value)
+{
+	
+}
+
+</script>

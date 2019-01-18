@@ -1,0 +1,438 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script>
+$(function () {
+    $('#container2').highcharts({
+
+        chart: {
+            type: 'column'
+        },
+
+        title: {
+            text: 'Doanh số từng chi nhánh theo giá trị'
+        },
+
+        xAxis: {
+            categories: [<? echo $this->vote_name ?>]
+        },
+
+        yAxis: {
+            allowDecimals: false,
+            min: 0,
+            title: {
+                text: 'Tiền (x 1.000)'
+            }
+        },
+
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.x + '</b><br/>' +
+                    this.series.name + ': ' + this.y + '<br/>' +
+                    'Total: ' + this.point.stackTotal;
+            }
+        },
+
+        plotOptions: {
+            column: {
+                stacking: 'normal'
+            }
+        },
+
+        series: [
+        {name: 'ĐT-old',
+            data: <? echo $this->phone_old ?>,
+            stack: 'dt'
+        },{
+            name: 'ĐT-Hnam',
+            data: <? echo $this->phone_hnam ?>,
+            stack: 'dt'
+        },
+        {
+            name: 'ĐT-Cty',
+            data: <? echo $this->phone_cty ?>,
+            stack: 'dt'
+        }, {
+            name: 'MTB-Cty',
+            data: <? echo $this->tablet_cty ?>,
+            stack: 'mtb'
+        }, {
+            name: 'MTB-Hnam',
+            data: <? echo $this->tablet_hnam ?>,
+            stack: 'mtb'
+        },{
+            name: 'MTB-old',
+            data: <? echo $this->tablet_old ?>,
+            stack: 'mtb'
+        }, {
+            name: 'Phụ kiện-Cty',
+            data: <? echo $this->acc_cty ?>,
+            stack: 'pk'
+        },{
+            name: 'Phụ kiện-Hnam',
+            data: <? echo $this->acc_hnam ?>,
+            stack: 'pk'
+        }, {
+            name: 'Laptop-Cty',
+            data: <? echo $this->laptop_cty ?>,
+            stack: 'lt'
+        }, {
+            name: 'Laptop-Hnam',
+            data: <? echo $this->laptop_hnam ?>,
+            stack: 'lt'
+        }, {
+            name: 'ĐHTM-Cty',
+            data: <? echo $this->watch_cty ?>,
+            stack: 'watch'
+        }, {
+            name: 'ĐHTM-Hnam',
+            data: <? echo $this->watch_hnam ?>,
+            stack: 'watch'
+        }]
+    });
+});
+
+$(function () {
+    $('#container').highcharts({
+
+        chart: {
+            type: 'column'
+        },
+
+        title: {
+            text: 'Doanh số từng chi nhánh theo số lượng'
+        },
+
+        xAxis: {
+            categories: [<? echo $this->vote_name ?>]
+        },
+
+        yAxis: {
+            allowDecimals: false,
+            min: 0,
+            title: {
+                text: 'Số lượng'
+            }
+        },
+
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.x + '</b><br/>' +
+                    this.series.name + ': ' + this.y + '<br/>' +
+                    'Total: ' + this.point.stackTotal;
+            }
+        },
+
+        plotOptions: {
+            column: {
+                stacking: 'normal'
+            }
+        },
+
+        series: [
+        {name: 'ĐT-old',
+            data: <? echo $this->cphone_old;?>,
+            stack: 'dt'
+        },{
+            name: 'ĐT-Hnam',
+            data: <? echo $this->cphone_hnam ?>,
+            stack: 'dt'
+        },
+        {
+            name: 'ĐT-Cty',
+            data: <? echo $this->cphone_cty ?>,
+            stack: 'dt'
+        }, {
+            name: 'MTB-Cty',
+            data: <? echo $this->ctablet_cty ?>,
+            stack: 'mtb'
+        }, {
+            name: 'MTB-Hnam',
+            data: <? echo $this->ctablet_hnam ?>,
+            stack: 'mtb'
+        },{
+            name: 'MTB-old',
+            data: <? echo $this->ctablet_old ?>,
+            stack: 'mtb'
+        }, {
+            name: 'Phụ kiện-Cty',
+            data: <? echo $this->cacc_cty ?>,
+            stack: 'pk'
+        },{
+            name: 'Phụ kiện-Hnam',
+            data: <? echo $this->cacc_hnam ?>,
+            stack: 'pk'
+        }, {
+            name: 'Laptop-Cty',
+            data: <? echo $this->laptop_cty ?>,
+            stack: 'lt'
+        }, {
+            name: 'Laptop-Hnam',
+            data: <? echo $this->claptop_hnam ?>,
+            stack: 'lt'
+        }, {
+            name: 'ĐHTM-Cty',
+            data: <? echo $this->cwatch_cty ?>,
+            stack: 'watch'
+        }, {
+            name: 'ĐHTM-Hnam',
+            data: <? echo $this->cwatch_hnam ?>,
+            stack: 'watch'
+        }]
+    });
+});
+</script>
+<?php
+//điện thoại khác
+    //cty
+    $s_phone_other_cty = (int)$this->sum_all[1][3][3][0];
+    $c_phone_other_cty = (int)$this->count_all[1][3][3][0];
+    // hnam
+    $s_phone_other_hnam = (int)$this->sum_all[2][3][3][0];
+    $c_phone_other_hnam = (int)$this->count_all[2][3][3][0];
+    
+// điện thoại khác cũ
+    //cty
+    $s_phone_other_cty_old = (int)$this->sum_all[1][3][4][0];
+    $c_phone_other_cty_old = (int)$this->count_all[1][3][4][0];
+    //hnam
+    $s_phone_other_hnam_old = (int)$this->sum_all[2][3][4][0];
+    $c_phone_other_hnam_old = (int)$this->count_all[2][3][4][0];
+    
+// điện thoại apple
+    //cty
+    $s_phone_apple_cty = (int)$this->sum_all[1][3][3][1];
+    $c_phone_apple_cty = (int)$this->count_all[1][3][3][1];
+    //hnam
+    $s_phone_apple_hnam = (int)$this->sum_all[2][3][3][1];
+    $c_phone_apple_hnam = (int)$this->count_all[2][3][3][1];
+    
+// điện thoại apple cũ
+    // cty
+    $s_phone_apple_cty_old = (int)$this->sum_all[1][3][4][1];
+    $c_phone_apple_cty_old = (int)$this->count_all[1][3][4][1];
+    // hnam
+    $s_phone_apple_hnam_old = (int)$this->sum_all[2][3][4][1];
+    $c_phone_apple_hnam_old = (int)$this->count_all[2][3][4][1];
+
+    
+// máy tính bảng khác
+    // cty
+    $s_mtb_khac_cty     = (int)$this->sum_all[1][5][3][0];
+    $c_mtb_khac_cty     = (int)$this->count_all[1][5][3][0];
+    // hnam
+    $s_mtb_khac_hnam     = (int)$this->sum_all[2][5][3][0];
+    $c_mtb_khac_hnam     = (int)$this->count_all[2][5][3][0];
+// máy tính bảng khác cũ
+    // cty
+    $s_mtb_khac_old_cty     = (int)$this->sum_all[1][5][4][0];
+    $c_mtb_khac_old_cty     = (int)$this->count_all[1][5][4][0];
+    // hnam
+    $s_mtb_khac_old_hnam     = (int)$this->sum_all[2][5][4][0];
+    $c_mtb_khac_old_hnam     = (int)$this->count_all[2][5][4][0];
+// máy tính bảng apple
+    // cty
+    $s_mtb_apple_cty     = (int)$this->sum_all[1][5][3][1];
+    $c_mtb_apple_cty     = (int)$this->count_all[1][5][3][1];
+    // hnam
+     $s_mtb_apple_hnam     = (int)$this->sum_all[2][5][3][1];
+    $c_mtb_apple_hnam     = (int)$this->count_all[2][5][3][1];
+    
+// máy tính bảng apple cũ
+    //cty
+    $s_mtb_apple_old_cty     = (int)$this->sum_all[1][5][4][1];
+    $c_mtb_apple_old_cty     = (int)$this->count_all[1][5][4][1];
+    //hnam
+    $s_mtb_apple_old_hnam     = (int)$this->sum_all[2][5][4][1];
+    $c_mtb_apple_old_hnam     = (int)$this->count_all[2][5][4][1];
+    
+    // Phụ kiện cty
+    $s_phukien_cty      = (int)$this->sum_all[1][4][3][0];
+    $c_phukien_cty      = (int)$this->count_all[1][4][3][0];
+    // Phụ kiện hnam
+    $s_phukien_hnam      = (int)$this->sum_all[2][4][3][0];
+    $c_phukien_hnam      = (int)$this->count_all[2][4][3][0];
+    // Laptop cty
+    $s_laptop_cty       = (int)$this->sum_all[1][6][3][0];
+    $c_laptop_cty       = (int)$this->count_all[1][6][3][0];
+    // Laptop hnam
+    $s_laptop_hnam       = (int)$this->sum_all[2][6][3][0];
+    $c_laptop_hnam       = (int)$this->count_all[2][6][3][0];
+    // Laptop  cty cũ
+    $s_laptop_cty_old       = (int)$this->sum_all[1][6][4][0];
+    $c_laptop_cty_old       = (int)$this->count_all[1][6][4][0];
+    // Laptop hnam cũ
+    $s_laptop_hnam_old       = (int)$this->sum_all[2][6][4][0];
+    $c_laptop_hnam_old       = (int)$this->count_all[2][6][4][0];
+    // đồng hồ thông minh cty
+    $s_dhtm_cty         = (int)$this->sum_all[1][8][3][0];
+    $c_dhtm_cty         = (int)$this->count_all[1][8][3][0];
+    // đồng hồ thông minh hnam
+    $s_dhtm_hnam         = (int)$this->sum_all[2][8][3][0];
+    $c_dhtm_hnam         = (int)$this->count_all[2][8][3][0];
+    // đồng hồ thông minh cty cũ
+    $s_dhtm_old_cty         = (int)$this->sum_all[1][8][4][0];
+    $c_dhtm_old_cty         = (int)$this->count_all[1][8][4][0];
+    // đồng hồ thông minh hnam cũ
+    $s_dhtm_old_hnam         = (int)$this->sum_all[2][8][4][0];
+    $c_dhtm_old_hnam         = (int)$this->count_all[2][8][4][0];
+
+    $s_khomaycu_cty = $s_phone_other_cty_old + $s_phone_apple_cty_old + $s_mtb_khac_old_cty + $s_mtb_apple_old_cty + $s_laptop_cty_old + $s_dhtm_old_cty;
+    $c_khomaycu_cty = $c_phone_other_cty_old + $c_phone_apple_cty_old + $c_mtb_khac_old_cty + $c_mtb_apple_old_cty + $c_laptop_cty_old + $c_dhtm_old_cty;
+    // hnam
+    $s_khomaycu_hnam = $s_phone_other_hnam_old + $s_phone_apple_hnam_old + $s_mtb_khac_old_cty + $s_mtb_apple_old_cty + $s_laptop_cty_old + $s_dhtm_old_cty;
+    $c_khomaycu_hnam = $c_phone_other_hnam_old + $c_phone_apple_hnam_old + $c_mtb_khac_old_hnam + $c_mtb_apple_old_hnam + $c_laptop_hnam_old + $c_dhtm_old_hnam;
+
+
+
+    $sum = $s_phone_other_cty + $s_phone_apple_cty + $s_mtb_khac_cty + $s_mtb_apple_cty + $s_phukien_cty + $s_laptop_cty + $s_dhtm_cty + $this->kmcu[1];
+    $count = $c_phone_other_cty + $c_phone_apple_cty + $c_mtb_khac_cty + $c_mtb_apple_cty + $c_phukien_cty + $c_laptop_cty + $c_dhtm_cty + $this->ckmcu[1];
+
+    $sum_hnam = $s_phone_other_hnam + $s_phone_apple_hnam + $s_mtb_khac_hnam + $s_mtb_apple_hnam + $s_phukien_hnam + $s_laptop_hnam + $s_dhtm_hnam + $this->kmcu[2];
+    $count_hnam = $c_phone_other_hnam + $c_phone_apple_hnam + $c_mtb_khac_hnam + $c_mtb_apple_hnam + $c_phukien_hnam + $c_laptop_hnam + $c_dhtm_hnam + $this->ckmcu[2];
+
+    ?>
+<div class="box box-primary">
+    <div class="col-md-9">
+        <div class="box-header">
+            <i class="ion ion-clipboard"></i>
+            <h4 class="box-title">Báo cáo tổng quan</h4>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <br/>
+        <form >
+            <div class="input-group input-group-sm right">
+                <?php 
+                    $start_end='Date range picker';
+                    if($this->start_end !=null){
+                        $start_end = $this->start_end;
+                    }
+                    ?>
+                    <span class="input-group-btn">
+                    <button class="btn btn-default pull-right" id="daterange-btn">
+                          <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                          <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                        <i class="fa fa-caret-down"></i>
+                      </button>
+                    </span>
+                    
+                    <span class="input-group-btn">
+                    <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> Xem </i></button>
+                    </span>
+            </div>
+        </form>
+    </div>
+    
+    <div class="box-body">
+        
+        <div class="col-md-12">
+            <div id="container2" style=" height: 350px; margin: 0 auto; margin-top:0px;"></div>
+        </div>
+        <div class="col-md-12">
+            <b><p style="color: red;font-size: 20px">Doanh số: <?php echo number_format($sum + $sum_hnam) ?></p></b>
+        </div>        
+        <div class="col-md-12">
+            <table style="font-size: small;font-weight: bold" class="table-bordered table-condensed" >
+                <tr>
+                    <th></th>
+                    <th colspan="2">CTY</th>
+                    <th colspan="2">HNAM</th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Doanh thu</td>
+                    <td>Số lượng</td>
+                    <td>Doanh thu</td>
+                    <td>Số lượng</td>
+                </tr>
+                
+                
+                <tr>
+                    <td><a href="#" id="hrf_detail3" onclick="details(3,'',0);return false;">Điện thoại khác</a></td>
+                    <td><a href="#" id="hrf_detail31" onclick="details(3,1,0);return false;"><?php echo number_format($s_phone_other_cty) ?></a></td>
+                    <td><?php echo number_format($c_phone_other_cty) ?></td>
+                    <td><a href="#" id="hrf_detail32" onclick="details(3,2,0);return false;"><?php echo number_format($s_phone_other_hnam) ?></a></td>
+                    <td><?php echo number_format($c_phone_other_hnam) ?></td>
+                </tr>
+                <tr>
+                    <td><a href="#" id="hrf_detail3" onclick="details(3,'',999997);return false;">Điện thoại Apple</a></td>
+                    <td><a href="#" id="hrf_detail3" onclick="details(3,1,999997);return false;"><?php echo number_format($s_phone_apple_cty) ?></a></td>
+                    <td><?php echo number_format($c_phone_apple_cty) ?></td>
+                    <td><a href="#" id="hrf_detail3" onclick="details(3,2,999997);return false;"><?php echo number_format($s_phone_apple_hnam) ?></a></td>
+                    <td><?php echo number_format($c_phone_apple_hnam) ?></td>
+                </tr>
+                <tr>
+                    <td><a href="#" id="hrf_detail3" onclick="details(5,'',0);return false;">MTB khác</a></td>
+                    <td><a href="#" id="hrf_detail3" onclick="details(5,1,0);return false;"><?php echo number_format($s_mtb_khac_cty) ?></a></td>
+                    <td><?php echo number_format($c_mtb_khac_cty) ?></td>
+                    <td><a href="#" id="hrf_detail3" onclick="details(5,2,0);return false;"><?php echo number_format($s_mtb_khac_hnam) ?></a></td>
+                    <td><?php echo number_format($c_mtb_khac_hnam) ?></td>
+                </tr>
+                <tr>
+                    <td><a href="#" id="hrf_detail3" onclick="details(5,'',999998);return false;">MTB Apple</a></td>
+                    <td><a href="#" id="hrf_detail3" onclick="details(5,1,999998);return false;"><?php echo number_format($s_mtb_apple_cty) ?></a></td>
+                    <td><?php echo number_format($c_mtb_apple_cty) ?></td>
+                    <td><a href="#" id="hrf_detail3" onclick="details(5,2,999998);return false;"><?php echo number_format($s_mtb_apple_hnam) ?></a></td>
+                    <td><?php echo number_format($c_mtb_apple_hnam) ?></td>
+                </tr>
+                <tr>
+                    <td>Phụ kiện</td>
+                    <td><?php echo number_format($s_phukien_cty) ?></td>
+                    <td><?php echo number_format($c_phukien_cty) ?></td>
+                    <td><?php echo number_format($s_phukien_hnam) ?></td>
+                    <td><?php echo number_format($c_phukien_hnam) ?></td>
+                </tr>
+                <tr>
+                    <td>Laptop</td>
+                    <td><?php echo number_format($s_laptop_cty) ?></td>
+                    <td><?php echo number_format($c_laptop_cty) ?></td>
+                    <td><?php echo number_format($s_laptop_hnam) ?></td>
+                    <td><?php echo number_format($c_laptop_hnam) ?></td>
+                </tr>
+                <tr>
+                    <td>Đồng hồ thông minh</td>
+                    <td><?php echo number_format($s_dhtm_cty) ?></td>
+                    <td><?php echo number_format($c_dhtm_cty) ?></td>
+                    <td><?php echo number_format($s_dhtm_hnam) ?></td>
+                    <td><?php echo number_format($c_dhtm_hnam) ?></td>
+                </tr>
+                
+                <tr>
+                    <td>Kho máy cũ</td>
+                    <td><?php echo number_format($this->kmcu[1]) ?></td>
+                    <td><?php echo number_format($this->ckmcu[1]) ?></td>
+                    <td><?php echo number_format($this->kmcu[2]) ?></td>
+                    <td><?php echo number_format($this->ckmcu[2]) ?></td>
+                </tr>
+                
+                
+                <tr>
+                    <td>Tổng</td>
+                    <td><?php echo number_format($sum) ?></td>
+                    <td><?php echo number_format($count) ?></td>
+                    <td><?php echo number_format($sum_hnam) ?></td>
+                    <td><?php echo number_format($count_hnam) ?></td>
+                </tr>
+            </table>
+            <p class="small" style="color:red"><i>(Đơn vị tính x 1.000)</i></p>
+        </div>
+        
+         <div class="col-md-12">
+            <div id="container" style=" height: 350px; margin: 0 auto; margin-top:0px;"></div>
+        </div><!--
+        <div class="col-md-12">
+            <b><p style="color: red;font-size: 20px">Tổng số lượng:  <?php echo $this->count ?></p></b>
+        </div>-->
+        
+        
+    </div>
+</div>
+<script >
+    function details(productsid,flag,cated_id){
+        var start_end = $( "#start_end" ).val();
+        $("#hrf_detail"+productsid+flag).attr("href", "/admin/user/report/sales?cated_id="+cated_id+"&productsid="+productsid+"&flag="+flag+"&start_end="+start_end);
+        var href = $("#hrf_detail"+productsid+flag).attr('href');
+        window.location = href;
+    }
+</script>

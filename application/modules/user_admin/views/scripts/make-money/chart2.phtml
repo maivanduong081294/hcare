@@ -1,0 +1,313 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script>
+$(function () {
+    $('#container2').highcharts({
+
+        chart: {
+            type: 'column'
+        },
+
+        title: {
+            text: 'Doanh số từng chi nhánh theo giá trị'
+        },
+
+        xAxis: {
+            categories: [<? echo $this->vote_name ?>]
+        },
+
+        yAxis: {
+            allowDecimals: false,
+            min: 0,
+            title: {
+                text: 'Tiền (x 1.000)'
+            }
+        },
+
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.x + '</b><br/>' +
+                    this.series.name + ': ' + this.y + '<br/>' +
+                    'Total: ' + this.point.stackTotal;
+            }
+        },
+
+        plotOptions: {
+            column: {
+                stacking: 'normal'
+            }
+        },
+
+        series: [{name: 'ĐT-Cty',
+            data: <? echo $this->seri ?>,
+            stack: 'dt'
+        },{
+            name: 'ĐT-Hnam',
+            data: <? echo $this->seri_hnam ?>,
+            stack: 'dt'
+        }, {
+            name: 'MTB-Cty',
+            data: <? echo $this->seri_tablet ?>,
+            stack: 'mtb'
+        }, {
+            name: 'MTB-Hnam',
+            data: <? echo $this->seri_tablet_hnam ?>,
+            stack: 'mtb'
+        }, {
+            name: 'Phụ kiện',
+            data: <? echo $this->seri_acc ?>,
+            stack: 'pk'
+        }, {
+            name: 'Laptop-Cty',
+            data: <? echo $this->seri_laptop ?>,
+            stack: 'lt'
+        }, {
+            name: 'Laptop-Hnam',
+            data: <? echo $this->seri_laptop_hnam ?>,
+            stack: 'lt'
+        }]
+    });
+});
+
+//so luong
+$(function () {
+    $('#container').highcharts({
+
+        chart: {
+            type: 'column'
+        },
+
+        title: {
+            text: 'Doanh số từng chi nhánh theo số lượng'
+        },
+
+        xAxis: {
+            categories: [<? echo $this->vote_name ?>]
+        },
+
+        yAxis: {
+            allowDecimals: false,
+            min: 0,
+            title: {
+                text: 'Số lượng'
+            }
+        },
+
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.x + '</b><br/>' +
+                    this.series.name + ': ' + this.y + '<br/>' +
+                    'Total: ' + this.point.stackTotal;
+            }
+        },
+
+        plotOptions: {
+            column: {
+                stacking: 'normal'
+            }
+        },
+
+        series: [{name: 'ĐT-Cty',
+            data: <? echo $this->seri_count ?>,
+            stack: 'dt'
+        },{
+            name: 'ĐT-Hnam',
+            data: <? echo $this->seri_hnam_count ?>,
+            stack: 'dt'
+        }, {
+            name: 'MTB-Cty',
+            data: <? echo $this->seri_tablet_count ?>,
+            stack: 'mtb'
+        }, {
+            name: 'MTB-Hnam',
+            data: <? echo $this->seri_tablet_hnam_count ?>,
+            stack: 'mtb'
+        }, {
+            name: 'Phụ kiện',
+            data: <? echo $this->seri_acc_count ?>,
+            stack: 'pk'
+        }, {
+            name: 'Laptop-Cty',
+            data: <? echo $this->seri_laptop_count ?>,
+            stack: 'lt'
+        }, {
+            name: 'Laptop-Hnam',
+            data: <? echo $this->seri_laptop_hnam_count ?>,
+            stack: 'lt'
+        }]
+    });
+});
+</script>
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="ion ion-clipboard"></i>
+        <h4 class="box-title">Báo cáo tổng quan</h4>
+        
+        <form method="get" id="v" name="v">
+            <div style="float: right" class="form-group">
+                <button type="button" id="btnView" class="btn btn-primary">Xem</button>
+            </div>
+            <div style="float: right;width: 200px">
+                <input  type="text" class="form-control pull-right day_created_end" name="day_created_end" value="<?php echo $this->days_created_end ?>" placeholder="Tìm kiếm theo ngày tháng năm ..." id="reservation"/>
+            </div>
+        </form>
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        
+        <div class="col-md-12">
+            <div id="container2" style=" height: 350px; margin: 0 auto; margin-top:0px;"></div>
+        </div>
+        <div class="col-md-12">
+            <b><p style="color: red;font-size: 20px">Doanh số: <?php echo $this->sum ?></p></b>
+        </div>        
+        <div class="col-md-12 hidden-xs">
+            <table style="font-size: small;font-weight: bold" class="table-bordered table-condensed" >
+                <tr>
+                    <th></th>
+                    <th>Điện thoại</th>
+                    <th>Máy tính bảng</th>
+                    <th>Phụ kiện</th>
+                    <th>Laptop</th>
+                </tr>
+                <tr>
+                    <td>Công ty</td>
+                    <td><?php echo $this->sum_phone_cty ?></td>
+                    <td><?php echo $this->sum_tablet_cty ?></td>
+                    <td><?php echo $this->sum_acc_cty ?></td>
+                    <td><?php echo $this->sum_laptop_cty ?></td>
+                </tr>
+                <tr>
+                    <td>Hnam</td>
+                    <td><?php echo $this->sum_phone_hnam ?></td>
+                    <td><?php echo $this->sum_tablet_hnam ?></td>
+                    <td><?php echo $this->sum_acc_hnam ?></td>
+                    <td><?php echo $this->sum_laptop_hnam ?></td>
+                </tr>
+                <tr>
+                    <td>Tổng</td>
+                    <td><?php echo $this->sum_phone ?></td>
+                    <td><?php echo $this->sum_tablet ?></td>
+                    <td><?php echo $this->sum_acc ?></td>
+                    <td><?php echo $this->sum_laptop ?></td>
+                </tr>
+            </table>
+            <p class="small" style="color:red"><i>(Đơn vị tính x 1.000)</i></p>
+        </div>
+        <div class="col-md-12 visible-xs">
+            <table style="font-size: 15px;font-weight: bold" class="table-bordered table-condensed" >
+                <tr>
+                    <th></th>
+                    <th>Điện thoại</th>
+                    <th>Máy tính bảng</th>
+                    <th>Phụ kiện</th>
+                    <th>Laptop</th>
+                </tr>
+                <tr>
+                    <td>Công ty</td>
+                    <td><?php echo $this->sum_phone_cty_lite ?></td>
+                    <td><?php echo $this->sum_tablet_cty_lite ?></td>
+                    <td><?php echo $this->sum_acc_cty_lite ?></td>
+                    <td><?php echo $this->sum_laptop_cty_lite ?></td>
+                </tr>
+                <tr>
+                    <td>Hnam</td>
+                    <td><?php echo $this->sum_phone_hnam_lite ?></td>
+                    <td><?php echo $this->sum_tablet_hnam_lite ?></td>
+                    <td><?php echo $this->sum_acc_hnam_lite ?></td>
+                    <td><?php echo $this->sum_laptop_hnam_lite ?></td>
+                </tr>
+                <tr>
+                    <td>Tổng</td>
+                    <td><?php echo $this->sum_phone_lite ?></td>
+                    <td><?php echo $this->sum_tablet_lite ?></td>
+                    <td><?php echo $this->sum_acc_lite ?></td>
+                    <td><?php echo $this->sum_laptop_lite ?></td>
+                </tr>
+            </table>
+        </div>
+         <div class="col-md-12">
+            <div id="container" style=" height: 350px; margin: 0 auto; margin-top:0px;"></div>
+        </div>
+        <div class="col-md-12">
+            <b><p style="color: red;font-size: 20px">Tổng số lượng:  <?php echo $this->count ?></p></b>
+        </div>
+        <div class="col-md-12 hidden-xs">
+            <table style="font-size: 15px;font-weight: bold" class="table-bordered table-condensed" >
+                <tr>
+                    <th></th>
+                    <th>Điện thoại</th>
+                    <th>Máy tính bảng</th>
+                    <th>Phụ kiện</th>
+                    <th>Laptop</th>
+                </tr>
+                <tr>
+                    <td>Công ty</td>
+                    <td><?php echo $this->count_phone_cty ?></td>
+                    <td><?php echo $this->count_tablet_cty ?></td>
+                    <td><?php echo $this->count_acc_cty ?></td>
+                    <td><?php echo $this->count_laptop_cty ?></td>
+                </tr>
+                <tr>
+                    <td>Hnam</td>
+                    <td><?php echo $this->count_phone_hnam ?></td>
+                    <td><?php echo $this->count_tablet_hnam ?></td>
+                    <td><?php echo $this->count_acc_hnam ?></td>
+                    <td><?php echo $this->count_laptop_hnam ?></td>
+                </tr>
+                <tr>
+                    <td>Tổng</td>
+                    <td><?php echo $this->count_phone ?></td>
+                    <td><?php echo $this->count_tablet ?></td>
+                    <td><?php echo $this->count_acc ?></td>
+                    <td><?php echo $this->count_laptop ?></td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-12 visible-xs">
+            <table style="font-size: small;font-weight: bold" class="table-bordered table-condensed" >
+                <tr>
+                    <th></th>
+                    <th>Điện thoại</th>
+                    <th>Máy tính bảng</th>
+                    <th>Phụ kiện</th>
+                    <th>Laptop</th>
+                </tr>
+                <tr>
+                    <td>Công ty</td>
+                    <td><?php echo $this->count_phone_cty ?></td>
+                    <td><?php echo $this->count_tablet_cty ?></td>
+                    <td><?php echo $this->count_acc_cty ?></td>
+                    <td><?php echo $this->count_laptop_cty ?></td>
+                </tr>
+                <tr>
+                    <td>Hnam</td>
+                    <td><?php echo $this->count_phone_hnam ?></td>
+                    <td><?php echo $this->count_tablet_hnam ?></td>
+                    <td><?php echo $this->count_acc_hnam ?></td>
+                    <td><?php echo $this->count_laptop_hnam ?></td>
+                </tr>
+                <tr>
+                    <td>Tổng</td>
+                    <td><?php echo $this->count_phone ?></td>
+                    <td><?php echo $this->count_tablet ?></td>
+                    <td><?php echo $this->count_acc ?></td>
+                    <td><?php echo $this->count_laptop ?></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    
+        $().ready(function () {
+            $('#btnView').click(function (e) {
+            e.preventDefault();
+            $("#v").attr("action", "/admin/user/make-money/chart2");
+            $("#v").submit();
+        });
+        });
+    </script>
+    
+    

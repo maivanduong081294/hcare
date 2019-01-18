@@ -1,0 +1,230 @@
+
+<form role="form" id="view-sales-day"   class="frmReport">
+    <div class="form-group" style="float: left;margin-left: 60px">
+        <div  class="input-group" style="width:405px">
+            <span class="input-group-addon"><i class="fa fa-list"></i></span>
+            <select id="vote-name" name="vote-name" class="form-control">
+                <option value="0">Tất cả</option>
+                <?php
+                foreach ($this->items as $list) {
+                    $slected = '';
+                    if ($list['userid'] == $this->v_id) {
+                        $slected = 'selected="selected"';
+                    }
+                    if ($list['userid'] == null) {
+                        $list['userid'] = 21;
+                    }
+                    ?>
+                    <?php if ($list['userid'] != 14) { ?>
+                        <option <?php echo $slected ?> value="<?php echo $list['userid'] ?>"><?php echo $list['vote_name'] ?></option>
+                    <?php } ?>
+<?php } ?>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div  class="input-group">
+            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            <select style="width: 80px;height:34px" id="month_create" name="month_create" >
+                <?php
+                foreach ($this->months_view as $month) {
+                    $month_select = '';
+                    if ($month == $this->months) {
+                        $month_select = 'selected="selected"';
+                    }
+                    ?>
+                    <option <?php echo $month_select ?> value="<?php echo $month ?>">
+                        Tháng <?php echo $month ?>
+                    </option>
+<?php } ?>
+            </select>
+            <select style="width: 90px;height:34px" id="year_create" name="year_create">
+                <option value="<?php echo date('Y') ?>">
+                    Năm <?php echo date('Y') ?>
+                </option>
+            </select>
+        </div> 
+
+    </div>
+    <div class="form-group" style="margin-top: -50px;float: left">
+        <button type="submit" id="btnView" class="btn btn-primary">Xem</button>
+    </div>
+</form>
+
+<script>
+    $('#btnView').click(function(e) {
+        var vote_id = $('#vote-name').val();
+//        alert(vote_id);//return false;
+        if (vote_id != 0) {
+            $("#view-sales-day").attr("action", "/admin/user/sales/index2");
+            $("#view-sales-day").submit();
+        } else {
+            $("#view-sales-day").attr("action", "/admin/user/sales/");
+            $("#view-sales-day").submit();
+        }
+
+
+    });
+</script>                                   
+
+<div class="box box-primary">
+    <div class="box-body">
+        <ul class="todo-list">
+            <table class="table table-data table-striped table-bordered">
+                <tbody>
+                    <tr>
+                        <th>Doanh số tháng 
+                            <?php
+                            if ($this->months == null) {
+                                echo date('m');
+                            } else {
+                                echo $this->months;
+                            }
+                            ?>
+                            Các chi nhánh</strong>
+                <div style="float:right">
+                    <form  action="/admin/user/make-money/add">
+                        <button class="btn btn-primary"><i class="fa fa-plus"></i>Thêm Thưởng</button>
+                    </form>
+                </div>
+                </th>
+                </tr>
+                <?php
+                foreach ($this->items as $list1) {
+                    ?>
+                    <tr class="row-<?php echo $list1["userid"]; ?>"><td>
+                            <!--Tung chi nhanh-->
+    <?php if ($list1["userid"] != 14) { ?>
+                                <strong style="font-size: 17px"> Chi nhánh <?php echo $list1["storename"]; ?> </strong>
+                                <div class="table-responsive">
+
+                                    <table class="table table-data table-striped table-bordered table-hover">
+                                        <tbody>
+                                            <tr>
+                                                <th>Loại sản phẩm</th>
+                                                <th>Chỉ tiêu(Tiền)</th>
+                                                <th>Doanh số bán được</th>
+                                                <th >Chỉ tiêu(Số lượng)</th>
+                                                <th >Doanh số bán được</th>
+                                                <th>Tháng</th>
+                                                <th>Lựa chọn</th>
+                                            </tr>
+                                            <?php
+                                            foreach ($list1["list2"] as $item3) {
+                                                $is_actived = $item3["is_actived"];
+                                                ?>
+                                                <tr class="row-<?php echo $item3["id"]; ?>">
+                                                    <td><?php echo $item3["cate_product_name"]; ?></td>
+                                                    <td><?php echo number_format($item3["sum_prices"]); ?> VND</td>
+                                                    <td <?php echo $back_groundds ?>><strong> 
+                                                            <?php
+                                                            if ($item3["cateid_products"] == 1) {
+                                                                echo number_format($list1["sumPriceCTY"]) . 'VNĐ';
+                                                            }
+                                                            if ($item3["cateid_products"] == 2) {
+                                                                echo number_format($list1["sumPriceXTAY"]) . 'VNĐ';
+                                                            }
+                                                            if ($item3["cateid_products"] == 3) {
+                                                                echo number_format($list1["sumPriceLKIEN"]) . 'VNĐ';
+                                                            }
+                                                            ?>
+                                                        </strong>
+                                                    </td>
+                                                    <td><?php echo number_format($item3["sum_numbers"]); ?> Sản phẩm</td>
+                                                    <td><strong>
+                                                            <?php
+                                                            if ($item3["cateid_products"] == 1) {
+                                                                echo number_format($list1["countProductCTY"]) . ' Sản phẩm';
+                                                            }
+                                                            if ($item3["cateid_products"] == 2) {
+                                                                echo number_format($list1["countProductXTAY"]) . ' Sản phẩm';
+                                                            }
+                                                            if ($item3["cateid_products"] == 3) {
+                                                                echo number_format($list1["countProductLKIEN"]) . ' Sản phẩm';
+                                                            }
+                                                            ?>
+                                                        </strong>
+                                                    </td>
+                                                    <td>Tháng <?php echo $this->months; ?> / <?php echo $this->years; ?></td>
+                                                    <td><a class="btn btn-flat btn-info btn-sm" data-toggle="tooltip" id="edit-<?php echo $item3["id"]; ?>"  href="/admin/user/sales/edit-sales?id=<?php echo $item3["id"]; ?>&month=<?php
+                                                        if ($this->months == null) {
+                                                            echo date('m');
+                                                        } else {
+                                                            echo $this->months;
+                                                        }
+                                                        ?>" ><i class="fa fa-edit"></i></a>
+                                                        <?php if ($is_actived == '0'): ?>
+                                                            <a id="retore-<?php echo $item3["id"]; ?>" class="btn btn-flat btn-warning btn-sm" data-toggle="tooltip"  href="#"><i class="fa fa-reply"></i></a>
+            <?php else: ?>
+                                                            <a id="delete-<?php echo $item3["id"]; ?>" class="btn btn-flat btn-danger btn-sm" data-toggle="tooltip" rels="<?php echo $item3["id"] ?>"  href="#"><i class="fa fa-trash-o"></i></a>
+            <?php endif; ?>
+                                                    </td>
+                                                </tr>
+                                            <div id="ddelete" style="display:none;"></div>
+                                            <script>
+                                                function checkme()
+                                                {
+                                                    isCheck = document.frmPage.checkall.checked;
+                                                    elts = document.frmPage.elements['check[]'];
+                                                    if (!elts.length)
+                                                    {
+                                                        elts.checked = isCheck;
+                                                    }
+                                                    else
+                                                    {
+                                                        for (i = 0; i < elts.length; i++)
+                                                            elts[i].checked = isCheck;
+                                                    }
+                                                }
+                                                function isCheckDetail() {
+                                                    result = 0;
+                                                    $('input:checkbox').each(function() {
+                                                        if ($(this).attr('checked') == true)
+                                                            result = 1;
+                                                    });
+                                                    return result;
+                                                }
+
+                                                $().ready(function() {
+                                                    $('#delete-<?php echo $item3["id"] ?>').click(function() {
+                                                        result = isCheckDetail();
+                                                        id = $(this).attr('rels');
+                                                        //                                                            alert(id);return false;
+                                                        if (id != '')
+                                                            result = confirm('Bạn chắc chắn muốn xoá ?');
+                                                        if (result)
+                                                            $('#ddelete').load('/admin/user/sales/delete-sales?id=' + id, function() {
+                                                                //                                                                    return false;
+                                                                alert('Xoá  thành công.');
+                                                                window.location.reload(true);
+                                                            });
+                                                    });
+                                                });
+                                                $().ready(function() {
+                                                    $("retore-<?php echo $item3["id"] ?>").click(function() {
+                                                        alert("Bạn vui lòng liên hệ bộ phận IT");
+                                                        return false;
+                                                    });
+                                                });
+                                            </script>
+
+        <?php } ?>
+                                        <tr style="color: red;font-size: 15px">
+                                            <th>Tổng cộng</th>
+                                            <th><strong> <?php echo number_format($list1["tonggia"]) . ' VNĐ' ?></strong></th>
+                                            <th  style="color:#000000"><strong> <?php echo number_format($list1["sumPriceCTY"] + $list1["sumPriceXTAY"] + $list1["sumPriceLKIEN"]) . ' VNĐ' ?></strong></th>
+                                            <th><strong><?php echo number_format($list1["soluong"]) . ' Sản phẩm' ?></strong></th>
+                                            <th colspan="3" style="color:#000000"><strong><?php echo number_format($list1["countProductCTY"] + $list1["countProductXTAY"] + $list1["countProductLKIEN"]) . ' Sản phẩm' ?></strong></th>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+    <?php } ?>
+                            <!--Ket thuc tung chi nhanh-->
+                        </td></tr>
+<?php } ?>
+                </tbody>
+            </table>
+        </ul>
+    </div><!-- /.box-body -->
+</div><!-- /.box -->

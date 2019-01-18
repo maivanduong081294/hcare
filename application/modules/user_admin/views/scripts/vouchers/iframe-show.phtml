@@ -1,0 +1,27 @@
+<?php foreach ($this->list as $items){
+            $token = md5($this->skey.$items["id"].$this->parentid);
+            ?>
+        <div class="col-md-2">
+            <a class="btn" onclick="get_voucher_web(<?php echo $items["id"] ?>,'<?php echo $token ?>');return false;">
+            <img class="image img-responsive" src="/images/gift_vouchers.jpg" />
+            </a>
+            <table class="table table-condensed table-striped">
+                <tr style="height: 70px">
+                    <td colspan="2"><a onclick="get_voucher_web(<?php echo $items["id"] ?>,'<?php echo $token ?>');return false;"><?php echo $items["note"]; ?></a></td>
+                </tr>
+                <tr>
+                    <td>Giá trị voucher</td>
+                    <td><?php echo number_format($items["code_value"]); ?></td>
+                </tr>
+                <tr>
+                    <td>Chặn trên</td>
+                    <td><?php echo number_format($items["limit_down"]); ?></td>
+                </tr>
+                <tr>
+                    <td>Chặn dưới</td>
+                    <td><?php echo number_format($items["limit_up"]); ?></td>
+                </tr>
+            </table>
+        </div>
+        <?php }?>
+<input type="hidden" name="ssphone" id="ssphone" value="<?php echo $this->phone ?>" />

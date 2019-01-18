@@ -1,0 +1,196 @@
+<style>
+    #paging_klinen{
+        height: 23px;
+        width: 600px;
+    }
+    #paging_klinen img {
+        height: 25px;
+        width: 28px;
+        margin-top: -3px;
+    }
+    #paging_klinen span{
+        /*font-size: 20px;*/
+        background: #f05920;
+        color: #ffffff;
+        padding :4px 10px;
+    }
+    .pagingItems{
+        background: #f3f3f3;
+        padding :4px 10px;
+        color: #777777;
+        font-weight: bold;
+        margin-top: 5px;
+    }
+    .pagingItems hover {
+        background: #f05920;
+    }
+</style>
+<div class="panel-default">
+    <div class="box-header">
+        <i class="ion ion-clipboard"></i>
+        <h3 class="box-title">Danh sách cường lực</h3>
+        <?php if($this->add): ?>
+            <a href="#" id="addPBH" class="btn btn-primary pull-right">Thêm sản phẩm</a>
+        <?php endif; ?>
+    </div>
+
+    <?php if($this->add): ?>
+    <div class="col-md-12" style="display: none" id="formAdd">
+        <form action="/admin/user/guaranteepk/add-products-bao-hiem">
+            <input type="text" name="itemid" placeholder="Item ID" required="true">
+            <input type="text" name="ma_vt" placeholder="Mã vật tư" required="true">
+            <input type="submit" value="submit">
+        </form>
+    </div>
+    <?php endif; ?>
+</div>
+<div class="clearfix"></div>
+<div class="box-body">
+    <div class="table-responsive">
+        <div class="col-md-12">
+            <div><?php echo $this->paging_template ?></div>
+        </div>
+        <div class="clearfix"></div>
+        <table id="f_tables" class="table table-data table-striped table-bordered table-hover table-condensed">
+            <thead>
+            <tr>
+                <th width="10">STT</th>
+                <th width="100">ID sản phẩm</th>
+                <th>Tên</th>
+                <th>Giá</th>
+                <th>Ngày tạo</th>
+                <?php if($this->add): ?>
+                <th width="50"></th>
+                <?php endif; ?>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            $no = 1;
+            foreach ($this->list as $key=>$list) {
+                if ($no % 2 == 0)
+                    $bgcolor = '#ccc';
+                else
+                    $bgcolor = '#ffffff';
+                ?>
+                <?php if ($list["username"] != "vote_all") { ?>
+                    <tr bgcolor="<?php echo $bgcolor; ?>" class="row-<?php echo $list["itemid"]; ?>">
+                        <td><?php echo $no ?></td>
+                        <td><?php echo $list["itemid"] ?></td>
+                        <td><?php echo $list["title"] ?></td>
+                        <td>
+                            <?php if($this->add): ?>
+                                <form action="/admin/user/guaranteepk/update-price-pbh">
+                                    <input type="text" class="pull-left" name="ma_vt" value="<?php echo $list["ma_vt"]; ?>">
+                                    <input type="hidden" name="id" value="<?php echo $list["id"] ?>">
+                                    <input class="pull-left" type="submit" id="savePrice" value="Lưu">
+                                </form>
+                            <?php else: ?>
+                                <?php echo $list["ma_vt"]; ?>
+                            <?php endif; ?>
+                        </td>
+                        <td><?php echo date('d/m/y', strtotime($list['datetime'])); ?></td>
+                        <?php if($this->add): ?>
+                        <td>
+                            <form action="/admin/user/guaranteepk/remove-pbh">
+                                <input type="hidden" name="id" value="<?php echo $list["id"] ?>">
+                            </form>
+                            <a href="#" class="btn btn-danger" data-itemid="<?php echo $list["itemid"] ?>" id="removePBH"><i class="fa fa-trash"></i></a>
+                        </td>
+                        <?php endif; ?>
+                    </tr>
+                    <? $no++;?>
+                <?php } ?>
+
+
+            <?php } ?>
+            </tbody>
+        </table>
+    </div>
+    <div id="popup">
+        <div id="popup-overlay"></div>
+        <div id="popup-content">
+            <form action="#" method="post" id="formUploadBaoHiem">
+                <div class="form-group">
+                    <label for="image">Hình ảnh</label>
+                    <input type="file" id="image" name="image" required="true">
+                </div>
+                <div class="form-group" id="newimei">
+                    <label for="imes_may">IMEI máy</label>
+                    <input type="text" id="imes_may" name="imes_may" required="true" placeholder="imei máy">
+                </div>
+                <div class="form-group">
+                    <input class="btn btn-primary" type="submit" value="Đăng">
+                    <input type="hidden" id="bill_id" name="bill_id">
+                    <input type="hidden" id="imes_md" name="imes_md">
+                    <input type="hidden" id="keycache" name="keycache" value="<?php echo $this->key; ?>">
+                </div>
+            </form>
+            <a id="popup-close" href="#" class="btn btn-primary">x</a>
+        </div>
+    </div>
+</div><!-- /.box-body -->
+<div id="ddelete" style="display:none;"></div>
+<script type="text/javascript">
+    $(document).ready(function($){
+        $(document).on('click','#addPBH',function (e) {
+            e.preventDefault();
+            $('#formAdd').slideDown();
+        });
+        $(document).on('click','#removePBH',function (e) {
+            e.preventDefault();
+            $(this).siblings('form').submit();
+        });
+    });
+    $("#f_tables").DataTable();
+</script>
+<style>
+    div#popup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 999999;
+        display: none;
+    }
+    a#popup-close {
+        position: absolute;
+        top: -16px;
+        right: -16px;
+        border-radius: 100%;
+    }
+    div#popup-overlay {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+    }
+    div#popup-content {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 326px;
+        background: #fff;
+        box-shadow: 0 0 10px #00000070;
+        border-radius: 5px;
+        padding: 10px;
+        transform: translate(-50%, -50%);
+    }
+    #popup .form-group label {
+        margin-bottom: 4px !important;
+        display: inline-block !important;
+    }
+    #popup .form-group input {
+        border-radius: 3px;
+        width: 100%;
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        outline: none;
+    }
+    #popup .form-group:last-child {
+        margin-bottom: 0;
+    }
+</style>

@@ -1,0 +1,57 @@
+<?if(Business_Common_Users::checkRight('admin blocks')) 
+{?>
+<h2 class="admin_h2">Admin Block Management</h2>
+<div id="admin_menu">
+<ul class="menu">
+	<!-- 
+	<li class="expanded"><a href="/admin/layout/list">Layouts Management</a>
+		<ul class="menu">
+			<li class="leaf last"><a href="/admin/block/list">Blocks Management</a></li>
+		</ul>
+	</li>
+	 -->
+	<li class="leaf"><a href="/admin/layout/list">Layouts Management</a></li>
+	<li class="leaf last"><a href="/admin/block/list">Blocks Management</a></li>
+	<li class="leaf last"><a href="/admin/box/list">Boxes Management</a></li>
+	<li class="leaf last"><a href="/admin/view/list">Views Management</a></li>
+	<li class="leaf last"><a href="/admin/extview/list">ExtView Management</a></li>
+	<li class="leaf last"><a href="/admin/content/list">Contents Management</a></li>
+</ul>
+</div>
+<?
+}?>
+<?if(Business_Common_Users::checkRight('change password')) 
+{?>
+<h2 class="admin_h2">Edit User</h2>
+<div id="admin_menu">
+<ul class="menu">
+	<li class="leaf last"><a href="/admin/users/change-pass">Change password</a></li>	
+</ul>
+</div>
+<?
+}?>
+
+<?if(Business_Common_Users::checkRight('user blocks')) 
+{?>
+<h2 class="admin_h2">User Management</h2>
+<div id="admin_menu">
+<ul class="menu">
+	<li class="leaf last"><a href="/admin/users/list">Users</a></li>
+	<li class="leaf last"><a href="/admin/permissions/list">Permissions</a></li>
+	<li class="leaf last"><a href="/admin/roles/list">Roles</a></li>
+</ul>
+</div>
+<?
+}?>
+
+<?if(Business_Common_Users::checkRight('admin misc')) 
+{?>
+<h2 class="admin_h2">Admin Common Management</h2>
+<div id="admin_menu">
+<ul class="menu">
+	<li class="leaf last"><a href="/admin/category/catename-list">Category Management</a></li>
+	<li class="leaf last"><a href="/admin/variables/list">Variables Management</a></li>
+</ul>
+</div>
+<?
+}?>

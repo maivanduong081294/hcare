@@ -1,0 +1,181 @@
+<link href="/backend/dist/css/fixtable.css" rel="stylesheet" type="text/css"/>
+<style>
+    @media (min-width: 1400px) {
+        .sheight{height: 500px !important;}
+    }
+    @media only screen and (max-width: 600px) {
+        .mwidth{
+            width: 50% !important;
+        }
+    } 
+    .form-group{
+        padding-left: 0px;
+    }
+</style>
+
+    <div class="box-header">
+        <div class="col-md-9">
+            <i class="ion ion-clipboard"></i>
+            <h4 class="box-title">DOANH SỐ BÁN HNAMMOBILE Chi nhánh : <?php echo $this->storename[$this->storeid] ?></h4>
+        </div>
+    </div><!-- /.box-header -->
+        <form role="form" id="frm" method="get"  class="frmReport">
+            <input type="hidden" name="products_id" id="products_id" value="<?php echo $this->products_id ?>" />
+            <input type="hidden" name="storeid" id="storeid" value="<?php echo $this->storeid ?>" />
+            
+            <div class="col-md-3">
+                <b style="font-size: 20px"><?php echo $this->detail["title"]; ?></b>
+                <div class="form-group">
+                    <div class="input-group input-group-sm">
+                        <?php
+                        $start_end = 'Date range picker';
+                        if ($this->start_end != null) {
+                            $start_end = $this->start_end;
+                        }
+                        ?>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default pull-right" id="daterange-btn">
+                                <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                                <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                        </span>
+
+                        <span class="input-group-btn">
+                            <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> <span class="hidden-xs">Xem</span> </i></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    <div class="clearfix"></div>
+    <div class="box-body">
+        <table class="table table-condensed table-hover table-bordered table-striped">
+                <tr>
+                    <th width="10">STT</th>
+                    <th>Mã đơn hàng</th>
+                    <th>Ngày tạo</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Màu</th>
+                    <th>Giá gốc</th>
+                    <th>Giảm tiền</th>
+                    <th>Voucher</th>
+                    <th>Tiền thưởng kỹ thuật</th>
+                    <th>Giá cuối</th>
+                </tr>
+                <?php
+                $stt=0;
+                foreach ($this->list as $list){ ?>
+                <tr>
+                    <td><?php echo ++$stt ?></td>
+                    <td><a onclick="show_print(<?php echo $list["id_addon_user"] ?>,0);return false;">#<?php echo $list["id_addon_user"] ?></a></td>
+                    <td><?php echo date('d/m/Y H:i:s',  strtotime($list["create_date"])) ?></td>
+                    <td><?php echo $list["products_name"] ?></td>
+                    <td><?php echo $this->name_color[$list["colorid"]] ?></td>
+                    <td><?php echo number_format($list["products_price_cost"]) ?></td>
+                    <td><?php echo number_format($list["reduction_money"]) ?></td>
+                    <td><?php echo number_format($list["money_voucher"]) ?></td>
+                    <td><?php echo number_format($list["bonus_tech"]) ?></td>
+                    <td><?php echo number_format($list["sum"]) ?></td>
+                </tr>
+                <?php }?>
+        </table>
+    </div>
+<div class="modal fade" id="print">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="show_print">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function show_print(id_addon_user,tprint) {
+        $.ajax
+        ({
+            method: "POST",
+            url: "/payorder/get-print",
+            data: {id_addon_user: id_addon_user, tprint:tprint},
+            dataType: "html",
+            success: function (data) {
+                console.log(data);
+                $('.show_print').html(data);
+                $('#print').modal('show');
+            }
+        });
+    }
+    function detailsales(catedid) {
+        var productsid = $("#productsid option:selected").val();
+        var flag = $("#flag option:selected").val();
+        var is_apple = $("#is_apple option:selected").val();
+        var is_type = $("#is_type option:selected").val();
+        var storeid = $("#storeid option:selected").val();
+        var start_end = $("#start_end").val();
+        $("#hrf_detail" + catedid).attr("href", "/admin/user/report/sales?cated_id=" + catedid + "&productsid=" + productsid + "&flag=" + flag + "&start_end=" + start_end+ "&is_apple=" + is_apple+ "&is_type=" + is_type+ "&storeid=" + storeid);
+        var href = $("#hrf_detail" + catedid).attr('href');
+        window.location = href;
+    }
+    function hrf() {
+        var productsid = $("#productsid option:selected").val();
+        var flag = $("#flag option:selected").val();
+        var start_end = $("#start_end").val();
+        $("#hrf_detail").attr("href", "/admin/user/target/money-monthly?productsid=" + productsid + "&flag=" + flag + "&start_end=" + start_end);
+    }
+    $().ready(function () {
+        $('#cated_id').change(function (e) {
+            e.preventDefault();
+            var cated_name = $("#cated_id option:selected").text();
+            $('#cated_name').val(cated_name);
+        });
+
+
+        $('#productsid').change(function () {
+            var productsid = $('#productsid option:selected').val();
+            $('#cated_id').html('');
+            $('#cated_id').html('<option value="0"> Tất cả</option>');
+            var ajaxLink = '/admin/user/ajax/get-menu';
+            $.ajax({
+                method: 'get',
+                cache: false,
+                url: ajaxLink,
+                data: {productsid: productsid},
+                dataType: 'json',
+                success: function (resp) {
+                    console.log(resp);
+                    $.each(resp, function (i) {
+                        html_cated_id = '<option  value="' + resp[i].itemid + '">' + resp[i].title + '</option>';
+                        $('#cated_id').append(html_cated_id);
+                    });
+
+                }
+            });
+        });
+
+
+        $('#export').click(function (e) {
+            e.preventDefault();
+            var cated_id = $('#cated_id').val();
+            if (cated_id == 0) {
+                alert('Vui lòng chọn loại để export');
+                return false;
+            } else {
+                $("#frm").attr("action", "/admin/user/report/export-sales");
+            }
+            $("#frm").submit();
+        });
+        $('#export_lite').click(function (e) {
+            e.preventDefault();
+            var cated_id = $('#cated_id').val();
+            if (cated_id == 0) {
+                alert('Vui lòng chọn loại để export');
+                return false;
+            } else {
+                $("#frm").attr("action", "/admin/user/report/export-sales-lite");
+            }
+            $("#frm").submit();
+        });
+    });
+</script>

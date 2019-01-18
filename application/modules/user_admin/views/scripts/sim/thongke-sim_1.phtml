@@ -1,0 +1,102 @@
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="ion ion-clipboard"></i>
+                <h3 class="box-title">DANH SÁCH SIM TẠI HỆ THỐNG HNAMMOBILE.COM</h3>
+            </div><!-- /.box-header -->
+            <form role="form" id="view-sales-day" method="get"  class="frmReport">
+                    <div class="form-group"  style="float: left;max-width: 650px">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input id="reservation" class="form-control" value="<?php echo $this->days_created_end ?>" name="day_created_end" type="text" placeholder="Nhập ngày tháng năm ...." />
+                        </div><!-- /.input group -->
+
+                    </div>
+                <div class="form-group">
+                        <button type="button" id="btnView" class="btn btn-primary">Xem</button>
+                    </div>
+            </form>
+            <div class="box-body">
+                <div class="table-responsive">
+
+                    <table class="table table-data table-striped table-bordered table-hover">
+                        <tbody>
+
+                            <tr>
+                                <th><input name="select-all" type="checkbox" data-toggle="tooltip" title="Select All"/></th>
+                                <th>Chi nhánh</th>
+                                <th>Sim đã active</th>
+                                <th>sim chưa active</th>
+                                <th>Tổng sim</th>
+                                <th>Tỷ trọng</th>
+                            </tr>
+                            <?php
+                            $no = 1;
+                            foreach ($this->list_vote as $list) {
+                                $storeid = $list["userid"];
+                                $__total = (int)$this->count_simActive[$storeid][1];
+                                $__total2 = (int)$this->count_simActive[$storeid][0];
+                                $__sum = $__total+$__total2;
+                                $check_dat = ($__total/$__sum) * 100;
+                                if(round($check_dat,2) > 100){
+                                    $color = "#3c8dbc";
+                                }else{
+                                   $color = "red"; 
+                                }
+                                if(round($check_dat,2) > 100){
+                                    $check_dat = 100;
+                                }
+                                if ($no % 2 == 0)
+                                    $bgcolor = '#ccc';
+                                else
+                                    $bgcolor = '#ffffff';
+                                $is_actived = $list["enabled"];
+                                ?>
+                                <?php if($list["username"] !="vote_all" && $list["username"] !="vote_saleonline"){ ?>
+                                <tr bgcolor="<?echo $bgcolor; ?>" class="row-<?php echo $list["userid"]; ?>">
+                                    <? $no++;?>
+                                    <td><input type="checkbox" name="select-user[]" class="check-user minimal-red" value="<?php echo $list["userid"]; ?>"/></td>
+                                    <td><?php echo $list["storename"]; ?></td>
+                                    <td><?php  echo $__total?></td>
+                                    <td><?php  echo $__total2?></td>
+                                    <td><?php  echo $__sum?></td>
+                                    <td style="background: <?php echo $color  ?> ; color: #FFF" width="70"><?php echo round($check_dat,2)  ?>%</td>
+                                </tr>
+                                <?php }?>
+                            <div id="ddelete" style="display:none;"></div>
+                            <?php
+                            $sum +=$__total;
+                            $sum2 +=$__total2;
+                            $sum3 +=$__sum;
+                            ?>
+                        <?php } ?>
+
+                        <tr style="color: red ;font-size: 15px">
+                            <th><input onclick="checkme()" name="checkall" type="checkbox" data-toggle="tooltip" title="Select All"/></th>
+                            <th colspan="1">Tổng cộng</th>
+                            <th colspan="1"><strong><?php echo $sum ?></strong></th>
+                            <th colspan="1"><strong><?php echo $sum2 ?> </strong></th>
+                            <th colspan="1"><strong><?php echo $sum3 ?></strong></th>
+                            <th colspan="1"></th>
+                        </tr>     
+                        </tbody>
+
+                    </table>
+                    <div class=" btn dat">Đạt</div>
+                    <div class="btn nodat">Không đạt</div>
+                </div>
+            </div><!-- /.box-body -->
+
+        </div><!-- /.box -->
+<script>
+    $().ready(function () {
+
+        $('#btnView').click(function (e) {
+            e.preventDefault();
+            $("#view-sales-day").attr("action", "/admin/user/sim/thongke-sim");
+            $("#view-sales-day").submit();
+            
+        });
+    });
+</script>

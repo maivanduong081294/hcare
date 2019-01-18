@@ -1,0 +1,22 @@
+<?php if(isset($this->result)) echo $this->result; ?>
+<form method="POST" enctype="multipart/form-data">
+	<div>
+		<input type="file" name="file" id="file"/>
+	</div>
+	<div>
+		<select name="type">
+			<option value="">Mặc Định</option>
+			<option value="scale">Scale</option>
+			<option value="fit">Fit</option>
+			<option value="cover">Cover</option>
+			<option value="thumb">Thumb</option>
+		</select>
+	</div>
+	<div>
+		<input type="number" name="width" id="width" placeholder="width" />
+	</div>
+	<div>
+		<input type="number" name="height" id="height" placeholder="height"/>
+	</div>
+	<input type="submit" value="submit"/>
+</form>

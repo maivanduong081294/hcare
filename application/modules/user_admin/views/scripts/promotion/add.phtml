@@ -1,0 +1,542 @@
+<script>
+    $(document).ready(function () {
+        availableTags = [<?php echo SEOPlugin::getAllTagsByCateid2(); ?>];
+        availableTags2 = [<?php echo SEOPlugin::getAllTagsPromotion(); ?>];
+        $("#title_km").autocomplete({
+            source: availableTags2,
+            select: function (a, b) {
+                $(this).val(b.item.value);
+            }
+        });
+        $("#product_ids").autocomplete({
+            source: availableTags,
+            select: function (a, b) {
+                $(this).val(b.item.value);
+                var encodedProductName = encodeURIComponent(b.item.value);
+                var ajaxLink = '/sales/get-color';
+                $.ajax({
+                    method: 'get',
+                    cache: false,
+                    url: ajaxLink,
+                    data: {pid: encodedProductName},
+                    dataType: 'json',
+                    success: function (resp) {
+                        $('.pcolor0').html('');
+                        $('.pcolor0').html('<option value ="0"> Tất cả</option>');
+                        $.each(resp, function (i) {
+                            var color = '<option value="' + resp[i].colorid + '">' + resp[i].ncolorid + '</option>';
+                            $('.pcolor0').append(color);
+                        });
+                    }
+                });
+            }
+        });
+        $("#itemid_title").autocomplete({
+            source: availableTags,
+            select: function (a, b) {
+                $(this).val(b.item.value);
+            }
+        });
+    });
+</script>
+<div class="box box-primary">
+    <div class="box-header">
+        <h3 class="box-title">THÔNG TIN KHUYẾN MÃI-HNAMMOBILE</h3>
+    </div><!-- /.box-header -->
+    <!-- form start -->
+    <div class="box-body">
+        <form role="form" action=""  id="data_frm" name="data_frm" method="POST" class="frmReport">
+        <div class="col-md-6">
+                    <div class="form-group">
+                        
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Chương trình KM: </label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-desktop"></i>
+                            </div>
+                            <select name="ctkm" id="ctkm" class="form-control">
+                                <option value="0">Mặc định</option>
+                                <?php foreach ($this->list_ctkm as $items){ ?>
+                                <option value="<?php echo $items["id"]; ?>"><?php echo $items["name"]; ?></option>
+                                <?php }?>
+                            </select>
+                            <span  id="add_ctkm" onclick="add_ctkm();return false;" class="input-group-addon btn"><i class="fa fa-plus "></i> Thêm</span>
+                        </div>
+                    </div>
+                    <div style="display: none" class="form-group frm_ctkm">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Tên chương trình KM: </label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-desktop"></i>
+                            </div>
+                            <input name="name_ctkm" id="name_ctkm" class="form-control" placeholder="Tên chương trình khuyến mãi..."/>
+                            <span  id="save_ctkm" onclick="save_ctkm();return false;" class="input-group-addon btn"><i class="fa fa-floppy-o"></i> Save</span>
+                            <span style="display: none" id="wt_ctkm"  class="input-group-addon btn"><i class="fa fa-spinner"></i> Đang xử lý.</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Tên khuyến mãi: </label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-desktop"></i>
+                            </div>
+                            <input type="text" class="form-control" name="title" id="title_km" value="<?php echo $this->detail_promotion["title"] ?>" placeholder="Nhập tên khuyến mãi">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Loại : </label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                            <select name="type" id="type" class="form-control">
+                                <option value="">Lựa chọn</option>
+                                <?php
+                                foreach ($this->items as $list) {
+                                    $selectd = '';
+                                    if ($this->detail_promotion["type"] == $list["value"]) {
+                                        $selectd = 'selected = "selected"';
+                                    }
+                                    ?>
+                                    <option <?php echo $selectd ?> value="<?php echo $list["value"] ?>"><?php echo $list["name"] ?></option>
+<?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <input type="hidden" name="vote_name" id="vote_name" value="" />
+                    <div class="addproducts">
+                        <div class="form-group ">
+                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Tên sản phẩm & Màu :</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                                <input rel="0" type="text" class="form-control" name="product_ids" id="product_ids" value="<?php echo $this->detail_promotion["product_name"] ?>" placeholder="Mã sản phẩm khuyến mãi">
+                                <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                                <select class="form-control pcolor0" name="colorid" id="colorid0">
+                                    <option value="0">Tất cả</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        var count = 1;
+                        $('#add_products').click(function (e) {
+                            e.preventDefault();
+                            count++;
+                            var html = '<div id="dsadd_' + count + '" class="form-group">\n\
+                                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">\n\
+                                Tên sản phẩm ' + count + ' </label>\n\
+                                <div class="input-group">\n\
+                                <span class="input-group-addon"><i class="fa fa-desktop"></i></span>\n\
+                                <input rel="' + count + '" type="text" class="form-control productids" name="product_ids[]" id="product_ids" value="" placeholder="Mã sản phẩm khuyến mãi">\n\
+                                    <span class="input-group-addon btn" onclick="removeBlock(' + count + ');return false;"><i class="fa fa-times"> Xóa</i></span>\n\
+                                </div></div>';
+                            var km = '<div id="km_' + count + '" class="form-group">\n\
+                                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">\n\
+                                Màu sắc ' + count + ' </label>\n\
+                                <div class="input-group">\n\
+                                <span class="input-group-addon"><i class="fa fa-desktop"></i></span>\n\
+                                <select class="form-control pcolor' + count + '" name="colorid[]" id="colorid' + count + '"><option value="0">Tất cả</option></select>\n\
+                                </div></div>';
+
+                            $('.addproducts').append(html);
+                            $('.addproducts').append(km);
+                            $(".productids").each(function (i, obj) {
+                                var num = $(this).attr("rel");
+                                $(obj).autocomplete({
+                                    source: availableTags,
+                                    select: function (a, b) {
+                                        $(this).val(b.item.value);
+                                        var encodedProductName = encodeURIComponent(b.item.value);
+                                        var ajaxLink = '/sales/get-color';
+                                        $.ajax({
+                                            method: 'get',
+                                            cache: false,
+                                            url: ajaxLink,
+                                            data: {pid: encodedProductName},
+                                            dataType: 'json',
+                                            success: function (resp) {
+                                                $('.pcolor' + num).html('');
+                                                $('.pcolor' + num).html('<option class="hidden_select_' + num + '" value ="0"> Tất cả</option>');
+                                                $.each(resp, function (i) {
+                                                    var color = '<option value="' + resp[i].colorid + '">' + resp[i].ncolorid + '</option>';
+                                                    $('.pcolor' + num).append(color);
+                                                });
+                                            }
+                                        });
+
+                                    }
+                                });
+                            });
+
+                        });
+                    </script>
+                    <div id="charge_card" class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Trị giá & Giá hoàn tiền: </label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-desktop"></i>
+                            </div>
+                            <input type="text" class="form-control pricing" id="price" value="" name="price" value="" placeholder="Trị giá sản phẩm..." />
+                            <div class="input-group-addon" >
+                                <i class="fa fa-desktop"></i>
+                            </div>
+                            <input type="text" class="form-control pricing" id="return_price" name="return_price" value="" placeholder="Giá hoàn tiền của sản phẩm..." />
+                        </div>
+                    </div>
+                    <div id="makm" style="display: <?php echo $this->display ?>" class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Sản phẩm khuyến mãi : </label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                            <input type="text" class="form-control" name="itemid_title" id="itemid_title" value="<?php echo $this->detail_promotion["product_itemidtitle"] ?>" placeholder="Mã sản phẩm mua thêm giảm giá nếu có">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Khuyến mãi hãng:</label>
+                        <div class="input-group">
+                            <label><input  type="radio" name="kmhang" checked="checked"  value="0">  Không</label>
+                            <label  style="margin-left: 20px"><input  type="radio" name="kmhang"  value="1">  Có</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Thời gian hiệu lực(nếu có): </label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                            <input type="text" class="form-control pull-right" name="start_ends" id="reservationtime" value="<?php echo $this->start_ends ?>" placeholder="Ngày bắt đầu và ngày kết thúc...">
+                        </div>
+                    </div>
+                    <div class="row">
+                    <div class="col-md-7">
+                        <div class="form-group">
+                            <label for="warranty_info_id" class="col-sm-5 control-label" id="text-align-label" style="color: red">Áp dụng cho chi nhánh : </label>
+                            <div class="input-group">
+                                <label><input id="vote_check_all" name="vote_check_all" type="checkbox" value="0"> Tất cả</label><br/>
+                                <?php
+                                $count=0;
+                                $this->mid = count($this->list_vote)/2;
+                                foreach ($this->list_vote as $list) { 
+                                    if ($count++ >= $this->mid) continue;
+                                    ?>
+                                    <label><input class="cchecked" id="vote_check_<?php echo $list["userid"] ?>" name="vote_check_<?php echo $list["userid"] ?>" type="checkbox" value="<?php echo $list["userid"] ?>">     <?php echo $list["storename"] ?></label><br/>
+<?php } ?>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <?php
+                                $count2=0;
+                                foreach ($this->list_vote as $list) {
+                                    if ($count2++ < $this->mid) continue;
+                                    ?>
+                                    <label><input class="cchecked" id="vote_check_<?php echo $list["userid"] ?>" name="vote_check_<?php echo $list["userid"] ?>" type="checkbox" value="<?php echo $list["userid"] ?>">     <?php echo $list["storename"] ?></label><br/>
+<?php } ?>
+
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+        </div>
+        <div class="col-md-6">
+                    <div class="form-group" >
+                        <div  class="input-group" style="width: 100%">
+                            <textarea id="bonus_company_full" placeholder="khuyến mãi ngoài website vào đây..." name="bonus_company_full" ><?php echo $this->detail_products["bonus_company_full"] ?></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Khuyến mãi mobile: </label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                            <input type="text" class="form-control" name="bonus_mobile" id="bonus_mobile" value="<?php echo $this->detail_products["bonus_mobile"] ?>" placeholder="Khuyến mãi mobile">
+                        </div>
+                    </div>
+                    
+                    <div class="box-footer">
+                        <button type="button" id="add0" onclick="add(0);return false;" class="btn btn-primary right"><i class="fa fa-plus"> Thêm mới</i></button>
+                        <button style="display: none" type="button" id="wt_add0" class="btn btn-primary right"><i class="fa fa-spinner"> Đang xử lý</i></button>
+                        <input type="hidden" name="id" id="id" value="<?= $this->id; ?>" />
+                    </div>
+                    <div class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Nhập mã khuyến mãi : </label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                            <textarea class="form-control" rows="5" name="product_ids_fast" id="product_ids_fast" value="" placeholder="Mã km thêm nhanh vào đây, cách nhau dấu ,"></textarea>
+                            
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">loại khuyến mãi thêm nhanh : </label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                            <select class="selects" name="idfast" id="idfast">
+                                <option value="0">Chọn khuyến mãi thêm nhanh</option>
+                                <?php foreach ($this->list_fast as $items){ ?>
+                                <option value="<?php echo $items["itemid"] ?>"><?php echo $items["title"] ?></option>
+                                <?php }?>
+                            </select>
+                        </div>
+                    </div>
+            <div class="box-footer">
+                <button type="button" id="save" onclick="saves();return false;" class="btn btn-primary right"><i class="fa fa-floppy-o"> Lưu khuyến mãi nhanh</i></button>
+                <button style="display: none" type="button" id="wt" class="btn btn-primary right"><i class="fa fa-spinner"> Đang xử lý</i></button>
+            </div>
+        </div>
+            <input type="hidden" name="add_or_copy" id="add_or_copy" value="0"/>
+        </form>
+        
+        <table id="f_table" class="table table-bordered table-condensed table-striped">
+            <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tên khuyến mãi</th>
+                <th width="130">Trị giá</th>
+                <th width="130">Giá hoàn tiền</th>
+                <th width="200">Loại</th>
+                <th width="30"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php $stt=0;
+            foreach ($this->list_fast as $items){ ?>
+            <tr>
+                <td><?php echo ++$stt; ?></td>
+                <td><?php echo $items["title"] ?></td>
+                <td><?php echo number_format($items["price"]) ?></td>
+                <td><?php echo number_format($items["return_price"]) ?></td>
+                <td><?php echo $this->name_type_km[$items["type"]] ?></td>
+                <td>
+                    <a class="btn btn-info btn-sm" data-toggle="tooltip"  href="/admin/user/promotion/add-fast?id=<?php echo $items["itemid"] ?>" ><i class="fa fa-edit"></i></a>
+                </td>
+            </tr>
+            <?php }?>
+            </tbody>
+        </table>
+        <div class="box box-footer">
+            <a href="/admin/user/promotion/add-fast" class="btn btn-default right"><i class="fa fa-plus"> Thêm nhanh khuyến mãi</i></a>
+        </div>
+    </div>
+</div>
+<div id="del" style="display: none" />
+    <script>
+        $(function () {
+            CKEDITOR.replace('bonus_company_full');
+      });
+      function getDatas(){
+            var value = CKEDITOR.instances['bonus_company_full'].getData();
+            $('#bonus_company_full').val(value); 
+      }
+        function shows(id){
+            $('#add'+id).hide();
+            $('#wt_add'+id).show();
+        }
+        function hides(id){
+            $('#add'+id).show();
+            $('#wt_add'+id).hide();
+            
+        }
+        function add(ids){
+            $('#add_or_copy').val(ids);
+            shows(ids);
+            getDatas();
+            $.post("/admin/user/promotion/save", $('form').serialize(), function (resp) {
+                $.each(resp, function (i, obj) {
+                    var id = obj.id;
+                    var msg = obj.msg;
+                    if (msg != "ok") {
+                        alert(msg);
+                        $('#' + id).focus();
+                        hides(ids);
+                        return false;
+                    } else {
+                        alert('Lưu thành công');
+                        window.location = "/admin/user/promotion";
+                    }
+
+                });
+            }, 'json');
+        }
+        function deletes(id){
+            result = confirm('Bạn chắc chắn huỷ khuyến mãi này ?');
+            if (result)
+                $('#ddelete').load('/admin/user/promotion/del-fast?id=' + id, function () {
+                    alert('Xoá  thành công.');
+                    window.location.reload(true);
+                });
+        }
+        function saves(){
+            $('#wt').show();
+            $('#save').hide();
+            getDatas();
+            $.post("/admin/user/promotion/save-fast", $('form').serialize(), function (resp) {
+                $.each(resp, function (i, obj) {
+                    var id = obj.id;
+                    var msg = obj.msg;
+                    if (msg != "ok") {
+                        alert(msg);
+                        $('#' + id).focus();
+                        $('#wt').hide();
+                        $('#save').show();
+                        return false;
+                    } else {
+                        alert("Thêm thành công");
+                        $('#wt').hide();
+                        $('#save').show();
+                    }
+
+                });
+            }, 'json');
+        }
+        function add_ctkm(){
+            $('.frm_ctkm').show();
+        }
+        function save_ctkm(){
+            $.post("/admin/user/promotion/save-ctkm", $('form').serialize(), function (resp) {
+                $('#wt_ctkm').show();
+                $('#save_ctkm').hide();
+                $.each(resp, function (i, obj) {
+                    var id = obj.id;
+                    var msg = obj.msg;
+                    if (msg != "ok") {
+                        alert(msg);
+                        $('#' + id).focus();
+                        $('#wt_ctkm').hide();
+                        $('#save_ctkm').show();
+                        return false;
+                    } else {
+                        alert('Lưu thành công');
+                        $('.frm_ctkm').hide();
+                        $('#save_ctkm').show();
+                        $('#wt_ctkm').hide();
+                        
+                        var ajaxLink = '/admin/user/promotion/get-ctkm';
+                        $.ajax({
+                            method: 'get',
+                            cache: false,
+                            url: ajaxLink,
+                            data: {listctkm: 1},
+                            dataType: 'json',
+                            success: function (resp) {
+                                $('#ctkm').html('');
+                                $('#ctkm').html('<option value ="0"> Mặc định</option>');
+                                $.each(resp, function (i) {
+                                    var html_ctkm = '<option value="' + resp[i].id + '">' + resp[i].name + '</option>';
+                                    $('#ctkm').append(html_ctkm);
+                                });
+                            }
+                        });
+                        
+                    }
+
+                });
+            }, 'json');
+            
+            
+        }
+        function keys(e)
+        {
+            var keyword = null;
+            if (window.event)
+            {
+                keyword = window.event.keyCode;
+            } else
+            {
+                keyword = e.which; //NON IE;
+            }
+            if (keyword < 48 || keyword > 57)
+            {
+                if (keyword == 48 || keyword == 127)
+                {
+                    return;
+                }
+                return false;
+            }
+        }
+
+        $(".pricing").keyup(function () {
+            var price = this.value;
+            price = price.replace(/,/gi, "");
+            price = price + ".";
+            price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            var sprice = price.split(".");
+            $(this).val(sprice[0]);
+        });
+
+    </script>
+
+<script>
+    function number_format(price) {
+        price = price.replace(/,/gi, "");
+        price = price + ".";
+        price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        return price;
+    }
+</script>
+
+<script>
+    
+    $( window ).load(function() {
+            $("#vote_check_all").prop("checked", true)
+            $('.cchecked').each(function () { //loop through each checkbox
+                this.checked = true;  //select all checkboxes with class "checkbox1" 
+                $('#vote_check_all').val(1);
+            });
+          });
+    $(document).ready(function () {
+        $('#vote_check_all').click(function (event) {  //on click 
+            if (this.checked) { // check select status
+                $('.cchecked').each(function () { //loop through each checkbox
+                    this.checked = true;  //select all checkboxes with class "checkbox1" 
+                    $('#vote_check_all').val(1);
+                });
+            } else {
+                $('.cchecked').each(function () { //loop through each checkbox
+                    this.checked = false; //deselect all checkboxes with class "checkbox1"   
+                    $('#vote_check_all').val(0);
+                });
+            }
+        });
+        $('.cchecked').click(function(){
+            var ck=0;
+            $('.cchecked').each(function () { //loop through each checkbox
+                if(this.checked === false){
+                    ck=1;
+                }
+                
+            })
+            if(ck===1){
+                $('#vote_check_all').val(0);
+                $("#vote_check_all").prop("checked", false);
+            }else{
+                $('#vote_check_all').val(1);
+                $("#vote_check_all").prop("checked", true);
+            }
+            
+        });
+    });
+    function removeBlock(num) {
+        $("#dsadd_" + num).remove();
+        $("#km_" + num).remove();
+    }
+    $().ready(function () {
+        $('#type').change(function () {
+            var type = $('#type').val();
+            if (type == 4 || type == 0) {
+                $('#makm').show();
+            } else {
+                $('#makm').hide();
+                $('#itemid_title').val('');
+            }
+        });
+    });
+    
+    function convertDate(vnDate) {
+        try {
+            var vnDateArr = vnDate.split("/");
+            var rDate = vnDateArr.reverse();
+            return rDate.join("-");
+        } catch (err) {
+            return vnDate;
+        }
+    }
+
+
+</script>

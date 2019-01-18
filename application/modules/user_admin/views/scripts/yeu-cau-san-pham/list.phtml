@@ -1,0 +1,179 @@
+<?php
+    $list_ycsp=$this->list_ycsp;
+    $danhmucsanpham=$this->danhmucsanpham;
+?>
+<table border="0" cellpadding="20" cellspacing="10" width="100%">
+  <tbody><tr>
+    <td style="padding: 5px;" align="center" valign="middle">
+    <table cellspacing="0" cellpadding="0" border="0" width="100%" class="borderMain">
+    <tbody><tr valign="top">
+        <td><table cellspacing="0" cellpadding="0" border="0" width="100%">
+                <tbody><tr>
+                    <td><div class="header icon-48-categories"><a href="/admin/user/yeu-cau-san-pham/list/">Danh sách yêu cầu sản phẩm</a></div></td>
+                           <td align="right"><div class="toolbar">
+                            <table class="toolbar">
+                                <tbody>
+                                    <tr>
+                                        <td id="toolbar-new" class="button"><a class="toolbar" href="#" id="delete"> <span title="Delete" class="icon-32-delete"></span>Xóa</a></td>
+                                        <td id="toolbar-new" class="button"><a class="toolbar" href="/admin/user/yeu-cau-san-pham/export-excel/" id="export"> <span title="Export Excel" class="" style="background:url(/user_admin/images/excel.png)"></span>Export excel</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div></td>
+                                    </tr>
+            </tbody></table></td>
+    </tr>
+</tbody>
+</table>
+<div style="width:100%; text-align: right; margin:10px 0;">
+    <form action="" name="frmChange" id="frmChange" method="post">
+        <? echo $this->formSelect("type", $this->type, array("class"=>"menuname","class"=>"frm","style"=>"width:200px;"), $this->listtype); ?>
+    </form>
+</div>
+<BR>
+<div style="width:100%; text-align: right"><?echo $this->paging_template ?></div>
+<BR>
+<table cellpadding="0" border="0" width="100%" class="borderMain spaceTop5px">
+    <form method="post" name="frmPage" id="frmPage">
+        <input type="hidden" name="updateid" id="updateid" value="" />
+        <tbody>
+            <tr>
+                <td width="35" class="bgTitleadmin1"><input type="checkbox" onclick="checkme()" name="checkall"></td>
+                <td width="50" class="bgTitleadmin1">#</td>
+                <td class="bgTitleadmin2">Email yêu cầu</td>
+                <td class="bgTitleadmin2">Ngày gửi yêu</td>
+                <td width="80" class="bgTitleadmin1">Thao tác</td>
+            </tr>
+            <?php
+            if(count($list_ycsp)>0 && is_array($list_ycsp))
+            {
+
+                $no=1;
+                foreach($list_ycsp as $item)
+                {
+                    
+                    if($no%2 == 0)
+                        $bgcolor = '#f2f4f5';
+                   else
+                       $bgcolor = '#ffffff';
+                ?>
+                    <tr bgcolor="<?echo $bgcolor; ?>">
+                        <td class="bgContentadmin1"><input type="checkbox" value="<?php echo $item['itemid'];?>" name="check[]"></td>
+                        <td class="bgContentadmin1"><? echo $no++;?></td>
+                        <td class="bgContentadmin2"><?echo $item['title']?></td>
+                        <td class="bgContentadmin2" style="font-size:12px;text-align:justify;">
+                            <?echo date('d-m-Y H:i:s',strtotime($item['updatedate']))?>
+                        <?php
+//                            echo"Người gửi yêu cầu:".$item['fullcontent']['name'];
+//                            if($item['fullcontent']['gender']==0)
+//                                $gt="name";
+//                             if($item['fullcontent']['gender']==1)
+//                                 $gt="Nữ";
+//                            echo"<br />Giới tính: ".$gt;
+//                            echo"<br />Ngày sinh: ".$item['fullcontent']['ngaysing'];
+//                            echo"<br />Phone: ".$item['fullcontent']['phone'];
+//                            echo"<br />Tỉnh/Thành: ".$item['fullcontent']['cityid'];
+//                            echo"<br />Quận/Huyện: ".$item['fullcontent']['districtid'];
+//                            echo"<br />Địa chỉ: ".$item['fullcontent']['address'];
+//                            echo"<br />Sản phẩm yêu cầu: ".$item['fullcontent']['sprequest'];
+//                            echo"<br />Có nhận thông báo qua Email hay  không: ".$item['fullcontent']['nhansendwn'];
+                        ?>
+                        </td>
+                        <td class="bgContentadmin1">
+                            <a href="/admin/user/yeu-cau-san-pham/view?userid=<?php echo $item['itemid'];?>" class="view">
+                                <img border="0" title="Edit" src="/user_admin/templates/images/edit.png">
+                            </a>
+                            <a href="#" rel="<?php echo $item['itemid'];?>" class="sdelete"><img border="0" alt="Delete" src="/user_admin/templates/images/trash.png"></a>
+                        </td>
+                    </tr>
+                <?php
+                }
+            }
+            ?>
+    </form>
+</table>
+</td>
+  </tr>
+</tbody></table>
+<div id="ddelete" style="display:none;"></div>
+<div id="dmyorder" style="display:none"></div>
+<script type="text/javascript">
+function get_editor_data()
+{
+	document.getElementById('fullcontent').value = FCKeditorAPI.GetInstance('myFCKeditor_fullcontent').GetHTML();
+	return true;
+}
+function CheckForm()
+{
+	return true;
+}
+
+function checkme()
+{
+    isCheck=document.frmPage.checkall.checked;
+    elts=document.frmPage.elements['check[]'];
+	if(!elts.length)
+	{
+            elts.checked = isCheck;
+	}
+    else
+    {
+       for(i=0;i<elts.length;i++)
+          elts[i].checked=isCheck;
+    }
+}
+
+function isCheckDetail(){
+    result = 0;
+    $('input:checkbox').each(function(){
+        if ($(this).attr('checked') == true)
+            result = 1;
+    });
+    return result;
+}
+
+$().ready(function(){
+    $('#type').change(function(){
+        $('#frmChange').submit();
+    });
+    $('#delete').click(function(){
+        result = isCheckDetail();
+        if (result == 0) //ischeck
+        {
+            alert('Vui lòng chọn item muốn xóa');
+            return false;
+        }
+        result = confirm("Bạn có chắc muốn xóa?");
+        if (result)
+        {
+            $('#frmPage').attr('action','/admin/user/yeu-cau-san-pham/delete/');
+            $('#frmPage').submit();
+        }
+    });
+
+    $('.sdelete').click(function(){
+        id = $(this).attr('rel');
+        if (id != '')
+            result = confirm('Bạn có chắc muốn xóa?');
+            if (result)
+            $('#ddelete').load('/admin/user/yeu-cau-san-pham/delete?rand='+Math.random()+'&itemid='+id, function (){
+                alert('Xóa thành công.');
+                window.location.reload(true);
+            });
+    });
+    
+    $('.view').click(function(e){
+        e.preventDefault();
+        url = $(this).attr('href');
+        tb_show('xem thông tin thành viên',url+"&height=400&iframe=true");
+    });
+
+});
+</script>
+<script>
+$().ready(function(){
+    $('#option_cmsp').change(function(){
+        $('#frmChange').submit();
+    });
+});
+</script>

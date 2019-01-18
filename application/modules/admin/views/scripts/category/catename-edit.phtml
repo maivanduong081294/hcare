@@ -1,0 +1,37 @@
+
+<div id="centerCont"> 
+<strong>Category Name >> </strong> <? echo ($this->edited ? "Edit" : "Add"); ?>
+<br />
+<br />
+<form name="frm" id="frm" action="<?php echo $this->form_action; ?>" method="post" onsubmit="get_editor_data();return CheckForm();">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="mainTab">
+<tr>
+ <td class="hligh1"><label for="description">Category name</label></td>
+ <td class="hligh1">   
+   <input type="text" name="catename" id="catename" 
+   value="<?php echo $this->data["catename"]; ?>" style="width:400px" maxlength="100">
+   </td>
+</tr>
+<tr>
+ <td class="hligh2" valign="top"><label for="description">Description</label></td>
+ <td class="hligh2">
+	<textarea id="description" name="description" style="width:400px"><?echo $this->data["description"]; ?></textarea>
+ </td>
+</tr>
+</table>
+<br />
+<p>
+<input type="submit" name="submit" value="Submit" class="button"/>
+<input type="button" name="cancel" value="Cancel" onclick="window.location='<?php echo $this->cancel_btn;?>'"  class="button"/>
+<input type="hidden" name="id" value="<?php echo $this->data["categoryid"]; ?>" />
+</p>
+
+<script language="javascript">
+function get_editor_data()
+{	
+	return true;
+}
+</script>
+
+
+</form>

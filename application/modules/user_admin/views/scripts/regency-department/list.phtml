@@ -1,0 +1,103 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="col-md-3">
+            Chức vụ - Phòng ban
+        </div>
+        <div class="col-md-9">
+            <form role="form" id="view-sales-day" method="get"   class="frmReport">
+                <div class="col-md-4">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <select name="department" id="department" class="form-control" >
+                            <option value="0"> Nhóm phòng ban: </option> 
+                            <?php
+                            foreach ($this->list_department as $items) {
+                                $slected = '';
+                                if ($items["id"] == $this->department) {
+                                    $slected = 'selected = selected';
+                                }
+                                ?>
+                                <option <?php echo $slected ?> value="<?php echo $items["id"] ?>"><?php echo $items["name"] ?></option>
+<?php } ?>
+                        </select>
+                    </div><!-- /.input group -->
+
+                </div>
+                </div>
+                <div class="col-md-4">
+                <div class="form-group">
+                    <div class="input-group">
+                        <select name="regency" id="regency" class="form-control" >
+                            <option value="0"> Nhóm chức vụ: </option> 
+                            <?php
+                            foreach ($this->list_regency as $items) {
+                                $slected2 = '';
+                                if ($items["id"] == $this->regency) {
+                                    $slected2 = 'selected = selected';
+                                }
+                                ?>
+                                <option <?php echo $slected2 ?> value="<?php echo $items["id"] ?>"><?php echo $items["name"] ?></option>
+<?php } ?>
+                        </select>
+                    </div><!-- /.input group -->
+
+                </div>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" id="btnView" class="btn btn-primary"><i class="fa fa-search"></i> Xem</button>
+                    <a style="float: right" class="btn btn-primary" href="/admin/user/regency-department/edit"><i class="fa fa-plus"></i> Thêm</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="box-body">
+    <div class="table-responsive">
+        <table class="table table-data table-striped table-bordered table-hover">
+            <tbody>
+
+                <tr>
+                    <th>STT</th>
+                    <th>Tên chức vụ</th>
+                    <th>Tên phòng ban</th>
+                    <th>Thao tác</th>
+                </tr>
+                <?php
+                $no = 1;
+                foreach ($this->list as $list) {
+                    $department = $list["id_department"];
+                    $regency = $list["id_regency"];
+                    ?>
+                    <tr bgcolor="<?echo $bgcolor; ?>" class="row-<?php echo $list["id"]; ?>">
+                        <td><?= $no++; ?></td>
+                        <td><?php echo $this->name_regency[$regency]; ?></td>
+                        <td><?php echo $this->name_department[$department]; ?></td>
+                        <td width="100">
+                            <a onclick="deletes('<?php echo $list["id"]; ?>');return false;" class="btn btn-danger btn-sm" data-toggle="tooltip" rels=""  href="#"><i class="fa fa-trash-o"></i></a>
+                            <a  class="btn btn-primary btn-sm" data-toggle="tooltip" rels=""  href="/admin/user/regency-department/edit?id=<?php echo $list["id"]; ?>"><i class="fa fa-edit"></i></a>
+                        </td>
+                    </tr>
+
+<?php } ?>
+
+            </tbody>
+
+        </table>
+    </div>
+</div><!-- /.box-body -->
+<div id="ddelete" style="display:none;"></div>
+<script>
+    function deletes(id) {
+        if (id != '')
+            result = confirm('Bạn chắc chắn huỷ khuyến mãi này ?');
+        if (result)
+            $('#ddelete').load('/admin/user/regency-department/delete?id=' + id, function () {
+                alert('Xoá  thành công.');
+                window.location.reload(true);
+            });
+    }
+</script>

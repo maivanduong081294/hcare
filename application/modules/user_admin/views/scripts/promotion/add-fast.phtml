@@ -1,0 +1,266 @@
+<form role="form" action=""  id="data_frm" name="data_frm" method="POST" class="frmReport">
+    <div class="panel panel-default">
+    <div class="panel-heading">
+        <nav class="navbar">
+            <div class="container-fluid">
+                <div class="navbar-header col-md-10">
+                    <b class="navbar-brand"><i class="fa fa-shopping-cart"></i> THÊM KHUYẾN MÃI</b>
+                </div>
+                <div class="col-md-2 text-right">
+                    <button type="button" id="save" onclick="saves();return false;" class="btn btn-danger btn-lg right"><i class="fa fa-floppy-o"> </i> Lưu</button>
+                    <button style="display: none" type="button" id="wt" class="btn btn-app right"><i class="fa fa-spinner"> </i> Đang xử lý</button>
+                    <input type="hidden" name="id" id="id" value="<?= $this->id; ?>" />
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+    <div class="box-body">
+        <div class="col-md-6">
+            <div class="panel panel-default panel-success">
+                <div class="panel-heading">KHUYẾN MÃI CHI TIẾT</div>
+                     <div class="panel-body">
+                         <span>Nhập tên khuyến mãi (ghi rõ khuyến mãi)</span>
+                         <input type="text" class="form-control" name="title" id="title_km" value="<?php echo $this->detail_promotion["title"] ?>" placeholder="Nhập tên khuyến mãi">
+                         <span>Loại, kiểu chương trình khuyến mãi:</span>
+                         <select name="type" id="type" class="form-control">
+                                <option value="">Lựa chọn loại,kiểu khuyến mãi</option>
+                                <?php
+                                foreach ($this->items as $list) {
+                                    $selectd = '';
+                                    if ($this->detail_promotion["type"] == $list["value"]) {
+                                        $selectd = 'selected = "selected"';
+                                    }
+                                    ?>
+                                    <option <?php echo $selectd ?> value="<?php echo $list["value"] ?>"><?php echo $list["name"] ?></option>
+<?php } ?>
+                            </select>
+                    <input type="hidden" name="vote_name" id="vote_name" value="" />
+                    <?php
+                    $price ='';
+                        if((int)$this->detail_promotion["price"]>0){
+                            $price = number_format($this->detail_promotion["price"]);
+                        }
+                    $return_price ='';
+                        if((int)$this->detail_promotion["return_price"]>0){
+                            $return_price = number_format($this->detail_promotion["return_price"]);
+                        }
+                    ?>
+                    <span>Trị giá khuyến mãi của sản phẩm:</span>
+                    <input type="text" class="form-control pricing" id="price" value="<?php echo $price ?>" name="price" value="" placeholder="Giá trị sản phẩm" />
+                    <span>Giá hoàn tiền của sản phẩm</span>
+                    <input type="text" class="form-control pricing" id="return_price" name="return_price" value="<?php echo $return_price ?>" placeholder="Giá hoàn tiền của sản phẩm" />
+                    <div id="makm" style="display: <?php echo $this->display ?>">
+                        <span>Mã của sản phẩm khuyến mãi nếu có (0,4)</span>
+                        <select style="width: 100%" class="selects"  name="itemid_title" id="itemid_title">
+                                <option value="">Lựa chọn sản phẩm</option>
+                                <?php foreach ($this->slist as $items){ ?>
+                                <option value="<?php echo $items ?>"><?php echo $items ?></option>
+                                <?php }?>
+                            </select>
+                    </div>
+                    <span>Nếu Khuyến mãi của hãng check có:</span>
+                    <label><input  type="radio" name="kmhang" checked="checked"  value="0">  Không</label>
+                    <label  style="margin-left: 20px"><input  type="radio" name="kmhang"  value="1">  Có</label>
+                    <div class="form-group hidden">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Thời gian hiệu lực(nếu có): </label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                            <input type="text" class="form-control pull-right" name="start_ends" id="reservationtime" value="<?php echo $this->start_ends ?>" placeholder="Ngày bắt đầu và ngày kết thúc...">
+                        </div>
+                    </div>
+                    </div>
+             </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default panel-success">
+                <div class="panel-heading">THÊM CHƯƠNG TRÌNH KHUYẾN MÃI</div>
+                    <div class="panel-body">
+                        <span>Tên chương trình khuyến mãi (Thêm mới nhấn vào)</span><button id="add_ctkm" onclick="add_ctkm2();return false;" type="button" class="btn btn-sm btn-danger"><i class="fa fa-plus"></i></button>
+                        <div style="display: none" class="form-group frm_ctkm">
+                            <span>Tên chương trình khuyến mãi mới:</span>
+                                <input name="name_ctkm" id="name_ctkm" class="form-control" placeholder="Tên chương trình khuyến mãi..."/>
+                            <button id="save_ctkm" onclick="save_ctkm3();return false;" class="btn btn-danger"><i class="fa fa-save"></i> Save</button>
+                            <button id="wt_ctkm" style="display: none" class="btn btn-danger"><i class="fa fa-spinner"></i> Đang xử lý.</button>
+                        </div>
+                        <select name="ctkm" id="ctkm" class="form-control">
+                            <option value="0">Mặc định</option>
+                            <?php foreach ($this->list_ctkm as $items){
+                                $sl='';
+                                if($this->detail_promotion["ctkm"] == $items["id"]){
+                                    $sl='selected="selected"';
+                                }
+                                ?>
+                            <option <?php echo $sl; ?> value="<?php echo $items["id"]; ?>"><?php echo $items["name"]; ?></option>
+                            <?php }?>
+                        </select>
+                        
+                     </div>
+             </div>
+        </div>
+    </div>
+    <script>
+        function saves(){
+            $('#wt').show();
+            $('#save').hide();
+            $.post("/admin/user/promotion/save-promotion-fast", $('form').serialize(), function (resp) {
+                $.each(resp, function (i, obj) {
+                    var id = obj.id;
+                    var msg = obj.msg;
+                    if (msg != "ok") {
+                        alert(msg);
+                        $('#' + id).focus();
+                        $('#wt').hide();
+                        $('#save').show();
+                        return false;
+                    } else {
+                        alert("Lưu thành công");
+                        $('#wt').hide();
+                        $('#save').show();
+                        window.history.back();
+                    }
+
+                });
+            }, 'json');
+        }
+        function add_ctkm2(){
+            $('.frm_ctkm').show();
+        }
+        function save_ctkm3(){
+            $.post("/admin/user/promotion/save-ctkm", $('form').serialize(), function (resp) {
+                $('#wt_ctkm').show();
+                $('#save_ctkm').hide();
+                $.each(resp, function (i, obj) {
+                    var id = obj.id;
+                    var msg = obj.msg;
+                    if (msg != "ok") {
+                        alert(msg);
+                        $('#' + id).focus();
+                        $('#wt_ctkm').hide();
+                        $('#save_ctkm').show();
+                        return false;
+                    } else {
+                        alert('Lưu thành công');
+                        $('.frm_ctkm').hide();
+                        $('#save_ctkm').show();
+                        $('#wt_ctkm').hide();
+                        
+                        var ajaxLink = '/admin/user/promotion/get-ctkm';
+                        $.ajax({
+                            method: 'get',
+                            cache: false,
+                            url: ajaxLink,
+                            data: {listctkm: 1},
+                            dataType: 'json',
+                            success: function (resp) {
+                                $('#ctkm').html('');
+                                $('#ctkm').html('<option value ="0"> Mặc định</option>');
+                                $.each(resp, function (i) {
+                                    var html_ctkm = '<option value="' + resp[i].id + '">' + resp[i].name + '</option>';
+                                    $('#ctkm').append(html_ctkm);
+                                });
+                            }
+                        });
+                        
+                    }
+
+                });
+            }, 'json');
+            
+            
+        }
+        
+
+        $(".pricing").keyup(function () {
+            var price = this.value;
+            price = price.replace(/,/gi, "");
+            price = price + ".";
+            price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            var sprice = price.split(".");
+            $(this).val(sprice[0]);
+        });
+
+    </script>
+
+</form>                          
+
+<script>
+    function number_format(price) {
+        price = price.replace(/,/gi, "");
+        price = price + ".";
+        price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        return price;
+    }
+</script>
+
+<script>
+    <?php if($this->detail_promotion["vote_notus"]==0){ ?>
+    $( window ).load(function() {
+            $("#vote_check_all").prop("checked", true)
+            $('.cchecked').each(function () { //loop through each checkbox
+                this.checked = true;  //select all checkboxes with class "checkbox1" 
+                $('#vote_check_all').val(1);
+            });
+          });
+    <?php }?>
+    $(document).ready(function () {
+        $('#vote_check_all').click(function (event) {  //on click 
+            if (this.checked) { // check select status
+                $('.cchecked').each(function () { //loop through each checkbox
+                    this.checked = true;  //select all checkboxes with class "checkbox1" 
+                    $('#vote_check_all').val(1);
+                });
+            } else {
+                $('.cchecked').each(function () { //loop through each checkbox
+                    this.checked = false; //deselect all checkboxes with class "checkbox1"   
+                    $('#vote_check_all').val(0);
+                });
+            }
+        });
+        $('.cchecked').click(function(){
+            var ck=0;
+            $('.cchecked').each(function () { //loop through each checkbox
+                if(this.checked === false){
+                    ck=1;
+                }
+                
+            })
+            if(ck===1){
+                $('#vote_check_all').val(0);
+                $("#vote_check_all").prop("checked", false);
+            }else{
+                $('#vote_check_all').val(1);
+                $("#vote_check_all").prop("checked", true);
+            }
+            
+        });
+    });
+    function removeBlock(num) {
+        $("#dsadd_" + num).remove();
+        $("#km_" + num).remove();
+    }
+    $().ready(function () {
+        $('#type').change(function () {
+            var type = $('#type').val();
+            if (type == 4 || type == 0) {
+                $('#makm').show();
+            } else {
+                $('#makm').hide();
+                $('#itemid_title').val('');
+            }
+        });
+
+    });
+    
+    function convertDate(vnDate) {
+        try {
+            var vnDateArr = vnDate.split("/");
+            var rDate = vnDateArr.reverse();
+            return rDate.join("-");
+        } catch (err) {
+            return vnDate;
+        }
+    }
+
+
+</script>

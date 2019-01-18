@@ -1,0 +1,156 @@
+<div style="display:block;width:100%; text-align: right; margin: 5px 0"><?echo $this->paging_template ?></div>
+<form method="post" name="frmPage" id="frmPage">
+<table cellpadding="0" border="0" width="100%" class="borderMain spaceTop5px">
+        <input type="hidden" name="updateid" id="updateid" value="" />
+        <tbody>
+            <tr>
+                <td width="35" class="bgTitleadmin1"><input type="checkbox" onclick="checkme()" name="checkall"></td>
+                <td width="50" class="bgTitleadmin1">#</td>
+                <td width="120" class="bgTitleadmin2">Tên thành viên</td>
+                <td width="120" class="bgTitleadmin2">Email</td>
+                <td width="*" class="bgTitleadmin2">Nội dung </td>
+                <td width="300" class="bgTitleadmin2">URL</td>
+                <td width="" class="bgTitleadmin2" width="120">Ngày gửi</td>               
+                <td width="80" class="bgTitleadmin1">Hiển thị</td>
+            </tr>
+            <?php
+            if(count($this->list)>0)
+            {
+                $no=1;                
+                foreach($this->list as $item)
+                {
+//                    pre($item);
+                    if($no%2 == 0)
+                        $bgcolor = '#f2f4f5';
+                   else
+                       $bgcolor = '#ffffff';
+
+                   if ($item['display']==0) {
+                       $published = '<b style="color:red">No</b>';
+                       $published_type = 1;
+                   } else {
+                       $published = '<b style="color:green">Yes</b>';
+                       $published_type = 0;
+                   }
+                   
+                   $item['datetime'] = date("d/m/Y H:i:s", strtotime($item['datetime']));
+                ?>
+                    <tr bgcolor="<?echo $bgcolor; ?>">
+                        <td class="bgContentadmin1"><input type="checkbox" value="<?php echo $item['id'];?>" name="check[]"></td>
+                        <td class="bgContentadmin1"><? echo $no++;?></td>
+                        <td class="bgContentadmin2"><?echo $item['fullname']?><br /> <b style="color:<?echo $item["color"];?>;">(<?echo (int) $item["total"];?> trả lời)</b></td>                        
+                        <td class="bgContentadmin2"><?echo $item['email']?></td>
+                        <td class="bgContentadmin2"><?echo $item['content']?></td>
+                        <td class="bgContentadmin2"><a target="_blank" href="<?echo $item['url']?>"><?echo substr($item['url'], 0, 50);?></a></td>
+                        <td class="bgContentadmin2"><?echo $item['datetime']?></td>
+                        <td class="bgContentadmin1">                            
+                            <a href="<?=Globals::getBaseUrl();?>admin/user/comments/published?id=<?=$item['id']?>&display=<?echo $published_type;?>" class="published"><?=$published;?></a> |
+                            <a href="<?=Globals::getBaseUrl();?>admin/user/comments/list?id=<?=$item['id']?>" style="font-weight:bold;color:blue;">Chi tiết</a>
+                            <?if ($item["admin"]){?>
+                                <a href="#" style="color:#ffffff;background-color:red; padding:3px;">admin</a>
+                            <?}?>
+                        </td>
+                    </tr>
+                <?php
+                }
+            }
+            ?>   
+</table>
+    </form>
+</td>
+  </tr>
+</tbody></table>
+<div id="ddelete" style="display:none;"></div>
+<div id="dmyorder" style="display:none"></div>
+<script type="text/javascript">
+function get_editor_data()
+{
+	document.getElementById('fullcontent').value = FCKeditorAPI.GetInstance('myFCKeditor_fullcontent').GetHTML();
+	return true;
+}
+function CheckForm()
+{
+	return true;
+}
+
+function checkme()
+{
+    isCheck=document.frmPage.checkall.checked;
+    elts=document.frmPage.elements['check[]'];
+	if(!elts.length)
+	{
+            elts.checked = isCheck;
+	}
+    else
+    {
+       for(i=0;i<elts.length;i++)
+          elts[i].checked=isCheck;
+    }
+}
+
+function isCheckDetail(){
+    result = 0;
+    $('input:checkbox').each(function(){
+        if ($(this).attr('checked') == true)
+            result = 1;
+    });
+    return result;
+}
+
+$().ready(function(){
+    $('#delete').click(function(){
+        result = isCheckDetail();
+        if (result == 0) //ischeck
+        {
+            alert('Vui lòng chọn items để xóa');
+            return false;
+        }
+        result = confirm("Bạn có chắc muốn xóa?");
+        if (result)
+        {
+            $('#frmPage').attr('action','/admin/user/news/delete/');
+            $('#frmPage').submit();
+        }
+    });
+
+    $('.sdelete').click(function(){
+        id = $(this).attr('rel');
+        if (id != '')
+            result = confirm('Bạn có chắc chắn muốn xóa?');
+            if (result)
+            $('#ddelete').load('/admin/user/news/delete?rand='+Math.random()+'&itemid='+id, function (){
+                alert('Xóa thành công.');
+                window.location.reload(true);
+            });
+    });
+
+    $('.myorder').change(function()
+    {
+        $('#updateid').val($(this).attr('rel'));
+        $('#frmPage').attr('action','/admin/user/news/update-my-order/');
+        $('#frmPage').submit();
+    });
+
+    $('#menuname').change(function(){
+        $('#frmChange').submit();
+    });
+
+    $('#cateid').change(function(){
+        $('#frmChange').submit();
+    });
+
+    //published or unpublished item
+//    $('.published').click(function(e){
+//        e.preventDefault();
+//        url = $(this).attr('href');
+//        $('#loader').load(url);
+////        cur_url = $(document).attr('href');
+//        
+//        window.location.reload();
+//    });
+
+});
+</script>
+<style>
+    tr:hover { background: #e7e7fc; }
+</style>

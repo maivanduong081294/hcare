@@ -1,0 +1,150 @@
+<div id="centerCont" style="padding:10px; font-size: 13px!important;">
+<form name="frmBlock" id="frmBlock" method="post" action="<?php echo $this->form_action; ?>" enctype="multipart/form-data">
+<br>
+<table width="90%" border="0" cellspacing="0" cellpadding="0" class="mainTab" align="center">
+
+<tr>
+ <td class="hligh1" width="20%"><label for="description">Danh mục cha</label></td>
+ <td class="hligh1">
+	<?echo $this->parent != '' ? $this->parent : '-';?>
+  </td>
+</tr>
+<tr>
+ <td class="hligh1" width="20%"><label for="description">Tên danh mục</label></td>
+ <td class="hligh1">
+	<input type="text" name="title" id="title" 
+   value="<?php echo $this->data["title"]; ?>" style="width:400px"> 
+  </td>
+</tr>
+<tr>
+ <td class="hligh1" width="20%"><label for="description">Tên danh mục</label></td>
+  </td>
+  <td>
+    <?php echo $this->formSelect('warrantyid', $this->data["warrantyid"], array(																						
+											'style'=>'width:200px',
+											'onchange'=>""
+											), $this->wlist); ?> 
+      
+  </td>
+</tr>
+<tr>
+ <td class="hligh1" width="20%"><label for="description">Hình ảnh minh họa:</label></td>
+ <td class="hligh1">
+	<input type="file" name="picture" id="picture" />
+  </td>
+</tr>
+
+<tr style="display:none;">
+ <td class="hligh1" width="20%"><label for="description">Tên danh mục (EN)</label></td>
+ <td class="hligh1">
+	<input type="text" name="title_en" id="title_en"
+   value="<?php echo $this->data["title_en"]; ?>" style="width:400px">
+  </td>
+</tr>
+
+<tr style="display:none;">
+ <td class="hligh1" width="20%"><label for="description">Is Link</label></td>
+ <td class="hligh1">
+	<input type="checkbox" name="islink" id="islink" value="1" <?echo ($this->data['islink'] == "1" ? "checked=checked" : ""); ?>> 
+  </td>
+</tr>
+<tr style="display:none;">
+ <td class="hligh1" width="20%"><label for="description">Hide</label></td>
+ <td class="hligh1">
+	<input type="checkbox" name="hide" id="hide" value="1" <?echo ($this->data['hide'] == "1" ? "checked=checked" : ""); ?>> 
+  </td>
+</tr>
+<tr style="display:none;">
+ <td class="hligh1" width="20%"><label for="description">Expanded</label></td>
+ <td class="hligh1">
+	<input type="checkbox" name="expanded" id="expanded" value="1" <?echo ($this->data['expanded'] == "1" ? "checked=checked" : ""); ?>> 
+  </td>
+</tr>
+<tr style="display:none;">
+ <td class="hligh1" width="20%"><label for="description">Open In New Window</label></td>
+ <td class="hligh1">
+	<input type="checkbox" name="newwindow" id="newwindow" value="1" <?echo ($this->data['newwindow'] == "1" ? "checked=checked" : ""); ?>> 
+  </td>
+</tr>
+<tr style="display:none;">
+ <td class="hligh1" width="20%"><label for="description">Cate List</label></td>
+ <td class="hligh1">
+	<input type="checkbox" name="catelist" id="catelist" value="1" <?echo ($this->data['catelist'] == "1" ? "checked=checked" : ""); ?>> 
+  </td>
+</tr>
+<tr>
+ <td class="hligh1" width="20%"><label for="description">Order</label></td>
+ <td class="hligh1">
+	<input type="text" name="myorder" id="myorder" maxlength=3 
+   value="<?php echo $this->data["myorder"]; ?>" style="width:40px"> 
+  </td>
+</tr>
+<tr>
+ <td class="hligh1" width="20%" valign="top"><label for="description">Short content</label></td>
+ <td class="hligh1" width="80%">
+                <input type="hidden" name="shortcontent" id="shortcontent" value="<?php echo $this->data['shortcontent'];?>" />
+                <script type="text/javascript">
+                var sBasePath = "/fckeditor/" ;
+                var oFCKeditor_email_content2 = new FCKeditor( 'myFCKeditor_shortcontent' ) ;
+                oFCKeditor_email_content2.BasePath	= sBasePath ;
+                oFCKeditor_email_content2.Height	= "350" ;
+                oFCKeditor_email_content2.Width	= "95%" ;
+                oFCKeditor_email_content2.ToolbarSet = '' ;
+                oFCKeditor_email_content2.Value	= document.getElementById("shortcontent").value ;
+                </script>
+                <div id="myFCKeditor_shortcontent"></div>
+                <script type="text/javascript">
+                var div = document.getElementById("myFCKeditor_shortcontent");
+                div.innerHTML = oFCKeditor_email_content2.CreateHtml();
+                </script>
+ </td>
+</tr>
+<tr style="display:none;">
+ <td class="hligh1" width="20%"><label for="description">Sub menu</label></td>
+ <td class="hligh1">
+	<?php echo $this->formSelect('submenu', $this->data['submenu'], array(																						
+											'style'=>'width:200px',
+											'onchange'=>""
+											), $this->submenus); ?> 
+  </td>
+</tr>
+<tr style="display:none;">
+ <td class="hligh1" width="20%"><label for="description">Menu start</label></td>
+ <td class="hligh1">
+	<input type="text" name="submenu_menustart" id="submenu_menustart" maxlength=3 
+   value="<?php echo $this->data["submenu_menustart"]; ?>" style="width:40px"> 
+  </td>
+</tr>
+<tr style="display:none;">
+ <td class="hligh1" width="20%"><label for="description">language for submenu</label></td>
+ <td class="hligh1">
+	<?php echo $this->formSelect('submenu_lang', $this->data['submenu_lang'], array(																						
+											'style'=>'width:200px',
+											'onchange'=>""
+											), $this->langs); ?> 
+  </td>
+</tr>
+</table>
+<br />
+<p>
+<input type="submit" name="submit" value="Lưu" class="button"/>
+<input type="hidden" name="id" value="<?php echo $this->data["itemid"]; ?>" />
+</p>
+</form>
+</div>
+<div id="fsubmit"></div>
+<script language="javascript">    
+    $(document).ready(function(){
+        $('#frmBlock').submit(function(e){
+            document.getElementById('shortcontent').value = FCKeditorAPI.GetInstance('myFCKeditor_shortcontent').GetHTML();
+            return true;
+//            e.preventDefault();
+//            $.post("<?php echo $this->form_action; ?>", $("#frmBlock").serialize(), function(data){
+//                alert($("#frmBlock").serialize());
+//                alert(data);
+//                //window.parent.tb_remove();
+//                //window.parent.location = "/admin/user/cate/cate?act=Complete&menuname=<?=$this->menuname?>";
+//            });
+        });
+    });        
+</script>

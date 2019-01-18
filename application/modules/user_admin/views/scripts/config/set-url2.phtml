@@ -1,0 +1,200 @@
+<form role="form" action=""  id="add" name="add" class="frmReport">
+    <!--<div class="col-md-8">-->
+    <div class="box box-primary">
+        <div class="box-header">
+            <h3 class="box-title">LINK HNAMMOBILE</h3>
+        </div><!-- /.box-header -->
+        <!-- form start -->
+        <!--<div style="margin-top: 30px"></div><hr/>-->
+        <div class="box-body">
+            <div class="col-md-9">
+            
+            <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label"  id="text-align-label">Tên : </label>
+                    <div  class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                        <input id="name" name="name" class="form-control" value="<?php echo $this->detail["name"]; ?>" placeholder="Vd: Đơn hàng đóng gói" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label"  id="text-align-label">Modules: </label>
+                    <div  class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                        <select id="modules" name="moduless" class="form-control">
+                            <option value="">Chọn</option>
+                            <?php foreach ($this->list_modules as $items) {
+                                $sli='';
+                                if($this->detail["modules"] == $items){
+                                   $sli = "selected = 'selected'"; 
+                                }
+                                ?>
+                            <option <?php echo $sli ?>  value="<?php echo $items ?>"><?php echo $items ?> </option>
+
+                                <?php } ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label"  id="text-align-label">Controller : </label>
+                    <div  class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                        <input id="controller" name="controllers" class="form-control" value="<?php echo $this->detail["controller"] ?>" placeholder="Ví dụ : IndexController -> index" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label"  id="text-align-label">Action : </label>
+                    <div  class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                        <input id="action" name="actions" class="form-control" value="<?php echo $this->detail["action"] ?>" placeholder="Ví dụ: indexAction -> index" />
+                    </div>
+                </div>
+                
+            
+            <div class="form-group">
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label" style="color: red">Phân quyền : </label>
+                <div class="col-md-9">
+                    <div class="col-md-4">
+                        <?php
+                    $count=0;
+                    
+                    foreach ($this->list_regency as $items) {
+                        $checked ='';
+                        if(in_array($items["id"], $this->people) ===true){
+                            $checked = ' checked ="checked"';
+                        }
+                        if ($count++ >= $this->mid) continue;
+                        ?>
+                        <label><input id="regency_<?php echo $items["id"] ?>" name="regency_<?php echo $items["id"] ?>" <?php echo $checked ?>   type="checkbox" value="<?php echo $items["id"] ?>">  <?php echo $items["name"] ?></label><br/>
+                    <?php } ?>
+                    </div>
+                    <div class="col-md-4">
+                        <?php
+                    $count2=0;
+                    foreach ($this->list_regency as $items) {
+                        $checked1 ='';
+                        if(in_array($items["id"], $this->people) ===true){
+                            $checked1 = ' checked ="checked"';
+                        }
+                        if ($count2++ < $this->mid) continue;
+                        ?>
+                        <label><input id="regency_<?php echo $items["id"] ?>" <?php echo $checked1 ?> name="regency_<?php echo $items["id"] ?>"  type="checkbox" value="<?php echo $items["id"] ?>">     <?php echo $items["name"] ?></label><br/>
+                    <?php } ?>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label"  id="text-align-label">Vị trí : </label>
+                    <div  class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                        <select name="postion" id="postion" class="form-control">
+                            <?php foreach ($this->list_postion as $key=> $items){ 
+                                $sl='';
+                                if($this->detail["postion"] == $key){
+                                    $sl = ' selected ="selected"';
+                                }
+                                ?>
+                            
+                            <option <?php echo $sl; ?> value="<?php echo $key ?>"> <?php echo $items ?></option>
+                            <?php }?>
+                        </select>
+                    </div>
+                </div>
+                
+                
+            <div class="box-footer">
+                <button type="submit" id="save" class="btn btn-primary"><i class="fa fa-floppy-o"> Lưu</i></button>
+                <button style="display: none" type="button" id="wt" class="btn btn-primary"> <i class="fa fa-spinner"> Đang xử lý...</i></button>
+                <input type="hidden" name="id" id="id" value="<?php echo $this->detail["id"] ?>" />
+            </div>
+
+
+
+        </div><!-- /.box-body -->
+        </div><!-- /.box-body -->
+
+    </div>
+    <!--</div>-->
+
+
+
+    <script>
+        function keys(e)
+        {
+            var keyword = null;
+            if (window.event)
+            {
+                keyword = window.event.keyCode;
+            } else
+            {
+                keyword = e.which; //NON IE;
+            }
+            if (keyword < 48 || keyword > 57)
+            {
+                if (keyword == 48 || keyword == 127)
+                {
+                    return;
+                }
+                return false;
+            }
+        }
+
+        $(".pricing").keyup(function() {
+            var price = this.value;
+            price = price.replace(/,/gi, "");
+            price = price + ".";
+            price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            var sprice = price.split(".");
+            $(this).val(sprice[0]);
+        });
+
+
+    </script>
+
+</form>                          
+<script>
+   function removeBlock(num) {
+            $("#dsadd_" + num).remove();
+        }
+    $(document).ready(function() {
+        $('#apply').change(function(){
+            var id = $( "#apply option:selected" ).val();
+            if(id ==1){
+                $('.addproducts').show();
+            }
+            if(id ==0 || id==-1){
+                $('.addproducts').hide();
+                $('.products_id').val('');
+            }
+//            alert(id);
+        });
+        
+        
+    });
+    $('#save').click(function (e) {
+            e.preventDefault();
+            $('#wt').show();
+            $('#save').hide();
+            $.post("/admin/user/config/save-url", $('form').serialize(), function (resp) {
+                $('.errblock').remove();
+                $.each(resp, function (i, obj) {
+                    var id = obj.id;
+                    var msg = obj.msg;
+                    
+                    if (msg != "ok") {
+                        alert(msg);
+                        $('#' + id).focus();
+                        $('#wt').hide();
+                        $('#save').show();
+                        return false;
+                    } else {
+                        alert('Thành công');
+                        $('#wt').hide();
+                        $('#save').show();
+//                        window.location = "/admin/user/config/list-url";
+                    }
+
+                });
+            }, 'json');
+        });
+</script>

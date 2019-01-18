@@ -1,0 +1,100 @@
+<div class="panel panel-default">
+    <div class="col-md-12">
+        <i class="fa fa-home"></i>
+        <b>DOANH SỐ BÁN SÀN SALEONLINE </b>
+        <form role="form" id="frm" method="get"  class="frmReport">
+            <div class="col-md-3 col-xs-6">
+                <div class="form-group input-group-sm ">
+                    <select  name="productsid" onchange="change_productsid_kmc();" id="productsid" class="form-control">
+                        <option value="0">Loại</option>
+                        <?php
+                        foreach ($this->list_hnammobile as $key => $value) {
+                            $sl = '';
+                            if ($this->productsid == $key) {
+                                $sl = 'selected = selected';
+                            }
+                            ?>
+                            <option data="<?php echo $value ?>" <?php echo $sl ?> value="<?php echo $key ?>"> <?php echo $value ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3 col-xs-6">
+                <div class="form-group input-group-sm">
+                    <select style="width: 100%" name="cated_id"  id="cated_id" class="selects form-control">
+                        <option value="0"> Sản phẩm</option>
+                        <?php
+                        foreach ($this->menu as $items) {
+                            $sl = '';
+                            if ($this->cated_id == $items["itemid"]) {
+                                $sl = 'selected = selected';
+                            }
+                            ?>
+                            <option data="<?php echo $items["title"] ?>" <?php echo $sl ?> value="<?php echo $items["itemid"] ?>"> <?php echo $items["title"] ?></option>
+                        <?php } ?>
+
+                    </select>
+                </div>
+            </div>
+            <button class="btn btn-sm btn-primary"><i class="fa fa-search"></i> Xem</button>
+        </form>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="box-body">
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Tên sản phẩm</th>
+            <th>Giá Hnam</th>
+            <?php
+            foreach ($this->list_ctkm as $key => $items) {
+                ?>
+                <th ><?php echo $items ?></th>
+            <?php } ?>
+        </tr>
+        <?php
+        foreach ($this->array_products_id as $k => $itemid) {
+            ?>
+            <tr>
+                <td><?php echo $this->name_products[$itemid]; ?></td>
+                <td><?php echo number_format($this->array_price[$itemid]) ?></td>
+                <?php
+                foreach ($this->list_ctkm as $ictkm => $items) {
+                    $price = $this->array_price[$itemid] - $this->array_price_km[$itemid][$ictkm];
+                    if ($this->array_price_km[$itemid][$ictkm] == 0) {
+                        $price = '';
+                    }
+                    ?>
+                    <td><?php echo number_format($price) ?></td>
+                    <?php
+                }
+                ?>
+            </tr>
+            <?php
+        }
+        ?>
+    </table>
+</div>
+<script>
+function change_productsid_kmc(){
+            var productsid = $('#productsid option:selected').val();
+            $('#cated_id').html('');
+            $('#cated_id').html('<option value="0"> Tất cả</option>');
+            var ajaxLink = '/admin/user/ajax/get-menu';
+            $.ajax({
+                method: 'get',
+                cache: false,
+                url: ajaxLink,
+                data: {productsid: productsid},
+                dataType: 'json',
+                success: function (resp) {
+                    console.log(resp);
+                    $.each(resp, function (i) {
+                        html_cated_id = '<option  value="' + resp[i].itemid + '">' + resp[i].title + '</option>';
+                        $('#cated_id').append(html_cated_id);
+                    });
+
+                }
+            });
+        }
+</script>

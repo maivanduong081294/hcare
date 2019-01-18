@@ -1,0 +1,543 @@
+<div class="box-header panel-default">
+    <h3 class="box-title">DANH SÁCH BẢO HÀNH</h3>
+    <div class="row">
+        <form>
+            <input type="hidden" name="dd" id="dd" value="<?php echo rand(); ?>" />
+            <div class="form-group col-md-2 col-xs-6">
+                <div class="input-group-sm">
+                    <select name="storeid_in"  id="storeid_in" style="width: 100%" class="selects input-sm">
+                        <option value=""> Nhận máy từ chi nhánh nào</option>
+                        <?php
+                        foreach ($this->list_store as $items) {
+                            $sl = '';
+                            if ($this->storeid_in == $items["userid"]) {
+                                $sl = 'selected = selected';
+                            }
+                            ?>
+                            <option  <?php echo $sl ?> value="<?php echo $items["userid"] ?>"> <?php echo $items["storename"] ?></option>
+                        <?php } ?>
+
+                    </select>
+                </div>
+            </div>
+            <div class="form-group col-md-2 col-xs-6">
+                <div class="input-group-sm">
+                    <select name="storeid"  id="storeid" style="width: 100%" class="selects input-sm">
+                        <?php
+                        $sl0 = '';
+                        $sl1 = '';
+                        if ($this->storeid == -1) {
+                            $sl0 = 'selected = "selected"';
+                        }
+                        if ($this->storeid == 0) {
+                            $sl1 = 'selected = "selected"';
+                        }
+                        ?>
+                        <option <?php echo $sl0; ?> value="-1"> Tất cả chi nhánh(trừ KBH)</option>
+                        <option <?php echo $sl1; ?> value="0"> Kho bảo hành</option>
+                        <?php
+                        foreach ($this->list_store as $items) {
+                            $sl = '';
+                            if ($this->storeid == $items["userid"]) {
+                                $sl = 'selected = "selected"';
+                            }
+                            ?>
+                            <option  <?php echo $sl ?> value="<?php echo $items["userid"] ?>"> <?php echo $items["storename"] ?></option>
+                        <?php } ?>
+
+                    </select>
+                </div>
+            </div>
+            <div class="form-group col-md-2 col-xs-6">
+                <div class="input-group-sm">
+                    <select style="width: 100%"  class="selects input-sm"  name="receiver_id" id="receiver_id">
+                        <option value="">Chọn tên nhân viên</option>
+                        <?php
+                        foreach ($this->sreceiver as $items) {
+                            $sl = '';
+                            if ($this->receiver_id == $items["userid"]) {
+                                $sl = 'selected="selected"';
+                            }
+                            ?>
+                            <option <?php echo $sl ?> value="<?php echo $items["userid"] ?>"><?php echo $items["fullname"] ?></option>
+<?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group col-md-2 col-xs-6">
+                <div class="input-group-sm">
+                    <select name="complete" id="complete" class="form-control">
+                        <option value="-1">Trạng thái sửa chửa</option>
+                        <?php
+                        foreach ($this->lcomplete as $items) {
+                            $sl = '';
+                            if ($this->complete == $items["id"]) {
+                                $sl = 'selected = selected';
+                            }
+                            ?>
+                            <option <?php echo $sl ?> value="<?php echo $items["id"] ?>" ><?php echo $items["name"] ?></option>
+<?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group col-md-2 col-xs-6">
+                <div class="input-group-sm">
+                    <select name="status_guarantee" id="status_guarantee" class="form-control">
+                        <option value="0">Trạng thái bảo hành</option>
+                        <?php
+                        foreach ($this->list_status_guarantee as $key => $items) {
+                            $sl = '';
+                            if ($this->status_guarantee == $key) {
+                                $sl = 'selected = selected';
+                            }
+                            ?>
+                            <option <?php echo $sl ?> value="<?php echo $key ?>"><?php echo $items ?></option>
+<?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2 col-xs-6">
+                <div class="input-group-sm">
+                <select name="out" id="out" class="form-control">
+                    <option <?php if ((int) $this->out == 0) {
+    echo 'selected="selected"';
+} ?>  value="0">Chưa xuất</option>
+                    <option <?php if ((int) $this->out == 1) {
+    echo 'selected="selected"';
+} ?> value="1">Đã xuất</option>
+                </select>
+            </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-2 col-xs-12">
+                <div class="input-group-sm">
+                <select name="tstatus" id="tstatus" class="form-control">
+                    <option  value="0">Trạng thái lên hãng</option>
+                    <option <?php if ((int) $this->tstatus == 1) {
+    echo 'selected="selected"';
+} ?>  value="1">Chưa lên hãng</option>
+                    <option <?php if ((int) $this->tstatus == 2) {
+    echo 'selected="selected"';
+} ?> value="2">Đã lên hãng & trạng thái</option>
+                </select>
+            </div>
+            </div>
+            <div class="col-md-1"><label style="color: red">Đồng bộ <input type="checkbox" name="sync" id="sync" value="1"></label></div>
+            <div class="form-group col-md-3 col-xs-12">
+                <div class="input-group-sm">
+                    <?php
+                    $start_end = 'Date range picker';
+                    if ($this->start_end != null) {
+                        $start_end = $this->start_end;
+                    }
+                    ?>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default pull-right" id="daterange-btn">
+                            <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                            <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                            <i class="fa fa-caret-down"></i>
+                        </button>
+                    </span>
+                    <span class="input-group-btn">
+                        <button type="submit"  class="btn btn-info"><i class="fa fa-search"> <span class="hidden-xs">Xem </span></i></button>
+                    </span>
+                </div>
+            </div>
+            <button type="button" onclick="adds3();return false;" id="adds" class="btn btn-default right"><i class="fa fa-plus"> Thêm </i></button>
+        <button type="button" style="display: none" onclick="closess();return false;" id="closes" class="btn btn-danger right"><i class="fa fa-times-circle-o"> Đóng </i></button>
+        </form>
+    </div>
+    <div class="clear"></div>
+    <div class="frm_add">
+    </div>
+</div><!-- /.box-header -->
+<div class="clearfix"></div>
+<div class="box-body">
+    <div class="table-responsive">
+        <table class="table table-condensed table-striped table-bordered">
+            <tr>
+<?php foreach ($this->lcomplete as $items) { ?>
+                    <th><?php echo $items["name"] ?></th>
+                <?php } ?>
+                <th><a href="/admin/user/guaranteepk/list?out=1&storeid=<?php echo $this->storeid ?>&receiver_id=<?php echo $this->receiver_id ?>&complete=<?php echo $this->complete ?>&status_guarantee=<?php echo $this->status_guarantee ?>&transfers=<?php echo $this->transfers ?>&start_end=<?php echo $this->start_end ?>">Đã xuất</a></th>
+                <th><a href="/admin/user/guaranteepk/list?out=0&storeid=<?php echo $this->storeid ?>&receiver_id=<?php echo $this->receiver_id ?>&complete=<?php echo $this->complete ?>&status_guarantee=<?php echo $this->status_guarantee ?>&transfers=<?php echo $this->transfers ?>&start_end=<?php echo $this->start_end ?>">Tồn kho</a></th>
+            </tr>
+            <tr>
+                <?php foreach ($this->lcomplete as $items) { ?>
+                    <td style="background: <?php echo $items["color"] ?>;color: #fff;font-size: 30px">
+                        <b><?php echo number_format($this->total[$items["id"]]) ?></b>
+                    </td>
+<?php } ?>
+                <td style="font-size: 30px;"><b><a href="/admin/user/guaranteepk/list?out=1&storeid=<?php echo $this->storeid ?>&receiver_id=<?php echo $this->receiver_id ?>&complete=<?php echo $this->complete ?>&status_guarantee=<?php echo $this->status_guarantee ?>&transfers=<?php echo $this->transfers ?>&start_end=<?php echo $this->start_end ?>"><?php echo number_format($this->total_out); ?></a></b></td>
+                <td style="font-size: 30px;"><b><a href="/admin/user/guaranteepk/list?out=0&storeid=<?php echo $this->storeid ?>&receiver_id=<?php echo $this->receiver_id ?>&complete=<?php echo $this->complete ?>&status_guarantee=<?php echo $this->status_guarantee ?>&transfers=<?php echo $this->transfers ?>&start_end=<?php echo $this->start_end ?>"><?php echo number_format($this->total_inventory); ?></a></b></td>
+            </tr>
+        </table>
+    </div>
+    <div class="table-responsive">
+        <table id="f_tables" class="table table-condensed table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th width="10"></th>
+                    <th class="hidden-xs" width="10">STT</th>
+                    <th width="10">Số phiếu</th>
+                    <th class="hidden-xs">Ngày tạo phiếu</th>
+                    <th class="hidden-xs">Ngày xác nhận</th>
+                    <th class="hidden-xs">Ngày xuất</th>
+                    <th class="hidden-xs">Ngày mua máy</th>
+                    <th width="60">Imei</th>
+                    <th>Sản phẩm</th>
+                    <th class="hidden-xs">Bảo hành</th>
+                    <th class="hidden-xs">Trạng thái</th>
+                    <th class="hidden-xs">Nhân viên 1</th>
+                    <th class="hidden-xs">Nhân viên 2</th>
+                    <th class="hidden-xs">Nhân viên 3</th>
+                    <th>Báo giá</th>
+                    <th class="hidden-xs">Ngày hẹn</th>
+                    <th>Xác nhận</th>
+                    <!--<th>Chuyển tiền</th>-->
+                    <th>Biên nhận</th>
+                    <!--<th>Khách đồng ý</th>-->
+                    <!--<th>Báo hãng</th>-->
+                    <th>CN</th>
+                    <th width="80"></th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th class="hidden-xs"></th>
+                    <th class="hidden-xs"></th>
+                    <th class="hidden-xs"></th>
+                    <th class="hidden-xs"></th>
+                    <th class="hidden-xs"></th>
+                    <th class="hidden-xs"></th>
+                    <th></th>
+                    <th class="hidden-xs"></th>
+                    <th class="hidden-xs"></th>
+                    <th class="hidden-xs"></th>
+                    <th class="hidden-xs"></th>
+                    <th class="hidden-xs"></th>
+                    <th class="hidden-xs"></th>
+                    <th style="text-align:right">Total:</th>
+                    <th></th>
+                    <th class="hidden-xs"></th>
+                    <th class="hidden-xs"></th>
+                    <th class="hidden-xs"></th>
+                    <th class="hidden-xs"></th>
+                    <th class="hidden-xs"></th>
+<!--                    <th class="hidden-xs"></th>
+                    <th class="hidden-xs"></th>
+                    <th class="hidden-xs"></th>-->
+                </tr>
+            </tfoot>
+            <tbody>
+<?php
+$stt = 0;
+foreach ($this->list as $items) {
+    if ($this->ok > -1 && (int) $items["money"] == 0) {
+        continue;
+    }
+    $purchase_date = '';
+    if (strtotime($items["purchase_date"]) > 0) {
+        $purchase_date = date('d/m/Y', strtotime($items["purchase_date"]));
+    }
+    $token = md5($this->skey . $items["id"]);
+    $token3 = md5($this->skey . $items["id"]);
+    $token2 = md5($this->skey . $items["id"] . $this->status_where);
+    ?>
+
+                    <tr style="height: 50px">
+                        <td style="background: <?php echo $this->complete_color[(int) $items["complete"]] ?>"></td>   
+                        <td class="hidden-xs"><?php echo ++$stt; ?></td>
+                        <td><?php echo $items["id"]; ?></td>
+                        <td class="hidden-xs"><?php echo date('d/m/Y', strtotime($items["datetime"])); ?></td>
+                        <td class="hidden-xs">
+                            <?php
+                            if($items["date_confirm"] != NULL){
+                                echo date('d/m/Y', strtotime($items["date_confirm"]));
+                            }
+                            ?>
+                        
+                        </td>
+                        
+                        <td class="hidden-xs">
+                            <?php if ($this->date_outs[$items["id"]] != NULL) { ?>
+                                <?php echo date('d/m/Y', strtotime($this->date_outs[$items["id"]])); ?>
+    <?php } ?>
+                        </td>
+                        <td class="hidden-xs"><?php echo $purchase_date ?></td>
+                        <td><?php echo $items["imei"]; ?></td>
+                        
+                        <td><?php echo $items["item_name"]; ?></td>
+                        <td class="hidden-xs">
+                            <?php foreach ($items["s_warranty"] as $_item) { ?> 
+                                <?php echo $this->name_producers[$_item["id_warranty"]]; ?> <br/>
+                            <?php } ?>
+                        </td>
+                        <td class="hidden-xs"><?php echo $this->list_status_guarantee[$items["status_guarantee"]]; ?></td>
+                        <td class="hidden-xs">
+                            <?php echo $this->receiver[$items["receiver_id"]]; ?>
+                        </td>
+                        <td class="hidden-xs">
+                            <?php echo $this->receiver[$items["receiver_id2"]]; ?>
+                        </td>
+                        <td class="hidden-xs">
+                            <?php echo $this->receiver[$items["receiver_id3"]]; ?>
+                        </td>
+                        <td>
+                            <?php echo number_format($items["money"]); ?>
+                        </td>
+                        <td class="hidden-xs">
+
+                            <?php
+                            foreach ($items["s_warranty"] as $_item) {
+                                $dealine = '';
+                                if (strtotime($_item["dealine"]) > 0) {
+                                    $dealine = date('d/m/Y', strtotime($_item["dealine"]));
+                                }
+                                ?> 
+                                    <?php echo $dealine; ?> <br/>
+                                <?php } ?>
+                        </td>
+                        <td>
+                            <?php
+                            $confirm = (int)$items["confirm"];
+                            $status_where = $items["status_where"];
+                            $receiver_id = $items["receiver_id"];
+                            $receiver_id2 = $items["receiver_id2"];
+                            $receiver_id3 = $items["receiver_id3"];
+                            
+                                if ((int) $items["complete"] > 1) {
+                                    echo 'Đã giao cho khách <i style="color:#090;size:50px" class="fa fa-check-circle fa-3 btn" aria-hidden="true"></i>';
+                                } else {
+                                    if($receiver_id2==0){
+                                        if($receiver_id ==0){
+                                            echo 'Chưa chọn nhân viên';
+                                        }else{
+                                            if($confirm==1){
+                                                echo 'Đã xác nhận';
+                                            }else{
+                                        ?>
+                                        <a style="font-size: 20px" data-toggle="tooltip" title="Chưa kích hoạt" onclick="actives(<?php echo $items["id"]; ?>,<?php echo $this->status_where ?>, '<?php echo $token2 ?>');return false;"><?php echo $this->icon[(int) $items["confirm"]] ?></a>
+                                        <?php }?>
+                                        <?php }?>
+                                    <?php }else{
+                                        if($receiver_id3==0){
+                                            echo 'Đang sửa';
+                                        }else{
+                                            if($confirm==0){
+                                                echo 'Đang chờ chi nhánh xác nhận';
+                                             }else{
+                                                echo 'Đã giao lại cho cửa hàng<i style="color:#090;size:50px" class="fa fa-check-circle fa-3 btn" aria-hidden="true"></i>';
+                                            }
+                                        }
+                                    }
+                                    ?>
+                                <?php }?>
+                            
+                            
+                        </td>
+
+                        <td>
+                            <?php foreach ($items["s_warranty"] as $_item) { ?> 
+        <?php echo $_item["receipt"]; ?> <br/>
+    <?php } ?>
+                        </td>
+
+                        <td>
+    <?php echo $this->storename[$items["storeid"]]; ?>
+                        </td>
+
+                        <td>
+                            <a title="Chi tiết bảo hành" data-toggle="tooltip" href="/admin/user/guaranteepk/detail?id=<?php echo $items["id"] ?>&token=<?php echo $token3; ?>" class="btn btn-info btn-sm"><i class="fa fa-file-o" aria-hidden="true"></i></a>
+                            <a title="Hủy đơn hàng này" data-toggle="tooltip" onclick="del_enabled(<?php echo $items["id"] ?>, '<?php echo $token3; ?>');
+                                return false;"  class="btn btn-danger btn-sm hidden-xs"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                            <a title="Lịch sử" data-toggle="tooltip" onclick="history(<?php echo $items["id"] ?>);return false;"  class="btn btn-warning btn-sm "><i class="fa fa-history" aria-hidden="true"></i></a>
+                        </td>
+
+                    </tr>
+<?php } ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal fade" id="updates">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div class="show_frm"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="history">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div class="history"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="ddelete"></div>
+<script>
+    function change_ok(id) {
+        var ok = $('#ok' + id + ' option:selected').val();
+        var result = confirm('Bạn chắc chắn muốn thực hiện ?');
+        if (result)
+            $('#ddelete').load('/admin/user/guaranteepk/ok-customer?id=' + id + "&ok=" + ok, function () {
+                alert('Lưu thành công.');
+                window.location.reload(true);
+            });
+    }
+    function bhang(id) {
+        var result = confirm('Bạn chắc chắn muốn thực hiện ?');
+        if (result)
+            $('#ddelete').load('/admin/user/guaranteepk/bhang?id=' + id, function () {
+                alert('Lưu thành công.');
+                window.location.reload(true);
+            });
+    }
+    function history(id) {
+        $.ajax
+                ({
+                    method: "POST",
+                    url: "/admin/user/guaranteepk/history",
+                    data: {id_guarantee: id},
+                    dataType: "html",
+                    success: function (data) {
+                        $('.history').html(data);
+                        $('#history').modal('show');
+                    }
+                });
+    }
+    function del_enabled(id, token) {
+        var result = confirm('Bạn chắc chắn muốn hủy ?');
+        if (result)
+            $('#ddelete').load('/admin/user/guaranteepk/del-enabled?id=' + id + "&token=" + token, function () {
+                alert('Hủy thành công.');
+                window.location.reload(true);
+            });
+    }
+
+    function transfers(id, transfers, token) {
+        var result = confirm('Bạn chắc chắn xác nhận?');
+        if (result)
+            $('#ddelete').load('/admin/user/guaranteepk/transfers?id=' + id + "&transfers=" + transfers + "&token=" + token, function () {
+                alert('Kích hoạt thành công.');
+                window.location.reload(true);
+            });
+    }
+    function actives(id, status_where, token) {
+        var result = confirm('Bạn chắc chắn muốn kích hoạt xác nhận?');
+        if (result)
+            $('#ddelete').load('/admin/user/guaranteepk/active?id=' + id + "&status_where=" + status_where + "&token=" + token, function () {
+                alert('Kích hoạt thành công.');
+                window.location.reload(true);
+            });
+    }
+    function closess() {
+        showss();
+    }
+    function showss() {
+        $('#adds').show();
+        $('.frm_add').html('');
+        $('#closes').hide();
+    }
+    function hidess() {
+        $('#adds').hide();
+        $('#closes').show();
+    }
+    function adds3() {
+        hidess();
+        $.ajax
+                ({
+                    method: "POST",
+                    url: "/admin/user/guaranteepk/search",
+                    data: {},
+                    dataType: "html",
+                    success: function (data) {
+                        $('.frm_add').html(data);
+                    }
+                });
+    }
+    function updates(id, token) {
+        $.ajax
+                ({
+                    method: "POST",
+                    url: "/admin/user/guaranteepk/update",
+                    data: {id: id, token: token},
+                    dataType: "html",
+                    success: function (data) {
+                        console.log(data);
+                        $('.show_frm').html(data);
+                        $('#updates').modal('show');
+                    }
+                });
+    }
+    function prints(id, token) {
+        $.ajax
+                ({
+                    method: "POST",
+                    url: "/admin/user/guaranteepk/print",
+                    data: {id: id, token: token},
+                    dataType: "html",
+                    success: function (data) {
+                        console.log(data);
+                        $('.show_frm').html(data);
+                        $('#updates').modal('show');
+                    }
+                });
+    }
+    $().ready(function () {
+        $("#f_tables").DataTable({
+            "pageLength": 25,
+            "footerCallback": function (row, data, start, end, display) {
+                var api = this.api(), data;
+                // Remove the formatting to get integer data for summation
+                var intVal = function (i) {
+                    return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                            i : 0;
+                };
+                // Total over all pages
+                total = api
+                        .column(12)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                // Total over this page
+                pageTotal = api
+                        .column(12, {page: 'current'})
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                // Update footer
+                $(api.column(12).footer()).html(
+                        format_number(pageTotal)
+                        //                '$'+pageTotal +' ( $'+ total +' total)'
+                        );
+            }
+
+        });
+    });
+
+    function format_number(nStr)
+    {
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        return x1 + x2;
+    }
+</script>

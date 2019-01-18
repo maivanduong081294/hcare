@@ -1,0 +1,37 @@
+Query
+
+1. update (loại phụ kiện+mới)
+- UPDATE users_products SET productsid = 4,type = 3 WHERE flag = 3
+
+2. update máy cũ (type = 4)
+- UPDATE users_products SET type = 4 WHERE cated_id = 53
+
+3. update máy mới (type = 3)
+- UPDATE users_products SET type = 3 WHERE cated_id != 53
+
+4 Lấy danh sách menu điện thoại, máy tính bảng, phụ kiện
+ + Điện thoại : SELECT itemid FROM ws_menuitem WHERE menuname='menu_products'
+	- Data : (32,41,42,44,45,51,53,778,780,782,784,490,264,185,227,556,354,759,437,585,563,559,408,452,455,674,688,513,758,760)
+ + Máy tính bảng :  SELECT itemid FROM ws_menuitem WHERE menuname='menu_tablet'
+	- Data : (439,739,466,263,622,174,554,529,337,362,494,586,587,522,764,765)
+ + Phụ kiện       : SELECT itemid FROM ws_menuitem WHERE menuname='menu_acc'
+	- Data : (33,291,567,656,607,509,425,592,595,596,597,598,599,600,602,63,775,776,777,781,783,62,787,791,792,93,99,100,470,488,472,645,648,773,651,652,653,654,655,763,737,738,481,104,105,112,469,127,128,229,130,131,133,167,590,485,486,662,396,505,237,146,295,195,569,570,571,572,573,576,464,695,774,697,772,727,724,728,767,731,790,344,345,347,491,196,591,223,225,543,202,204,666,436,208,404,594,274,275,276,578,579,287,657,633,623,625,626,748,629,631,634,635,637,638,642,643,661,663,664,290,296,415,624,435,483,431,432,433,608,609,610,611,612,613,614,620,616,640,618,619,394,381,383,384,729,386,388,389,390,493,560,561,401,440,660,456,675,676,677,678,679,680,681,684,685,686,687,689,690,691,740,743,742,744,745,746,458,589,503,511,512,584,583,582,580,518,732,506,735,694,671,747,749,750,751,752,753,754,757,756,761,766,768,769,770)
+	
++ laptop       : SELECT itemid FROM ws_menuitem WHERE menuname='menu_laptop'
+	- Data : (673)
+	
+4. Update loại  (điện thoại,máy tính bảng )
+ + Điện thoại : UPDATE users_products SET productsid = 3 WHERE cated_id IN (32,41,42,44,45,51,778,780,782,784,490,264,185,227,556,354,759,437,585,563,559,408,452,455,674,688,513,758,760)
+  + Máy tính bảng : UPDATE users_products SET productsid = 5 WHERE cated_id IN (439,739,466,263,622,174,554,529,337,362,494,586,587,522,764,765)
+  + Laptop : UPDATE users_products SET productsid = 6 WHERE cated_id IN (673)
+  
+  + đồng hồ tm : UPDATE users_products SET productsid = 8 WHERE cated_id IN ()
+  Sam sung
+  UPDATE users_products SET cated_id = 786,flag = 1,type = 3,productsid = 8 WHERE products_id IN (7400,7403)
+  sil
+  UPDATE users_products SET cated_id = 789,flag = 1,type = 3,productsid = 8 WHERE products_id IN (6661)
+  Apple
+  
+  UPDATE users_products SET cated_id = 785,flag = 2,type = 3,productsid = 8 WHERE products_id IN (6331,6333,6191,6201,6451)
+  
+ 

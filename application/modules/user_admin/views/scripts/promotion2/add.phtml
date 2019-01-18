@@ -1,0 +1,336 @@
+<div class="box-header panel-default">
+
+</div>
+<div class="box-body">
+    <div class="panel-heading">THÊM KHUYẾN MÃI NHANH</div>
+    <form>
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="input-group input-group-sm">
+                    <input  type="text" class="form-control pull-right" name="id" id="id" value="<?php echo $this->id ?>" placeholder="id sản phẩm"/>
+                    <span class="input-group-btn" style="margin-right: 10px">
+                        <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> Xem </i></button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="clearfix"></div>
+
+    <?php if ($this->detail != NULL) { ?>
+        <div>
+            <form role="form" action=""  id="data_frm" name="data_frm" method="POST" class="frmReport">
+                <div class="col-md-3">
+                    <span>Thời gian áp dụng:</span>
+                    <input type="text" class="form-control pull-left" name="start_end" id="reservationtime" value="<?php echo $this->start_end ?>" placeholder="Ngày bắt đầu và ngày kết thúc...">
+                    <div class="form-group hidden">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-text-width"></i></span>
+                            <select class="selects"  name="one_or_more" id="one_or_more" data-placeholder="Lựa chọn thêm 1 sản phẩm hoặc nhiều sản phẩm" tabindex="-1" aria-hidden="true">
+                                <?php
+                                foreach ($this->list_select as $key => $items) {
+                                    ?>
+                                    <option value="<?php echo $key ?>">Hình thức thêm <?php echo $items ?> sản phẩm</option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="add_one_more0">
+                        <span>Lựa chọn sản phẩm</span>
+                        <select onchange="change_product();" class="selects"  name="product_ids" id="product_ids">
+                            <option value="">Tất cả sản phẩm</option>
+                            <?php foreach ($this->slist as $items) {
+                                ?>
+                                <option value="<?php echo $items ?>"><?php echo $items ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div  class="add_one_more1 hid">
+                        <div class="form-group ">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-text-width"></i></span>
+                                <textarea class="form-control" name="product_idss" id="product_idss" placeholder="Nhập mã sản phẩm được khuyến mãi..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <span>Màu của sản phẩm:</span>
+                    <select data-placeholder="Nhập mã màu khuyến mãi ..." class="selects pcolor0" name="colorid" id="colorid0">
+                        <option value="0">Tất cả màu</option>
+                        <?php
+                        foreach ($this->color as $color) {
+                            $sl = '';
+                            if ($this->detail_promotion["colorid"] == $color["colorid"]) {
+                                $sl = 'selected="selected"';
+                            }
+                            ?>
+                            <option <?php echo $sl; ?> value="<?php echo $color["colorid"] ?>"><?php echo $this->name_color[$color["colorid"]] ?></option>
+                        <?php } ?>
+                    </select>
+
+                </div>
+                <div class="col-md-3">
+                    <span>Khuyến mãi sàn :</span>
+                    <select data-placeholder="Khuyến mãi sàn" class="selects" name="ictkm" id="ictkm">
+                        <?php
+                        foreach ($this->list_ctkm2 as $val) {
+                            ?>
+                            <option value="<?php echo $val["id"] ?>"><?php echo $val["name"] ?></option>
+                        <?php } ?>
+                    </select>
+                    <div class="add_one_more0 kmap">
+                        <span>Khuyến mãi áp dụng (*)</span>
+                        <select class="selects"  name="idfast[]" id="idfast" multiple data-placeholder="Khuyến mãi áp dụng ..." tabindex="-1" aria-hidden="true">
+                            <?php
+                            foreach ($this->list_fast as $items) {
+                                $sl = '';
+                                if ($this->detail_promotion["idfast"] == $items["itemid"]) {
+                                    $sl = 'selected="selected"';
+                                }
+                                ?>
+                                <option <?php echo $sl; ?> value="<?php echo $items["itemid"] ?>"><?php echo $items["title"] ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="add_one_more0 kmap ">
+                        <span>chi nhánh áp dụng (*)</span>
+                        <select class="selects"  name="vote_notus2[]" id="vote_notus2"  data-placeholder="Chi nhánh áp dụng ..." tabindex="-1" aria-hidden="true">
+                            <option value="167">Saleonline</option>
+                        </select>
+                    </div>
+
+                    <div  class="add_one_more1 hid">
+                        <span>Khuyến mãi áp dụng (*)</span>
+                        <select style="width: 100%" class="selects"  name="idfasts" id="idfasts" data-placeholder="Khuyến mãi áp dụng ...">
+                            <option value="">Khuyến mãi áp dụng</option>
+                            <?php
+                            foreach ($this->list_fast as $items) {
+                                $sl = '';
+                                if ($this->detail_promotion["idfast"] == $items["itemid"]) {
+                                    $sl = 'selected="selected"';
+                                }
+                                ?>
+                                <option <?php echo $sl; ?> value="<?php echo $items["itemid"] ?>"><?php echo $items["title"] ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="add_one_more1 hid">
+                        <span>chi nhánh áp dụng (*)</span>
+                        <select class="selects"  name="vote_notus2s[]" id="vote_notus2s" multiple data-placeholder="Chi nhánh áp dụng ..." tabindex="-1" aria-hidden="true">
+                            <option value="0">Tất cả chi nhánh</option>
+                            <?php
+                            foreach ($this->list_vote as $items) {
+                                ?>
+                                <option  value="<?php echo $items["userid"] ?>"><?php echo $items["storename"] ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+
+                </div>
+
+
+
+
+                <div class="clearfix"></div>
+                <div class="box-footer">
+                    <button type="button" id="add0" onclick="add(0);
+                            return false;" class="btn btn-primary"><i class="fa fa-plus"> Thêm mới</i></button>
+                    <button style="display: none" type="button" id="wt_add0" class="btn btn-primary"><i class="fa fa-spinner"> Đang xử lý</i></button>
+                    <input type="hidden" name="id" id="id" value="<?= $this->id; ?>" />
+                </div>
+            </form>
+        </div>
+    
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table id="f_table2" class="table table-bordered table-condensed table-striped">
+                <thead>
+                    <tr>
+                        <!--<th width="10"><input name="select-all" type="checkbox" data-toggle="tooltip" title="Select All"/></th>-->
+                        <th class="hidden-xs" width="10">ID</th>
+                        <th>Tên khuyến mãi</th>
+                        <th  width="10">Loại</th>
+                        <th class="hidden-xs" width="40">Trị giá</th>
+                        <th class="hidden-xs" width="40">HT</th>
+                        <th class="hidden-xs">Tên sản phẩm</th>
+                        <th>Từ ngày</th>
+                        <th>Đến ngày</th>
+                        <th>Chương trình khuyến mãi</th>
+                        <th width="20"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $no = 1;
+                    foreach ($this->items as $list) {
+                        $date_from2 = $list["date_from2"];
+                        $date_to2 = $list["date_to2"];
+//                        if ($date_from2 != NULL && $date_from2 != '0000-00-00 00:00:00') {
+//                            if (strtotime($date_to2) < strtotime('now')) {
+//                                continue;
+//                            }
+//                        }
+
+                        $is_actived = $list["enabled"];
+                        ?>
+                        <tr bgcolor="<?echo $bgcolor; ?>" class="row-<?php echo $list["itemid"]; ?>">
+
+                                        <!--<td><input type="checkbox" name="select-user[]" class="check-user minimal-red" value="<?php echo $list["itemid"]; ?>"/></td>-->
+                            <td class="hidden-xs"><?php echo $list["itemid"]; ?></td>
+                            <td ><?php echo $this->name_promotion_fast[$list["idfast"]]; ?></td>
+                            <td ><?php echo $this->types[$list["idfast"]]; ?></td>
+                            <td class="hidden-xs"><?php echo number_format($this->price[$list["idfast"]]); ?></td>
+                            <td class="hidden-xs"><?php echo number_format($this->return_price[$list["idfast"]]); ?></td>
+                            <td class="hidden-xs">
+                                <?php
+                                echo $this->name_product[$list["product_ids"]]
+                                ?>
+                                --[
+                                <?php echo $list["product_ids"] ?>
+                                ]
+                            </td>
+                            <td>
+                                <?php
+                                if ($date_from2 != NULL && $date_from2 != '0000-00-00 00:00:00') {
+                                    $date_from2 = date('d/m/Y H:i:s', strtotime($list["date_from2"]));
+                                }
+                                if ($date_to2 != NULL && $date_to2 != '0000-00-00 00:00:00') {
+                                    $date_to2 = date('d/m/Y H:i:s', strtotime($list["date_to2"]));
+                                }
+                                ?>
+                                <?php echo $date_from2; ?></td>
+                            <td><?php echo $date_to2; ?></td>
+                            <td><?php echo $this->name_ctkm[$list["ictkm"]] ?></td>
+                            <td>
+                                <?php if(in_array($list["ictkm"], $this->array_km_san)){ ?>
+                                <?php if ($is_actived == 0): ?>
+                                    <a title="Restore" onclick="del(<?php echo $list["itemid"]; ?>, 1);
+                                            return false;" class="btn btn-warning btn-sm" data-toggle="tooltip" rels="<?php echo $list["itemid"] ?>"  href="#"><i class="fa fa-reply"></i></a>
+                                   <?php else: ?>
+                                    <a title="Xóa" onclick="del(<?php echo $list["itemid"]; ?>, 0);
+                                            return false;"  class="btn btn-danger btn-sm" data-toggle="tooltip" rels="<?php echo $list["itemid"] ?>"  href="#"><i class="fa fa-trash-o"></i></a>
+                                   <?php endif; ?>
+                                
+                                <?php }?>
+                            </td>
+                        </tr>
+                        <? $no++;?>
+
+                        <?php
+                        $countProducts +=1;
+                        ?>
+                    <?php } ?>
+                </tbody>
+            </table>
+
+
+        </div>
+        <?php $col = 100 / 7; ?>
+        <table class="table table-bordered table-condensed table-striped hidden-xs">
+            <tr style="color: red">
+                <td width="<?php echo $col ?>%"><img alt="Khuyến mãi khi mua phụ kiện điện thoại" src="/backend/images/dot-blue.gif"> Loại 0. Tặng kèm</td>
+                <td width="<?php echo $col ?>%"><img alt="Khuyến mãi khi mua phụ kiện điện thoại" src="/backend/images/dot-blue.gif"> Loại 1. Tặng voucher mua phụ điện thoại (áp dụng ngay khi mua hàng)</td>
+                <td width="<?php echo $col ?>%"><img alt="Khuyến mãi khi mua phụ kiện điện thoại" src="/backend/images/dot-blue.gif"> Loại 2. Tặng voucher mua phụ MTB (áp dụng ngay khi mua hàng)</td>
+                <td width="<?php echo $col ?>%"><img alt="Khuyến mãi khi mua phụ kiện điện thoại" src="/backend/images/dot-blue.gif"> Loại 3. Tặng voucher mua phụ Phụ kiện (áp dụng ngay khi mua hàng)</td>
+                <td width="<?php echo $col ?>%"><img alt="Khuyến mãi khi mua phụ kiện điện thoại" src="/backend/images/dot-blue.gif"> Loại 4. Ưu đãi mua thêm sản phẩm với giá[4]</td>
+                <td width="<?php echo $col ?>%"><img alt="Khuyến mãi khi mua phụ kiện điện thoại" src="/backend/images/dot-blue.gif"> Loại 5. Giảm 10% khi mua thêm phụ kiện</td>
+                <td width="<?php echo $col ?>%"><img alt="Khuyến mãi khi mua phụ kiện điện thoại" src="/backend/images/dot-blue.gif"> Loại 6. Phiếu giảm tiền</td>
+            </tr>
+        </table>
+        
+    </div>
+    
+    <?php } else { ?>
+    <p style="color: red">Sản phẩm này không có thực. Vui lòng kiểm tra lại</p>
+    <?php }?>
+    <div id="del" style="display: none" />
+    <div id="ddelete" style="display: none" />
+    <script>
+        function del(id, r) {
+        if (id != '')
+            result = confirm('Bạn chắc chắn huỷ khuyến mãi này ?');
+        if (result)
+            $('#ddelete').load('/admin/user/promotion/del-fast-product?id=' + id + "&r=" + r, function () {
+                alert('Cập nhật thành công.');
+                window.location.reload(true);
+            });
+    }
+        function shows(id) {
+            $('#add' + id).hide();
+            $('#wt_add' + id).show();
+        }
+        function hides(id) {
+            $('#add' + id).show();
+            $('#wt_add' + id).hide();
+        }
+        function add(ids) {
+            shows(ids);
+            $.post("/admin/user/promotion/saves", $('form').serialize(), function (resp) {
+                $.each(resp, function (i, obj) {
+                    var id = obj.id;
+                    var msg = obj.msg;
+                    if (msg != "ok") {
+                        alert(msg);
+                        $('#' + id).focus();
+                        hides(ids);
+                        return false;
+                    } else {
+                        alert('Lưu thành công');
+                        window.location.reload(true);
+                    }
+
+                });
+            }, 'json');
+        }
+        function number_format(price) {
+            price = price.replace(/,/gi, "");
+            price = price + ".";
+            price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            return price;
+        }
+        $(window).load(function () {
+            showhide(0);
+        });
+        function showhide(id) {
+            if (id == 0) {
+                $('.add_one_more0').show();
+                $('.add_one_more1').hide();
+            }
+            if (id == 1) {
+                $('.add_one_more0').hide();
+                $('.add_one_more1').show();
+            }
+        }
+        $().ready(function () {
+            $('#reservationtime').daterangepicker({timePicker: true, format: 'YYYY/MM/DD HH:mm', use24hours: true});
+            showhide(0);
+            $('.selects').select2();
+            $('#one_or_more').change(function () {
+                var id = $('#one_or_more option:selected').val();
+                showhide(id);
+            });
+        });
+
+        function change_product() {
+            var productName = $('#product_ids option:selected').val();
+            var ajaxLink = '/ajax/get-color';
+            $.ajax({
+                method: 'get',
+                cache: false,
+                url: ajaxLink,
+                data: {pid: productName},
+                dataType: 'json',
+                success: function (resp) {
+                    $('.pcolor0').html('');
+                    $('.pcolor0').html('<option value ="0"> Tất cả</option>');
+                    $.each(resp, function (i) {
+                        var color = '<option value="' + resp[i].colorid + '">' + resp[i].ncolorid + '</option>';
+                        $('.pcolor0').append(color);
+                    });
+                }
+            });
+        }
+    </script>
+</div>
+</div>

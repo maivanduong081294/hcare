@@ -1,0 +1,19 @@
+<div class="form-group form-group-sm"> 
+    <span>Nhân viên forward:</span>
+    <select name="forward" id="forward" class="selects" style="width:100%">
+        <option value="0">-- Tất cả nhân viên --</option> 
+        <?php
+        foreach ($this->list as $val2) {
+            if($val2["userid"]==177){
+                continue;
+            }
+            ?>
+            <option <?php echo $sl; ?> value="<?php echo $val2["userid"] ?>"><?php echo $val2["fullname"] ?></option>
+<?php } ?>
+    </select> 
+</div>
+<script>
+    $(function () { 
+        $('.selects').select2();
+    });
+</script>

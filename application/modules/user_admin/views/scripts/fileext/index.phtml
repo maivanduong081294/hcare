@@ -1,0 +1,53 @@
+<div style="margin:20px;">
+
+
+    <div style="margin:0 0 10px 0">
+        <form action="/admin/user/fileext/upload-pic" method="post" enctype='multipart/form-data'>
+            Upload file <input type="file" name="file[]" multiple="multiple"/>
+            <input type="submit" value="Upload" id="btnUpload"/>
+        </form>
+    </div>
+    <ul class="list">
+        <? foreach ($this->list as $item) { ?>
+
+            <li>
+                <p class="border" style="text-align: center"><?= $item['metadata'] ?></p>
+                <p style="text-align: center; height:24px; overflow: hidden"><?= $item['name'] ?></p>
+                <p class="link"><a target="_blank" href="<?= $item['link'] ?>">Xem</a> | <a href="#" rel="<?= $item['file'] ?>" class="btnDel">Xóa</a> </p>
+            </li>
+
+        <? } ?>
+    </ul>
+
+    <style>
+        ul.list{width:100%;}
+        ul.list li{width:100px; height: 110px; overflow: hidden; margin:3px; float:left; display:block; position: relative}
+        .border{border: 1px solid #CCCCCC;}
+        .link{position: absolute; bottom:0px; left:30px;}
+    </style>
+    <script>
+        $('#btnUpload').click(function(e){
+            e.preventDefault();
+            var val = $('input[name*="file"]').val();
+            if (val == "") {
+                alert('Vui lòng chọn file để upload');
+                return;
+            } else{
+                $('form').submit();
+            }
+            
+        });
+        $('.btnDel').click(function(){
+            if(confirm('Bạn có chắc chắn muốn xóa')) {       
+                $.get('/admin/user/fileext/del',{
+                    filename : $(this).attr('rel')
+                }, function(resp){
+                    if (resp == '') {
+                        window.location = '/admin/user/fileext#'+Math.random();
+                        window.location.reload();
+                    }
+                });
+            }
+        });
+    </script>
+</div>

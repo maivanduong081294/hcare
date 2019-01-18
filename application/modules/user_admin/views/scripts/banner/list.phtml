@@ -1,0 +1,225 @@
+<?php
+    $list_banner=$this->list_banner;
+    $data_pageshow=$this->data_pageshow;
+    $sfilter = new Zend_Session_Namespace('sfilterbanner');
+    $filter=$sfilter->pageshow;
+?>
+<table border="0" cellpadding="20" cellspacing="10" width="100%">
+  <tbody><tr>
+    <td style="padding: 5px;" align="center" valign="middle">
+    <table cellspacing="0" cellpadding="0" border="0" width="100%" class="borderMain">
+    <tbody><tr valign="top">
+        <td><table cellspacing="0" cellpadding="0" border="0" width="100%">
+                <tbody><tr>
+                    <td><div class="header icon-48-categories"><a href="/admin/user/banner/list/">Danh sách Banner</a></div></td>
+                           <td align="right"><div class="toolbar">
+                            <table class="toolbar">
+                                <tbody>
+                                    <tr>
+                                        <td id="toolbar-new" class="button"><a class="toolbar" href="/admin/user/banner/edit/"> <span title="New" class="icon-32-new"></span>Thêm mới</a></td>
+                                        <td id="toolbar-new" class="button"><a class="toolbar" href="#" id="delete"> <span title="Delete" class="icon-32-delete"></span>Xóa</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div></td>
+                                    </tr>
+            </tbody></table></td>
+    </tr>
+</tbody>
+</table>
+<div style="width:100%; text-align: right; margin:10px 0;">
+    <form action="" name="frmChange" id="frmChange" method="post">
+        <select style="width:130px;" name="option_banner" id="option_banner">
+            <option value="">Tất cả</option>
+            <?php
+            foreach ($data_pageshow as $key => $value)
+            {
+            ?>
+            <option value="<?php echo $key; ?>" <?php if($key==$filter) echo"selected"; ?>><?php echo $value; ?></option>
+            <?php
+            }
+            ?>
+        </select><br/>
+        <p style="padding:10px;">Tìm kiếm <input type="text" value="<?= $this->key ?>" name="key" id="key"> 
+            <a href="#" id="search" style="padding:3px; background:#000000; color:#ffffff;">Tìm</a> 
+            <a href="#" id="reset" style="padding:3px; background:#000000; color:#ffffff;">Reset</a> 
+        </p>
+        <BR><BR>
+
+    </form>
+</div>
+<BR>
+<div style="width:100%; text-align: right"><?echo $this->paging_template ?></div>
+<BR>
+<table cellpadding="0" border="0" width="100%" class="borderMain spaceTop5px">
+    <form method="post" name="frmPage" id="frmPage">
+        <input type="hidden" name="updateid" id="updateid" value="" />
+        <tbody>
+            <tr>
+                <td width="35" class="bgTitleadmin1"><input type="checkbox" onclick="checkme()" name="checkall"></td>
+                <td width="50" class="bgTitleadmin1">#</td>
+                <td class="bgTitleadmin2">Tên Banner</td>
+                <td class="bgTitleadmin2">Hình</td>
+                <td class="bgTitleadmin2">Link</td>
+                <td class="bgTitleadmin2">Hiển thị</td>
+                <td class="bgTitleadmin2">Hiển thị trang</td>
+                <td class="bgTitleadmin2">Vị trí</td>
+                <td width="50" class="bgTitleadmin2">Clicks</td>
+                <td width="80" class="bgTitleadmin1">Thao tác</td>
+            </tr>
+            <?php
+            if(count($list_banner)>0 && is_array($list_banner))
+            {
+                $no=1;
+                foreach($list_banner as $item)
+                {
+                    if($no%2 == 0)
+                        $bgcolor = '#f2f4f5';
+                   else
+                       $bgcolor = '#ffffff';
+                   ($item['enabled'] == 0) ? $enabled = "<span class='red'>No</span>" : $enabled = "<span class='green'>Yes</span>";
+                ?>
+                    <tr bgcolor="<?echo $bgcolor; ?>">
+                        <td class="bgContentadmin1"><input type="checkbox" value="<?php echo $item['banners_id'];?>" name="check[]"></td>
+                        <td class="bgContentadmin1"><? echo $no++;?></td>
+                        <td class="bgContentadmin2"><?echo $item['name']?></td>
+                        <?if($item['img'] !=null){?>
+                        <td class="bgContentadmin2"><img src="<?echo Globals::getStaticUrl();?>uploads/banners/<?php echo $item['img'] ?>" height="70" width="100" /> </td>
+                        <?}else{?>
+                        <td class="bgContentadmin2">&nbsp;</td>
+                        <?}?>
+                        <td class="bgContentadmin1" style="text-align:left;"><? echo $item['link'];?></td>
+                        <td class="bgContentadmin2"><a class="update" href="<?=Globals::getBaseUrl();?>admin/user/banner/status?itemid=<?=$item['banners_id'];?>&act=enabled"><?=$enabled;?></a></td>
+                        <td class="bgContentadmin2">
+                        <?php
+                            foreach ($data_pageshow as $key => $value) {
+                                if ($item['pageshow'] == $key) {
+                                    echo $value;
+                                    break;
+                                }
+                            }
+                        ?></td>
+                        <td class="bgContentadmin1" style="text-align:left;">
+                           <?php echo $this->formSelect("ordering".$item['banners_id'], $item['ordering'], array('rel'=>$item['banners_id'],"class"=>"ordering"), $this->orderlist); ?>
+                        </td>                        
+                        <td class="bgContentadmin2"><?echo $item['hits']?></td>
+                        <td class="bgContentadmin1">
+                            <a href="/admin/user/banner/edit/?banners_id=<?php echo $item['banners_id'];?>"><img border="0" title="Edit" src="/user_admin/templates/images/edit.png"></a>
+                            <a href="#" rel="<?php echo $item['banners_id'];?>" class="sdelete"><img border="0" alt="Delete" src="/user_admin/templates/images/trash.png"></a>
+                        </td>
+                    </tr>
+                <?php
+                }
+            }
+            ?>
+    </form>
+</table>
+</td>
+  </tr>
+</tbody></table>
+<div id="ddelete" style="display:none;"></div>
+<div id="dmyorder" style="display:none"></div>
+<script type="text/javascript">
+function get_editor_data()
+{
+	document.getElementById('fullcontent').value = FCKeditorAPI.GetInstance('myFCKeditor_fullcontent').GetHTML();
+	return true;
+}
+function CheckForm()
+{
+	return true;
+}
+
+function checkme()
+{
+    isCheck=document.frmPage.checkall.checked;
+    elts=document.frmPage.elements['check[]'];
+	if(!elts.length)
+	{
+            elts.checked = isCheck;
+	}
+    else
+    {
+       for(i=0;i<elts.length;i++)
+          elts[i].checked=isCheck;
+    }
+}
+
+function isCheckDetail(){
+    result = 0;
+    $('input:checkbox').each(function(){
+        if ($(this).attr('checked') == true)
+            result = 1;
+    });
+    return result;
+}
+
+$().ready(function(){
+    $('#delete').click(function(){
+        result = isCheckDetail();
+        if (result == 0) //ischeck
+        {
+            alert('Vui lòng chọn item để xóa');
+            return false;
+        }
+        result = confirm("Bạn có chắc chắn muốn xóa?");
+        if (result)
+        {
+            $('#frmPage').attr('action','/admin/user/banner/delete/');
+            $('#frmPage').submit();
+        }
+    });
+
+    $('.sdelete').click(function(){
+        id = $(this).attr('rel');
+        if (id != '')
+            result = confirm('Bạn chắc chắn muốn xóa?');
+            if (result)
+            $('#ddelete').load('/admin/user/banner/delete?rand='+Math.random()+'&banners_id='+id, function (){
+                alert('Xóa thành công.');
+                window.location.reload(true);
+            });
+    });
+
+    $('.ordering').change(function(){
+        $('#updateid').val($(this).attr('rel'));
+        $('#frmPage').attr('action','/admin/user/banner/update-ordering/');
+        $('#frmPage').submit();
+    });
+
+});
+</script>
+<script>
+$().ready(function(){
+    $('#option_banner').change(function(){
+        $('#frmChange').submit();
+    });
+    //chagne newest or highlight
+    $('.update').click(function(e){
+        e.preventDefault();
+        var __url = $(this).attr('href')+"&"+Math.random();
+        $('#ddelete').load(__url, function(__data){
+	    alert(__data);
+            window.location.reload();
+        });
+    });
+    
+//add filter
+    $('#key').keypress(function(e){      
+        if(e.which == 13){
+            window.location = '<?= globals::getBaseUrl() ?>admin/user/banner/list?key='+$(this).val();
+            return false;
+        }
+    });
+       
+    $('#reset').click(function(e){
+        e.preventDefault();
+        window.location = '<?= globals::getBaseUrl() ?>admin/user/banner/list';
+    });
+       
+    $('#search').click(function(e){
+        e.preventDefault();
+        window.location = '<?= globals::getBaseUrl() ?>admin/user/banner/list?key='+$('#key').val();
+    });
+});
+</script>

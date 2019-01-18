@@ -1,0 +1,124 @@
+<h3 style="font-weight: bold" class="box-title">CẬP NHẬT THÔNG TIN IMEI: <?php echo $this->detail["imei"] ?> -- <?php echo $this->detail["item_name"] ?></h3>
+<form  name="data_frm" id="formData" method="post" action="/admin/user/guarantee/save-info" target="hiddenIF"  enctype="multipart/form-data">
+    <iframe  name="hiddenIF" style="display: none" scrolling="auto"></iframe>
+    <input type="hidden"   name="token" value="<?php echo $this->token?>">
+    <input type="hidden"   name="id" value="<?php echo $this->detail["id"]?>">
+    <input type="hidden"   name="t" value="<?php echo $this->viewss ?>">
+    <div class="form-group">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="producers_tb"></span>
+                <label for="warranty_info_id"  class="col-sm-3 control-label" id="text-align-label">Đơn vị bảo hành (ĐVBH): </label>
+                <div class="input-group col-md-6">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <select style="width: 100%" required="required" class="selects" name="producers" id="producers">
+                        <option value=""> Lựa chọn hãng bảo hành</option>
+                        <?php foreach ($this->sproducers as $items){ ?>
+                        <option value="<?php echo $items["id"] ?>"><?php echo $items["name"] ?></option>
+                        <?php }?>
+                    </select>
+                    <div onclick="add_warranty();return false;" class="input-group-addon btn">
+                        <i class="fa fa-plus"> Thêm</i>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group add_warranty dvbh" style="display: none">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="id_warranty_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Tên ĐVBH mới : </label>
+                <div class="input-group col-md-6">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <input placeholder="Nhập đơn vị bảo hành mới vào đây...." type="text" class="form-control" name="name_warranty" id="name_warranty" />
+                    <div id="save_warranty" onclick="save_warranty();return false;" class="input-group-addon btn">
+                        <i class="fa fa-floppy-o"> Lưu</i>
+                    </div>
+                    <div style="display: none" id="wt_warranty" class="input-group-addon btn">
+                        <i class="fa fa-spinner"> Đang xử lý</i>
+                    </div>
+                </div>
+            </div>
+            <div class="frm_dvbh"></div>
+    <div class="box-footer">
+            <input type="hidden" name="idcustomer" id="idcustomer" value="<?php echo $this->idcustomer ?>" />
+            <button type="submit" id="save" class="btn btn-primary right"><i class="fa fa-floppy-o"> Lưu</i></button>
+            <b id="complete"  class="color_red right size20"></b>
+        </div>
+    <input type="hidden" name="receiver" id="receiver" />
+</form>
+<script>
+    function save_warranty(){
+        $.post("/admin/user/guarantee/save-warranty", $('form').serialize(), function (resp) {
+                $('#wt_warranty').show();
+                $('#save_warranty').hide();
+                $.each(resp, function (i, obj) {
+                    var id = obj.id;
+                    var msg = obj.msg;
+                    var data = obj.data;
+                    if (msg != "ok") {
+                        alert(msg);
+                        $('#' + id).focus();
+                        $('#wt_warranty').hide();
+                        $('#save_warranty').show();
+                        return false;
+                    } else {
+                        alert('Lưu thành công');
+                        $('.dvbh').hide();
+                        $('#save_warranty').show();
+                        $('#wt_warranty').hide();
+                        $('#producers').html('');
+                        $('#producers').html('<option value =""> Lựa chọn hãng bảo hành</option>');
+                        $.each(data, function (y,objs) {
+                            var html = '<option value="' + objs.id + '">' + objs.name + '</option>';
+                            $('#producers').append(html);
+                        });
+                    }
+                });
+            }, 'json');
+    }
+    function add_warranty(){
+        $('.add_warranty').show();
+    }
+    function change_receiver(){
+        var receiver = $("#receiver_id option:selected").text();
+        $('#receiver').val(receiver);
+    }
+    function format_price(id){
+        var price = $("#"+id).val();
+        price = price.replace(/,/gi, "");
+        price = price + ".";
+        price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        var sprice = price.split(".");
+        $("#"+id).val(sprice[0]);
+    }
+    function shows(){
+        $('#save').hide();
+        $('#wt').show();
+    }
+    function hides(){
+        $('#save').show();
+        $('#wt').hide();
+    }
+    $( document ).ready(function() {
+        $('.selects').select2();
+//        $('#save').click(function(){
+//            shows();
+//        });
+    });
+    function notification (msg,id){
+        alert(msg);
+        $('.tb').html('');
+        $('#'+id).focus(); 
+        var msg_add = '<i class="fa fa-times-circle-o"> '+msg+' </i>';
+        $('#'+id+"_tb").html(msg_add); 
+        hides();
+//        location.reload();
+    }
+    function completes(msg){
+        $('.tb').html('');
+        var msg_add = '<i class="fa fa-check" aria-hidden="true"> </i>'+msg+'';
+        alert(msg);
+        $('#complete').html(msg_add);
+        window.location.reload(true);
+    }
+</script>

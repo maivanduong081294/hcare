@@ -1,0 +1,21 @@
+<h3 style="font-weight: bold" class="box-title">LẤY VOUCHER : <?php echo $this->vouchers?></h3><hr/>
+<form  name="data_frm" id="data_frm" method="post" action="/admin/user/vouchers/getvoucherbybill2" target="hiddenIF"  enctype="multipart/form-data">
+    <iframe  name="hiddenIF" style="display: none" scrolling="auto"></iframe>
+    <input type="hidden"   name="token" value="<?php echo $this->token?>">
+    <input type="hidden"   name="id" value="<?php echo $this->id?>">
+    <div class="form-group">
+        <span class="col-sm-offset-3 col-sm-9 color_red tb" id="id_addon_user_tb"></span>
+        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Mã đơn hàng : </label>
+        <div class="input-group input-group-sm">
+            <div class="input-group-addon">
+                <i class="fa fa-text-width"></i>
+            </div>
+            <input type="number" min="0" class="form-control" id="id_addon_user" name="id_addon_user" value="<?php echo $this->id_addon_user ?>" placeholder="Nhập mã đơn hàng vào đây nhé">
+            <span class="input-group-btn">
+                <button  type="submit" id="save"   class="btn btn-primary"><i class="fa fa-sign-in"> Send</i></button>
+                <button style="display: none" type="button" id="wt" class="btn btn-primary"><i class="fa fa-spinner"> Đang xử lý</i></button>
+            </span>
+        </div>
+    </div>
+    <b id="complete" align="center" class="color_red  size20"></b>
+</form>

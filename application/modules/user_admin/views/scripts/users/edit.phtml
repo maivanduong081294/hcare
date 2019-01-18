@@ -1,0 +1,105 @@
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tbody><tr>
+    <td style="padding: 5px;" align="center" valign="middle">
+    <table class="borderMain" border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tbody><tr valign="top">
+        <td><div class="header icon-48-config">Thay đổi mật khẩu quản trị</div></td>
+        <td align="right"><div class="toolbar">
+            <table class="toolbar"><tbody><tr>
+                <td id="toolbar-new" class="button">
+                    <a class="toolbar" id="save" href="#">
+                    <span title="Save" class="icon-32-save"></span>
+                    Lưu</a>
+                </td>
+        </tr></tbody></table>
+        </div></td>
+      </tr>
+</tbody></table>
+<table class="borderMain spaceTop5px" border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tbody><tr>
+    <td>
+   	<form name="frmPage" id="frmPage" method="post" action="/admin/user/users/save/">
+	<table class="adminerror spaceTop10px" border="0" cellpadding="0" cellspacing="0" width="100%">
+	    </table>
+    <br>
+    <fieldset class="adminform"><legend>Thông tin tài khoản</legend>
+    <table class="spaceTop5px" border="0" width="100%">
+        <tbody>
+            
+        <tr id="serverTr">
+            <td align="right" width="110">Tên</td>
+            <td style="padding-left: 5px;">
+                <input name="username" id="username" style="width: 200px; background:#eeeeee" value="<? echo $this->data['username']; ?>" type="text" readonly>
+                </td>
+        </tr>
+        <tr id="loginTr">
+            <td align="right" width="110">
+                Mật khẩu<span style="color:#ff0000;">(*)</span></td>
+            <td style="padding-left: 5px;">
+                <input name="password" id="password" style="width: 200px;" value="" type="password">
+            </td>
+        </tr>
+        <tr id="loginTr">
+            <td align="right" width="110">
+                Xác nhận mật khẩu<span style="color:#ff0000;">(*)</span></td>
+            <td style="padding-left: 5px;">
+                <input name="cpassword" id="cpassword" style="width: 200px;" value="" type="password">
+            </td>
+        </tr>
+
+    </tbody></table>
+	</fieldset>
+
+	</form>
+    </td>
+  </tr>
+</tbody></table>
+</td>
+  </tr>
+</tbody></table>
+<script type="text/javascript">
+function checkme()
+{
+    isCheck=document.frmmain.checkall.checked;
+    elts=document.frmmain.elements['check[]'];
+	if(!elts.length)
+	{
+		elts.checked = isCheck;
+	}
+    else
+    {
+       for(i=0;i<elts.length;i++)
+          elts[i].checked=isCheck;
+    }
+}
+
+function jsSubmit()
+{
+	document.frmmain.submit();
+}
+
+function new_window(url,width, height){
+		window.open (url, "new_window", "width="+ width + ", height="+ height +", resizable=1,scrollbars=yes");
+	}
+
+function confirmSubmit(){
+	var agree=confirm("Bạn có chắc không?");
+	if (agree)
+		return true ;
+	else
+		return false ;
+}
+
+$().ready(function(){
+//
+    $('#save').click(function(){
+        filter_array = new Array('password','cpassword');
+        valid = new Array('password','confirm');
+        result = fsubmit('frmPage', filter_array, valid);
+        if(result){
+            $('#frmPage').submit();
+        }
+    });
+});
+
+</script>

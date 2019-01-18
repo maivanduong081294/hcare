@@ -1,0 +1,76 @@
+<script type="text/javascript" src="/hnamv2/js/print.js"></script>
+<?
+$_deal = Business_Addon_Deal::getInstance();
+$this->filters = array(
+    'def'=>'Mặc định',
+    'a-z' => 'A-Z',
+    'z-a' => 'Z-A',
+    'pa-z' => 'Giá tăng',
+    'pz-a' => 'Giá giảm' 
+);
+?>
+<div class="clearTop10"></div>
+<div style="margin-left:10px;">
+    <form action="" method="" name="frmFilterPhone" id="frmFilterPhone" style="font-size: 13px;">        
+        Chọn danh mục: <? echo $this->formSelect("cateid", $this->cateid, array("style"=>"font-size:13px;padding:2px;"), $this->menu); ?>
+    </form>    
+</div>
+<div id="plist" style="margin-left:10px;">
+<?foreach($this->list as $list){    
+    if (in_array($list['itemid'], $this->hidden_menu))  continue;
+    echo "<h2 class='red bold bigger shadow pAll'>".$list['title']."</h2>";    
+    ?>
+<table class="table2" width="830" class="borderLightGrey bgDarkGrey border" cellspacing="1" style="background-color: #CCCCCC; border:1px solid #CCCCCC">
+    <?foreach($list['sub'] as $p){
+        $_title = Business_Common_Utils::adaptTitleLinkURLSEO($p['title']);
+        if ( in_array($p['itemid'], $this->_mixPPrice) || ($p['cateid'] == 40 || $p['cateid']==39 || in_array($p['cateid'], $this->mixPrice))){
+            $_price = 'Đen';
+            $_oprice = 'Trắng';
+        }else{
+            $_price = 'HNam';
+            $_oprice = 'Cty';
+        }
+        ?>
+    <tr height="40">
+        <td width="150" class="bgWhite" style="background-color: #ffffff; border-right:1px solid #CCCCCC; border-bottom:1px solid #CCCCCC">
+            <p class="pLeft5">
+                <a class="grey bold medium" href="<?=SEOPlugin::getProductDetailLink($p['itemid'],$_title);?>">
+        <?=$p['title']?> 
+        <?
+            
+            
+            if ($p['discount_online'] > 0) {
+                echo "<span class=\"red\"><br />(Đã giảm hàng công ty ".number_format($p['discount_online']).")</span>";
+            }
+            
+        ?>
+                </a>
+            </p>
+        </td>
+        <td width="250" class="bgWhite" style="background-color: #ffffff; border-right:1px solid #CCCCCC; border-bottom:1px solid #CCCCCC">
+            <p class="medium pLeft5"><?=$p['packet']?></p>
+        </td>
+        <td width="80" class="bgWhite" style="background-color: #ffffff; border-right:1px solid #CCCCCC; border-bottom:1px solid #CCCCCC">
+            <?if ($p['original_price']){?>
+            <p class="blue medium pLeft5 l15"><?=$_oprice?>: <?=  number_format($p['original_price']-$p['discount_online']);?></p>
+            <?}?>
+            <?if ($p['price']){?>
+            <p class="red medium pLeft5 l15"><?=$_price?>: <?=  number_format($p['price']);?></p>
+            <?}?>
+        </td>
+    </tr>
+    <?}?>
+</table>    
+
+<?}?>
+</div>
+<script language="javascript">
+    $().ready(function(){
+        $('#cateid').change(function(){
+            $('form').submit();
+        });
+        $('#print').click(function(){
+            $('#plist').printArea();
+        });
+    });
+</script>

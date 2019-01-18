@@ -1,0 +1,473 @@
+<?
+if ($this->menuname == 'menu_acc')
+    $cate = 'accesories';
+else
+    $cate = 'products';
+//pre($this->old_thumb1);
+//pre($this->data);
+$discount = array(
+    1 => "Nắp sau Apple iPhone",
+    2 => "Bao da Apple iPhone",
+    3 => "Bao da Apple Ipad",
+    4 => "Nắp sau thương hiệu khác",
+    5 => "Bao da thương hiệu khác",
+);
+?>
+<table border="0" cellpadding="20" cellspacing="10" width="100%">
+  <tbody><tr>
+    <td style="padding: 5px;" align="center" valign="middle">
+    <table class="borderMain" border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tbody><tr valign="top">
+        <td><div class="header icon-48-article">Quản lý thông tin sản phẩm</div></td>
+        <td align="right"><div class="toolbar">
+            <table class="toolbar"><tbody><tr>
+                <td id="toolbar-new" class="button">
+                    <a class="toolbar" id="save" href="#">
+                    <span title="Save" class="icon-32-save"></span>
+                    Lưu</a>
+                </td>
+                 <td id="toolbar-cancel" class="button">
+                    <a class="toolbar" onclick="javascript:window.location='/admin/user/products/list/'" href="#">
+                    <span title="Cancel" class="icon-32-back"></span>
+                    Quay lại</a>
+                </td>
+        </tr></tbody></table>
+        </div></td>
+      </tr>
+</tbody></table>
+<table class="borderMain spaceTop5px" border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tbody><tr>
+    <td>        
+<form name="frmPage" id="frmPage" method="post" enctype="multipart/form-data" action="/admin/user/products/save?id=<?php echo $this->data["itemid"]; ?>">
+<input type="hidden" name="id" value="<?php echo $this->data["itemid"]; ?>" />
+	
+    <br>
+    <fieldset class="adminform"><legend>Thông tin chi tiết</legend>
+    <table class="spaceTop5px" border="0" width="50%" style="float:left;">
+        <tbody>
+            <?if (in_array($this->productsid,array(3,4,5))):?>
+                <tr id="serverTr">
+                    <td align="right" width="110">Loại<span style="color:#ff0000;">(*)</span></td>
+                    <td style="padding-left: 5px;">
+                    <? echo $this->formSelect("productsid", $this->productsid, array(), $this->pcatelist); ?>
+                    </td>
+                </tr>
+            <?endif;?>
+        <tr id="serverTr">
+            <td align="right" width="110">Danh mục<span style="color:#ff0000;">(*)</span></td>
+            <td style="padding-left: 5px;">
+            <select name="cateid" class="frm" id="cateid">
+                <option value="0">Tất cả</option>
+                <? echo $this->productlist;?>
+            </select>
+            </td>
+        </tr>
+        <tr id="serverTr">
+            <td align="right" width="110">Tên sản phẩm<span style="color:#ff0000;">(*)</span></td>
+            <td style="padding-left: 5px;">
+                <input name="title" id="title" style="width: 200px;" value="<?php echo $this->data["title"]; ?>" type="text" />
+                </td>
+        </tr>        
+        <?if ($this->menuname == 'menu_acc'){?>
+        <tr id="serverTr">
+            <td align="right" width="110">Mã sản phẩm<span style="color:#ff0000;">(*)</span></td>
+            <td style="padding-left: 5px;">
+                <input name="productscode" id="productscode" style="width: 200px;" value="<?php echo $this->data["productscode"]; ?>" type="text" />
+                </td>
+        </tr>        
+        <tr id="loginTr">
+                <td align="right" width="110" valign="top">
+                    Bảo hành</td>
+                <td style="padding-left: 5px;">
+                    <?if ($this->menuname == 'menu_products'){?>
+                        <input type="text" name="warranty"  id="warranty" value="<?=($this->data['warranty'] == '' ? '12 tháng' : $this->data['warranty'] );?>">
+                    <?}else{?>
+                        <input type="text" name="warranty"  id="warranty" value="<?=$this->data['warranty'];?>">
+                    <?}?>
+                </td>
+            </tr>
+        <?}?>
+        <tr id="serverTr">
+            <td align="right" width="110">Tình trạng<span style="color:#ff0000;">(*)</span></td>
+            <td style="padding-left: 5px;">
+            <? echo $this->formSelect("onstock", $this->data['onstock'], array("class"=>"menuname","class"=>"frm"), $this->onstocks); ?>
+            </td>
+        </tr>
+        <tr id="serverTr">
+            <td align="right" width="110">Từ khóa tìm kiếm trong tin tức (cách nhau bằng dấu ,)<span style="color:#ff0000;">(*)</span></td>
+            <td style="padding-left: 5px;">
+                <input name="search_text" id="search_text" style="width: 500px;" value="<?php echo $this->data["search_text"]; ?>" type="text" />
+                </td>
+        </tr>     
+        <tr id="loginTr">
+            <td align="right" width="110" valign="top">
+                Mô tả ngắn</td>
+            <td style="padding-left: 5px;">
+                <input type="hidden" name="shortcontent" id="shortcontent" value="<?php echo $this->data['shortcontent'];?>" />
+                <script type="text/javascript">
+                var sBasePath = "/fckeditor/" ;
+                var oFCKeditor_email_content2 = new FCKeditor( 'myFCKeditor_shortcontent' ) ;
+                oFCKeditor_email_content2.BasePath	= sBasePath ;
+                oFCKeditor_email_content2.Height	= "300" ;
+                oFCKeditor_email_content2.Width	= "95%" ;
+                oFCKeditor_email_content2.ToolbarSet = '' ;
+                oFCKeditor_email_content2.Value	= document.getElementById("shortcontent").value ;
+                </script>
+                <div id="myFCKeditor_shortcontent"></div>
+                <script type="text/javascript">
+                var div = document.getElementById("myFCKeditor_shortcontent");
+                div.innerHTML = oFCKeditor_email_content2.CreateHtml();
+                </script>
+            </td>
+        </tr>
+        
+        <tr id="loginTr">
+            <td align="right" width="110" valign="top">
+                Tổng quan</td>
+            <td style="padding-left: 5px;">
+                <input type="hidden" name="fullcontent" id="fullcontent" value="<?php echo $this->data['fullcontent'];?>" />
+                <script type="text/javascript">
+                var sBasePath = "/fckeditor/" ;
+                var oFCKeditor_email_content2 = new FCKeditor( 'myFCKeditor_fullcontent' ) ;
+                oFCKeditor_email_content2.BasePath	= sBasePath ;
+                oFCKeditor_email_content2.Height	= "350" ;
+                oFCKeditor_email_content2.Width	= "95%" ;
+                oFCKeditor_email_content2.ToolbarSet = '' ;
+                oFCKeditor_email_content2.Value	= document.getElementById("fullcontent").value ;
+                </script>
+                <div id="myFCKeditor_fullcontent"></div>
+                <script type="text/javascript">
+                var div = document.getElementById("myFCKeditor_fullcontent");
+                div.innerHTML = oFCKeditor_email_content2.CreateHtml();
+                </script>
+            </td>
+        </tr>
+        <?if ($this->menuname == 'menu_acc'){$__display="none";}?>
+        <tr id="loginTr" style="display:<?=$__display;?>">
+            <td align="right" width="110" valign="top">
+                Đập hộp</td>
+            <td style="padding-left: 5px;">
+                <input type="hidden" name="unbox" id="unbox" value="<?php echo $this->data['unbox'];?>" />
+                <script type="text/javascript">
+                var sBasePath = "/fckeditor/" ;
+                var oFCKeditor_email_content2 = new FCKeditor( 'myFCKeditor_unbox' ) ;
+                oFCKeditor_email_content2.BasePath	= sBasePath ;
+                oFCKeditor_email_content2.Height	= "350" ;
+                oFCKeditor_email_content2.Width	= "95%" ;
+                oFCKeditor_email_content2.ToolbarSet = '' ;
+                oFCKeditor_email_content2.Value	= document.getElementById("unbox").value ;
+                </script>
+                <div id="myFCKeditor_unbox"></div>
+                <script type="text/javascript">
+                var div = document.getElementById("myFCKeditor_unbox");
+                div.innerHTML = oFCKeditor_email_content2.CreateHtml();
+                </script>
+            </td>
+        </tr>
+		<tr id="loginTr" style="display:<?=$__display;?>">
+            <td align="right" width="110" valign="top">
+                Video</td>
+            <td style="padding-left: 5px;">
+                <input type="hidden" name="video" id="video" value="<?php echo $this->data['video'];?>" />
+                <script type="text/javascript">
+                var sBasePath = "/fckeditor/" ;
+                var oFCKeditor_email_content2 = new FCKeditor( 'myFCKeditor_video' ) ;
+                oFCKeditor_email_content2.BasePath	= sBasePath ;
+                oFCKeditor_email_content2.Height	= "350" ;
+                oFCKeditor_email_content2.Width	= "95%" ;
+                oFCKeditor_email_content2.ToolbarSet = '' ;
+                oFCKeditor_email_content2.Value	= document.getElementById("video").value ;
+                </script>
+                <div id="myFCKeditor_video"></div>
+                <script type="text/javascript">
+                var div = document.getElementById("myFCKeditor_video");
+                div.innerHTML = oFCKeditor_email_content2.CreateHtml();
+                </script>
+            </td>
+        </tr>
+        <tr>
+             <td align="right" class="hligh2" width="110"><label for="description">Hình ảnh nhỏ</label></td>
+             <td class="hligh2">
+                    <input type="file" name="thumb1" id="thumb1" >
+                    <input type="hidden" name="old_thumb1" id="old_thumb1" value="<?php echo $this->old_thumb1; ?>">
+                    <a href="/uploads/<?=$cate?>/homes/<?=$this->old_thumb1?>"><img src="/uploads/<?=$cate?>/homes/<?=$this->old_thumb1?>" height="50"/></a>
+              </td>
+        </tr>
+        <?     
+        
+            
+            for($i=0; $i<10; $i++){                
+                
+                
+                if ($i==0){
+                    $_text = 'Hình trang chi tiết sản phẩm';
+                    if ($this->menuname !='menu_acc')
+                        $_path = '/uploads/'.$cate.'/thumbnails/';
+                    else
+                        $_path = '/uploads/'.$cate.'/details/';
+                }else{
+                    $_text = 'Hình ảnh chi tiết ' . ($i);
+                    $_path = '/uploads/'.$cate.'/details/';
+                }                
+        ?>
+            <tr style="border-bottom:1px solid #f2f2f2">
+                 <td style="border-bottom:1px solid #f2f2f2" align="right" class="hligh2" width="110"><label for="description"><?=$_text;?></label></td>
+                 <td style="border-bottom:1px solid #f2f2f2" class="hligh2">
+                        <input type="file" name="thumb2[]" >
+                        <input type="hidden" name="old_thumb2[]" value="<?=$this->old_thumb2[$i];?>">
+                        <a href="<?=$_path.$this->old_thumb2[$i];?>" target="_blank"><img src="<?=$_path.$this->old_thumb2[$i];?>" height="50" /></a>
+                  </td>
+            </tr>
+        <?}?>
+    </tbody></table>
+        <?if ($this->menuname != 'menu_acc'){?>
+        <table>
+            
+            <tr id="loginTr">
+                <td align="right" width="110" valign="top">
+                    Khuyến mãi HOT</td>
+                <td style="padding-left: 5px;">
+                    <?if($this->data["hotsale"]==1){$checked="checked";}?>
+                    <input type="checkbox" name="hotsale" id="hotsale" value="1" <?=$checked;?>>
+                </td>
+            </tr>
+            <tr id="loginTr">
+                <td align="right" width="110" valign="top">
+                    Giá cũ</td>
+                <td style="padding-left: 5px;">
+                    <input type="text" name="oldprice" id="oldprice" value="<?=$this->data["oldprice"];?>">
+                </td>
+            </tr>
+            <tr id="loginTr">
+                <td align="right" width="110" valign="top">
+                    Gía Hnam</td>
+                <td style="padding-left: 5px;">
+                    <input type="text" name="price"  id="price" value="<?=(int)$this->data['price'];?>">
+                </td>
+            </tr>
+            <tr id="loginTr">
+                <td align="right" width="110" valign="top">
+                    Gía Chính hãng</td>
+                <td style="padding-left: 5px;">
+                    <input type="text" name="original_price"  id="original_price" value="<?=(int)$this->data['original_price'];?>">
+                </td>
+            </tr>
+            <tr id="loginTr">
+                <td align="right" width="110" valign="top">
+                    Gía giảm (áp dụng cho sản phẩm giảm giá hàng tuần)</td>
+                <td style="padding-left: 5px;">
+                    <input type="text" name="pricebeforediscount"  id="pricebeforediscount" value="<?=(int)$this->data['pricebeforediscount'];?>">
+                    <? echo $this->formCheckbox("weeklysaletype", 1, array('checked' => $this->data["metadata"]));?> Chính hãng
+                </td>
+            </tr>
+            <tr id="loginTr">
+                <td align="right" width="110" valign="top">
+                    Bảo hành</td>
+                <td style="padding-left: 5px;">
+                    <input type="text" name="warranty"  id="warranty" value="<?=($this->data['warranty'] == '' ? '12 tháng' : $this->data['warranty'] );?>">
+                </td>
+            </tr>
+            <tr id="loginTr">
+                <td align="right" width="110" valign="top">
+                    Phụ kiện đi kèm</td>
+                <td style="padding-left: 5px;">
+                    <input style="width:500px" type="text" name="packet"  id="packet" value="<?=($this->data['packet'] == '' ? '1 máy, 1 pin, 1 sạc nhanh, tai nghe, sách hướng dẫn' : $this->data['packet'] );?>"><br />
+                    <?
+		      if ($this->data["displayacc"]==1) $checked = "checked"; else $checked="";
+                    ?>
+                    <input type="checkbox" value="1" name="displayacc" id="displayacc" <?=$checked;?> /> Hiển thị phụ kiện đi kèm
+                </td>
+            </tr>
+            <tr id="loginTr">
+                <td align="right" width="110" valign="top">
+                    Ghi chú</td>
+                <td style="padding-left: 5px;">
+                    <textarea name="note" id="note" style="width:500px;height:80px;"><?=$this->data['note']?></textarea>
+                </td>
+            </tr>
+            <tr id="loginTr">
+                <td align="right" width="110" valign="top">
+                    Khuyến mãi hàng Hnam</td>
+                <td style="padding-left: 5px;">
+                    <input style="width:500px" type="text" name="bonus_hnam"  id="bonus_hnam" value="<?=($this->data['bonus_hnam'] == '' ? '' : $this->data['bonus_hnam'] );?>">
+                </td>
+            </tr>
+            <tr id="loginTr">
+                <td align="right" width="110" valign="top">
+                    Khuyến mãi hàng Công ty (Tặng thẻ)</td>
+                <td style="padding-left: 5px;">
+                    <input style="width:500px" type="text" name="bonus_company"  id="bonus_company" value="<?=($this->data['bonus_company'] == '' ? '' : $this->data['bonus_company'] );?>">
+                </td>
+            </tr>
+            <tr id="loginTr">
+                <td align="right" width="110" valign="top">
+                    Khuyến mãi (Hiển thị trên mobile)</td>
+                <td style="padding-left: 5px;">
+                    <input style="width:500px" type="text" name="bonus_mobile"  id="bonus_mobile" value="<?=($this->data['bonus_mobile'] == '' ? '' : $this->data['bonus_mobile'] );?>">
+                </td>
+            </tr>
+            <tr id="loginTr">
+                <td align="right" width="110" valign="top">
+                    Khuyến mẫi hàng Cty</td>
+                <td style="padding-left: 5px;">
+                    <input type="hidden" name="bonus_company_full" id="bonus_company_full" value="<?php echo $this->data['bonus_company_full'];?>" />
+                    <script type="text/javascript">
+                    var sBasePath = "/fckeditor/" ;
+                    var oFCKeditor_email_content2 = new FCKeditor( 'myFCKeditor_bonus_company_full' ) ;
+                    oFCKeditor_email_content2.BasePath	= sBasePath ;
+                    oFCKeditor_email_content2.Height	= "350" ;
+                    oFCKeditor_email_content2.Width	= "95%" ;
+                    oFCKeditor_email_content2.ToolbarSet = '' ;
+                    oFCKeditor_email_content2.Value	= document.getElementById("bonus_company_full").value ;
+                    </script>
+                    <div id="myFCKeditor_bonus_company_full"></div>
+                    <script type="text/javascript">
+                    var div = document.getElementById("myFCKeditor_bonus_company_full");
+                    div.innerHTML = oFCKeditor_email_content2.CreateHtml();
+                    </script>
+                </td>
+            </tr>
+            <tr>                
+                <td colspan="2">Chức năng gọi điện thoại: <input type="checkbox" name="callable" value="1" <?if ((int)$this->data['callable']>0) {echo "checked='checked'";}?> /></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <table width="100%" cellpadding="5" cellspacing="1" class="infoDetail">
+                        <?
+                        if (count($this->fList)>0){
+                            $pid = (int)$this->data['itemid'];;
+                            foreach($this->fList as $_item){                                
+                                $_name = array();
+                                $_name[] = (int)$_item['fid'];
+                                $_name[] = (int)$pid;
+                                $_name[] = (int)$_item['parentid'];
+                                $name = "val[f_".implode("_", $_name)."]";
+                                $value = str_replace("<br />", "\r\n", $_item['value']);
+                                if (strlen($value)>200){
+                                    $height='height:150px';
+                                }else{
+                                    $height='height:25px';
+                                }
+                                if ($_item['parentid']==0){
+                                    echo '<tr class="infoDetail"><td colspan="2">'.$_item['name'].'</td></tr>';
+                                }else{ //has fielf
+                                    echo '<tr class="bgGrey">';
+                                    
+                                    echo '<td width="120">'.$_item['name'].'</td>';
+                                    echo '<td><textarea style="width:100%;'.$height.'" name="'.$name.'">'.$value.'</textarea></td>';
+                                    
+                                    echo '</tr>';
+                                }
+                            }
+                        }
+                        ?>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <?}else{?>
+        <table>
+            <tr id="loginTr">
+                <td align="right" width="110" valign="top">
+                    Khuyến mãi Phụ kiện</td>
+                <td style="padding-left: 5px;">
+                    
+                    <select name="discountid" id="discountid">
+                        <option value="0">Không</option>
+                        <?foreach($discount as $k => $d){?>
+                        <option value="<?=$k?>" <?if ($this->data["discountid"] == $k) echo "selected='selected'"; else echo "";?>><?=$d?></option>
+                        <?}?>
+                    </select>
+                </td>
+            </tr>
+            <tr id="loginTr">
+                <td align="right" width="110" valign="top">
+                    Gía Hnam</td>
+                <td style="padding-left: 5px;">
+                    <input type="text" name="price"  id="price" value="<?=(int)$this->data['price'];?>">
+                </td>
+            </tr>
+            <tr id="loginTr">
+                <td align="right" width="110" valign="top">
+                    Gía Deal</td>
+                <td style="padding-left: 5px;">
+                    <input type="text" name="original_price" id="original_price" value="<?=(int)$this->data['original_price'];?>">                    
+                </td>
+            </tr>
+            <tr id="loginTr">
+                <td align="right" width="110" valign="top">
+                    Ghi chú</td>
+                <td style="padding-left: 5px;">
+                    <textarea name="note" id="note" style="width:500px;height:80px;"><?=$this->data['note']?></textarea>
+                </td>
+            </tr>
+        </table>
+        <?}?>
+</fieldset>
+
+</form>
+        
+    </td>
+  </tr>
+</tbody></table>
+</td>
+  </tr>
+</tbody></table>
+<script type="text/javascript">
+function get_editor_data()
+{
+	document.getElementById('fullcontent').value = FCKeditorAPI.GetInstance('myFCKeditor_fullcontent').GetHTML();
+        document.getElementById('shortcontent').value = FCKeditorAPI.GetInstance('myFCKeditor_shortcontent').GetHTML();
+        document.getElementById('unbox').value = FCKeditorAPI.GetInstance('myFCKeditor_unbox').GetHTML();
+        document.getElementById('video').value = FCKeditorAPI.GetInstance('myFCKeditor_video').GetHTML();
+        <?if ($this->menuname != 'menu_acc'){?>
+            document.getElementById('bonus_company_full').value = FCKeditorAPI.GetInstance('myFCKeditor_bonus_company_full').GetHTML();
+        <?}?>
+	return true;
+}
+
+$().ready(function(){
+
+    $('#save').click(function(){
+        get_editor_data();
+        filter_array = new Array('title:Vui lòng nhập tên sản phẩm','cateid:Vui lòng chọn danh mục con');
+        valid = new Array('required','selected');
+        result = fsubmit('frmPage', filter_array, valid);
+        if(result){            
+            $('#frmPage').submit();
+        }
+    });
+
+    $('#cateid').find('option').each(function(){
+        id = $(this).val();
+
+        if (id == <?echo (int)$this->cateid;?>){
+            $(this).attr('selected','selected');
+        }
+    });
+    $("#cateid[value='<?=$this->cateid;?>']").attr('selected','selected');
+
+    //update sub cate list
+    $('select[name="productsid"]').change(function(e){        
+        e.preventDefault();
+        var menuname = $(this).find('option:selected').val();
+        url = '<?=Globals::getBaseUrl()?>admin/user/products/get-cate-list';        
+        $.ajax({
+          url: url,
+          data: {menuid:menuname},
+          success: function(response){
+            $('#cateid').html(response);
+          },
+          dataType: 'html'
+        });        
+        
+    });
+});
+
+</script>
+<style>
+    input{padding: 5px;}
+    .infoDetail{background:#CCCCCC}
+    .infoDetail tr td{font-size: 13px!important}    
+    .bgGrey{background-color: #e8e8e8; line-height: 1.2em;}
+</style>

@@ -1,0 +1,245 @@
+<link rel="stylesheet" href="/backend/plugins/daterangepicker/daterangepicker-bs3.css"> 
+<p style="font-weight: bold;font-size: 20px"><i class="fa fa-user"></i> THAY ĐỔI THÔNG TIN NHÂN VIÊN</p>
+<form role="form" action="" class="frmReport">
+    <div class="col-md-4">
+        <div class="panel panel-default panel-success">
+            <div class="panel-heading">THÔNG TIN NHÂN VIÊN</div>
+            <div class="panel-body">
+                <span>Chức vụ nhân viên:</span>
+                <select class="form-control" name="idregency" id="idregency" >
+                    <option value="0">Lựa chọn loại nhân viên</option>
+                    <?php
+                    foreach ($this->list_regency as $items) {
+                        $selectd = '';
+                        if ($this->detail["idregency"] == $items["id"]) {
+                            $selectd = ' selected = selected';
+                        }
+                        ?>
+                        <option <?php echo $selectd ?> value="<?php echo $items["id"] ?>"><?php echo $items["name"] ?></option>
+                    <?php } ?>
+                </select>
+                <span>Họ tên nhân viên:</span>
+                <input type="text" class="form-control" name="fullname" id="fullname" value="<?php echo $this->detail["fullname"] ?>" placeholder="Nhập tên nhân viên">
+                <span>Số điện thoại:</span>
+                <input type="text" class="form-control" name="phone" id="phone" value="<?php echo $this->detail["phone"] ?>" placeholder="Nhập số điện thoại">
+                <span>Email:</span>
+                <input type="text" class="form-control" name="email" id="email" value="<?php echo $this->detail["email"] ?>" placeholder="Nhập địa chỉ email nhân viên">
+                <span>Địa chỉ cửa hàng:</span>
+                <textarea class="form-control" name="address" id="address"><?php echo $this->detail["address"] ?></textarea>
+                <div id="show_sc" class="form-group" style="display: none">
+                    <span>Tên bảo vệ:</span>
+                    <input type="text" class="form-control" name="security_name" id="security_name" value="<?php echo $this->detail["security_name"] ?>" placeholder="Nhập bảo vệ của chi nhánh ...">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-default panel-success">
+            <div class="panel-heading">THÔNG TIN NHÂN VIÊN</div>
+            <div class="panel-body">
+                <span>Ngày tháng năm sinh:</span>
+                <input placeholder="dd/mm/yyyy" type="text" name="birthday" id="birthday" class="form-control" value="<?php if (!empty($this->detail)) echo date('d/m/Y', strtotime($this->detail["birthday"])); ?>" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                <span>CMND:</span>
+                <input type="text" class="form-control" name="cmnd" id="cmnd" value="<?php echo $this->detail["cmnd"] ?>" placeholder="Nhập chứng minh nhân dân">
+                <span>Địa chỉ thường trú:</span>
+                <textarea class="form-control" name="resident_address" id="resident_address"><?php echo $this->detail["resident_address"] ?></textarea>
+                <span>Thành phố, Huyện:</span>
+                <select class="form-control" name="city" id="city">
+                    <option value="0">Chọn Thành phố, Huyện</option>
+                    <?php
+                    foreach ($this->list_city as $items) {
+                        $sl = '';
+                        if ($this->detail["city"] == $items["id"]) {
+                            $sl = ' selected = selected';
+                        }
+                        ?>
+                        <option <?php echo $sl ?> value="<?php echo $items["id"] ?>"><?php echo $items["name"] ?></option>
+                    <?php } ?>
+                </select>
+                <span>Khu vực (Quận)</span>
+                <select class="form-control" name="district" id="district">
+                    <option value="">Chọn khu vực</option>
+                    <?php
+                    foreach ($this->list_district as $items) {
+
+                        $sl2 = '';
+                        if ($this->detail["district"] == $items["id"]) {
+                            $sl2 = ' selected = selected';
+                        }
+                        ?>
+                        <option <?php echo $sl2 ?> value="<?php echo $items["id"] ?>"><?php echo $items["name"] ?></option>
+                    <?php } ?>
+                </select>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-default panel-success">
+            <div class="panel-heading">THÔNG TIN TÀI KHOẢN</div>
+            <div class="panel-body">
+                <span>Ngày bắt đầu làm việc:</span>
+                <input placeholder="dd/mm/yyyy" type="text" name="startdate" id="startdate" value="<?php if (!empty($this->detail)) echo date('d/m/Y', strtotime($this->detail["startdate"])); ?>" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                <span>Số tài khoản ngân hàng:</span>
+                <input placeholder="Nhập số tài khoản ngân hàng vào." type="text" name="bank" id="bank" value="<?php if (!empty($this->detail)) echo $this->detail["bank"]; ?>" class="form-control">
+                <span>Tên đăng nhập:</span>
+                <input  type="text" <?php echo $this->disabled ?> class="form-control" name="username" id="username" value="<?php echo $this->detail["username"] ?>" placeholder="Nhập tên tài khoản">
+                <span>Mật khẩu:</span>
+                <input type="password" <?php echo $this->disabled ?> class="form-control" name="password" id="password" value="<?php echo $this->detail["pass_show"] ?>" placeholder="Nhập mật khẩu của nhân viên">
+                <span>Xác nhận mật khẩu (Đổi mật khẩu)</span>
+                <input type="password" <?php echo $this->disabled ?> class="form-control" name="r-password" id="r-password" value="<?php echo $this->detail["pass_show"] ?>" placeholder="Xác nhận mật khẩu của nhân viên">
+                <span>Chi nhánh:</span>
+                <select class="form-control" name="storeid" id="storeid">
+                    <option value="0"> Chọn chi nhánh</option>
+                    <?php
+                    foreach ($this->items1 as $list_vote) {
+                        $selected = '';
+                        if ($this->detail["parentid"] == $list_vote["userid"]) {
+                            $selected = ' selected = "selected"';
+                        }
+                        ?>
+                        <option <?php echo $selected ?> value="<?php echo $list_vote["userid"] ?>"><?php echo $list_vote["vote_name"] ?></option>
+                    <?php } ?>
+                </select>
+
+            </div>
+        </div>
+    </div>
+    <div class="box-footer">
+        <button type="submit" id="btnadd" class="btn btn-primary btn-app right"><i class="fa fa-plus"></i> Lưu</button>
+        <button style="display: none" type="submit" id="btndxl" class="btn btn-primary"><i class="fa fa-warning"></i> Đang xử lý</button>
+        <input type="hidden" name="vote_name" id="vote_name" value="" />
+        <input type="hidden" name="id" id="id" value="<?= $this->detail["userid"]; ?>" />
+    </div>
+</form>
+<script>
+    $('#city').change(function () {
+        var _idcity = $('#city').val();
+        var ajaxLink = '/ajax/get-district';
+        $('#district').html('');
+        if ($('#city').val() == 0) {
+            $('#district').html('');
+            html_dis = ' <option value="">Chọn khu vực</option>';
+            $('#district').append(html_dis);
+        }
+        $.ajax({
+            method: 'get',
+            cache: false,
+            url: ajaxLink,
+            data: {city: _idcity},
+            dataType: 'json',
+            success: function (resp) {
+                console.log(resp);
+                $.each(resp, function (i) {
+                    html_district = '<option  value="' + resp[i].id + '">' + resp[i].name + '</option>';
+                    $('#district').append(html_district);
+                });
+
+            }
+        });
+    })
+    $('#type_member').change(function () {
+        var tmember = $('#type_member').val();
+        if (tmember == 6) {
+            $('#show_sc').show();
+        } else {
+            $('#show_sc').hide();
+            $('#security_name').val('');
+        }
+        var storename = $('#vote_id option:selected').text();
+        $('#vote_name').val(storename);
+    });
+    $('#vote_id').change(function () {
+        var storename = $('#vote_id option:selected').text();
+        $('#vote_name').val(storename);
+    });
+
+    $().ready(function () {
+        $('#btnadd').click(function (e) {
+            $('#btnadd').hide();
+            $('#btndxl').show();
+            var uname = $("#username").val();
+            var pass = $("#password").val();
+            var check = $('#id').val();
+            e.preventDefault();
+            $.post("/admin/user/users/save-member", $('form').serialize(), function (resp) {
+                $('.errblock').remove();
+                $.each(resp, function (i, obj) {
+                    var id = obj.id;
+                    var msg = obj.msg;
+                    var type_member = $('#type_member').val();
+                    if (msg != "ok") {
+                        alert(msg);
+                        $('#btnadd').show();
+                        $('#btndxl').hide();
+                        $('#' + id).focus();
+                        return false;
+                    } else {
+                        if (type_member == 6) {
+                            if (check != "") {
+                                alert("Lưu thành công \n Tài khoản là : " + uname + '\n password : ' + pass);
+                            } else {
+                                alert("Lưu thành công \n Tài khoản là : vote_" + uname + '\n password : ' + pass);
+                            }
+                        }
+                        if (type_member == 4) {
+                            if (check != "") {
+                                alert("Lưu thành công \n Tài khoản là : " + uname + '\n password : ' + pass);
+                            } else {
+                                alert("Lưu thành công \n Tài khoản là : mb_" + uname + '\n password : ' + pass);
+                            }
+                        }
+                        if (type_member == 7) {
+                            if (check != "") {
+                                alert("Lưu thành công \n Tài khoản là : " + uname + '\n password : ' + pass);
+                            } else {
+                                alert("Lưu thành công \n Tài khoản là : mbk_" + uname + '\n password : ' + pass);
+                            }
+                        }
+                        if (type_member == 8) {
+                            if (check != "") {
+                                alert("Lưu thành công \n Tài khoản là : " + uname + '\n password : ' + pass);
+                            } else {
+                                alert("Lưu thành công \n Tài khoản là : kinhdoanh_" + uname + '\n password : ' + pass);
+                            }
+                        }
+                        if (type_member == 9) {
+                            if (check != "") {
+                                alert("Lưu thành công \n Tài khoản là : " + uname + '\n password : ' + pass);
+                            } else {
+                                alert("Lưu thành công \n Tài khoản là : services_" + uname + '\n password : ' + pass);
+                            }
+                        }
+                        if (type_member == 5) {
+                            if (check != "") {
+                                alert("Lưu thành công \n Tài khoản là : " + uname + '\n password : ' + pass);
+                            } else {
+                                alert("Lưu thành công \n Tài khoản là : qlkt_" + uname + '\n password : ' + pass);
+                            }
+                        }
+
+                        window.location = "/admin/user/users/list-user";
+                    }
+
+                });
+            }, 'json');
+        });
+    });
+    function convertDate(vnDate) {
+        try {
+            var vnDateArr = vnDate.split("/");
+            var rDate = vnDateArr.reverse();
+            return rDate.join("-");
+        } catch (err) {
+            return vnDate;
+        }
+    }
+</script>
+<script src="/backend/plugins/input-mask/jquery.inputmask.js"></script>
+<script src="/backend/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script src="/backend/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+<script>
+    $("[data-mask]").inputmask();
+    $("#datemask").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+    $("#datemask2").inputmask("mm/dd/yyyy", {"placeholder": "mm/dd/yyyy"});
+</script>

@@ -1,0 +1,23 @@
+<meta charset="utf-8">
+<table class="">
+    <tr>
+        <th>Tên Model</th>
+        <th>IMEI</th>
+        <th>Ngày bán</th>
+        <th>Tên Chi nhánh</th>
+        <th>Tên khách hàng</th>
+        <th>Số điện thoại</th>
+    </tr>
+    <?php foreach ($this->items as $list){ 
+        $price = 0;
+        ?>
+    <tr>
+        <td> <?php echo $list["products_name"] ?></td>
+        <td> <?php echo $list["imes"] ?></td>
+        <td> <?php echo date('d/m/Y H:i:s',  strtotime($list["create_date"])) ?></td>
+        <td> <?php echo $list["chinhanh"] ?></td>
+        <td> <?php echo $list["tenkhachhang"] ?></td>
+        <td> <?php echo $list["phone_addon"] ?></td>
+    </tr>
+    <?php }?>
+</table>

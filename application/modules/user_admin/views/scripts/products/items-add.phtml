@@ -1,0 +1,109 @@
+<div id="centerCont" style="padding:10px">
+<form name="frmBlock" id="frmBlock" method="post" action="" enctype="multipart/form-data"> 
+<br>
+<table width="90%" border="0" cellspacing="0" cellpadding="0" class="mainTab" align="center">
+
+<tr>
+ <td class="hligh1" width="20%"><label for="description">Danh mục cha</label></td>
+ <td class="hligh1">
+	<?echo $this->parent != '' ? $this->parent : '-';?>
+  </td>
+</tr>
+<tr>
+ <td class="hligh1" width="20%"><label for="description">Tên danh mục</label></td>
+ <td class="hligh1">
+	<input type="text" name="title" id="title" 
+   value="<?php echo $this->data["title"]; ?>" style="width:400px"> 
+  </td>
+</tr>
+<tr style="display:none;">
+ <td class="hligh1" width="20%" valign="top"><label for="description">Short content</label></td>
+ <td class="hligh1">
+   <textarea id="shortcontent" name="shortcontent" style="width:95%;height:100px" cols="10"><?echo $this->data['shortcontent'] ?></textarea>
+  </td>
+</tr>
+<tr style="display:none;">
+ <td class="hligh1" width="20%"><label for="description">Is Link</label></td>
+ <td class="hligh1">
+	<input type="checkbox" name="islink" id="islink" value="1" <?echo ($this->data['islink'] == "1" ? "checked=checked" : ""); ?>> 
+  </td>
+</tr>
+<tr>
+ <td class="hligh1" width="20%"><label for="description">Hide</label></td>
+ <td class="hligh1">
+	<input type="checkbox" name="hide" id="hide" value="1" <?echo ($this->data['hide'] == "1" ? "checked=checked" : ""); ?>> 
+  </td>
+</tr>
+<tr style="display:none;">
+ <td class="hligh1" width="20%"><label for="description">Expanded</label></td>
+ <td class="hligh1">
+	<input type="checkbox" name="expanded" id="expanded" value="1" <?echo ($this->data['expanded'] == "1" ? "checked=checked" : ""); ?>> 
+  </td>
+</tr>
+<tr style="display:none;">
+ <td class="hligh1" width="20%"><label for="description">Open In New Window</label></td>
+ <td class="hligh1">
+	<input type="checkbox" name="newwindow" id="newwindow" value="1" <?echo ($this->data['newwindow'] == "1" ? "checked=checked" : ""); ?>> 
+  </td>
+</tr>
+<tr style="display:none;">
+ <td class="hligh1" width="20%"><label for="description">Cate List</label></td>
+ <td class="hligh1">
+	<input type="checkbox" name="catelist" id="catelist" value="1" <?echo ($this->data['catelist'] == "1" ? "checked=checked" : ""); ?>> 
+  </td>
+</tr>
+<tr>
+ <td class="hligh1" width="20%"><label for="description">Order</label></td>
+ <td class="hligh1">
+	<input type="text" name="myorder" id="myorder" maxlength=3 
+   value="<?php echo $this->data["myorder"]; ?>" style="width:40px"> 
+  </td>
+</tr>
+<tr style="display:none;">
+ <td class="hligh1" width="20%"><label for="description">Sub menu</label></td>
+ <td class="hligh1">
+	<?php echo $this->formSelect('submenu', $this->data['submenu'], array(																						
+											'style'=>'width:200px',
+											'onchange'=>""
+											), $this->submenus); ?> 
+  </td>
+</tr>
+<tr style="display:none;">
+ <td class="hligh1" width="20%"><label for="description">Menu start</label></td>
+ <td class="hligh1">
+	<input type="text" name="submenu_menustart" id="submenu_menustart" maxlength=3 
+   value="<?php echo $this->data["submenu_menustart"]; ?>" style="width:40px"> 
+  </td>
+</tr>
+<tr style="display:none;">
+ <td class="hligh1" width="20%"><label for="description">language for submenu</label></td>
+ <td class="hligh1">
+	<?php echo $this->formSelect('submenu_lang', $this->data['submenu_lang'], array(																						
+											'style'=>'width:200px',
+											'onchange'=>""
+											), $this->langs); ?> 
+  </td>
+</tr>
+</table>
+<br />
+<p>
+<input type="submit" name="submit" value="Lưu" class="button"/>
+<input type="hidden" name="id" value="<?php echo $this->data["itemid"]; ?>" />
+</p>
+</form>
+</div>
+<div id="fsubmit"></div>
+<script language="javascript">    
+    $(document).ready(function(){
+        $('#frmBlock').submit(function(e){
+//            $('#fsubmit').load("<?php echo $this->form_action; ?>");
+            e.preventDefault();
+            $.post("<?php echo $this->form_action; ?>", $("#frmBlock").serialize(), function(data){
+//                alert(data);
+                window.parent.tb_remove();
+                window.parent.location.reload();
+            });
+        });        
+    });
+        
+</script>

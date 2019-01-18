@@ -1,0 +1,161 @@
+<!--<div class="row">
+    <div class="col-md-6">-->
+        <div class="box box-primary">
+                                <div class="box-header">
+                                    <h3 class="box-title">Nhập liệu</h3>
+                                </div><!-- /.box-header -->
+                                <!-- form start -->
+                                <form role="form" action="" class="frmReport">
+                                    <div class="box-body">
+                                        <div class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label"  id="text-align-label">Tên chi nhánh : </label>
+                                            <div  class="input-group" style="width:405px">
+                                            <span class="input-group-addon"><i class="fa fa-plus-square"></i></span>
+                                                <select name="vote-name" class="form-control">
+                                                    <option value="0">Lựa chọn tên chi nhánh</option>
+                                                    <?php foreach ($this->vote as $list) { ?>
+                                                    <?php if($list["userid"] != 14){ ?>
+                                                    <option value="<?php echo $list['userid'] ?>"><?php echo $list['vote_name'] ?></option>
+                                                    <?php } ?>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Doanh số tháng : </label>
+                                            <div  class="input-group" style="width:405px">
+                                                <span class="input-group-addon"><i class="fa fa-plus-square"></i></span>
+                                                <select style="width: 180px;height:34px" id="month_create" name="month_create" >
+                                                    <?php foreach ($this->months as  $month) { 
+                                                        $slected = '';
+                                                        if($month == date('m')){
+                                                            $slected = 'selected="selected"';
+                                                        }
+                                                        ?>
+                                                    <option <?php echo $slected ?> value="<?php echo $month ?>">
+                                                        Tháng <?php echo $month ?>
+                                                    </option>
+                                                    <?php } ?>
+                                                </select>
+                                                <select style="width: 180px;height:34px" id="year_create" name="year_create">
+                                                    <option value="<?php echo date('Y') ?>">
+                                                        Năm <?php echo date('Y') ?>
+                                                    </option>
+                                                </select>
+                                            </div> 
+                                           
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Nhóm sản phẩm : </label>
+                                            <div  class="input-group" style="width:405px">
+                                                <span class="input-group-addon"><i class="fa fa-plus-square"></i></span>
+                                                <select name="cateid_name" class="form-control">
+                                                    <option value="0">Lựa chọn nhóm sản phẩm</option>
+                                                    <?php foreach ($this->cated_products as $c_products) { ?>
+                                                    <option value="<?php echo $c_products['id'] ?>"><?php echo $c_products['cate_product_name'] ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Loại sản phẩm : </label>
+                                            <div  class="input-group" style="width:405px">
+                                                <span class="input-group-addon"><i class="fa fa-plus-square"></i></span>
+                                                <select name="type" class="form-control">
+                                                    <option value="0">Lựa chọn loại sản phẩm</option>
+                                                    <?php foreach ($this->list_type as $key=> $items) { ?>
+                                                    <option value="<?php echo $key ?>"><?php echo $items ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                
+                                        <div class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Tổng tiền : </label>
+                                            <div  class="input-group" style="width:405px">
+                                                <span class="input-group-addon"><i class="fa fa-plus-square"></i></span>
+                                                <input type="text" style="font-size: 17px;color: red;" class="form-control pricing" name="sum_prices" id="sum_prices" value="" placeholder="Nhập số chỉ tiêu, tiền chi nhánh">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Số lượng : </label>
+                                            <div  class="input-group" style="width:405px">
+                                                <span class="input-group-addon"><i class="fa fa-plus-square"></i></span>
+                                                    <input type="text" style="font-size: 17px;color: red;" class="form-control pricing" name="sum-numbers" id="sum-numbers" value="" placeholder="Nhập số lượng máy bán trong tháng">
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                        
+                                        
+                                    </div><!-- /.box-body -->
+
+                                    <div class="box-footer">
+                                        <button type="submit" id="btnAdd" class="btn btn-primary">Lưu</button>
+                                        <!--<a href="#" id="btnView">Lưu</a>-->
+                                        
+                                        <input type="hidden" name="months_createdVN" id="months_createdVN" value="" />
+                                        <input type="hidden" name="years_createdVN" id="years_createdVN" value="" />
+                                        <input type="hidden" name="vipid" id="vipid" value="<?=$this->detail["id"];?>" />
+                                    </div>
+                                </form>
+            <script>
+                 
+                $().ready(function(){
+                    
+                     $(".pricing").keyup(function(){
+                        var price = this.value;
+                        price = price.replace(/,/gi,"");
+                        price = price + ".";
+                        price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                        var sprice = price.split(".");
+                        $(this).val(sprice[0]);
+                    });
+                    
+                    $('select').change(function(){
+                        var value = $('#day_create').val() + "/" + $('#month_create').val() + "/" + (parseInt($('#year_create').val()) +1);
+                        $('#endate').val(value);
+                    });
+                    $('select').change(function(){
+                        var value = $('#day_end').val() + "/" + $('#month_end').val() + "/" + (parseInt($('#year_end').val()) +1);
+                        $('#endate').val(value);
+                    });
+                    $('#btnAdd').click(function(e){
+
+                        e.preventDefault();            
+                        var months_createdVN = $("#month_create").val();
+                         $('#months_createdVN').val(months_createdVN);
+                        var years_createdVN = $("#year_create").val();
+                         $('#years_createdVN').val(years_createdVN);
+                       
+                        $.post("/admin/user/sales/save-sales",$('form').serialize(), function(resp){
+                            $('.errblock').remove();
+
+                            $.each(resp, function(i, obj){
+                                var id = obj.id; 
+                                var msg = obj.msg; 
+
+                                if (msg != "ok") {
+
+//                                    $('#'+id).parent().append(' <span class="errblock red" style="padding:3px 0 10px 0">'+msg+'</span>');
+                                    alert(msg);
+                                    return false;
+//                                    $('#'+id).focus();                   
+                                } else {
+                                    result = confirm('Thêm thành công, Bạn có muốn tiếp tục thêm không');
+                                    if(result){
+                                        
+                                    }else{
+                                            window.location = "/admin/user/sales/";
+                                        }
+//                                    alert("Thêm thành công");
+//                                    
+                                }
+
+                            });
+                        }, 'json');
+                    });
+                });
+               
+            </script>
+        </div>

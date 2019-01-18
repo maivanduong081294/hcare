@@ -1,0 +1,39 @@
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <div class="col-md-6">
+            <i class="ion ion-clipboard"></i>
+            <h3 class="box-title">CHUYỂN TIỀN CHO NHÂN VIÊN VỀ KBH</h3>
+        </div>
+    </div>
+    <div class="box-body">
+        <br/>
+        <h1>BILL NÀY ĐÃ ĐƯỢC CHUYỂN TIỀN VỀ CHO NHÂN VIÊN <?php echo $this->receiver[$this->check_layout["receiverid"]] ?> - <?php echo number_format($this->check_layout["money"]) ?></h1>
+        <h3>TRẠNG THÁI - [<?php echo $this->list_collectingmoney[$this->check_layout["status"]] ?>]</h3>
+</div>
+</div>
+<script>
+    $().ready(function () {
+    $(".pricing").keyup(function () {
+            var price = this.value;
+            price = price.replace(/,/gi, "");
+            price = price + ".";
+            price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            var sprice = price.split(".");
+            $(this).val(sprice[0]);
+        });
+    });
+    function notification (msg,id){
+        $('#'+id).focus(); 
+        alert(msg);
+        var msg_add = '<i class="fa fa-times-circle-o"> '+msg+' </i>';
+        $('#'+id+"_tb").html(msg_add);   
+//        location.reload();
+    }
+    function completes(msg){
+        $('.tb').html('');
+        var msg_add = '<i class="fa fa-check" aria-hidden="true"> </i>'+msg+'';
+        $('#complete').html(msg_add);
+        alert(msg);
+        window.location.reload(true);
+    }
+</script>

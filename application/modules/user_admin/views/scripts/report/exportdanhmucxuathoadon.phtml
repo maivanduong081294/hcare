@@ -1,0 +1,73 @@
+<link href="/backend/dist/css/fixtable.css" rel="stylesheet" type="text/css"/>
+<style>
+    @media (min-width: 1400px) {
+        .sheight{height: 400px !important;}
+    }
+    @media only screen and (max-width: 600px) {
+        .mwidth{
+            width: 50% !important;
+        }
+    } 
+    .form-group{
+        padding-left: 0px;
+    }
+</style>
+
+<div class="box-header">
+    <div class="col-md-9">
+        <i class="fa fa-home"></i>
+        <b>EXPORT THEO DANH MỤC (KẾ TOÁN) </b>
+    </div>
+</div><!-- /.box-header -->
+<form role="form" id="frm" method="get"  class="frmReport">
+    <div class="col-md-3">
+        <div class="form-group">
+            <div class="form-group input-group-sm">
+                <select class="form-control" name="flag" id="flag">
+                    <option value="0">Tất cả Công ty & Hnam</option>
+                    <option selected="selected" value="1">Công ty</option>
+                    <option value="2">Hnam</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="form-group col-md-4">
+        <div class="input-group input-group-sm">
+            <?php
+            $start_end = 'Date range picker';
+            if ($this->start_end != null) {
+                $start_end = $this->start_end;
+            }
+            ?>
+            <span class="input-group-btn">
+                <button class="btn btn-default pull-left" id="daterange-btn">
+                    <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                    <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                    <i class="fa fa-caret-down"></i>
+                </button>
+            </span>
+        </div>
+    </div>
+    <div class="form-group input-group-sm col-md-3">
+        <select  name="productsid" id="productsid" class="form-control">
+            <option value="0">--Chọn loại Điện thoại,MTB,PK---</option>
+            <?php
+            foreach ($this->list_hnammobile as $key => $value) {
+                $sl = '';
+                if ($this->productsid == $key) {
+                    $sl = 'selected = selected';
+                }
+                ?>
+                <option data="<?php echo $value ?>" <?php echo $sl ?> value="<?php echo $key ?>"> <?php echo $value ?></option>
+            <?php } ?>
+        </select>
+    </div>
+    <button type="button" onclick="export_all(2);return false;" class="btn btn-primary "><i class="fa fa-file-excel-o"> Export theo danh mục (kế toán)</i></button>
+</form>
+<div class="clearfix"></div>
+<script>
+    function export_all(id) {
+        $('#iexport').val(id);
+        $("#frm").submit();
+    }
+</script>

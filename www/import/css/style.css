@@ -1,0 +1,265 @@
+.div_textright{
+	text-align: right;
+}
+.div_textleft{
+	text-align: left;
+}
+.add_vendor{
+	display: none;
+}
+a{
+	cursor: pointer;	
+}
+a i{
+	font-size: 16px !important;	
+}
+.div_center{
+	text-align: center;
+}
+.clear{
+	clear: both;
+}
+.testimie{
+	position: relative;
+}
+.content_test{
+	position: absolute;
+	top: 34px;
+	left: 0px;
+	background: #FFF;
+	width: 100%;
+	display: none;
+	z-index: 9999;
+}
+.modal-backdrop {
+    position: relative;
+ }
+#content_test{
+	
+	width: 100% !important;
+	max-height: 300px;
+}
+#content_test ul{
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+}
+#content_test ul li{
+	padding-left: 10px;
+	height: 25px;
+	line-height: 25px;
+}
+.detail_pro{
+	list-style: none;
+}
+.view_detail{
+	display: none;
+}
+#paging{
+	line-height: 40px;
+}
+#paging a{
+	background: #3c8dbc;
+	color: #FFF;
+	padding: 4px 10px;
+}
+#paging a.active{
+	background: #222;
+}
+#box_img{
+	margin: 10px 0px;
+}
+#box_img img{
+	max-width: 150px;
+}
+#box_img_show{
+	margin: 10px 0px;
+}
+#box_img_show img{
+	width: 220px;
+}
+.item_detail img{
+	width: 400px !important;
+}
+.main_map{
+	position: relative;
+}
+.main_map .item_map{
+	position: absolute;
+}
+.main_map .item_map .item_img{
+	position: relative;
+}
+.main_map .item_map .item_img .item_detail{
+	position: fixed;
+	top: 51px;
+	right: 0px;
+	background: #FFF;
+	display: none;
+	padding: 10px;
+	text-align: left;
+	border: 1px solid #ddd;
+	-webkit-transition: width 1s; /* Safari */
+    transition: width 1s;
+    min-width: 300px;
+    z-index: 9;
+}
+.main_map .item_map .item_img:hover .item_detail{
+	display: block;
+	-webkit-transition: width 1s; /* Safari */
+    transition: width 1s;
+}
+.main_map .item_map .item_img .edit_position{
+	position: absolute;
+	top: -40px;
+    left: 0px;
+    background: #F00;
+    display: none;
+}
+.main_map .item_map .item_img .edit_position:hover{
+	background: #cb2121;
+}
+.main_map .item_map .item_img .request_position{
+	position: absolute;
+	top: 0px;
+    left: -40px;
+    background: #F00;
+    display: none;
+}
+.main_map .item_map .item_img .request_position:hover{
+	background: #cb2121;
+}
+.main_map .item_map .item_img .edit_position i{
+	color: #FFF;
+	padding: 8px;
+}
+.main_map .item_map .item_img .request_position i{
+	color: #FFF;
+	padding: 8px;
+}
+.modal-dialog {
+	width: 1000px !important;
+	max-width: 100%;
+	margin: 60px auto;
+}
+.move-div{
+	display: block!important;
+	animation: fadeInUp 0.25s ease-out;
+    -moz-animation: fadeInUp 0.25s ease-out;
+    -webkit-animation: fadeInUp 0.25s ease-out;
+    -o-animation: fadeInUp 0.25s ease-out;
+}
+.move-div1{
+	display: block!important;
+	animation: fadeInRingt 0.25s ease-out;
+    -moz-animation: fadeInRingt 0.25s ease-out;
+    -webkit-animation: fadeInRingt 0.25s ease-out;
+    -o-animation: fadeInRingt 0.25s ease-out;
+}
+.counter{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	text-align: left;
+	z-index: 20;
+}
+.counter li{
+	list-style: none;
+}
+.counter li input{
+	float: left;
+	margin-top: 5px;
+	margin-right: 5px;
+}
+.counter li img{
+	margin-right: 10px;
+	width:20px;
+}
+.main_map .item_map .item_img img{
+	width:15px;
+}
+.counter li strong{
+	color: #F00;
+}
+.status{
+	position: absolute;
+	top: -2px;
+	right: -8px;
+}
+.status i{
+	color: #F00;
+}
+.reply{
+	margin-left: 20px;
+}
+.content_reply{
+	position: absolute;
+	top: 60px;
+	left: 0px;
+	background: #FFF;
+	z-index: 999;
+	display: none;
+	padding: 5px;
+	border: 1px solid #ddd;
+}
+.content_reply .sent_reply{
+	padding: 4px 10px;
+	color: #FFF;
+	background: #0c98d9;
+	float: right;
+	margin-top: 5px;
+}
+.content_reply .cancel_reply{
+	padding: 4px 10px;
+	color: #FFF;
+	background: #0c98d9;
+	float: right;
+	margin-top: 5px;
+	margin-right: 5px;
+}
+.div_map{
+	width: 1300px;
+	overflow-y: scroll;
+	margin:auto;
+	position: relative;
+	min-height:800px;
+}
+.div_map img{
+	max-width: 100%;
+}
+.div_map .add_pos{
+	display: none;
+}
+.move-div2{
+	z-index: 10;
+}
+.move-div2 .add_pos{
+	display: block;
+	position: absolute;
+
+}
+.move-div2 .add_pos a{
+	background: #F00;
+	padding: 5px 8px;
+}
+.move-div2 .add_pos a i{
+	color: #FFF;
+}
+.select2-container--default .select2-selection--single {
+	border: 1px solid #d2d6de !important;
+    border-radius: 0 !important;
+    padding: 6px 12px !important;
+    height: 34px !important;
+}
+
+
+.counter li ul{
+	display: none;
+	margin-left: -5px !important;
+}
+.i-parent{
+	cursor: pointer;
+}
+.i-parent-hidden{
+	display: none;
+}

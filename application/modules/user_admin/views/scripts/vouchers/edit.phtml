@@ -1,0 +1,158 @@
+<form  name="data_frm" id="formData" method="post" target="hiddenIF"  enctype="multipart/form-data">
+    <iframe  name="hiddenIF" style="display: none" scrolling="auto"></iframe>
+    <div class="box-body">
+        <div class="box-header">
+            <h3 class="box-title">CHỈNH SỬA VOUCHER</h3>
+        </div><!-- /.box-header -->
+        <div id="frm_add">
+            <div class="col-md-4">
+                <div class="panel panel-default panel-success">
+                    <div class="panel-heading">THÔNG TIN VOUCHER</div>
+                    <div class="panel-body">
+                        <span>Tên chương trình voucher:</span>
+                        <input type="text" class="form-control" name="note" id="note" required="required" placeholder="Tên chương trình voucher..." value="<?php echo $this->item['note']; ?>">
+                        <!--//-->
+                        <span>Loại voucher:</span>
+                        <select name="type_ctkm" id="type_ctkm" class="form-control" >
+                            <?php foreach ($this->list_type_ctkm as $key=> $val){
+                                $sl='';
+                                if($this->item['type_ctkm'] == $key){
+                                    $sl='selected="selected"';
+                                }
+                                ?>
+                                <option <?php echo $sl; ?> value="<?php echo $key ?>"><?php echo $val ?></option>
+                            <?php }?>
+                        </select>
+                        <!--//-->
+                        <span>Theo cateid website:</span>
+                        <input type="text" class="form-control" name="cateid" id="cateid"  placeholder="Theo cateid(nếu có)..." value="<?php echo $this->item['cateid']; ?>">
+
+                        <!--//-->
+                        <span>Mã sản phẩm A(nếu có) :</span>
+                        <input type="text" class="form-control" name="itemid" id="itemid"  placeholder="Mã sản phẩm(nếu có)..." value="<?php echo $this->item['itemid']; ?>">
+
+                        <!--//-->
+                        <span>Áp dụng mã sản phẩm đầu ra B (nếu có) :</span>
+                        <input type="text" class="form-control" name="itemid_tmp" id="itemid_tmp"  placeholder="Áp dụng mã sản phẩm đầu ra..." value="<?php echo $this->item['itemid_tmp']; ?>">
+                        <span>Hình thức Giảm Giá:</span>
+                        <select name="code_type" id="code_type" class="form-control">
+                            <?php foreach ($this->list_cate as $key=> $items){ ?>
+                                <?php
+                                $sl='';
+                                if($this->item['code_type'] == $key){
+                                    $sl='selected="selected"';
+                                }
+                                ?>
+                                <option <?php echo $sl; ?> value="<?php echo $key ?>"><?php echo $items ?></option>
+                            <?php }?>
+                        </select>
+                        <span>Trị giá:</span>
+                        <input type="text" class="form-control" name="code_value" id="code_value" placeholder="Giá trị" value="<?php echo $this->item['code_value']?$this->item['code_value']:''; ?>">
+                        <span>Ngày hết hạn hiệu lực (Nếu có)</span>
+                        <input type="date" class="form-control" name="code_expired" id="code_expired" placeholder="Ngày hết hạn..." value="<?php echo date("Y-m-d",strtotime($this->item['code_expired'])); ?>" />
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default panel-success">
+                    <div class="panel-heading">THÔNG TIN VOUCHER</div>
+                    <div class="panel-body">
+                        <span>Loại Hàng CTY,HNAM:</span>
+                        <select data-placeholder="Cty/Hnam ..." style="width: 100%"  class="selects" name="flag" id="flag">
+                            <option value=0"<?php if(!$this->item['flag']) echo " selected"; ?>>Hàng Cty/Hnam</option>
+                            <option value="1"<?php if($this->item['flag']==1) echo " selected"; ?>>Công ty</option>
+                            <option value="2"<?php if($this->item['flag']==2) echo " selected"; ?>>Hnam</option>
+                        </select>
+                        <!--//-->
+                        <span>Nhóm (ĐT,MTB,PK...) :</span>
+                        <select data-placeholder="Khuyến mãi áp dụng cho nhóm sản phẩm ..." style="width: 100%"  class="selects" name="productsid[]" id="productsid"  multiple>
+                            <?php foreach ($this->list_productsid as $key=> $items){ ?>
+                                <option value="<?php echo $key; ?>"><?php echo $items; ?></option>
+                            <?php }?>
+                        </select>
+                        <!--//-->
+                        <span>Loại (Demo,Line New,SR...) :</span>
+                        <select data-placeholder="Khuyến mãi áp dụng cho loại sản phẩm ..." style="width: 100%"  class="selects" multiple name="istype[]" id="istype">
+                            <?php foreach ($this->lis_istype as $key=> $items){ ?>
+                                <option value="<?php echo $key; ?>"><?php echo $items; ?></option>
+                            <?php }?>
+                        </select>
+                        <!--//-->
+                        <span>Đặc biệt (Phụ kiện,MTB,ĐT...) :</span>
+                        <select  class="form-control" name="is_special" id="is_special">
+                            <option value="0"<?php if(!$this->item['is_special']) echo " selected"; ?>>Thường</option>
+                            <option value="1"<?php if($this->item['is_special']) echo " selected"; ?>>Đặc biệt</option>
+                        </select>
+
+                        <span>Số lần sử dụng theo phone:(/Tháng)</span>
+                        <input type="number" min="0" value="<?php echo $this->item['number_used']?$this->item['number_used']:1; ?>" class="form-control" name="number_used" id="number_used"  placeholder="Số lần sử dụng trong tháng áp dụng với 1 số điện thoại...">
+                        <span>Số lần sử dụng:</span>
+                        <input type="number" value="<?php echo $this->item['nb_used']?$this->item['nb_used']:1; ?>" min="0" class="form-control" name="nb_used" id="nb_used"  placeholder="Số lần sử dụng của mã voucher được cấp ra.Mặc định là sử dụng 1 lần.">
+                        <span>Các chương trình không áp dụng kèm</span>
+                        <?php $list_cktm = explode(',',$this->item['id_ctkm']); ?>
+                        <select style="width: 100%" name="id_ctkm[]" data-placeholder="Chương trình khuyến mãi ..." class="selects" multiple id="id_ctkm">
+                            <option value="0">Áp dụng tất cả</option>
+                            <?php foreach ($this->list_ctkm as $key=> $km){ ?>
+                                <?php
+                                $sl='';
+                                if( in_array($km["id"],$list_cktm)){
+                                    $sl='selected="selected"';
+                                }
+                                ?>
+                                <option <?php echo $sl; ?> value="<?php echo $km["id"] ?>">Không áp dụng <?php echo $km["name"]; ?></option>
+                            <?php }?>
+                        </select>
+                        <span>Áp dụng khuyến mãi:</span>
+                        <?php $list_nokm = explode(',',$this->item['nokm']); ?>
+                        <select style="width: 100%" name="nokm[]" data-placeholder="Khuyến mãi áp dụng ..." class="selects" multiple id="nokm">
+                            <option value="-1">Tất cả</option>
+                            <?php foreach ($this->km as $key=> $km){ ?>
+                                <?php
+                                $sl='';
+                                if( in_array($key,$list_nokm)){
+                                    $sl='selected="selected"';
+                                }
+                                ?>
+                                <option <?php echo $sl; ?> value="<?php echo $key ?>">Không áp dụng <?php echo $km; ?></option>
+                            <?php }?>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default panel-success">
+                    <div class="panel-heading">THÔNG TIN VOUCHER</div>
+                    <div class="panel-body">
+                        <span>Giới hạn trên:</span>
+                        <input type="number" min="0" class="form-control" name="limit_up" id="limit_up"  placeholder="Giới hạn trên..." value="<?php echo $this->item['limit_up']?$this->item['limit_up']:''; ?>">
+                        <span>Giới hạn dưới:</span>
+                        <input type="number" min="0" class="form-control" name="limit_down" id="limit_down"  placeholder="Giới hạn dưới..." value="<?php echo $this->item['limit_down']?$this->item['limit_down']:''; ?>">
+                        <span>Tiền tố (nếu có):</span>
+                        <input type="text" class="form-control" name="tiento" id="tiento" placeholder="Nhập tiền tố nếu có"  value="<?php echo $this->item['tiento']?$this->item['tiento']:''; ?>">
+                        <span>Áp dụng theo số điện thoại:</span>
+                        <select class="form-control" id="access_phone" name="access_phone">
+                            <option value="0"<?php if(!$this->item['access_phone']) echo " selected"; ?>>Không</option>
+                            <option value="1"<?php if($this->item['access_phone']) echo " selected"; ?>>Có</option>
+                        </select>
+                        <span>Nhập nội dung tin nhắn SMS : </span>
+                        <textarea class="form-control" onKeyDown="CountLeft(this.form.sms, this.form.csms,512);" onKeyUp="CountLeft(this.form.sms,this.form.csms,512);" rows="4" cols="50" id="sms" name="sms" placeholder="Nhập nội dung tin nhắn SMS..."><?php echo $this->item['sms']?$this->item['sms']:''; ?></textarea>
+                        <p><input class="form-control right" style="width: 50px" readonly disabled="disabled" type="text" name="csms" /></p>
+                        <p class="color_red">* VOUCHERHNAM2016 : Mã code tự phát sinh</p>
+                        <span>Trạng thái kích hoạt:</span>
+                        <label> <input type="radio" name="enabled" <?php if(!$this->item['enabled']) echo " checked"; ?> value="0" id="" /> Không kích hoạt</label>
+                        <label> <input type="radio" name="enabled" <?php if($this->item['enabled']) echo " checked"; ?> value="1" id="" /> Kích hoạt</label>
+                    </div>
+                </div>
+            </div>
+            <div class="box-footer" align="right">
+                <b id="complete" align="center" class="color_red size20"></b>
+                <button type="submit" id="save" class="btn btn-primary"><i class="fa fa-floppy-o"> Lưu </i></button>
+                <button type="submit" id="close" onclick="closes();return false;" class="btn btn-danger"><i class="fa fa-times"> Đóng... </i></button>
+                <button style="display: none" type="button" id="wt" class="btn btn-primary"><i class="fa fa-spinner"> Đang xử lý</i></button>
+                <input type="hidden" name="id" id="id" value="<?= $this->detail["id"]; ?>" />
+            </div>
+        </div>
+    </div>
+</form>

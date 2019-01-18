@@ -1,0 +1,169 @@
+<script>
+    $(document).ready(function () {
+        //CTRL_A
+        checkCtrl = false
+        $('*').keydown(function (e) {
+            if (e.keyCode == '17') {
+                checkCtrl = true
+            }
+        }).keyup(function (ev) {
+            if (ev.keyCode == '17') {
+                checkCtrl = false
+            }
+        }).keydown(function (event) {
+            if (checkCtrl) {
+                if (event.keyCode == '80') {
+                    alert('Vui lòng nhấn nút in phiếu để in')
+                    checkCtrl = false
+                }
+            }
+        })
+    })
+</script>
+<div id="dvPrint">
+    <div style="position: absolute;width: 30%;left: 0;top: 0;opacity: 0.1"><img style="width: 200px;height: 110px" src="http://stcv4.hnammobile.com//fileext//logo-hnam-in-phieu.png" /><br/><br/>
+    <?php
+    $datess = date('YmdHis');
+    $y = date('Y');
+    $m = date('m');
+    $d = date('d');
+    $h = date('H');
+    $i = date('i');
+    $s = date('s');
+    for($i=0;$i<5;$i++){
+        echo "∑".$h."∏".$i."∇".$s."∇".$y."∏".$m."∑".$d."∑"."<br>";
+    } ?>
+    </div>
+    <style>
+        @media print
+        {
+            table, th, td,tr {
+                border: 1px solid black;
+                border-spacing: 0;
+                border-collapse: collapse;
+            }
+            .size30{
+                font-size: 30px;
+            }
+            .no_border{
+                border:0px !important;
+                width: 50% !important;
+            }
+            #btn_in{
+                display: none;
+            }
+        }
+    </style>
+    <div>
+        <div class="col-md-6"  style="float: left;">
+            <span style="font-size: 10px"><?php echo $this->token_id; ?></span><br/>
+            <b>HNAMMOBILE.COM <?php echo $this->storename2 ?></b><br/>
+            Địa chỉ: <?php echo $this->address ?><br/>
+            Hotline: <?php echo $this->phone_store; ?>
+        </div>
+        <div class="col-md-6" style="float: right;">
+            Số phiếu : <?php echo $this->detail["id"] ?> <?php if($this->detail["bill_of_bhsc"] != NULL){ echo "-".$this->detail["bill_of_bhsc"];  }?><br/>
+            Ngày nhận : <?php echo date('d/m/Y', strtotime($this->detail["datetime"])) ?><br/>
+            <?php
+            $dealine = '';
+            if ($this->detail["dealine"] !='0000-00-00' && strtotime($this->detail["dealine"]) !=FALSE) {
+                $dealine = date('d/m/Y', strtotime($this->detail["dealine"]));
+                echo "Ngày hẹn: $dealine";
+            }
+            ?>
+        </div>
+    </div>
+    <div class="clearfix" style="clear: both"></div><br/>
+    <div style="text-align: center"><b style="font-size: 30px" class="size30">BIÊN NHẬN</b>
+        <a id="btn_in" class="btn btn-app"><i class="fa fa-print"></i>in</a></div>
+    <br/>
+    <table class="table table-condensed table-bordered table-striped" style="width: 100%">
+        <tr>
+            <th>THÔNG TIN KHÁCH HÀNG</th>
+            <th>THÔNG TIN SẢN PHẨM</th>
+        </tr>
+        <tr>
+            <td>Họ Tên : <?php echo $this->detail_customer["fullname"] ?></td>
+            <td>MODEL : <?php echo $this->detail["item_name"] ?></td>
+        </tr>
+        <tr>
+            <td>Địa chỉ : <?php echo $this->detail_customer["address"] ?></td>
+            <td>Số SERI : <?php echo $this->detail["seri"] ?></td>
+        </tr>
+        <?php
+        $purchase_date = '';
+        if (strtotime($this->detail["purchase_date"]) > 0) {
+            $purchase_date = date('d/m/Y', strtotime($this->detail["purchase_date"]));
+        }
+        ?>
+        <tr>
+            <td>Điện thoại : <?php echo $this->detail_customer["phone"] ?></td>
+            <td>Ngày mua : <?php echo $purchase_date ?></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>Màu : <?php echo $this->color_name[$this->detail["pid_color"]] ?></td>
+            
+        </tr>
+        <tr>
+            <td> <?php
+            if((int)$this->detail["money"] ==0){
+                $__money = '';
+            }else{
+                $__money = number_format($this->detail["money"]) ;
+                echo "Báo giá : ".$__money;
+            }
+            ?></td>
+            <td><?php if($this->detail["status_receive"]){ ?>Tình trạng tiếp nhận : <?php echo $this->detail["status_receive"] ?><?php }?></td>
+        </tr>
+        <tr>
+            <td class="hidden">Mô tả ngoại quan : <?php echo $this->detail["note"] ?></td>
+            <td>IMEI : <?php echo $this->detail["imei"] ?></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>Hư hỏng : <?php echo $this->detail["damages"] ?></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>Phát sinh : <?php echo $this->detail["acc_attach"] ?></td>
+        </tr>
+    </table>
+    <div class="clearfix" style="clear: both"></div><br/>
+    <div class="col-md-12">
+        <div class="col-md-6"  style="float: left;">KHÁCH HÀNG</div>
+        <div class="col-md-6"  style="float: right;">NHẬN MÁY
+            <br/>
+            <br/>
+            <?php echo $this->detail["fullname"] ?>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+
+    <p><b>Quy định bảo hành: </b><br/>
+        - TTBH không chịu trách nhiệm đối với những dữ liệu trong các thiết bị khách hàng gửi bảo hành và làm mất phiếu này.
+        <br/>- Xin mang phiếu biên nhận này khi đến nhận máy và phiếu biên nhận này chỉ có giá trị trong vòng 30 kể từ ngày nhận.</p>
+    <p><?php echo date('d/m/Y H:i:s'); ?></p>
+</div>
+<input type="hidden" name="ids" id="ids" value="<?php echo $this->detail["id"] ?>" />
+<input type="hidden" name="isdel" id="isdel" value="<?php echo $this->detail["isdel"] ?>" />
+<div class="hidden" id="ddelete"></div>
+<script>
+    $(document).ready(function () {
+        $("#btn_in").click(function (e) {
+            var result = confirm('Khi đã in là bạn đồng ý tạo đơn hàng này và không thể hủy. Vui lòng xem kỹ?');
+            if (result){
+                var id = $('#ids').val();
+                $('#ddelete').load('/admin/user/guarantee/del2?id=' + id, function () {
+                });
+                var divContents = $("#dvPrint").html();
+                var printWindow = window.open('', '', 'height=700,width=1280');
+                printWindow.document.write(divContents);
+                printWindow.document.close();
+                printWindow.print();
+            }
+        });
+    });
+</script>

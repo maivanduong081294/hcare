@@ -1,0 +1,142 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="col-md-3">
+            Chỉnh sửa Thông tin Chức vụ - Phòng ban
+        </div>
+    </div>
+</div>
+
+<form role="form" action="" target="_blank" id="add_member" name="add_member" method="get" class="frmReport">
+    <div class="box-body">
+        <div class="col-md-8">
+
+            <div class="form-group">
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Chức vụ: </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-desktop"></i>
+                    </div>
+                    <select name="regency" id="regency" class="form-control">
+                        <option value="0">Chức vụ -Hnammobile.com</option>
+                        <?php
+                        foreach ($this->list_regency as $items) {
+                            $selected1 = '';
+                            if ($this->detail["id_regency"] == $items["id"]) {
+                                $selected1 = " selected ='selected'";
+                            }
+                            ?>
+                            <option <?php echo $selected1 ?> value="<?php echo $items["id"] ?>"><?php echo $items["name"]; ?></option>
+<?php } ?>
+                    </select>
+                </div>
+            </div>
+
+
+            <div id="charge_card" class="form-group">
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Phòng ban: </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-desktop"></i>
+                    </div>
+                    <select class="form-control" id="department" name="department">
+                        <option value="0">Phòng ban - Hnammobile.com</option>
+                        <?php
+                        foreach ($this->list_department as $items) {
+                            $selected2 = '';
+                            if ($this->detail["id_department"] == $items["id"]) {
+                                $selected2 = " selected ='selected'";
+                            }
+                            ?>
+                            <option <?php echo $selected2 ?> value="<?php echo $items["id"] ?>"><?php echo $items["name"] ?></option>
+<?php } ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="box-footer">
+                <button type="submit" id="btnView" class="btn btn-primary">Lưu</button>
+                <input type="hidden" name="id" id="id" value="<?php echo $this->detail["id"] ?>" />
+            </div>
+
+
+
+        </div><!-- /.box-body -->
+    </div>
+
+    <!--</div>-->
+
+
+
+    <script>
+        function keys(e)
+        {
+            var keyword = null;
+            if (window.event)
+            {
+                keyword = window.event.keyCode;
+            } else
+            {
+                keyword = e.which; //NON IE;
+            }
+            if (keyword < 48 || keyword > 57)
+            {
+                if (keyword == 48 || keyword == 127)
+                {
+                    return;
+                }
+                return false;
+            }
+        }
+
+        $(".pricing").keyup(function () {
+            var price = this.value;
+            price = price.replace(/,/gi, "");
+            price = price + ".";
+            price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            var sprice = price.split(".");
+            $(this).val(sprice[0]);
+        });
+
+
+    </script>
+
+</form>                          
+
+<script>
+    function number_format(price) {
+        price = price.replace(/,/gi, "");
+        price = price + ".";
+        price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        return price;
+    }
+</script>
+<script>
+    $().ready(function () {
+        $('#btnView').click(function (e) {
+            e.preventDefault();
+            $.post("/admin/user/regency-department/save", $('form').serialize(), function (resp) {
+                $('.errblock').remove();
+                $.each(resp, function (i, obj) {
+//                                alert('dsadas');return false;
+                    var id = obj.id;
+                    var msg = obj.msg;
+                    if (msg != "ok") {
+                        alert(msg);
+                        $('#' + id).focus();
+                        return false;
+//                                                       
+                    } else {
+                        alert('Thông báo.\nLưu thành công.!');
+                        window.location.reload(true);
+                    }
+
+                });
+            }, 'json');
+        });
+    });
+</script>
+
+
+
+
+

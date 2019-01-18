@@ -1,0 +1,91 @@
+<?
+    $item = $this->detail;
+
+//    echo"Người gửi yêu cầu:".$item['fullcontent']['name'];
+//                            if($item['fullcontent']['gender']==0)
+//                                $gt="name";
+//                             if($item['fullcontent']['gender']==1)
+//                                 $gt="Nữ";
+//                            echo"<br />Giới tính: ".$gt;//
+//                            echo"<br />Ngày sinh: ".$item['fullcontent']['ngaysing'];
+//                            echo"<br />Phone: ".$item['fullcontent']['phone'];//
+//                            echo"<br />Tỉnh/Thành: ".$item['fullcontent']['cityid'];
+//                            echo"<br />Quận/Huyện: ".$item['fullcontent']['districtid'];
+//                            echo"<br />Địa chỉ: ".$item['fullcontent']['address'];//
+//                            echo"<br />Sản phẩm yêu cầu: ".$item['fullcontent']['sprequest'];
+//                            echo"<br />Có nhận thông báo qua Email hay  không: ".$item['fullcontent']['nhansendwn'];
+?>
+<table border="0" cellpadding="20" cellspacing="10" width="100%" style="font-size:13px;">
+  <tbody>
+        <tr>
+            <td style="padding: 5px;" align="left" valign="left" width="200">
+                <strong>Họ tên<strong>
+            </td>
+            <td>
+                <? echo $item['name']; ?>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 5px;" align="left" valign="left" width="100">
+                <strong>Giới tính<strong>
+            </td>
+            <td>
+                <? echo $item['gender'] == 0 ? 'Nam' : 'Nữ'; ?>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 5px;" align="left" valign="left" width="100">
+                <strong>Địa chỉ<strong>
+            </td>
+            <td>
+                <? echo $item['address']; ?>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 5px;" align="left" valign="left" width="100">
+                <strong>Khu vực<strong>
+            </td>
+            <td>
+                <? echo $item['cityid']."-".$item['districtid']; ?>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 5px;" align="left" valign="left" width="100">
+                <strong>Điện thoại<strong>
+            </td>
+            <td>
+                <? echo $item['phone']; ?>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 5px;" align="left" valign="left" width="100">
+                <strong>Thông tin của bé<strong>
+            </td>
+            <td>
+                Tê: <? echo $item['baby_name'];?><BR>
+                Giới tính: <? echo $item['baby_gender'] == 0 ? 'Nam' : 'Nữ';?><BR>
+                Năm sinh: <? echo $item['baby_year'];?>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 5px;" align="left" valign="left" width="100">
+                <strong>Nhận thông tin của <strong>
+            </td>
+            <td>
+                <? echo $item['sprequest']; ?>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding: 5px;" align="left" valign="left" width="100">
+                <strong>Nhận thông tin quảng cáo từ NK <strong>
+            </td>
+            <td>
+                <? echo $item['nhansendwn']; ?>
+            </td>
+        </tr>
+
+</tbody></table>
+<style>
+    table td{font-size: 13px;}
+</style>

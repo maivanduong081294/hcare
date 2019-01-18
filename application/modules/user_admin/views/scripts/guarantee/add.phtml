@@ -1,0 +1,135 @@
+<div class="box box-primary">
+    <div class="box-header">
+        <h3 class="box-title">THÔNG TIN BẢO HÀNH</h3>
+    </div><!-- /.box-header -->
+    <form  name="data_frm" id="formData" method="post" target="hiddenIF"  enctype="multipart/form-data">
+        <iframe  name="hiddenIF" style="display: none" scrolling="auto"></iframe>
+        <div class="col-md-6">
+            <div class="form-group">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="imei_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Số IMEI : </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <input type="text" class="form-control" required="required" name="imei" id="imei" value="<?php echo $this->detail["imei"] ?>" placeholder="Nhập số imei của sản phẩm...">
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="seri_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Số Seri : </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <input type="text" required="required" class="form-control" name="seri" id="seri" value="<?php echo $this->detail["seri"] ?>" placeholder="Nhập số seri của sản phẩm vào đây...">
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="itemid_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Tên sản phẩm : </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <select  class="selects" required="required" name="itemid" id="itemid">
+                        <option value="">Lựa chọn sản phẩm</option>
+                        <?php foreach ($this->slist as $items){ ?>
+                        <option value="<?php echo $items ?>"><?php echo $items ?></option>
+                        <?php }?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="producers_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Hãng bảo hành : </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <input type="text" required="required" class="form-control" name="producers" id="producers" value="<?php echo $this->detail["producers"] ?>" placeholder="Hãng bảo hành">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="receiver_id_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Nhân viên nhận : </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <select onchange="change_receiver();" class="selects" required="required" name="receiver_id" id="receiver_id">
+                        <option value="">Chọn tên nhân viên</option>
+                        <?php foreach ($this->sreceiver as $items){ ?>
+                        <option value="<?php echo $items["userid"] ?>"><?php echo $items["fullname"] ?></option>
+                        <?php }?>
+                    </select>
+                </div>
+            </div>
+            <input type="hidden" name="receiver" id="receiver" />
+            <div class="form-group hidden">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="img_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Chọn Hình:</label>
+                <div class="input-group">
+                    <input  onchange='Test.UpdatePreview(this)' type="file" name="img" id="img" />
+                    <img id="img_review" src="/uploads/profile/<?php echo $this->detail["img"] ?>" alt="no-img" style="border: 1px solid #ccc;border-radius: 5px"  width="128" height="128" />
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <span class="col-sm-offset-3 col-sm-9 color_red tb" id="note_tb"></span>
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Ghi chú : </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <textarea placeholder="Nhập ghi chú vào đây..." class="form-control" required="required" name="note" id="note" rows="5" ></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer">
+            <button type="submit" id="save" class="btn btn-primary right"><i class="fa fa-floppy-o"> Lưu</i></button>
+            <b id="complete"  class="color_red right size20"></b>
+        </div>
+    </form>
+</div>
+<script>
+    function change_receiver(){
+        var receiver = $("#receiver_id option:selected").text();
+        $('#receiver').val(receiver);
+    }
+    function notification (msg,id){
+        $('.tb').html('');
+        $('#'+id).focus(); 
+        var msg_add = '<i class="fa fa-times-circle-o"> '+msg+' </i>';
+        $('#'+id+"_tb").html(msg_add);   
+//        location.reload();
+    }
+    function completes(msg){
+        $('.tb').html('');
+        var msg_add = '<i class="fa fa-check" aria-hidden="true"> </i>'+msg+'';
+        $('#complete').html(msg_add);
+        alert(msg);
+        window.location.reload(true);
+    }
+    $(function(){
+    Test = {
+        UpdatePreview: function(obj){
+          // if IE < 10 doesn't support FileReader
+          if(!window.FileReader){
+             // don't know how to proceed to assign src to image tag
+          } else {
+             var reader = new FileReader();
+             var target = null;
+             
+             reader.onload = function(e) {
+              target =  e.target || e.srcElement;
+               $("#img_review").prop("src", target.result);
+             };
+              reader.readAsDataURL(obj.files[0]);
+          }
+        }
+    };
+});
+</script>

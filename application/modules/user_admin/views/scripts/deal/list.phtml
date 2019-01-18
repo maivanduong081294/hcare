@@ -1,0 +1,220 @@
+<table border="0" cellpadding="20" cellspacing="10" width="100%">
+  <tbody><tr>
+    <td style="padding: 5px;" align="center" valign="middle">
+    <table cellspacing="0" cellpadding="0" border="0" width="100%" class="borderMain">
+    <tbody><tr valign="top">
+        <td><table cellspacing="0" cellpadding="0" border="0" width="100%">
+                <tbody><tr>
+                    <td><div class="header icon-48-categories"><a href="<?=$this->url_list;?>">Danh sách hàng giảm giá</a></div></td>
+                           <td align="right"><div class="toolbar">
+                            <table class="toolbar">
+                                <tbody>
+                                    <tr>
+                                        <td id="toolbar-new" class="button"><a class="toolbar" href="<?=$this->url_edit;?>"> <span title="New" class="icon-32-new"></span>Thêm mới</a></td>
+                                        <td id="toolbar-new" class="button"><a class="toolbar" href="#" id="delete"> <span title="Delete" class="icon-32-delete"></span>Xóa</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div></td>
+                                    </tr>
+            </tbody></table></td>
+    </tr>
+</tbody>
+</table>
+<div style="width:100%; text-align: right; margin:10px 0;">
+    <form action="" name="frmChange" id="frmChange" method="post">
+        
+    <p style="padding:10px;">Tìm kiếm <input type="text" value="<?=$this->key?>" name="key" id="key" style="width:400px"> 
+        <a href="#" id="search" style="padding:3px; background:#000000; color:#ffffff;">Tìm</a>
+        <a href="#" id="reset" style="padding:3px; background:#000000; color:#ffffff;" onclick="reset();return false;">reset</a>
+    </p>
+
+    </form>
+</div>
+<div style="width:100%; text-align: right; margin: 5px 0"><?echo $this->paging_template ?></div>
+<table cellpadding="0" border="0" width="100%" class="table table-data table-striped table-bordered">
+    <form method="post" name="frmPage" id="frmPage">
+        <input type="hidden" name="updateid" id="updateid" value="" />
+        <tbody>
+            <tr>
+                <td width="35" class="bgTitleadmin1"><input type="checkbox" onclick="checkme()" name="checkall"></td>
+                <td width="50" class="bgTitleadmin1">#</td>
+                <td class="bgTitleadmin1">Tiêu đề tin</td>
+                <td class="bgTitleadmin1" width="80"><a href="<?=Globals::getBaseUrl()?>admin/user/deal/change-filter?filter=type&id=0" class="filter">Deal mới</a></td>
+                <td class="bgTitleadmin1" width="80"><a href="<?=Globals::getBaseUrl()?>admin/user/deal/change-filter?filter=type&id=1" class="filter">Deal cũ</a></td>
+                <td class="bgTitleadmin1" width="80"><a href="<?=Globals::getBaseUrl()?>admin/user/deal/change-filter?filter=type&id=2" class="filter">Deal đặc biệt</a></td>
+                <td class="bgTitleadmin1" width="80">Hiển thị</td>
+                <td class="bgTitleadmin1" width="120">Ngày đăng</td>
+                <td class="bgTitleadmin1" width="80">Vị trí</td>
+                <td width="80" class="bgTitleadmin1">Thao tác</td>
+            </tr>
+            <?php
+            if(count($this->list)>0 && is_array($this->list))
+            {
+                $red = "<span class='red'>No</span>";
+                $green = "<span class='green'>Yes</span>";
+                $no=($this->no);
+                foreach($this->list as $item)
+                {
+                   
+                    $item['datetime'] = date('d-m-Y H:i:s', strtotime($item['datetime']));
+                    
+                    if($no%2 == 0)
+                        $bgcolor = '#f2f4f5';
+                    else
+                       $bgcolor = '#fff';
+                    $_title = Business_Common_Utils::adaptTitleLinkURLSEO($item['title']);
+
+                    ($item['type'] == 0) ? $newDeal = $green : $newDeal = $red;
+                    ($item['type'] == 1) ? $oldDeal = $green : $oldDeal = $red;
+                    ($item['type'] == 2) ? $bestDeal = $green : $bestDeal = $red;
+                    ($item['enabled'] == 0) ? $enabled = "<span class='red'>No</span>" : $enabled = "<span class='green'>Yes</span>";
+                    
+                ?>
+                    <tr bgcolor="<?echo $bgcolor; ?>">
+                        <td class="bgContentadmin1"><input type="checkbox" value="<?php echo $item['product_id'];?>" name="check[]"></td>
+                        <td class="bgContentadmin1"><? echo $no++;?></td>
+                        <td class="bgContentadmin2"><?echo $item['title']?> </td>
+                        <td class="bgContentadmin2"><a class="update" href="<?=Globals::getBaseUrl();?>admin/user/deal/status?product_id=<?=$item['product_id'];?>&act=type&value=0"><?=$newDeal;?></a></td>
+                        <td class="bgContentadmin2"><a class="update" href="<?=Globals::getBaseUrl();?>admin/user/deal/status?product_id=<?=$item['product_id'];?>&act=type&value=1"><?=$oldDeal;?></td>
+                        <td class="bgContentadmin2"><a class="update" href="<?=Globals::getBaseUrl();?>admin/user/deal/status?product_id=<?=$item['product_id'];?>&act=type&value=2"><?=$bestDeal;?></td>
+                        <td class="bgContentadmin2"><a class="update" href="<?=Globals::getBaseUrl();?>admin/user/deal/status?product_id=<?=$item['product_id'];?>&act=enabled"><?=$enabled;?></td>
+                        <td class="bgContentadmin2"><?echo $item['datetime']?></td>
+                        <td class="bgContentadmin1" style="text-align:left;">
+                           <? echo $this->formSelect("myorder".$item['product_id'], $item['myorder'], array('rel'=>$item['product_id'],"class"=>"myorder"), $this->myorderlist); ?>
+                        </td>
+                        <td class="bgContentadmin1">
+                            <a href="<?=$this->url_edit;?>/?product_id=<?php echo $item['product_id'];?>"><img border="0" title="Edit" src="/user_admin/templates/images/edit.png"></a>
+                            <a href="#" rel="<?php echo $item['product_id'];?>" class="sdelete"><img border="0" alt="Delete" src="/user_admin/templates/images/trash.png"></a>
+                        </td>
+                    </tr>
+                <?php
+                }
+            }
+            ?>
+    </form>
+</table>
+</td>
+  </tr>
+</tbody></table>
+<div id="ddelete" style="display:none;"></div>
+<div id="dmyorder" style="display:none"></div>
+<script type="text/javascript">
+function get_editor_data()
+{
+	document.getElementById('fullcontent').value = FCKeditorAPI.GetInstance('myFCKeditor_fullcontent').GetHTML();
+	return true;
+}
+function CheckForm()
+{
+	return true;
+}
+
+function reset() {
+    var url = '<?=Globals::getBaseUrl()?>admin/user/deal/reset';
+    $.get(url, function(resp){
+        window.location.reload(true);
+    });
+}
+
+function checkme()
+{
+    isCheck=document.frmPage.checkall.checked;
+    elts=document.frmPage.elements['check[]'];
+	if(!elts.length)
+	{
+            elts.checked = isCheck;
+	}
+    else
+    {
+       for(i=0;i<elts.length;i++)
+          elts[i].checked=isCheck;
+    }
+}
+
+function isCheckDetail(){
+    result = 0;
+    $('input:checkbox').each(function(){
+        if ($(this).attr('checked') == true)
+            result = 1;
+    });
+    return result;
+}
+
+$().ready(function(){
+    $('#delete').click(function(){
+        result = isCheckDetail();
+        if (result == 0) //ischeck
+        {
+            alert('Vui lòng chọn items để xóa');
+            return false;
+        }
+        result = confirm("Bạn có chắc muốn xóa?");
+        if (result)
+        {
+            $('#frmPage').attr('action','<?=$this->url?>/delete');
+            $('#frmPage').submit();
+        }
+    });
+
+    $('.sdelete').click(function(){
+        id = $(this).attr('rel');
+        if (id != '')
+            result = confirm('Bạn có chắc chắn muốn xóa?');
+            if (result)
+            $('#ddelete').load('<?=$this->url?>/delete?rand='+Math.random()+'&product_id='+id, function (){
+                alert('Xóa thành công.');
+                window.location.reload(true);
+            });
+    });
+
+    $('.myorder').change(function()
+    {
+        $('#updateid').val($(this).attr('rel'));
+        $('#frmPage').attr('action','<?=$this->url;?>/update-my-order/');
+        $('#frmPage').submit();
+    });
+
+    $('#menuname').change(function(){
+        $('#frmChange').submit();
+    });
+
+    $('#cateid').change(function(){
+        $('#frmChange').submit();
+    });
+    
+    //add filter
+    $('#key').keypress(function(e){      
+        
+        if(e.which == 13){            
+            window.location = '<?=$this->url;?>/add-key?key='+$(this).val();
+            return false;
+        }
+    });
+    
+    $('#search').click(function(e){
+        e.preventDefault();
+        window.location = '<?=$this->url;?>/add-key?key='+$('#key').val();
+    });
+    
+    //chagne newest or highlight
+    $('.update').click(function(e){
+        e.preventDefault();
+        url = $(this).attr('href');
+        
+        $(document).load(url, function(){
+            window.location.reload();
+        });
+    });
+    
+    //change filter 
+    $('.filter').click(function(e){
+        e.preventDefault();
+        url = $(this).attr('href');
+        $(document).load(url, function(){
+            window.location.reload();
+        });
+    });
+
+});
+</script>

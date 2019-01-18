@@ -1,0 +1,147 @@
+<form  name="data_frm" id="formData"  method="post" target="hiddenIF"  enctype="multipart/form-data">
+        <iframe  name="hiddenIF" style="display: none" scrolling="auto"></iframe>
+
+        <div class="block1 col-md-offset-3 col-xs-12 col-md-6">
+            <div class="form-group">
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Loại phiếu : </label>
+                <div class="input-group input-group-sm">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <select name="loaiphieu" id="loaiphieu" class="form-control input-sm">
+                       <option value="0">=== Chọn loại ===</option>
+                       <?php if($this->loai==0): ?>
+                        <option value="1">Điện thoại</option>
+                        <option value="2">Phụ kiện</option>
+                        <?php endif; ?> 
+                       <?php if($this->loai==1): ?>
+                        <option value="1">Điện thoại</option>
+                        <?php endif; ?> 
+                        <?php if($this->loai==2): ?>
+                        <option value="2">Phụ kiện</option>
+                        <?php endif; ?> 
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="block2 col-md-offset-3 col-xs-12 col-md-6 hide">
+            <div class="form-group">
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Số điện thoại : </label>
+                <div class="input-group input-group-sm">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <input type="number" class="form-control" required="required" name="phone_search" id="phone_search" value="<?php echo $this->phone ?>" placeholder="Nhập số điện thoại của sản phẩm...">
+                    <span class="input-group-btn">
+                        <button type="submit" onclick="searchs();return false" class="btn btn-info btn-flat"><i class="fa fa-search"> <span class="hidden-xs">Tìm kiếm </span></i></button>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 frm_search">
+            
+        </div>
+        
+    </form>
+<script>
+
+    $('#loaiphieu').on('change', function() {
+            alert( "Chọn loại phiếu thành công!" );
+            if(this.value >0)
+            {
+                $('#temp_loai_phieu').val(this.value);
+                $('.block1').addClass('hide');
+                $('.block2').removeClass('hide');
+            }
+ 
+    })
+
+
+    function searchs(){
+        var phone = $('#phone_search').val();
+        $.ajax
+        ({
+           method: "POST",
+           url: "/admin/user/guarantee/searchs",
+           data: {phone:phone},
+           dataType: "html",
+            success: function(data){
+              $('.frm_search').html(data);
+            }
+        });
+    }
+    function save_warranty(){
+        $.post("/admin/user/guarantee/save-warranty", $('form').serialize(), function (resp) {
+                $('#wt_warranty').show();
+                $('#save_warranty').hide();
+                $.each(resp, function (i, obj) {
+                    var id = obj.id;
+                    var msg = obj.msg;
+                    var data = obj.data;
+                    if (msg != "ok") {
+                        alert(msg);
+                        $('#' + id).focus();
+                        $('#wt_warranty').hide();
+                        $('#save_warranty').show();
+                        return false;
+                    } else {
+                        alert('Lưu thành công');
+                        $('.dvbh').hide();
+                        $('#save_warranty').show();
+                        $('#wt_warranty').hide();
+                        $('#producers').html('');
+                        $('#producers').html('<option value =""> Lựa chọn hãng bảo hành</option>');
+                        $.each(data, function (y,objs) {
+                            var html = '<option value="' + objs.id + '">' + objs.name + '</option>';
+                            $('#producers').append(html);
+                        });
+                    }
+                });
+            }, 'json');
+    }
+    function add_warranty(){
+        $('.add_warranty').show();
+    }
+    $( document ).ready(function() {
+        $('.selects').select2();
+    });
+    function change_receiver(){
+        var receiver = $("#receiver_id option:selected").text();
+        $('#receiver').val(receiver);
+    }
+    function notification (msg,id){
+        $('.tb').html('');
+        $('#'+id).focus(); 
+        var msg_add = '<i class="fa fa-times-circle-o"> '+msg+' </i>';
+        $('#'+id+"_tb").html(msg_add);   
+//        location.reload();
+    }
+    function completes(msg){
+        $('.tb').html('');
+        var msg_add = '<i class="fa fa-check" aria-hidden="true"> </i>'+msg+'';
+        $('#complete').html(msg_add);
+        alert(msg);
+        window.location.reload(true);
+    }
+    $(function(){
+    Test = {
+        UpdatePreview: function(obj){
+          // if IE < 10 doesn't support FileReader
+          if(!window.FileReader){
+             // don't know how to proceed to assign src to image tag
+          } else {
+             var reader = new FileReader();
+             var target = null;
+             
+             reader.onload = function(e) {
+              target =  e.target || e.srcElement;
+               $("#img_review").prop("src", target.result);
+             };
+              reader.readAsDataURL(obj.files[0]);
+          }
+        }
+    };
+});
+</script>

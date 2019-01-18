@@ -1,0 +1,108 @@
+<div class="box-header panel-default">
+    <form>
+    <div class="col-md-12">
+        <div class="col-md-3">
+            <div class="form-group form-group-sm">
+                    <select onchange="hrf();return false;" class="form-control" name="storeid" id="storeid">
+                        <option value="0">Tất cả chi nhánh</option>
+                        <?php
+                        foreach ($this->list_store as $store) {
+                            $selected0 = '';
+                            if ($this->storeid == $store["userid"]) {
+                                $selected0 = ' selected ="selected"';
+                            }
+                            ?>
+                            <option <?php echo $selected0 ?> value="<?php echo $store["userid"]; ?>"><?php echo $store["storename"]; ?></option>
+                        <?php } ?>
+                        <option <?php if ($this->storeid == "622") {
+                        echo 'selected="selected"';
+                    } ?> value="622">40 Hoàng văn thụ</option>
+                        <option <?php if ($this->storeid == "443") {
+                        echo 'selected="selected"';
+                    } ?> value="443">778 Vivo City</option>
+                    </select>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <span>Trạng thái nhân viên</span>
+            <select name="is_active" id="is_active">
+                <option value="-1">Tất cả</option>
+                <option <?php if($this->is_active ==1){ echo 'selected="selected"'; } ?>  value="1">Kích hoạt</option>
+                <option <?php if($this->is_active ==0){ echo 'selected="selected"'; } ?> value="0">Đã hủy</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group form-group-sm">
+                <select onchange="hrf();return false;" class="form-control" name="month" id="month">
+                    <?php
+for($m=1;$m<= 12;$m++) {
+    $selected = '';
+    if ($this->month == $m) {
+        $selected = ' selected ="selected"';
+    }
+    ?>
+                            <option <?php echo $selected ?> value="<?php echo $m; ?>"> Tháng <?php echo $m; ?></option>
+                        <?php } ?>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group form-group-sm">
+                <select onchange="hrf();return false;" class="form-control" name="year" id="year">
+                   <?php
+                    for($y=2014;$y<= date('Y') + 5;$y++) {
+                        $selected2 = '';
+                        if ($this->year == $y) {
+                            $selected2 = ' selected ="selected"';
+                        }
+                        ?>
+                        <option <?php echo $selected2 ?> value="<?php echo $y; ?>"> Năm <?php echo $y; ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+        </div>
+        <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> Xem </i></button>
+    </div>
+</form>
+</div>
+<div class="clearfix"></div>
+<div class="box-body">
+    <div class="table-responsive">
+        <table class="table table-data table-striped table-bordered table-hover">
+            <tr>
+                <th width="20">STT</th>
+                <th>Họ tên nhân viên</th>
+                <th>Chi nhánh</th>
+                <th>Số tiền</th>
+                <th>Trạng thái</th>
+            </tr>
+            <?php
+            $____date = date('Ymd');
+            foreach ($this->list as $val){
+                $userid = $val["userid"];
+                $storeid = $val["storeid"];
+                $total_money += $val["money"];
+                $style='';
+                $status='Kích hoạt';
+                if($this->active[$userid]==0){
+                    $style='style="background: red;color: #fff"';
+                    $status='Đã hủy';
+                }
+                $ztoken = md5("target_by_userid".$____date.$userid);
+                ?>
+            <tr>
+                <td><?php echo ++ $stt ?></td>
+                <td><a href="http://app.hnammobile.com/admin/user/target/index?month=<?php echo $this->month ?>&year=<?php echo $this->year ?>&sync=1&userid=<?php echo $userid ?>&token=<?php echo $ztoken ?>" target="_blank"><?php echo  $this->array_fullname2[$userid] ?></a></td>
+                <td><?php echo  $this->storename2[$storeid] ?></td>
+                <td><?php echo number_format($val["money"]) ?></td>
+                <td <?php echo $style ?>><?php echo $status ?></td>
+            </tr>
+            <?php }?>
+            <tr>
+                <td colspan="3" align="right"> Tổng</td>
+                <td><?php echo number_format($total_money) ?></td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+</div>

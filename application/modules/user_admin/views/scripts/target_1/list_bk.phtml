@@ -1,0 +1,500 @@
+<?php
+$_scty =0;
+$_tl =1;
+    foreach ($this->ptype as $key => $items) {
+        if($key==3){
+            continue;
+        }else{
+            $m_hnam +=$this->money_hnam[$key];
+            $tg_hnam += $this->sum_hnam[$key];
+    
+            $_scty +=  $this->sum_cty[$key];
+            $_mcty +=  $this->money_cty[$key];
+            $_pt_phone_other = round($this->sum_cty[$key]/$this->money_cty[$key]*100,2);
+            if($_pt_phone_other <75){
+               $_tl =0; 
+            }
+        }
+        
+    }
+    $_thuongthem =0;
+    $_percent = round($_mcty/$_scty*100,2);
+    if($_tl==1 && $_percent >=80){
+        if($_percent >=80){
+           $_thuongthem = 1000000; 
+        }
+        $_them = $_percent -100;
+        if($_them >=5){
+            $_thuongthem += floor($_them/5)*500000;
+        }
+        
+    }
+//
+    if ($tg_hnam / $m_hnam * 100 >= 120) {
+        $number = 10000;
+    } else {
+        $number = 5000;
+    }
+?>
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="ion ion-clipboard"></i>
+        <h3 class="box-title">Target chi nhánh</h3>
+    </div><!-- /.box-header -->
+    <form role="form" id="view-sales-day" method="get"  class="frmReport">
+                <div class="box-body">
+                    <div style="float: left" class="form-group">
+                        <div class="input-group" style="width: 400px">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <select class="form-control" name="month" id="month">
+                                <?php foreach ($this->months as $m){ 
+                                    $selected = '';
+                                    if($this->month == $m){
+                                        $selected = ' selected ="selected"';
+                                    }
+                                    ?>
+                                <option <?php echo $selected ?> value="<?php echo $m; ?>"> Tháng <?php echo $m; ?></option>
+                                <?php }?>
+                            </select>
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <select class="form-control" name="year" id="year">
+                                <?php foreach ($this->years as $y){ 
+                                    $selected2 = '';
+                                    if($this->year == $y){
+                                        $selected2 = ' selected ="selected"';
+                                    }
+                                    ?>
+                                <option <?php echo $selected2 ?> value="<?php echo $y; ?>"> Năm <?php echo $y; ?></option>
+                                <?php }?>
+                            </select>
+                        </div><!-- /.input group -->
+
+                    </div>
+                    <div style="float: left" class="form-group">
+                        <button type="submit" id="btnView" class="btn btn-primary">Xem</button>
+                    </div>
+                    <div style="float: right">
+                        <a class="btn btn-primary" href="/admin/user/target/listmb" ><i class="glyphicon glyphicon-plus"></i>Target từng nhân viên</a>
+                    </div>
+                </div><!-- /.box-body -->
+
+            </form>
+    
+    <div class="box-body">
+        <div class="table-responsive">
+                <table class="table table-data table-striped table-bordered table-hover">
+                        <tr>
+                            <!--Target-->
+                            <th width="150"></th>
+                            <th colspan="3">Công ty</th>
+                            <th colspan="3">Hnam</th>
+                            <!--Doanh số-->
+                            <th width="20">-</th>
+                            <th colspan="3">Công ty</th>
+                            <th colspan="3">Hnam</th>
+                        </tr>
+                        <tr>
+                            <!--Target-->
+                            <th width="150"></th>
+                            <th>Tiền</th>
+                            <th width="40">SL</th>
+                            <th width="40"></th>
+                            <th>Tiền</th>
+                            <th width="40">SL</th>
+                            <th width="40"></th>
+                            
+                            <!--Doanh số-->
+                            <td></td>
+                            <th>Tiền</th>
+                            <th>Tỷ lệ</th>
+                            <th width="40">SL</th>
+                            <!--<th>Thưởng</th>-->
+                            <th>Tiền</th>
+                            <th>Tỷ lệ</th>
+                            <th width="40">SL</th>
+                            <!--<th>Thưởng</th>-->
+                        </tr>
+                        <?php
+                        $_other_target = $this->money_cty[1] + $this->money_cty[4];
+                        $_apple_target = $this->money_cty[2] + $this->money_cty[5];
+                        $_target = $_other_target + $_apple_target;
+                        $_other_sales = $this->sum_cty[1] + $this->sum_cty[4]; 
+                        $_apple_sales = $this->sum_cty[2] + $this->sum_cty[5]; 
+                        $_sales = $_other_sales + $_apple_sales;
+
+                        $seckey ="TARGET2016HNAMMOBILE";
+                        foreach ($this->ptype as $key=> $items){ 
+                            $token_cty = md5($seckey.$this->id_cty[$key]);
+                            $token_hnam = md5($seckey.$this->id_hnam[$key]);
+                            
+                            //Doanh số
+                            $_phantram_cty = round($this->sum_cty[$key]/$this->money_cty[$key]*100,2);
+                            $_phantram_hnam = round($this->sum_hnam[$key]/$this->money_hnam[$key]*100,2);
+                            $bgcolor1 ='';
+                            $bgcolor2 ='';
+                            if($_phantram_cty >=75){
+                                $bgcolor1 = 'class="dat"';
+                            }else{
+                                $bgcolor1 = 'class="nodat"';
+                            }
+                            if($_phantram_hnam >=75){
+                                $bgcolor2 = 'class="dat"';
+                            }else{
+                                $bgcolor2 = 'class="nodat"';
+                            }
+                            $___often =0;
+                            $___often_hnam =0;
+                            if($key ==1 || $key ==2 || $key==4 || $key ==5){
+                                if($_sales/$_target*100 >= 80 && $_other_sales/$_other_target*100 >= 75 && $_apple_sales/$_apple_target*100 >= 75 ){
+                                    if($key==1 || $key ==4){
+                                        $often = 0.3;
+                                    }else{
+                                        $often = 0.1;
+                                    }
+
+                                }else{
+                                    if($key==1 || $key ==4){
+                                        $often = 0.15;
+                                    }else{
+                                        $often = 0.05;
+                                    }
+                                }
+                                $___often = $this->sum_cty[$key]*$often/100;
+                                $___often_hnam = $this->totals_hnam[$key] * $number;
+                            }
+                            if($key ==6 || $key ==10){
+                                $___often = floor($this->sum_cty[$key]/1000000)*10000;
+                                $___often_hnam = floor($this->sum_hnam[$key]/1000000)*10000;
+                            }
+                            if($key ==7 || $key ==8){
+                                $___often = $this->totals_cty[$key] * 5000;
+                                $___often_hnam = $this->totals_hnam[$key] * 5000;
+                            }
+                            ?>
+                        <tr>
+                            <td><?php echo $items; ?></td>
+                            <!--Target-->
+                            <td><?php echo number_format($this->money_cty[$key]);?></td>
+                            <td><?php echo number_format($this->total_cty[$key]); ?></td>
+                            <td width="40"><a  title="Lịch sử chỉnh sửa" data-toggle="tooltip" onclick="history(<?php echo (int)$this->id_cty[$key]; ?>,'<?php echo $token_cty;?>');return false;" class="btn btn-sm btn-warning" >
+                                    <i class="fa fa-eye"></i></a>
+                            </td>
+                            <td><?php echo number_format($this->money_hnam[$key]); ?></td>
+                            <td><?php echo number_format($this->total_hnam[$key]); ?></td>
+                            <td width="40"><a  title="Lịch sử chỉnh sửa" data-toggle="tooltip" onclick="history(<?php echo (int)$this->id_hnam[$key]; ?>,'<?php echo $token_hnam;?>');return false;" class="btn btn-sm btn-warning" >
+                                    <i class="fa fa-eye"></i></a>
+                            </td>
+                            
+                            <td></td>
+                            <!--Doanh số-->
+                            <td><?php echo number_format($this->sum_cty[$key]);?></td>
+                            <td <?php echo $bgcolor1; ?>><?php echo $_phantram_cty;?>%</td>
+                            <td><?php echo number_format($this->totals_cty[$key]); ?></td>
+                            <!--<td><?php // echo number_format($___often);?></td>-->
+                            <td><?php echo number_format($this->sum_hnam[$key]); ?></td>
+                            <td <?php echo $bgcolor2; ?>><?php echo $_phantram_hnam;?>%</td>
+                            <td><?php echo number_format($this->totals_hnam[$key]); ?></td>
+                            <!--<td><?php // echo number_format($___often_hnam);?></td>-->
+                        </tr>
+                        <?php $money_cty +=  $this->money_cty[$key];
+                            $total_cty +=  $this->total_cty[$key];
+                            $money_hnam +=  $this->money_hnam[$key];
+                            $total_hnam +=  $this->total_hnam[$key];
+                            $sum_cty +=  $this->sum_cty[$key];
+                            $totals_cty +=  $this->totals_cty[$key];
+                            $sum_hnam +=  $this->sum_hnam[$key];
+                            $totals_hnam+=  $this->totals_hnam[$key];
+                            $_soften +=$___often;
+                            $_soften_hnam +=$___often_hnam;
+                            ?>
+                        <?php }?>
+                        
+                        <!--Tổng-->
+                        <tr style="color: white;background: #090;font-weight: bold">
+                            <td>Tổng cộng</td>
+                            <td><?php echo number_format($money_cty);?></td>
+                            <td><?php echo number_format($total_cty);?></td>
+                            <td></td>
+                            <td><?php echo number_format($money_hnam);?></td>
+                            <td><?php echo number_format($total_hnam);?></td>
+                            <td></td>
+                            
+                            <td></td>
+                            
+                            <td><?php echo number_format($sum_cty);?></td>
+                            <td></td>
+                            <td><?php echo number_format($totals_cty);?></td>
+                            <!--<td><?php // echo number_format($_soften);?></td>-->
+                            <td><?php echo number_format($sum_hnam);?></td>
+                            <td></td>
+                            <td><?php echo number_format($totals_hnam);?></td>
+                            <!--<td><?php // echo number_format($_soften_hnam);?></td>-->
+                        </tr>
+                </table>
+        </div>
+        
+        
+        
+        <div class="col-md-6">
+            <p style="color: red"><b>Target được set</b></p>
+            <div class="table-responsive">
+                <table class="table table-data table-striped table-bordered table-hover">
+                        <tr>
+                            <th width="150"></th>
+                            <th colspan="3">Công ty</th>
+                            <th colspan="3">Hnam</th>
+                        </tr>
+                        <tr>
+                            <th width="150"></th>
+                            <th>Tiền</th>
+                            <th width="40">SL</th>
+                            <th width="40"></th>
+                            
+                            <th>Tiền</th>
+                            <th width="40">SL</th>
+                            <th width="40"></th>
+                        </tr>
+                        <?php
+                        $seckey ="TARGET2016HNAMMOBILE";
+                        foreach ($this->ptype as $key=> $items){ 
+                            $token_cty = md5($seckey.$this->id_cty[$key]);
+                            $token_hnam = md5($seckey.$this->id_hnam[$key]);
+                            ?>
+                        <tr>
+                            <td><?php echo $items; ?></td>
+                            <td><?php echo number_format($this->money_cty[$key]);?></td>
+                            <td><?php echo number_format($this->total_cty[$key]); ?></td>
+                            <!--<td><?php // echo $this->often_cty[$key];?></td>-->
+                            <td width="40"><a  title="Lịch sử chỉnh sửa" data-toggle="tooltip" onclick="history(<?php echo (int)$this->id_cty[$key]; ?>,'<?php echo $token_cty;?>');return false;" class="btn btn-sm btn-warning" >
+                                    <i class="fa fa-eye"></i></a>
+                            </td>
+                            <td><?php echo number_format($this->money_hnam[$key]); ?></td>
+                            <td><?php echo number_format($this->total_hnam[$key]); ?></td>
+                            <!--<td><?php // echo $this->often_hnam[$key];?></td>-->
+                            <td width="40"><a  title="Lịch sử chỉnh sửa" data-toggle="tooltip" onclick="history(<?php echo (int)$this->id_hnam[$key]; ?>,'<?php echo $token_hnam;?>');return false;" class="btn btn-sm btn-warning" >
+                                    <i class="fa fa-eye"></i></a>
+                            </td>
+                        </tr>
+                        <?php $money_cty +=  $this->money_cty[$key];
+                            $total_cty +=  $this->total_cty[$key];
+                            $money_hnam +=  $this->money_hnam[$key];
+                            $total_hnam +=  $this->total_hnam[$key];?>
+                        <?php }?>
+                        <tr style="color: white;background: red;font-weight: bold">
+                            <td>Tổng cộng</td>
+                            <td><?php echo number_format($money_cty);?></td>
+                            <td><?php echo number_format($total_cty);?></td>
+                            <!--<td></td>-->
+                            <td></td>
+                            <td><?php echo number_format($money_hnam);?></td>
+                            <td><?php echo number_format($total_hnam);?></td>
+                            <!--<td></td>-->
+                            <td></td>
+                        </tr>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <p style="color: red"><b>Chi nhánh bán được</b></p>
+            <div class="table-responsive">
+                <table class="table table-data table-striped table-bordered table-hover">
+                        <tr>
+                            <th width="150"></th>
+                            <th colspan="4">Công ty</th>
+                            <th colspan="4">Hnam</th>
+                        </tr>
+                        <tr>
+                            <th width="150"></th>
+                            <th>Tiền</th>
+                            <th>Tỷ lệ</th>
+                            <th width="40">SL</th>
+                            <th>Thưởng</th>
+                            
+                            <th>Tiền</th>
+                            <th>Tỷ lệ</th>
+                            <th width="40">SL</th>
+                            <th>Thưởng</th>
+                            
+                        </tr>
+                        <?php
+                        
+                            $_other_target = $this->money_cty[1] + $this->money_cty[4];
+                            $_apple_target = $this->money_cty[2] + $this->money_cty[5];
+                            $_target = $_other_target + $_apple_target;
+                            
+                            $_other_sales = $this->sum_cty[1] + $this->sum_cty[4]; 
+                            $_apple_sales = $this->sum_cty[2] + $this->sum_cty[5]; 
+                            $_sales = $_other_sales + $_apple_sales; 
+                            
+                            
+                        foreach ($this->ptype as $key=> $items){
+                            $_phantram_cty = round($this->sum_cty[$key]/$this->money_cty[$key]*100,2);
+                            $_phantram_hnam = round($this->sum_hnam[$key]/$this->money_hnam[$key]*100,2);
+                            $bgcolor1 ='';
+                            $bgcolor2 ='';
+                            if($_phantram_cty >=75){
+                                $bgcolor1 = 'class="dat"';
+                            }else{
+                                $bgcolor1 = 'class="nodat"';
+                            }
+                            if($_phantram_hnam >=75){
+                                $bgcolor2 = 'class="dat"';
+                            }else{
+                                $bgcolor2 = 'class="nodat"';
+                            }
+                            $___often =0;
+                            $___often_hnam =0;
+                            if($key ==1 || $key ==2 || $key==4 || $key ==5){
+                                if($_sales/$_target*100 >= 80 && $_other_sales/$_other_target*100 >= 75 && $_apple_sales/$_apple_target*100 >= 75 ){
+                                    if($key==1 || $key ==4){
+                                        $often = 0.3;
+                                    }else{
+                                        $often = 0.1;
+                                    }
+
+                                }else{
+                                    if($key==1 || $key ==4){
+                                        $often = 0.15;
+                                    }else{
+                                        $often = 0.05;
+                                    }
+                                }
+                                $___often = $this->sum_cty[$key]*$often/100;
+                                $___often_hnam = $this->totals_hnam[$key] * $number;
+                            }
+                            if($key ==6 || $key ==10){
+                                $___often = floor($this->sum_cty[$key]/1000000)*10000;
+                                $___often_hnam = floor($this->sum_hnam[$key]/1000000)*10000;
+                            }
+                            if($key ==7 || $key ==8){
+                                $___often = $this->totals_cty[$key] * 5000;
+                                $___often_hnam = $this->totals_hnam[$key] * 5000;
+                            }
+                            
+                            ?>
+                        <tr>
+                            <td><?php echo $items; ?></td>
+                            <td><?php echo number_format($this->sum_cty[$key]);?></td>
+                            <td <?php echo $bgcolor1; ?>><?php echo $_phantram_cty;?>%</td>
+                            <td><?php echo number_format($this->totals_cty[$key]); ?></td>
+                            <td><?php echo number_format($___often);?></td>
+                            <td><?php echo number_format($this->sum_hnam[$key]); ?></td>
+                            <td <?php echo $bgcolor2; ?>><?php echo $_phantram_hnam;?>%</td>
+                            <td><?php echo number_format($this->totals_hnam[$key]); ?></td>
+                            <td><?php echo number_format($___often_hnam);?></td>
+                        </tr>
+                        <?php $sum_cty +=  $this->sum_cty[$key];
+                            $totals_cty +=  $this->totals_cty[$key];
+                            $sum_hnam +=  $this->sum_hnam[$key];
+                            $totals_hnam+=  $this->totals_hnam[$key];
+                            $_soften +=$___often;
+                            $_soften_hnam +=$___often_hnam;
+                            ?>
+                        <?php }?>
+                        <tr style="color: white;background: red;font-weight: bold">
+                            <td>Tổng cộng</td>
+                            <td><?php echo number_format($sum_cty);?></td>
+                            <td></td>
+                            <td><?php echo number_format($totals_cty);?></td>
+                            <td><?php echo number_format($_soften);?></td>
+                            <td><?php echo number_format($sum_hnam);?></td>
+                            <td></td>
+                            <td><?php echo number_format($totals_hnam);?></td>
+                            <td><?php echo number_format($_soften_hnam);?></td>
+                        </tr>
+                </table>
+            </div>
+        </div>
+        <div class="btn dat">Đạt</div>
+        <div class="btn nodat">Không đạt</div>
+        <div style="color: red"><b>Tiền cộng cho quản lý : <?php echo number_format($_thuongthem); ?></b></div>
+    </div><!-- /.box-body -->
+</div><!-- /.box -->
+<div id="ddelete" style="display:none;"></div>
+<script>
+    function history(id,token){
+        var ajaxLink = '/admin/user/target/get-history';
+        $.ajax({
+            method: 'get',
+            cache: false,
+            url: ajaxLink,
+            data: {id: id,token:token},
+            dataType: 'json',
+            success: function (resp) {
+                console.log(resp);
+                $('.addrow').html('');
+                $('#myModal3').modal('show');
+                var count =0;
+                $.each(resp, function (i) {
+                    count ++;
+                    html = "<tr class='addrow'><td>"+count+"</td>\n\
+                            <td>"+resp[i].name_flag+"</td>\n\
+                            <td>"+resp[i].name_type+"</td>\n\
+                            <td>"+resp[i].money+"</td>\n\
+                            <td>"+resp[i].total+"</td>\n\
+                            <td>"+resp[i].datetime+"</td>\n\
+                            <td>"+resp[i].creator+"</td></tr>";
+                    $('.addtable').append(html);    
+                });
+
+            }
+        });
+    }
+    $().ready(function () {
+        function keys(e)
+        {
+            var keyword = null;
+            if (window.event)
+            {
+                keyword = window.event.keyCode;
+            } else
+            {
+                keyword = e.which; //NON IE;
+            }
+            if (keyword < 48 || keyword > 57)
+            {
+                if (keyword == 48 || keyword == 127)
+                {
+                    return;
+                }
+                return false;
+            }
+        }
+        $(".pricing").keyup(function () {
+            var price = this.value;
+            price = price.replace(/,/gi, "");
+            price = price + ".";
+            price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            var sprice = price.split(".");
+            $(this).val(sprice[0]);
+        });
+        
+    });
+</script>
+<div class="modal fade" id="myModal3">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="color: red"><b>Lịch sử chỉnh sửa target <span id="title"></span></b></h4>
+      </div>
+        <div class="modal-body">
+            <table class="table table-condensed table-bordered table-responsive addtable">
+                <tr>
+                    <th>STT</th>
+                    <th>Nhóm sản phẩm</th>
+                    <th>Loại sản phẩm</th>
+                    <th>Tổng tiền</th>
+                    <th>Số lượng</th>
+                    <th>Ngày tạo</th>
+                    <th>Người tạo</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+  </div>
+</div>

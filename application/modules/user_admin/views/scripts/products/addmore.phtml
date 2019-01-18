@@ -1,0 +1,151 @@
+<table border="0" cellpadding="20" cellspacing="10" width="100%">
+  <tbody><tr>
+    <td style="padding: 5px;" align="center" valign="middle">
+    <table class="borderMain" border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tbody><tr valign="top">
+        <td><div class="header icon-48-article">Thông tin Size/Color/Price</div></td>
+        <td align="right"><div class="toolbar">
+            <table class="toolbar"><tbody><tr>
+                <td id="toolbar-new" class="button">
+                    <a class="toolbar" id="save" href="#">
+                    <span title="Save" class="icon-32-save"></span>
+                    Lưu</a>
+                </td>
+                 <td id="toolbar-cancel" class="button">
+                    <a class="toolbar" onclick="javascript:if(confirm('Bạn đã lưu thông tin và chắc chắn đóng?')) window.close()" href="#">
+                    <span title="Cancel" class="icon-32-delete"></span>
+                    Đóng</a>
+                </td>
+        </tr></tbody></table>
+        </div></td>
+      </tr>
+</tbody></table>
+<table class="borderMain spaceTop5px" border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tbody><tr>
+    <td>
+        
+<form name="frmPage" id="frmPage" method="post" action="">
+    <input type="hidden" value="<? echo $this->itemid; ?>" name="itemid" id="itemid" />
+	<table class="adminerror spaceTop10px" border="0" cellpadding="0" cellspacing="0" width="100%">
+	    </table>
+    <br>
+    <div id="add" style="width:100%; text-align: right; margin: 0 0 10px 0"><img src="/user_admin/templates/images/add.png" width="12" align="absmiddle" />Add more</div>
+    <fieldset class="adminform"><legend>Thông tin chi tiết sản phẩm "<font color="RED"><? echo $this->name; ?></font>"</legend>
+    <table class="spaceTop5px" border="0" width="100%">
+    <tbody id="mainbody">
+        <tr id="serverTr" width="100%">
+            <td colspan="8">Ghi chú: Giá nhập vào là giá chưa tính giảm giá nếu có, hệ thống sẽ tự tính toán phần giảm giá ở trang chủ</td>
+        </tr>        
+        <tr class="line" style="display:<? echo $this->display ?>" id="clone">
+            <td align="right" width="50">Kích cỡ<span style="color:#ff0000;">(*)</span></td>
+            <td style="padding-left: 2px; width: 50px;">
+            <select name="size[]" size="1">
+                <? foreach($this->sizelist as $k => $v){?>
+                    <option value="<?echo $k?>" <? echo $v[1];?>><? echo $v[0];?></option>
+                <? } ?>
+            </select>
+
+            </td>
+            <td align="right" width="30">Màu<span style="color:#ff0000;">(*)</span></td>
+            <td style="padding-left: 2px; width: 50px">
+                <select name="color[]" size="1">
+                    <? foreach($this->colorlist as $k => $v){?>
+                        <option value="<?echo $k?>" <?echo $v[1]?>><? echo $v[0];?></option>
+                    <? } ?>
+                </select>
+            </td>
+            <td align="right" width="70">Trọng lượng<span style="color:#ff0000;">(*)</span></td>
+            <td style="padding-left: 2px; width:40px">
+                <input type="text" name="weight[]" value="100" style="width:30px;"/>g
+            </td>
+            <td align="right" width="30">Giá<span style="color:#ff0000;">(*)</span></td>
+            <td style="padding-left: 2px; width:70px">
+                <input type="text" name="price[]" value="" style="width:70px;"/>
+            </td>
+            <td align="right" width="60">Giảm Giá<span style="color:#ff0000;">(*)</span></td>
+            <td style="padding-left: 2px; width:40px">
+                <input type="text" name="discount[]" value="0" style="width:30px;"/>%
+            </td>
+            <td align="right" width="70">Tình trạng<span style="color:#ff0000;">(*)</span></td>
+            <td style="padding-left: 2px; width:70px">
+                 <select name="status[]" size="1">
+                    <? foreach($this->statuslist as $k => $v){?>
+                        <option value="<?echo $k?>" <?echo $v[1];?>><? echo $v[0];?></option>
+                    <? } ?>
+                </select>
+            </td>
+            <td width="15" style="display:block">
+                <a href="#" style="color:RED" class="sremove">remove</a>
+            </td>
+        </tr>
+        <? echo $this->saveditem; ?>
+    </tbody>
+    </table>
+</fieldset>
+
+</form>
+        
+    </td>
+  </tr>
+</tbody></table>
+</td>
+  </tr>
+</tbody></table>
+<div id="deleted" style="display:none;"></div>
+<script type="text/javascript">
+
+$().ready(function(){
+    var inform = false;
+    $('#save').click(function(){
+        inform = false;
+        $('input[name^="price"]').each(function(){
+            if ($(this).parent().parent().attr('id') != 'clone')
+            if ( $(this).val() == '' || isNaN($(this).val()) ){
+                inform = true;
+            }
+        });
+
+        if (inform){
+            alert("Vui lòng nhập giá");
+            return false;
+        }else{
+            $('#frmPage').submit();
+        }
+            
+    });
+
+    $('#cateid').find('option').each(function(){
+        id = $(this).val();
+
+        if (id == 0){
+            $(this).attr('selected','selected');
+        }
+    });
+
+    var newline = $('#clone').clone();
+    <? if ($this->saveditem == ''){?>
+        $('#mainbody').append('<tr style="margin:5px 0;">'+newline.html()+'</tr>');
+    <? } ?>
+    $('#add').hover(function(){
+        $(this).css('cursor','pointer');
+    });
+    $('#add').click(function(){        
+        $('#mainbody').append('<tr style="margin:5px 0;">'+newline.html()+'</tr>');                
+        $('.sremove').click(function(){
+            $(this).parent().parent().remove();
+        });
+    });
+
+    $('.removehasitem').click(function(){
+        result = confirm('Bạn có chắc chắn muốn xóa?');
+        if (result){
+            param = $(this).attr('rel');
+            href = '/admin/user/products/delete-items/?param='+param;
+            $('#deleted').load(href, function(respone){
+            });
+            $(this).parent().parent().remove();
+        }
+    });
+});
+
+</script>

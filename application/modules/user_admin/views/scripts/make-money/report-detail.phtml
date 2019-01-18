@@ -1,0 +1,114 @@
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="ion ion-clipboard"></i>
+        <h3 class="box-title">Danh sách TIỀN THƯỞNG</h3>
+    </div><!-- /.box-header -->
+    <form role="form" id="view-sales-day" method="get"  class="frmReport">
+        <div class="box-body">
+            <div style="float: left" class="form-group">
+            <div class="input-group" style="width: 200px">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <select name="cated_id" id="cated_id" class="form-control">
+                        <option value="0"> Tất cả</option>
+                        <?php foreach ($this->menu_products2 as $items){ 
+                            $sl = '';
+                            if($this->itemid == $items["itemid"]){
+                                $sl = 'selected = selected';
+                            }
+                            ?>
+                        <option <?php echo $sl ?> value="<?php echo $items["itemid"] ?>"> <?php echo $items["title"] ?></option>
+                        <?php }?>
+                    </select>
+                
+                </div>
+            </div>
+            <div style="float: left;width: 600px">
+                        <input  type="text" class="form-control pull-right" name="day_created_end" value="<?php echo $this->days_created_end ?>" placeholder="Tìm kiếm theo ngày tháng năm ..." id="reservation"/>
+                    </div>
+            <div style="float: left" class="form-group">
+                <button type="button" id="btnView" class="btn btn-primary">Xem</button>
+
+            </div>
+        </div><!-- /.box-body -->
+
+    </form>
+    <br/>
+    <br/>
+    
+    <div class="box-body"  style="height:400px; overflow: auto;float: left;width:99%">
+        <div class="">
+            <table class="table table-data table-striped table-condensed table-bordered table-hover">
+                <tbody>
+
+                    <tr>
+                        <th  style="font-size: 12px">Loại sản phẩm</th>
+                        <?php foreach ($this->list_vote as $items){
+                            $storeid = $items["userid"];?>
+                        <th style="font-size: 12px" width="50"><?php echo $items["abbreviation"] ?></th>
+                        <?php }?>
+                        <th width="100">Tổng</th>
+                    </tr>
+                    <?php
+                    foreach ($this->menu_products as $list) {
+                        $cateid = $list["itemid"];
+                        if ($no % 2 == 0)
+                            $bgcolor = '#ccc';
+                        else
+                            $bgcolor = '#ffffff';
+                        ?>
+                        <tr bgcolor="<?echo $bgcolor; ?>" class="row-<?php echo $list["id"]; ?>">
+                            <? $no++;?>
+                            <td width="100" style="font-size: 12px"><?php echo $list["title"]; ?></td>
+                            <?php 
+                            $__s=0;
+                            foreach ($this->list_vote as $items){ 
+                                $storeid = $items["userid"];
+                                    $__total = (int)$this->sums[$storeid][$cateid];
+                                    $__count = (int)$this->count[$storeid][$cateid];
+                                    $__s+=$__total;
+                                    $__c+=$__count;
+                                    ?>
+                            <td width="50" style="font-size: 12px"><?php echo number_format($__total); ?> <br/><?php echo number_format($__count); ?></td>
+                            <?php 
+                                }?>
+                            
+                            <td><?php echo number_format($__s);?><br/><?php echo number_format($__c);?></td>
+                    <?php $__tong_products +=$__s ?>
+                        </tr>
+                <?php } ?>
+                        <tr>
+                            <td colspan="12"></td>
+                            <td colspan="4"><p style="font-size: 14px;color: red;font-weight: bold">Tổng doanh số bán được:</p></td>
+                            <td colspan="1"><p style="font-size: 14px;color: red;font-weight: bold"><?php echo number_format($__tong_products);?></p></td>
+                        </tr>
+                </tbody>
+                
+            </table>
+<!--            <div class="dat">Đạt</div>
+            <div class="nodat">Không đạt</div>-->
+        </div>
+    </div><!-- /.box-body -->
+</div><!-- /.box -->
+
+
+
+
+</div>
+</div>
+<script>
+    $().ready(function() {
+
+        $('#btnView').click(function(e) {
+            e.preventDefault();
+            var cated_id = $('#cated_id').val();
+            if(cated_id == 0){
+                $("#view-sales-day").attr("action", "/admin/user/make-money/report2");
+            }else{
+                $("#view-sales-day").attr("action", "/admin/user/make-money/report-detail");
+            }
+            $("#view-sales-day").submit();
+        });
+    });
+</script>

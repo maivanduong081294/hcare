@@ -1,0 +1,304 @@
+<div class="box-header with-border">
+    <div class="col-md-10"><h3>Xem yêu cầu hỗ trợ <b><?php echo $this->detail["name"] ?></b></h3></div>
+    <div class="col-md-2"><a href="/admin/user/ticket/list" class="btn btn-primary right"><i class="fa fa-table"></i> Danh sách</a></div>
+</div><!-- /.box-header -->
+<!-- form start -->
+<div class="box-body">
+    
+    <div class="col-md-6">
+        <div class="table-responsive">
+            <table class="table table-bordered table-condensed table-hover table-striped">
+                <tr>
+                    <td>Tiêu đề: <b><?php echo $this->detail["name"] ?></b></td>
+                </tr>
+                <tr>
+                    <td>Nội dung: <b><?php echo $this->detail["fullcontent"] ?></b></td>
+                </tr>
+                
+                <tr>
+                    <?php
+                    $storename="";
+                    $storeid = $this->array_idstrore[$this->detail["userid"]];
+                    $idregency = $this->array_idregency[$this->detail["userid"]];
+                    if($idregency==10 || $idregency==11 || $idregency==14){
+                        $storename = "[".$this->storename[$storeid]."]";
+                    }
+                    ?>
+                    <td>Nhân viên yêu cầu: <b><?php echo $this->array_fullnames[$this->detail["userid"]] ?>[<?php echo $this->name_regency[$idregency] ?>]<?php echo $storename ?></b></td>
+                </tr>
+                <tr>
+                    <td>Nhân viên tiếp nhận: <b><?php echo $this->array_fullnames[$this->detail["receiver"]] ?></b></td>
+                </tr>
+                <tr>
+                    <td>Chức vụ: <b><?php echo $this->detail_regency["name"] ?></b></td>
+                </tr>
+                <tr>
+                    <td>Ngày mong muốn hoàn thành: <b><?php echo date('d/m/Y',  strtotime($this->detail["dealine"])) ?></b>
+                        <div> Ngày dealine dự kiến: 
+                    <?php if($this->detail["dealine_edit"] != $this->detail["dealine"]){ ?>
+                    <b><?php echo date('d/m/Y',  strtotime($this->detail["dealine_edit"])) ?></b>
+                    <?php } else { ?>
+                    <p><b><?php echo date('d/m/Y',  strtotime($this->detail["dealine"])) ?></b></p>
+                    <span style="color: red">Bạn có thể chỉnh sửa dealine dự kiến 1 lần duy nhất</span>
+                    <?php
+                  if($this->userid == $this->detail["receiver"] || $this->bgd==1){?>
+                    <form  name="data_dealine" id="data_dealine"  method="post"  target="hiddenIF_dealine" action="/admin/user/ticket/editdealine" enctype="multipart/form-data">
+                <iframe  name="hiddenIF_dealine" style="display: none" scrolling="auto"></iframe>
+                <input type="hidden" name="ids" value="<?php echo $this->detail["id"] ?>" />
+                        <div class="input-group">
+                        <input type="text" required="required" name="dealine_edit" id="dealine_edit" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'"  data-mask="" placeholder="dd/mm/yyyy" class="form-control">
+                          <span class="input-group-btn">
+                              <button type="submit" onclick="savess2('#data_dealine');return false;"  class="btn btn-primary btn-flat">Send</button>
+                          </span>
+                    </div>
+                    </form>
+                  <?php }?>
+                    <?php }?>
+                    
+                    </div>
+                    </td>
+                </tr>
+                <?php if($this->detail["files"]){ ?>
+                <tr>
+                    <td>File đính kèm: 
+                        <?php
+                        $img_file =1;
+                        $link_img_file = "/uploads/ticket/". $this->detail["files"];
+                        if(strpos($this->detail["files"], ".jpg") || strpos($this->detail["files"], ".gif") || strpos($this->detail["files"], ".jpeg") || strpos($this->detail["files"], ".png")){ ?>
+                        <a href="<?php echo $link_img_file ?>" target="_blank"><img class="img-responsive" width="100" src="<?php echo $link_img_file ?>" /></a>
+                        <?php } else { ?>
+                        <a href="<?php echo $link_img_file ?>" target="_blank"><i class="fa fa-file"></i></a>
+                        <?php }?>
+                    </td>
+                </tr>
+                <?php }?>
+                <?php if($val["datetime_receiver"]){?>
+                <tr>
+                    <td>Thời gian tiếp nhận: <b><?php echo date('d/m/Y H:i',  strtotime($this->detail["datetime_receiver"])) ?></b></td>
+                </tr>
+                <?php }?>
+                <tr>
+                    <td>Tình trạng: <b>
+                    
+                    <?php
+                  if($this->userid == $this->detail["receiver"] || $this->bgd==1){
+                      echo $this->list_status[$this->detail["status"]]; 
+                      ?>
+                    <?php
+                  if($this->detail["status"]<3){?>
+                    <select name="status2<?php echo $this->detail["id"] ?>" id="status2<?php echo $this->detail["id"] ?>"  onchange="change_status2(<?php echo $this->detail["id"] ?>);">
+                        <option value="0">Trạng thái</option>
+                        <?php foreach ($this->list_status as $key=> $st){
+                            $s='';
+                            if($this->detail["status"]>= $key){
+                                continue ;
+                            }
+                            ?>
+                        <option <?php echo $sl ?> value="<?php echo $key ?>"><?php echo $st ?></option>
+                        <?php }?>
+                    </select>
+                  <?php }?>
+                  <?php }else{
+                     echo $this->list_status[$this->detail["status"]]; 
+                  }
+                  ?> 
+                        </b>
+                    </td>
+                </tr>
+            </table>
+            
+        </div>
+        
+    </div>
+    <form  name="data_frm" id="data_frm"  method="post"  target="hiddenIF" action="/admin/user/ticket/assign" enctype="multipart/form-data">
+    <input type="hidden" name="id" id="id" value="<?php echo $this->detail["id"] ?>" />
+    <input type="hidden" name="token" id="token" value="<?php echo $this->token ?>" />
+    <iframe  name="hiddenIF" style="display: none" scrolling="auto"></iframe>
+    <div class="col-md-6">
+        <p><i class="fa fa-cc"></i> Forward ticket (Người khác có thể xem ticket của bạn)</p>
+        <div class="form-group form-group-sm"> 
+            <span>Nhân viên forward:</span>
+            <select name="forward[]" id="forward" class="selects" multiple=""  data-placeholder="Tất cả nhân viên" style="width:100%">
+                <option value="0">-- Tất cả nhân viên --</option> 
+                <?php
+                foreach ($this->list_all_user as $val2) {
+                    if($val2["userid"]==177){
+                        continue;
+                    }
+                    if($val2["userid"]==$this->userid){
+                        continue;
+                    }
+                    ?>
+                    <option <?php echo $sl; ?> value="<?php echo $val2["userid"] ?>"><?php echo $val2["fullname"] ?> [<?php echo $this->name_regency[$val2["idregency"]] ?>]</option>
+        <?php } ?>
+            </select> 
+        </div>
+        
+        <?php if($this->list_assign){?>
+        <h2>Danh sách nhân viên đã tiếp nhận</h2>
+        <table class="table table-bordered table-condensed table-hover table-striped">
+            <tr>
+                <th>STT</th>
+                <th>Họ tên</th>
+                <th>Chức vụ</th>
+                <th>Ngày khởi tạo</th>
+                <th>#</th>
+            </tr>
+            <?php foreach ($this->list_assign as $val){
+                $storename2="";
+                $storeid2 = $this->array_idstrore[$val["receiver"]];
+                $idregency = $this->array_idregency[$val["receiver"]];
+                if($idregency==10 || $idregency==11 || $idregency==14){
+                    $storename2 = "[".$this->storename[$storeid2]."]";
+                }
+                ?>
+                <tr>
+                    <td><?php echo ++$stt ?></td>
+                    <td><b><?php echo $this->array_fullnames[$val["receiver"]].$storename2 ?></b></td>
+                    <td><b><?php echo $this->name_regency[$idregency] ?></b></td>
+                    <td><b><?php echo date('d/m/Y H:i',  strtotime($val["datetime"])) ?></b></td>
+                    <td><?php if($val["assign"]==1){ echo 'Đã assign'; } else { echo 'Đã forward'; } ?></td>
+                </tr>
+            <?php }?>
+        </table>  
+        <?php }?>
+        <h2>Bạn có thể chuyển yêu cầu này cho nhân viên khác hỗ trợ</h2>
+        <div class="col-md-6">
+        <span>Chức vụ:</span>
+        <select name="regencyid" id="regencyid" onchange="change_regencyid();" class="selects" style="width:100%">
+            <option value="0">Tất cả chức vụ</option>
+            <?php foreach ($this->list_regency as $val){ 
+                $sl='';
+//                if($this->detail["regencyid"] == $val["id"]){
+//                   $sl='selected="selected"'; 
+//                }
+                ?>
+            <option <?php echo $sl; ?> value="<?php echo $val["id"] ?>"><?php echo $val["name"] ?></option>
+            <?php }?>
+        </select>
+    </div>
+        <div class="col-md-6">
+        <div class="frm_pid">
+            
+        </div>
+        </div>
+    </div>
+    
+    <div class="clearfix"></div>
+    <br/>
+    <button type="submit" id="save" onclick="savess();return false;" class="btn btn-primary right"><i class="fa fa-floppy-o"></i>  Gửi yêu cầu</button>
+    </form>
+    <div class="clearfix"></div>
+    <hr/>
+    <div class="box box-primary direct-chat direct-chat-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">Có <?php echo number_format(count($this->list_comment)) ?> comment</h3>
+              <div class="box-tools pull-right">
+                <span data-toggle="tooltip" title="" class="badge bg-light-blue" data-original-title="<?php echo number_format(count($this->list_comment)) ?> New Messages"><?php echo number_format(count($this->list_comment)) ?></span>
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="" data-widget="chat-pane-toggle" data-original-title="Contacts">
+                  <i class="fa fa-comments"></i></button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <?php if($this->list_comment){ ?>
+            <div class="box-body">
+              <!-- Conversations are loaded here -->
+              <div class="direct-chat-messages-">
+                <!-- Message. Default to the left -->
+                <?php foreach ($this->list_comment1 as $val1){ 
+                    $id_cm = $val1["id"];
+                    $link_file1 = "/uploads/ticket/". $val1["files"];
+                    ?>
+                <div class="direct-chat-msg">
+                  <div class="direct-chat-info clearfix">
+                      <span class="direct-chat-name pull-left" id="fullname<?php echo $val1["id"] ?>"><?php echo $this->array_fullnames[$val1["userid"]] ?></span>
+                    <span class="direct-chat-timestamp pull-right"> <?php echo date("jS F, Y H:i A", strtotime($val1["datetime"])) ?></span>
+                  </div>
+                  <!-- /.direct-chat-info -->
+                  <img class="direct-chat-img" src="<?php echo $this->array_avatar[$val1["userid"]] ?>" alt="<?php echo $this->array_fullnames[$val1["userid"]] ?>"><!-- /.direct-chat-img -->
+                  <div class="direct-chat-text">
+                      
+                    <?php echo $val1["content"] ?> <?php if($val1["files"]){ ?> <a href="<?php echo $link_file1 ?>" target="_blank"><i class="fa fa-file"></i></a> <?php }?>
+                      <button onclick="reply(<?php echo $val1["id"] ?>);return false;" class="btn btn-primary btn-sm right"><i class="fa fa-reply"></i></button>
+                  </div>
+                  <!-- /.direct-chat-text -->
+                </div>
+                
+                <!-- /.direct-chat-msg -->
+                <!-- Message to the right -->
+                
+                <div class="direct-chat-msg right">
+                    <?php foreach ($this->list_comment2[$id_cm] as $val2){ 
+                        $link_file2 = "/uploads/ticket/". $val2["files"];
+                        ?>
+                  <div class="direct-chat-info clearfix">
+                    <span class="direct-chat-name pull-right"><?php echo $this->array_fullnames[$val2["userid"]] ?></span>
+                    <span class="direct-chat-timestamp pull-left"><?php echo date("jS F, Y H:i A", strtotime($val2["datetime"])) ?></span>
+                  </div>
+                  <!-- /.direct-chat-info -->
+                  <img class="direct-chat-img" src="<?php echo $this->array_avatar[$val2["userid"]] ?>" alt="<?php echo $this->array_fullnames[$val2["userid"]] ?>"><!-- /.direct-chat-img -->
+                  <div class="direct-chat-text">
+                    <?php echo $val2["content"] ?> <?php if($val2["files"]){ ?> <a href="<?php echo $link_file2 ?>" target="_blank"><i class="fa fa-file"></i></a> <?php }?>
+                  </div>
+                  <!-- /.direct-chat-text -->
+                  <div class="clearfix"></div>
+                  <?php }?>
+                </div>
+                <div class="clearfix"></div>
+                <?php }?>
+                <!-- /.direct-chat-msg -->
+              </div>
+              <!--/.direct-chat-messages-->
+              <!-- /.direct-chat-pane -->
+            </div>
+            <!-- /.box-body -->
+            <?php }?>
+            <div class="box-footer">
+              <form  name="data_comment" id="data_comment"  method="post"  target="hiddenIF2" action="/admin/user/ticket/savecomment" enctype="multipart/form-data">
+                <iframe  name="hiddenIF2" style="display: none" scrolling="auto"></iframe>
+                  <input type="hidden" name="itemid" id="itemid" value="<?php echo $this->detail["id"] ?>" />
+                  <input type="hidden" name="pid" id="pid" value="0" />
+                <div class="input-group">
+                    <input type="text" name="content" id="content" placeholder="Nhập nội dung comment của bạn ..." class="form-control">
+                      <span class="input-group-btn">
+                          <button type="submit" onclick="savess2('#data_comment');return false;"  class="btn btn-primary btn-flat">Send</button>
+                      </span>
+                </div>
+                  <input type="file" name="files" id="files" />
+                  <span>Hỗ trợ định dạng: .jpg, .gif, .jpeg, .png, .doc, .docx, .xls, .xlsx, .pdf</span>
+              </form>
+            </div>
+            <!-- /.box-footer-->
+          </div>
+    
+</div>
+<div class="hidden" id="url_change"><?php echo $this->url_change_regencyid ?></div>
+<script src="/backend/ckeditor/ckeditor.js?vs=<?php echo rand() ?>" type="text/javascript"></script>
+<script>
+    $("#dealine_edit").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+    function change_status2(id){
+        var status = $('#status2'+id+' option:selected').val();
+        var url = '/admin/user/ticket/changestatus?id='+id+'&status='+status;
+        window.location.href=url;
+    }
+    function reply(id){
+        var fullname = "@"+$('#fullname'+id).html()+": ";
+        $('#pid').val(id);
+        $('#content').val(fullname);
+        $('#content').focus();
+    }
+    function change_regencyid(){
+        var url = $('#url_change').html();
+        var regencyid = $('#regencyid option:selected').val();
+        $.get(url+'?regencyid='+regencyid, function(resp){
+            if(resp !=''){
+                $('.frm_pid').removeClass('hidden');
+                $(".frm_pid").html(resp); 
+            }
+        }, 'html');
+        
+    }
+</script>

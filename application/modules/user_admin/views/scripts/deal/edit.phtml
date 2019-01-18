@@ -1,0 +1,198 @@
+<style>
+    input,textarea{padding:5px;}
+    #frmListDetail p{padding:1px; margin:0;}
+</style>
+<script type="text/javascript" src="/hnamv2/datepicker/datepicker.js"></script>
+<link href="/hnamv2/datepicker/datepicker.css" media="screen" rel="stylesheet" type="text/css" >
+<table border="0" cellpadding="20" cellspacing="10" width="100%">
+  <tbody><tr>
+    <td style="padding: 5px;" align="center" valign="middle">
+    <table class="borderMain" border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tbody><tr valign="top">
+        <td><div class="header icon-48-article">Cập nhật DEAL</div></td>
+        <td align="right"><div class="toolbar">
+            <table class="toolbar"><tbody><tr>
+                <td id="toolbar-new" class="button">
+                    <a class="toolbar" id="save" href="#">
+                    <span title="Save" class="icon-32-save"></span>
+                    Lưu</a>
+                </td>
+                 <td id="toolbar-cancel" class="button">
+                    <a class="toolbar" onclick="javascript:window.location='<?=$this->url_list?>'" href="#">
+                    <span title="Cancel" class="icon-32-back"></span>Quay lại</a>
+                </td>
+        </tr></tbody></table>
+        </div></td>
+      </tr>
+</tbody></table>
+<form name="frmPage" id="frmPage" method="post" enctype="multipart/form-data" action="<?=$this->url_save;?>">
+<div class="box box-primary">
+                                <!-- /.box-header -->
+                                <!-- form start -->
+                                <hr/>
+                                    <div class="box-body">
+                                        <div class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Tên sản phẩm<span style="color:#ff0000;">(*)</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                <i class="fa fa-life-ring"></i>
+                                                </div>
+                                                <input class="form-control" type="text" name="title" id="title" value="<?=$this->detail['title'];?>" />
+                                            </div>
+                                        </div>
+                                         <div class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Mô tả ngắn</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa  fa-sort-numeric-asc"></i></span>
+                                            <input type="hidden" name="description" class="form-control" id="description" value="<?php echo $this->detail['description'];?>" />
+                                            <script type="text/javascript">
+                                            var sBasePath = "/fckeditor/" ;
+                                            var oFCKeditor_description = new FCKeditor( 'myFCKeditor_description' ) ;
+                                            oFCKeditor_description.BasePath	= sBasePath ;
+                                            oFCKeditor_description.Height	= "300" ;
+                                            oFCKeditor_description.Width	= "100%" ;
+                                            oFCKeditor_description.ToolbarSet = '' ;
+                                            oFCKeditor_description.Value	= document.getElementById("description").value ;
+                                            </script>
+                                            <div id="myFCKeditor_description"></div>
+                                            <script type="text/javascript">
+                                            var div = document.getElementById("myFCKeditor_description");
+                                            div.innerHTML = oFCKeditor_description.CreateHtml();
+                                            </script>
+                                            </div>
+                                         </div>
+                                        <div class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Số lượng<span style="color:#ff0000;">(*)</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                <i class="fa  fa-plus-square-o"></i>
+                                                </div>
+                                                <input class="form-control" type="text" name="quanlity" id="quanlity" value="<?=$this->detail['quanlity'];?>" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Giám giảm<span style="color:#ff0000;">(*)</span></label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                <i class="fa fa-usd"></i>
+                                                </div>
+                                                <input class="form-control" type="text" name="discount" id="discount" value="<?=$this->detail['discount'];?>" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Ngày hết hạn<span style="color:#ff0000;">(*)</span></label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                <i class="fa fa-clock-o"></i>
+                                                </div>
+                                                <input class="form-control" type="text" name="end_date" id="end_date" value="<?=$this->detail['end_date'];?>" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Sản phẩm đặc biệt<span style="color:#ff0000;">(*)</span></label>
+                                            <div style="float:left" class="input-group">
+                                                <?echo $this->formCheckbox('is_special', 1, array('checked' => ((int)$this->detail['is_special']==0?false:true)));?>
+                                                <strong style="color:RED;">[Sản phẩm phải mua đủ số lượng mới giảm]</strong>
+                                            </div>
+                                        </div><br/><br/>
+                                        <div class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Sản phẩm không giao hàng tận nơi<span style="color:#ff0000;">(*)</span></label>
+                                            <div style="float:left" class="input-group">
+                                                <?echo $this->formCheckbox('is_ship_local', 1, array('checked' => ((int)$this->detail['is_ship_local']==0?false:true)));?>
+                                                <strong style="color:RED;">[Sản phẩm không giao hàng tận nơi]</strong>
+                                            </div>
+                                        </div><br/>
+                                        <div class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Loại DEAL<span style="color:#ff0000;">(*)</span></label>
+                                            <div style="float:left" class="input-group">
+                                                <?echo $this->formSelect($name="type", $this->detail['type'], $attribs, array("0"=>"Deal mới","1"=>"Deal cũ", "2" => "Deal đặc biệt"))?>
+                                            </div>
+                                        </div><br/>
+                                        <div class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Hiển thị<span style="color:#ff0000;">(*)</span></label>
+                                            <div style="float:left" class="input-group">
+                                                <?echo $this->formCheckbox('enabled', 1, array('checked' => ((int)$this->detail['enabled']==0?false:true)));?>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <br/>
+                                        
+                                        
+                                    </div><!-- /.box-body -->
+</div>
+    </fieldset>
+</form>
+<div id="loader" style="display:none;"></div>
+<script type="text/javascript">
+function get_editor_data()
+{
+        document.getElementById('description').value = FCKeditorAPI.GetInstance('myFCKeditor_description').GetHTML();
+	return true;
+}
+
+function updateDiscountOnline(itemid){
+    var price = $('#item_discount_online_'+itemid).val();
+    var url = '<?=Globals::getBaseUrl();?>admin/user/products/update-discount-online';    
+    var data = {itemid:itemid,price:price};
+    $.post(url, data, function(resp){
+        $('#price_'+itemid).html(resp);
+        hideUpdate(itemid);
+    }, 'html');
+    
+}
+
+$().ready(function(){
+
+    $('#end_date').datetimepicker({
+            showSecond: false,
+            timeFormat: 'hh:mm:ss',
+            stepHour: 2,
+            stepMinute: 10,
+            stepSecond: 10
+    });
+
+    $('#save').click(function(){
+        get_editor_data();
+        filter_array = new Array('title','quanlity:Vui lòng nhập số lượng','discount:Vui lòng nhập giá giảm','end_date:Vui lòng nhập ngày hết hạn');
+        valid = new Array('required','number','number','required');
+        result = fsubmit('frmPage', filter_array, valid);
+        if(result){            
+            $('#frmPage').submit();            
+        }
+    });
+
+    $('#removeItem').click(function(e){
+        e.preventDefault();
+        var _couter = 0;
+        $('#frmListDetail').find('input').each(function(){
+            var _id = $(this).attr('id');
+            if ($(this).attr('checked')) {
+                _couter = 1;                
+            }
+        });
+
+        if (_couter == 0) {
+            alert('Vui lòng chọn item đế xóa');
+        }else{
+            $('#frmListDetail').find('input').each(function(){
+                if ($(this).attr('checked')==true)
+                    $(this).remove();
+            });
+            $('#frmListDetail').find('input').attr('checked','checked');
+            url = '<?=$this->url;?>/save-products-list';
+            data = $('#frmListDetail').serialize(),
+            
+            $.post(url, data, function(_data){
+                if (_data != '')
+                    alert('Lỗi: '+_data);
+                else {
+                    alert('Thành công.');
+                    window.location.reload(true);
+                }
+             });
+        }
+    });
+
+});
+
+</script>

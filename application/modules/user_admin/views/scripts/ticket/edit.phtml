@@ -1,0 +1,109 @@
+<div class="box-header with-border">
+    <div class="col-md-10"><h3><i class="fa fa-plus-circle"></i> Tạo yêu cầu hỗ trợ</h3></div>
+    <div class="col-md-2"><a href="/admin/user/ticket/list" class="btn btn-primary right"><i class="fa fa-table"></i> Danh sách</a></div>
+</div><!-- /.box-header -->
+<!-- form start -->
+<div class="box-body">
+    <div>
+        <table class="table table-condensed table-striped table-bordered">
+            <tr>
+                <td style="color: red">Đặng Văn Nghị (Trưởng Phòng IT)<br/>
+                Xóa bill,chỉnh sửa giá (ký gửi, bán hàng) <b>qua ngày không tạo yêu cầu xóa được</b>
+                </td>
+                <td style="color: red">Lê Hoàng Thắng (IT)<br/>
+                     - Vui lòng ticket ( kèm theo hình và link cần fix ) nếu có
+                </td>
+                <td> <b>Phan Trọng Nhân (IT)   </b>
+                    <p>- Mở bill bán hàng để cà thẻ, trả góp</p>
+                    <p>- Chỉnh sửa thông tin khách hàng</p>
+                    <p>- Đổi imei</p>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <form  name="data_frm" id="data_frm"  method="post"  target="hiddenIF"  enctype="multipart/form-data">
+    <input type="hidden" name="id" id="id" value="<?php echo $this->detail["id"] ?>" />
+    <input type="hidden" name="token" id="token" value="<?php echo $this->token ?>" />
+    <iframe  name="hiddenIF" style="display: none" scrolling="auto"></iframe>
+    <div class="col-md-6">
+        <span>Tiêu đề (* diễn giải mã bill vào luôn):</span>
+        <input class="form-control" name="name" id="name" placeholder="Ví dụ mở bill 109218 để cà thẻ." />
+        <span>Nội dung:</span>
+        <textarea placeholder="Mô tả chi tiết về sản phẩm..." class="form-control" name="fullcontent" id="fullcontent"><?php echo $this->detail['fullcontent']; ?></textarea>
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+            <h3>Nhân viên tiếp nhận</h3>
+            <div class="col-md-6">
+                <span>Chức vụ:</span>
+                <select name="regencyid" id="regencyid" onchange="change_regencyid();" class="selects" style="width:100%">
+                    <option value="0">Tất cả chức vụ</option>
+                    <?php foreach ($this->list_regency as $val){ 
+                        $sl='';
+                        if($this->detail["regencyid"] == $val["id"]){
+                           $sl='selected="selected"'; 
+                        }
+                        ?>
+                    <option <?php echo $sl; ?> value="<?php echo $val["id"] ?>"><?php echo $val["name"] ?></option>
+                    <?php }?>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <div class="frm_pid">
+
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <h3><i class="fa fa-cc"></i> Những thành viên liên quan để có thể xem, theo dõi ticket</h3>
+        <div class="form-group form-group-sm"> 
+            <select name="forward[]" id="forward" class="selects" multiple=""  data-placeholder="Tất cả nhân viên" style="width:100%">
+                <option value="0">-- Tất cả nhân viên --</option> 
+                <?php
+                foreach ($this->list_all_user as $val2) {
+                    if($val2["userid"]==177){
+                        continue;
+                    }
+                    if($val2["userid"]==$this->userid){
+                        continue;
+                    }
+                    ?>
+                    <option <?php echo $sl; ?> value="<?php echo $val2["userid"] ?>"><?php echo $val2["fullname"] ?> [<?php echo $this->name_regency[$val2["idregency"]] ?>]</option>
+        <?php } ?>
+            </select> 
+        </div>
+        
+        <span>Ngày mong muốn hoàn thành</span>
+        <input  type="text" required="required" name="dealine" id="dealine" value="<?php echo $this->z_dealine ?>" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'"  data-mask="" placeholder="dd/mm/yyyy">
+        <span>Đính kèm</span>
+        <input  type="file"   name="files" id="files" class="form-control" placeholder="Đính kèm file" >
+        <span>Hỗ trợ định dạng: .jpg, .gif, .jpeg, .png, .doc, .docx, .xls, .xlsx, .pdf</span>
+        <br/>
+        <button type="submit" id="save" onclick="savess();
+                            return false;" class="btn btn-primary right"><i class="fa fa-floppy-o"></i>  Gửi yêu cầu</button>
+    </div>
+    <div class="clearfix"></div>
+    
+    <br/>
+    
+    </form>
+</div>
+<div class="hidden" id="url_change"><?php echo $this->url_change_regencyid ?></div>
+<script src="/backend/ckeditor/ckeditor.js?vs=<?php echo rand() ?>" type="text/javascript"></script>
+<script>
+    $("#dealine").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+$(function () {
+        CKEDITOR.replace('fullcontent', {height: 300});
+    });
+    function change_regencyid(){
+        var url = $('#url_change').html();
+        var regencyid = $('#regencyid option:selected').val();
+        $.get(url+'?regencyid='+regencyid, function(resp){
+            if(resp !=''){
+                $('.frm_pid').removeClass('hidden');
+                $(".frm_pid").html(resp); 
+            }
+        }, 'html');
+        
+    }
+</script>

@@ -1,0 +1,29 @@
+<div class="form-group">
+    <div class="input-group">
+        <span class="input-group-addon"><i class="fa fa-text-width"></i></span>
+        <select class="selects"  name="idfast[]" id="idfast" multiple data-placeholder="Khuyến mãi áp dụng ..." tabindex="-1" aria-hidden="true">
+            <?php
+            foreach ($this->list_fast as $items) {
+
+                $date_from = $items["date_from"];
+                $date_to = $items["date_to"];
+                if($date_from !=NULL && $date_from != '0000-00-00 00:00:00'){
+                    if(strtotime($date_to) < strtotime('now')){
+                        continue;
+                    }
+                }
+                $sl = '';
+                if ($this->detail_promotion["idfast"] == $items["itemid"]) {
+                    $sl = 'selected="selected"';
+                }
+                ?>
+                <option <?php echo $sl; ?> value="<?php echo $items["itemid"] ?>"><?php echo $items["title"] ?></option>
+            <?php } ?>
+        </select>
+    </div>
+</div>
+<script>
+     $(function () {
+        $('.selects').select2();
+      });
+    </script>

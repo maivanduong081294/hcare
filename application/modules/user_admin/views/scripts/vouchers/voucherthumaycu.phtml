@@ -1,0 +1,52 @@
+<table id="table_voucher" class="table table-bordered table-hover table-condensed table-striped" >
+    <tr>
+        <th>STT</th>
+        <th>Mã đơn hàng</th>
+        <th>Mã voucher</th>
+        <th>Giá trị</th>
+        <th>Số lần SD</th>
+        <th>Ngày tạo</th>
+        <th>Ngày hết hạn</th>
+    </tr>
+    <?php
+    $stt=0;
+    foreach ($this->slist as $list){ ?>
+    <tr>
+        <td><?php echo ++$stt; ?></td>
+        <td><?php echo $list["id_addon_user"] ?></td>
+        <td><?php echo $list["code_name"] ?></td>
+        <td><?php echo number_format($list["code_value"]) ?></td>
+        <td><?php echo $list["number_used"] ?></td>
+        <td><?php echo date('d/m/Y H:i:s',  strtotime($list["code_created"])); ?></td>
+        <td><?php echo date('d/m/Y H:i:s',  strtotime($list["code_expired"])); ?></td>
+    </tr>
+    
+    <?php }?>
+</table>
+<script>
+    function send_voucher(){
+        var id_addon_user = $('#id_addon_user').val();
+        $('#wt').show();
+        $('#btnSave').hide();
+        var id = $('#id').val();
+        var token = $('#token').val();
+        var ajaxLink = "/admin/user/vouchers/voucherthumaycu";
+        show_loading();
+        $.ajax({
+            method: 'get',
+            cache: false,
+            url: ajaxLink,
+            data: {id_addon_user: id_addon_user,id: id,token: token},
+            dataType: 'html',
+            success: function (data) {
+                $('#wt').hide();
+                $('#btnSave').show();
+                $('#table_voucher').html(data);
+                hidden_loading();
+                
+            }
+        });
+        
+        
+    }
+</script>

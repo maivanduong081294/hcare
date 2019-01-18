@@ -1,0 +1,138 @@
+<aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+          <!-- Sidebar user panel -->
+          <div class="user-panel">
+            <div class="pull-left image">
+              <img src="/backend/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+            </div>
+            <div class="pull-left info">
+              <p><?php echo $this->full_name; ?></p>
+              <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+            </div>
+          </div>
+          <!-- search form -->
+          <form action="#" method="get" class="sidebar-form">
+            <div class="input-group">
+              <input type="text" name="q" class="form-control" placeholder="Search...">
+              <span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
+              </span>
+            </div>
+          </form>
+          <!-- /.search form -->
+          <!-- sidebar menu: : style can be found in sidebar.less -->
+          <ul class="sidebar-menu">
+            <li class="header">MAIN NAVIGATION</li>
+            
+            <?php if(strpos($this->user_name,"qlkt_") !== false){?>
+            <li>
+              <a href="/app-services/by-vote2">
+                <i class="fa fa-laptop"></i> <span>Danh sách App IOS</span>
+                <small class="label pull-right bg-green">1</small>
+              </a>
+            </li>
+            <?php }else{?>
+            <!--end Quản lý kỹ thuật-->
+            <?php if(strpos($this->user_name,"mbk_") !== false){?>
+            <li>
+              <a href="/app-services">
+                <i class="fa fa-laptop"></i> <span>Danh sách cài đặt</span>
+                <small class="label pull-right bg-green">1</small>
+              </a>
+            </li>
+            <li>
+              <a href="/app-services/edit">
+                <i class="fa fa-laptop"></i> <span>Thêm mới</span>
+                <small class="label pull-right bg-green">1</small>
+              </a>
+            </li>
+            <?php }else {?>
+            <!--end nhân viên kỹ thuật-->
+            <li>
+              <a href="/sales/don-hang-online">
+                <i class="fa fa-laptop"></i> <span>Đơn hàng online</span>
+                <small class="label pull-right bg-red-active"><?php echo $this->dhonline ?></small>
+              </a>
+            </li>
+            <li>
+              <a href="/sales/add-sales2">
+                <i class="fa fa-laptop"></i> <span>Bán hàng</span>
+                <small class="label pull-right bg-green">1</small>
+              </a>
+            </li>
+            <?php if(strpos($this->user_name,"vote_") !==false){ ?>
+            <li class="treeview">
+              <a href="#">
+                <i class="fa fa-share"></i>
+                <span>Doanh số</span>
+                <span class="label label-primary pull-right">4</span>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="/vote/list-sales"><i class="fa fa-circle-o"></i> Doanh số theo tháng</a></li>
+                <li><a href="/vote/doanh-so-theo-ngay"><i class="fa fa-circle-o"></i> Doanh số theo ngày</a></li>
+                <li><a href="/vote/set-target"><i class="fa fa-circle-o"></i> Set Target nhân viên</a></li>
+                <li><a href="/sales/make-money"><i class="fa fa-circle-o"></i> Tiền thưởng</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="/vote/list-member">
+                <i class="fa fa-laptop"></i> <span>Danh sách nhân viên</span>
+                <small class="label pull-right bg-green">1</small>
+              </a>
+            </li>
+            <li>
+              <a href="/app-services/by-vote2">
+                <i class="fa fa-laptop"></i> <span>Danh sách IOS</span>
+                <small class="label pull-right bg-green">1</small>
+              </a>
+            </li>
+            <?php }?>
+            <!--end quản lý-->
+            
+            <?php if(strpos($this->user_name,"mb_") !== false ){?>
+            <li>
+              <a href="/sales/doanh-so-theo-ngay">
+                <i class="fa fa-laptop"></i> <span>Doanh số theo ngày</span>
+                <small class="label pull-right bg-green">1</small>
+              </a>
+            </li>
+            <li>
+              <a href="/sales/thong-ke">
+                <i class="fa fa-laptop"></i> <span>Thống kê</span>
+                <small class="label pull-right bg-green">1</small>
+              </a>
+            </li>
+            <li>
+              <a href="/sales/make-money">
+                <i class="fa fa-laptop"></i> <span>Tiền thưởng</span>
+                <small class="label pull-right bg-green">1</small>
+              </a>
+            </li>
+            <?php }?>
+            <li>
+              <a href="/sales/hd">
+                <i class="fa fa-laptop"></i> <span>Hướng dẫn tìm kiếm</span>
+                <small class="label pull-right bg-green">1</small>
+              </a>
+            </li>
+            <li>
+              <a href="/sales/bonus-tech">
+                <i class="fa fa-laptop"></i> <span>Danh sách thưởng kỹ thuật</span>
+                <small class="label pull-right bg-green">1</small>
+              </a>
+            </li>
+            <?php }?>
+            <?php }?>
+            <li>
+              <a href="/sim/list">
+                <i class="fa fa-laptop"></i> <span>Danh sách Sim</span>
+                <small class="label pull-right bg-green">1</small>
+              </a>
+            </li>
+            <!--end nhân viên bán hàng-->
+            
+          </ul>
+        </section>
+        <!-- /.sidebar -->
+      </aside>

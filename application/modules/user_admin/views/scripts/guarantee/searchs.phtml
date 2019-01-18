@@ -1,0 +1,50 @@
+<table id="f_tb" class="table table-condensed table-bordered table-striped">
+    <thead>
+    <tr>
+        <th class="hidden-xs" width="10">STT</th>
+        <th>Họ tên</th>
+        <th width="50">SĐT</th>
+        <th class="hidden-xs">Địa chỉ</th>
+        <th class="hidden-xs">Email</th>
+        <th class="hidden-xs">Ngày tháng năm sinh</th>
+        <th width="10"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($this->list as $list){ ?>
+    <tr>
+        <td class="hidden-xs"><?php echo ++$stt ?></td>
+        <td><?php echo $list["fullname"] ?></td>
+        <td><?php echo $list["phone"] ?></td>
+        <td class="hidden-xs"><?php echo $list["address"] ?></td>
+        <td class="hidden-xs"><?php echo $list["email"] ?></td>
+        <?php $birthday ='';
+        if(strtotime($list["birthday"]) > 0){
+            $birthday = date('d/m/Y',  strtotime($list["birthday"]));
+        }
+        ?>
+        <td class="hidden-xs"><?php echo $birthday ?></td>
+        <td><a title="Chọn thông tin khách hàng này" data-toggle="tooltip" onclick="steps2(<?php echo $list["id"] ?>);return false;" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i></a></td>
+    </tr>
+    <?php }?>
+    </tbody>
+</table>
+<script>
+    $().ready(function () {
+        $("#f_tb").DataTable({
+                "pageLength": 10,
+            });
+        });
+        function steps2(idcustomer){
+        $.ajax
+        ({
+           method: "POST",
+           url: "/admin/user/guarantee/iframe-add",
+           data: {idcustomer:idcustomer, loai_phieu : $('#temp_loai_phieu').val()},
+           dataType: "html",
+            success: function(data){
+              $('.frm_add').html(data);
+            }
+        });
+    }
+</script>

@@ -1,0 +1,150 @@
+<table border="0" cellpadding="20" cellspacing="10" width="100%">
+  <tbody><tr>
+    <td style="padding: 5px;" align="center" valign="middle">
+    <table cellspacing="0" cellpadding="0" border="0" width="100%" class="borderMain">
+    <tbody><tr valign="top">
+        <td><table cellspacing="0" cellpadding="0" border="0" width="100%">
+                <tbody><tr>
+                    <td><div class="header icon-48-categories"><a href="/admin/user/members/list/">Danh sách thành viên</a></div></td>
+                                        <td align="right"><div class="toolbar">
+                            <table class="toolbar">
+                                <tbody>
+                                    <tr>
+                                        <td id="toolbar-new" class="button"><a class="toolbar" href="#" id="delete"> <span title="Delete" class="icon-32-delete"></span>Xóa</a></td>
+                                        <td style="display:none;" id="toolbar-new" class="button"><a class="toolbar" href="/admin/user/members/export-excel/" id="export"> <span title="Export Excel" class="" style="background:url(/user_admin/images/excel.png)"></span>Export excel</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div></td>
+                                    </tr>
+            </tbody></table></td>
+    </tr>
+</tbody></table>
+        <BR>
+        <div style="width:100%; text-align: right"><?echo $this->paging_template ?></div>        
+        <BR>
+<table cellpadding="0" border="0" width="100%" class="borderMain spaceTop5px">
+    <form method="post" name="frmPage" id="frmPage">
+        <input type="hidden" name="updateid" id="updateid" value="" />
+        <tbody>
+            <tr>
+                <td width="35" class="bgTitleadmin1"><input type="checkbox" onclick="checkme()" name="checkall"></td>
+                <td width="50" class="bgTitleadmin1">#</td>
+                <td class="bgTitleadmin2">Tên đăng nhập</td>
+                <td class="bgTitleadmin2">Họ tên</td>
+                <td width="80" class="bgTitleadmin2" style="display:none;">Đơn hàng</td>
+                <td width="80" class="bgTitleadmin2">Ngày đăng ký</td>
+                <td width="80" class="bgTitleadmin1">Thao tác</td>
+            </tr>
+            <?php
+                $list = $this->list;
+                $no = 1;
+                if(count($list)>0)
+                    foreach($list as $item){
+                   if ($no % 2 ==0)
+                       $bgcolor = '#f2f4f5';
+                   else
+                       $bgcolor = '#ffffff';
+                
+            ?>
+            <tr bgcolor="<?echo $bgcolor; ?>">
+                <td class="bgContentadmin1"><input type="checkbox" value="<?php echo $item['userid'];?>" name="check[]"></td>
+                <td class="bgContentadmin1"><? echo $no++;?></td>
+                <td class="bgContentadmin2"><a href="/admin/user/members/view/?userid=<?php echo $item['userid'];?>" class="view"><b><?echo $item['username']?></b></a></td>
+                <td class="bgContentadmin2"><?echo $item['fullname']?></td>
+                <td class="bgContentadmin2" style="display:none;">
+                    <a href="/admin/user/shopping-bag/list?userid=<?echo $item['userid'];?>">Xem</a>
+                </td>
+                <td class="bgContentadmin2"><?echo $item['created']?></td>
+                <td class="bgContentadmin1">                    
+                    <a href="/admin/user/members/view?userid=<?php echo $item['userid'];?>" class="view">
+                        <img border="0" title="Edit" src="/user_admin/templates/images/edit.png">
+                    </a>
+                    <a href="#" rel="<?php echo $item['userid'];?>" class="sdelete"><img border="0" alt="Delete" src="/user_admin/templates/images/trash.png"></a>
+                </td>
+            </tr>
+            <? } ?>
+    </form>
+</table>
+</td>
+  </tr>
+</tbody></table>
+<div id="ddelete" style="display:none;"></div>
+<div id="dmyorder" style="display:none"></div>
+<script type="text/javascript">
+function get_editor_data()
+{
+	document.getElementById('fullcontent').value = FCKeditorAPI.GetInstance('myFCKeditor_fullcontent').GetHTML();
+	return true;
+}
+function CheckForm()
+{
+	return true;
+}
+
+function checkme()
+{
+    isCheck=document.frmPage.checkall.checked;
+    elts=document.frmPage.elements['check[]'];
+	if(!elts.length)
+	{
+            elts.checked = isCheck;
+	}
+    else
+    {
+       for(i=0;i<elts.length;i++)
+          elts[i].checked=isCheck;
+    }
+}
+
+function isCheckDetail(){
+    result = 0;
+    $('input:checkbox').each(function(){
+        if ($(this).attr('checked') == true)
+            result = 1;
+    });
+    return result;
+}
+
+$().ready(function(){
+    $('#delete').click(function(){
+        result = isCheckDetail();
+        if (result == 0) //ischeck
+        {
+            alert('Vui lòng chọn item để xóa');
+            return false;
+        }
+//        window.location = '/admin/user/products-size/delete/';
+        result = confirm("Bạn có chắc chắn muốn xóa?");
+        if (result){
+            $('#frmPage').attr('action','/admin/user/members/delete/');
+            $('#frmPage').submit();
+        }
+    });
+
+    $('.sdelete').click(function(){
+        id = $(this).attr('rel');        
+        if (id != '')
+            result = confirm('Bạn chắc chắn muốn xóa?');
+            if (result)
+            $('#ddelete').load('/admin/user/members/delete?rand='+Math.random()+'&userid='+id, function (){
+                alert('Xóa thành công.');
+                window.location.reload(true);
+            });
+    });
+
+    $('.myorder').change(function(){
+        $('#updateid').val($(this).attr('rel'));
+        $('#frmPage').attr('action','/admin/user/products-size/update-order/');
+        $('#frmPage').submit();
+    });
+
+    $('.view').click(function(e){
+        e.preventDefault();
+        url = $(this).attr('href');
+        tb_show('Xem thông tin thành viên',url+"&height=200&iframe=true");
+    });
+
+});
+
+</script>

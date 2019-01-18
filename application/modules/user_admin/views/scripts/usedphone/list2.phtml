@@ -1,0 +1,274 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title><?= SEOPlugin::getTitle(); ?></title>
+        <meta name="description" content="<?= SEOPlugin::getDescriptions(); ?>" />
+        <link rel="shortcut icon" href="<?= Globals::getBaseUrl() ?>favicon.ico" />
+        <link type="text/css" href="<?= Globals::getBaseUrl() ?>hnamv3/css/screen-1.03.css" media="screen" rel="stylesheet" />
+        <link type="text/css" href="<?= Globals::getBaseUrl() ?>v4/css/used_phone.css?v=1.1" media="screen" rel="stylesheet" />
+        <script type="text/javascript">
+            var baseURL = "<?= Globals::getBaseUrl(); ?>";
+        </script>
+<!--        <script type="text/javascript" src="<?= Globals::getBaseUrl() ?>hnamv3/js/jquery-1.6.3.min.js"></script>-->
+        <script type="text/javascript" src="<?= Globals::getBaseUrl() ?>hnamv2/thickbox/thickbox.js"></script>
+        <script type="text/javascript" src="<?= Globals::getBaseUrl() ?>hnamv3/js/cookie.js"></script>
+        <link type="text/css" href="http://www.hnammobile.com/hnamv2/thickbox/thickbox.css" media="screen" rel="stylesheet" />
+        <link type="text/css" href="/v4/images/used_phone.css" media="screen" rel="stylesheet" />
+        <script type="text/javascript" src="http://www.hnammobile.com/hnamv2/thickbox/thickbox.js"></script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <script>
+            $().ready(function(){
+                
+                $( "#from" ).datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    numberOfMonths: 1,
+                    dateFormat: "dd/mm/yy",
+                    onClose: function( selectedDate ) {
+                        
+                        $( "#to" ).datepicker( "option", "minDate", selectedDate );
+                    }
+                });
+                $( "#to" ).datepicker(
+                    "option", "dateFormat", "dd/mm/yy"
+                );
+                $( "#to" ).datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    numberOfMonths: 1,
+                    dateFormat: "dd/mm/yy",
+                    onClose: function( selectedDate ) {
+                        $( "#from" ).datepicker( "option", "maxDate", selectedDate );
+                    }
+                });
+            });
+        </script>
+        <body>
+            <table cellspacing="0" cellpadding="0" border="0" width="100%" class="borderMain">
+    <tbody><tr valign="top">
+        <td><table cellspacing="0" cellpadding="0" border="0" width="100%">
+                <tbody><tr>
+                    <td><div class="header icon-48-categories"><a href="/admin/user/usedphone/list2">Quản lý máy cũ</a></div></td>
+                                        <td align="right"><div class="toolbar">
+                            <table class="toolbar">
+                                <tbody>
+                                    <tr>
+                                        <div class="box-footer clearfix no-border">
+                                            <form  action="/vote/cpanel">
+                                                <button class="btn btn-primary"><i class="fa fa-chevron-circle-right"></i> Back</button>
+                                            </form>
+                                        </div>
+                                        <!--<td id="toolbar-new" class="button"><a class="resetall" href="#" id="delete"> <span title="Delete" class="icon-32-delete"></span>Reset tất cả</a></td>-->
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div></td>
+                                    </tr>
+            </tbody></table></td>
+    </tr>
+</tbody></table>
+        <form role="form" id="get-member" method="post"  class="frmReport">
+            <BR>
+            <div style="width:100%; text-align: right"><?echo $this->paging_template;?></div>        
+            <BR>
+            <?if ($this->isAdmin == 1){?>
+                <select class="form-control" id="vote_id" name="vote_id" >
+                    <option value=""> Chọn chi nhánh</option>
+                    <?php foreach ($this->slist as  $k => $value) { 
+                        $selected = "";
+                        if ($k == $this->sid) {
+                            $selected = "selected='selected'";
+                        }
+                        ?>
+                    <option value="<?php echo $k; ?>" <?echo $selected;?>>
+                        <?php echo $value; ?>
+                    </option>
+                    <?php } ?>
+                </select>
+            <?}?>
+            <div class="box-body">
+                <div style="float: left" class="form-group">
+                <div class="input-group" style="width:400px">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <input type="text" class="form-control pull-right" name="keyword" value="<?php echo $this->keyword?>" placeholder="Nhập mã phiếu hoặc số điện thoại" id="keyword"/>
+                </div><!-- /.input group -->               
+            </div>
+            <div>
+                Từ <input type="text" id="from" name="from" value="<?echo $this->from;?>"> đến
+                <input type="text" id="to" name="to" value="<?echo $this->to;?>">
+                <input type="button" name="view" value="Xem" class="btn-small btn-primary" style="float:right" onclick="$('#get-member').submit();"/>
+                <input type="button" name="view" value="Reset" class="btn-small btn-primary" style="float:right;margin:0 3px;" onclick="window.location.reload();"/>
+            </div>
+            <div>
+                 
+            <p>&nbsp;</p>
+             </div>
+                <div style="float: left;display:none" class="form-group">
+                    <button type="button" id="btnView" class="btn btn-primary">Xem</button>
+                </div>
+
+            </div><!-- /.box-body -->
+
+        </form>
+            <form action=""method="GET" class="frmReport">
+                
+
+<!--                <table width="430" cellspacing="0" class="sum" cellpadding="5" style="margin:20px; font-size:15px;">
+                    <tr>
+                        <td>
+                            <h2>Tra cứu thông tin thẻ VIP</h2>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" name="keys" id="keys" value="" placeholder="Nhập tên khách hàng, mã VIP, Email, Điện thoại" autocomplete="off" />
+                            <a href="#" id="search" class="simpleBtn2">Tra cứu</a>                            
+                        </td>
+                    </tr>
+                </table> -->
+                <?if ($this->list != null){
+                     
+                    ?>
+                    <table width="100%" border="0" cellpadding="5" class="table table-data table-striped table-bordered" cellspacing="0" style="clear:both">                            
+                        <tr class="header">
+                            <td>Mã Phiếu</td>
+                            <td>Tên máy</td>
+                            <td>IMEI</td>
+                            <td>Giá thu vào</td>
+                            <td>Tiền được giảm</td>
+<!--                            <td style="display:none;">Họ tên</td>-->
+<!--                            <td style="display:none;">Điện thoại</td>-->
+<!--                            <td style="display:none;">Email</td>-->
+                            <td width="100">Ngày thu máy</td>
+<!--                            <td>Ngày hết hạn</td>-->
+<!--                            <td  style="display:none;">Địa chỉ</td>-->
+<!--                            <td>Ngày sử dụng</td>-->
+<!--                            <td>Chi nhánh</td>-->
+                            <td width="*">Thông tin máy</td>
+                            <td width="200">Giá bán ra</td>
+                            <td width="200">Public web</td>
+                        </tr>
+                        <?php $no = 1; ?>
+                        <?foreach($this->list as $item){
+                            $edate = date("d/m/Y", strtotime($item['datetime_expired']));
+                            if ($item['datetime_update']!=null) {
+                                $udate = date("d/m/Y", strtotime($item['datetime_update']));
+                            } else {
+                                $udate = "";
+                            }
+                            $time = strtotime($item['datetime_expired']);
+                            $curTime = time();
+                            
+                            if ($time < $curTime) {
+                                $active2 = "<span class='btnRed'>HẾT HẠN</span>";
+                            } else {
+                                $active2 = "";
+                                if ($item["active"]==1) {
+                                    $active = "<span class='btnGreen'>Sử dụng</span>";
+                                } else {
+                                    $active = "<span class='btnRed'>Đã sử dụng</span>";
+                                }
+                            }          
+                            
+                            if ($item["info"]["checked"]==0) {
+                                $checked = "<a href='/admin/user/usedphone/public?id=".$item["id"]."' id='public' class='btnGreen white small'>Đưa lên web</a>";
+                            } else {
+                                $checked = "<span class='btnGrey'>Đã đăng web</span>";
+                            }
+                            
+                            if ($no % 2 ==0)
+                                $bgcolor = '#f2f4f5';
+                            else
+                                $bgcolor = '#ffffff';
+                            ?>
+                            <tr bgcolor="<?echo $bgcolor; ?>" class="sub">
+                                
+                                <td><?=$item['id']?></td>
+                                <td><?=$item['detail']['name'];?></td>
+                                <td><?=$item['detail']['imei'];?></td>
+                                <td><?=number_format($item['detail']['price']);?></td>
+                                <td><?=number_format($item['price'])?>đ</td>
+                                <td><?=$item['datetime']?></td>  
+                                <td><?=$item['infos']?></td>  
+                                <td>
+                                    <input value="<?echo number_format($item['detail2']['sellout_price']);?>" type="text" name="sell_price" id="sell_price_<?echo $item["addon_usedphone_id"];?>" class="sell_price" style="width:90%" />
+                                    <button style="width:90px; padding:5px 0; margin:5px 0 0 0;" name="btnUpdate" class="btnUpdate" rel="<?echo $item["addon_usedphone_id"];?>">Update</button>
+                                    <button style="width:90px; padding:5px 0; margin:5px 0 0 0;" name="btnAdd" class="btnAdd btnGreen" rel="<?echo $item["addon_usedphone_id"];?>">Add</button>
+                                </td>
+                                <td>
+<!--                                    <input value="<?echo $item['detail2']['itemid'];?>" type="text" name="itemid" id="itemid_<?echo $item["addon_usedphone_id"];?>" style="width:90%" />
+                                    <button style="width:100px; padding:5px 0; margin:5px 0 0 0;" name="btnUpdateItemid" class="btnUpdateItemid" rel="<?echo $item["addon_usedphone_id"];?>">Update</button>-->
+                                    <?echo $checked;?>
+                                </td>
+                            </tr>
+                            <div id="ddelete" style="display:none;"></div>
+                            <script>
+                                $().ready(function(){
+                                    $('#delete-<?php echo $item["id"]?>').click(function(){ 
+                                    id = $(this).attr('rels');
+                                    active = $(this).attr('rel');
+                                    if (id != '')
+                                        result = confirm('Bạn chắc chắn muốn cập nhật phiếu này ?');
+                                            if (result)
+                                            {
+                                               $('#ddelete').load('/admin/user/usedphone/delete?&id='+id+'&active='+active, function (){
+                                                alert('Cập nhật thành công.');
+                                                window.location.reload(true);
+                                                }); 
+                                            }
+                                        });
+                                    });
+                            </script>
+                        <?}?>
+                    </table>
+                <?}?>
+            </form>
+            <script>
+                $().ready(function(){
+                    $(".sell_price").keyup(function(){
+                        var price = this.value;
+                        price = price.replace(/,/gi,"");
+                        price = price + ".";
+                        price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                        var sprice = price.split(".");
+                        $(this).val(sprice[0]);
+                    });
+                    
+                    $(".btnUpdate").click(function(e){
+                        e.preventDefault();                        
+                        var id = $(this).attr("rel");
+                        var price = $("#sell_price_"+id).val();
+                        var url = "/admin/user/usedphone/update?id="+id+"&price="+price;
+                        $(this).html("Đang cập nhật...");
+                        $.post(url, function(resp){
+                            alert("Cập nhật hành công!");
+                            window.location.reload();
+                        });
+                    });
+                    
+                    $(".btnUpdateItemid").click(function(e){
+                        e.preventDefault();                        
+                        var id = $(this).attr("rel");
+                        var itemid = $("#itemid_"+id).val();
+                        var url = "/admin/user/usedphone/update-itemid?id="+id+"&itemid="+itemid;
+                        $(this).html("Đang cập nhật...");
+                        $.post(url, function(resp){
+                            alert("Cập nhật hành công!");
+                            window.location.reload();
+                        });
+                    });
+                    
+                    $(".public").click(function(e){
+                        e.preventDefault();
+                        var url = $(this).attr("url");
+                        alert(url);
+                    });
+                });
+            </script>
+        </body>
+</html>

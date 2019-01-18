@@ -1,0 +1,308 @@
+<?
+
+$this->stocklist = array(
+    '' => 'Tất cả',
+    0 => 'Hết hàng',
+    1 => 'Còn hàng',
+    2 => 'Sắp có hàng'
+);
+?>
+
+<table border="0" cellpadding="20" cellspacing="10" width="100%">
+  <tbody><tr>
+    <td style="padding: 5px;" align="center" valign="middle">
+    <table cellspacing="0" cellpadding="0" border="0" width="100%" class="borderMain">
+    <tbody><tr valign="top">
+        <td><table cellspacing="0" cellpadding="0" border="0" width="100%">
+                <tbody><tr>
+                    <td><div class="header icon-48-categories"><a href="/admin/user/products/list/">Cập nhật bảng giá</a></div></td>
+                    <td align="right">
+                        <div class="toolbar">
+                            <table class="toolbar">
+                                <tbody>
+                                    <tr>
+                                        <td id="toolbar-new" class="button"><a class="toolbar" href="/admin/user/products/edit/"> <span title="New" class="icon-32-new"></span>Thêm mới</a></td>
+                                        <td id="toolbar-new" class="button"><a class="toolbar" href="#" id="delete"> <span title="Delete" class="icon-32-delete"></span>Xóa</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+            </tr>
+            </tbody></table></td>
+    </tr>
+</tbody></table>
+<div style="width:100%; text-align: right; margin:10px 0;">
+<form action="" name="frmChange" id="frmChange" method="post">
+    <input type="hidden" name="page" value="<?echo $this->page?>" />
+    Danh mục: <? echo $this->formSelect("menuname", $this->menuname, array("class"=>"menuname","class"=>"frm"), $this->productstype); ?>
+    <select name="cateid" class="frm" id="cateid">
+        <option value="0">Tất cả</option>
+        <? echo $this->productlist;?>
+    </select><BR>
+    <p style="padding:10px;">Tìm kiếm <input type="text" value="<?=$this->key?>" name="key" id="key"> <a href="#" id="search" style="padding:3px; background:#000000; color:#ffffff;">Tìm</a> | 
+	<a href="#" id="reset-search" style="padding:3px; background:#000000; color:#ffffff;">Reset</a> | 
+    Tình trạng: <? echo $this->formSelect("onstock", $this->onstock, array("class"=>"menuname","class"=>"frm"), $this->stocklist); ?>
+    </p>
+        <BR><BR>
+    <?php echo $this->paging_template;?>
+</form>
+        </div>
+        <p style="display:none;"><a href="#" id="saveAll" class="saveAll default" style="">[Save-All]</a> </p>       
+<table cellpadding="0" border="0" width="100%" class="borderMain spaceTop5px" id="tMain">
+     <form method="post" name="frmPage" id="frmPage">
+         <input type="hidden" name="page" value="<?echo $this->page?>" />
+        <input type="hidden" name="updateid" id="updateid" value="" />        
+        <tbody>
+            <tr>
+                <td width="35" class="bgTitleadmin1"><input type="checkbox" onclick="checkme()" name="checkall"></td>
+                <td width="50" class="bgTitleadmin1">#</td>
+                <td class="bgTitleadmin2"><a href="<?=Globals::getBaseUrl()?>admin/user/products/sort?var=<?=$this->sort;?>">Tên sản phẩm</a></td>
+                <td class="bgTitleadmin2"><a href="#" id="saveHnam" class="savePriceHnam default">[Save]</a> Giá HNam - Gía cộng thêm 
+                    <input type="text" name="add_hnam" value="0" style="width:50px"/> (x 1,000)
+                </td>
+                <td class="bgTitleadmin2"><a href="#" id="saveCompany" class="savePriceOriginalHnam default">[Save]</a> Giá Công ty - Gía cộng thêm 
+                    <input type="text" name="add_original" value="0" style="width:50px"/> (x 1,000)
+                </td>
+            </tr>
+            <?php
+            
+                $list = $this->list;
+                $no = $this->no;
+                $_hStore = Business_Helpers_Store::getInstance();
+                
+                $storeList = $_hStore->getList();
+                if(count($list)>0)
+                    foreach($list as $item){
+                    
+                    //get store location list
+                    $pid = $item['itemid'];
+                    
+                    
+                   if ($no % 2 ==0)
+                       $bgcolor = '#f2f4f5';
+                   else
+                       $bgcolor = '#ffffff';
+                   
+                   $price = $item['price'] / 1000;
+                   $oprice = $item['original_price'] / 1000;
+//                   pre($item);
+                   
+            ?>
+            <tr bgcolor="<?echo $bgcolor; ?>" height="40">
+                <td class="bgContentadmin1"><input type="checkbox" value="<?php echo $item['itemid'];?>" name="check[]"></td>
+                <td class="bgContentadmin1"><? echo $no++;?></td>
+                <td class="bgContentadmin2"><a href="<?=Globals::getBaseUrl();?>/admin/user/products/edit?itemid=<?php echo $item['itemid'];?>"><b><?echo $item['title']?></b></a></td>
+                <td class="bgContentadmin2"><input type="text" name="price_hnam[]" value="<?=$price?>" /> 
+                    <input type="text" name="bonus_hnam[]" value="<?=$item['bonus_hnam']?>" /> 
+                    <input type="hidden" name="itemid_hnam[]" value="<?=$item['itemid']?>" /> 
+                    
+                </td>
+                <td class="bgContentadmin2"><input type="text" name="price_company[]" value="<?=$oprice?>" /> 
+                    <input type="text" name="bonus_company[]" value="<?=$item['bonus_company']?>" /> 
+                    <input type="hidden" name="itemid_company[]" value="<?=$item['itemid']?>" /> 
+                </td>                
+            </tr>
+            <? } ?>
+    </form>
+</table>
+</td>
+  </tr>
+</tbody></table>
+<div id="ddelete" style="display:none;"></div>
+<div id="dmyorder" style="display:none"></div>
+<div id="loader" style="display:none"></div>
+<script type="text/javascript">
+function get_editor_data()
+{
+	document.getElementById('fullcontent').value = FCKeditorAPI.GetInstance('myFCKeditor_fullcontent').GetHTML();
+	return true;
+}
+function CheckForm()
+{
+	return true;
+}
+
+function checkme()
+{
+    isCheck=document.frmPage.checkall.checked;
+    elts=document.frmPage.elements['check[]'];
+	if(!elts.length)
+	{
+            elts.checked = isCheck;
+	}
+    else
+    {
+       for(i=0;i<elts.length;i++)
+          elts[i].checked=isCheck;
+    }
+}
+
+function isCheckDetail(){
+    result = 0;
+    $('input:checkbox').each(function(){
+        if ($(this).attr('checked') == true)
+            result = 1;
+    });
+    return result;
+}
+
+$().ready(function(){
+    $('#delete').click(function(){
+        result = isCheckDetail();
+        if (result == 0) //ischeck
+        {
+            alert('Vui lòng chọn item để xóa');
+            return false;
+        }
+        result = confirm("Bạn có chắc chắn muốn xóa?");
+        if (result){
+            $('#frmPage').attr('action','/admin/user/products/delete/');
+            $('#frmPage').submit();
+        }
+    });
+
+    $('.sdelete').click(function(){
+        id = $(this).attr('rel');        
+        if (id != '')
+            result = confirm('Bạn chắc chắn muốn xóa?');
+            if (result)
+            $('#ddelete').load('/admin/user/products/delete?rand='+Math.random()+'&itemid='+id, function (){
+                alert('Delete completed.');
+                window.location.reload(true);
+            });
+    });
+
+    $('.myorder').change(function(){
+        $('#updateid').val($(this).attr('rel'));
+        $('#frmPage').attr('action','/admin/user/products/update-order/');
+        $('#frmPage').submit();
+    });
+
+    $('#cateid').change(function(){
+        $('#frmChange').submit();
+    });
+
+    $('#cateid').find('option').each(function(){
+        id = $(this).val();
+
+        if (id == <?echo $this->cateid;?>){
+            $(this).attr('selected','selected');
+        }
+    });
+
+    $('#menuname').change(function(){  
+        $(document).load('/admin/user/products/change-cate?filter='+$(this).val(), function(){
+            window.location.reload();
+        });
+        
+    });
+
+    $('.size').click(function(e){
+        e.preventDefault();
+        url = $(this).attr('href');
+        window.open(url, "Update Product", "menubar=1,resizable=1,width=850,height=400");
+    });
+
+    //chagne newest or highlight
+    $('.update').click(function(e){
+        e.preventDefault();
+        url = $(this).attr('href');
+        $('#loader').load(url, function(){
+            window.location.reload();
+        });
+    });
+
+    //change filter 
+    $('.filter').click(function(e){
+        e.preventDefault();
+        url = $(this).attr('href');
+        $('#loader').load(url, function(){
+            window.location.reload();
+        });
+    });
+
+    $('#tMain tr').hover(function(){
+        $(this).addClass('thover');
+    }, function(){
+        $(this).removeClass('thover');
+    });
+    
+    //add filter
+    $('#key').keypress(function(e){      
+        if(e.which == 13){
+            window.location = '<?=globals::getBaseUrl()?>admin/user/products/add-key?key='+$(this).val();
+            return false;
+        }
+    });
+
+    $('#search').click(function(e){
+        e.preventDefault();
+        window.location = '<?=globals::getBaseUrl()?>admin/user/products/add-key?key='+$('#key').val();
+    });
+    
+    //add filter
+    $('#onstock').change(function(e){
+        e.preventDefault();
+        window.location = '<?=globals::getBaseUrl()?>admin/user/products/add-status?onstock='+$('#onstock').val();
+    });
+    
+    $('.updatestore').click(function(e){
+        e.preventDefault();
+        var _id = $(this).attr('rel');
+        _id =_id.split("-");
+        var _sid = _id[0];
+        var _pid = _id[1];
+        var _name = _id[2];
+        var _url = "<?=Globals::getBaseUrl()?>admin/user/products/update-store?sid="+_sid+"&pid="+_pid+"&name="+_name;
+        
+        $().load(_url, function(_data){
+//            alert(_data);
+            window.location.reload();
+        });
+    });
+    
+    $('.savePriceHnam').click(function(e){
+        e.preventDefault();
+        var _data = $('#frmPage').serialize()+"&price_type=hnam";                
+        var _url = '<?=Globals::getBaseUrl()?>admin/user/products/update-price-list?rand='+Math.random();
+        
+        $.post(_url, _data, function(data){
+            alert("Cập nhật thành công!\nLưu ý điều chỉnh banner, khuyến mãi mobile");
+            document.location.reload();
+        });
+    });
+    
+    $('.savePriceOriginalHnam').click(function(e){
+        e.preventDefault();
+        var _data = $('#frmPage').serialize()+"&price_type=company";                
+        var _url = '<?=Globals::getBaseUrl()?>admin/user/products/update-price-list?rand='+Math.random();
+        
+        $.post(_url, _data, function(data){                                    
+            alert("Cập nhật thành công!\nLưu ý điều chỉnh banner, khuyến mãi mobile");
+            document.location.reload();
+	    //console.log(data);
+        });
+    });
+    
+    $('#saveAll').click(function(e){
+        e.preventDefault();
+        var _data = $('#frmPage').serialize();                
+        var _url = '<?=Globals::getBaseUrl()?>admin/user/products/update-price-list-all?rand='+Math.random();
+        
+        $.post(_url, _data, function(data){                                    
+            document.location.reload();
+        });
+    });
+    
+});
+
+</script>
+<style>
+    .frm{line-height: 25px; height: 25px; font-size: 12px; font-family: arial,tahoma; width:150px;}
+    #frmChange{font-size: 12px;}
+    .thover{background-color: #FFFFCC}
+    a.grey{color:#CCCCCC;text-decoration: none; font-size:13px;}
+    a.green{color:green;text-decoration: none;font-weight:bold;font-size:13px;}
+    .default{padding:2px 5px; color:#ffffff!important; background-color: black; font-size:13px; }    
+</style>

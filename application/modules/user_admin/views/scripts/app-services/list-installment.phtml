@@ -1,0 +1,333 @@
+<script>
+    $(document).ready(function() {
+    availableTags = [ <?php echo SEOPlugin::getAllTagsByCateid2(); ?> ];
+    $("#products_id").autocomplete({
+                source: availableTags,
+                select: function(a, b) {
+                    $(this).val(b.item.value);
+                }
+            });
+        });
+</script>
+<div class="box box-primary">
+    <div class="box-header">
+        <div class="col-md-7">
+            <i class="ion ion-clipboard"></i>
+            <h3 class="box-title">Các chương trình của dịch vụ trả góp</h3>
+        </div>
+        <div class="col-md-5">
+            <form role="form" id="view-sales-day" method="get"   class="frmReport">
+                    <div class="form-group">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-btn">
+                                <a class="btn btn-primary" onclick="adds();return false;" href="/admin/user/app-services/add-installment"> <i class="fa fa-plus"> Thêm</i></a>
+                            </span>
+                            <div class="input-group-addon">
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <select name="cateid" id="cateid" class="form-control" >
+                                <option value="0"> Trả góp qua: </option> 
+                                <?php
+                                foreach ($this->list_cated as $key => $plist) {
+                                    $slected = '';
+                                    if ($key == $this->cateid) {
+                                        $slected = 'selected = selected';
+                                    }
+                                    ?>
+                                    <option <?php echo $slected ?> value="<?php echo $key ?>"><?php echo $plist ?></option>
+                                <?php } ?>
+                            </select>
+<!--                            <div class="input-group-addon">
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <input  type="text" class="form-control pull-right day_ce" name="day_ce" value="<?php // echo $this->day_ce ?>" placeholder="Ngày tháng" id="reservation"/>-->
+                            <span class="input-group-btn">
+                                <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> Xem </i></button>
+                            </span>
+                            
+                        </div><!-- /.input group -->
+                    </div>
+            </form>
+        </div>
+        
+    </div><!-- /.box-header -->
+    
+    <div class="box-body">
+        <div class="table-responsive">
+
+            <table id="f_table" class="table table-data table-striped table-bordered table-hover">
+                <thead>
+
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên chương trình</th>
+                        <th>Ngân hàng</th>
+                        <th>Phí(nếu có)</th>
+                        <th>Áp dụng</th>
+                        <th>Sản phẩm áp dụng</th>
+                        <th>Trả trước(%)</th>
+                        <th>Thời gian áp dụng(tháng)</th>
+                        <th>Hiệu lực từ</th>
+                        <th>Hiệu lực đến</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $no = 1;
+                    foreach ($this->list as $list) {
+                        $ap = '';
+                        $apply = $list["apply"];
+                        if ($apply == 1) {
+                            $ap = '1 sản phẩm';
+                        }
+                        if ($apply == 0) {
+                            $ap = 'Tất cả sản phẩm';
+                        }
+                        ?>
+                        <tr bgcolor="<?echo $bgcolor; ?>" class="row-<?php echo $list["id"]; ?>">
+                            <td><?= $no++; ?></td>
+                            <td><?php echo $list["name"]; ?></td>
+                            <td><?php echo $list["name_cateid"]; ?></td>
+                            <td><?php echo $list["fee"]; ?></td>
+                            <td><?php echo $ap ?></td>
+                            <td><?php echo $list["products_name"]; ?></td>
+                            <td><?php echo $list["percent"]; ?> %</td>
+                            <td><?php echo $list["c_months"]; ?></td>
+                            <td><?php echo $list["startdate"]; ?></td>
+                            <td><?php echo $list["enddate"]; ?></td>
+                            <td><?php echo $list["status2"]; ?></td>
+                            <td>
+                                <a onclick="deletes('<?php echo $list["id"]; ?>');
+                                            return false;" class="btn btn-danger btn-sm" data-toggle="tooltip" rels=""  href="#"><i class="fa fa-trash-o"></i></a>
+                                <a target="_blank" class="btn btn-success btn-sm" data-toggle="tooltip" rels=""  href="/admin/user/app-services/thong-ke-installment?id=<?php echo $list["id"]; ?>"><i class="fa fa-eye">Thống kê</i></a>
+                            </td>
+                        </tr>
+
+                    <?php } ?>
+
+                </tbody>
+
+            </table>
+        </div>
+    </div><!-- /.box-body -->
+
+</div><!-- /.box -->
+<div id="ddelete" style="display:none;"></div>
+</div>
+<script>
+    function adds(){
+         $('#modal').modal('show');
+        }
+    function deletes(id) {
+        if (id != '')
+            result = confirm('Bạn chắc chắn huỷ khuyến mãi này ?');
+        if (result)
+            $('#ddelete').load('/admin/user/app-services/delete-installment?id=' + id, function () {
+                alert('Xoá  thành công.');
+                window.location.reload(true);
+            });
+    }
+    $( document ).ready(function() {
+        $("#f_table").DataTable();
+    });
+
+</script>
+<div class="modal fade" id="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" style="font-weight: bold">CHƯƠNG TRÌNH TRẢ GÓP</h4>
+                <div class="right">
+                    <button type="submit" id="save" class="btn btn-primary"><i class="fa fa-floppy-o"> Lưu</i></button>
+                    <button style="display: none" type="button" id="wt" class="btn btn-primary"><i class="fa fa-spinner"> Đang xử lý ...</i></button>
+                </div>
+            </div>
+            
+                <div class="modal-body">
+                    <div class="box-body">
+            <div class="col-md-9">
+            <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label"  id="text-align-label">Tên chương trình : </label>
+                    <div  class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                        <input id="name" name="name" class="form-control" value="<?php echo $this->detail["name"]; ?>" placeholder="Vd: Trả góp 0% Sacombank" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label"  id="text-align-label">Trả góp qua. : </label>
+                    <div  class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                        <select id="cated_prepaid" name="cated_prepaid" class="form-control">
+                            <option value="0">Chọn</option>
+                            <?php foreach ($this->list_cated as $key=> $items) {
+                                $sli='';
+                                if($this->detail["cated_prepaid"] == $key){
+                                   $sli = "selected = 'selected'"; 
+                                }
+                                ?>
+                            <option <?php echo $sli ?>  value="<?php echo $key ?>"><?php echo $items ?> </option>
+
+                                <?php } ?>
+                        </select>
+                        <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                        <input id="fee" name="fee" class="form-control" value="" placeholder="Phí hnam phải trả nếu có" />
+                    </div>
+                </div>
+            <div class="form-group">
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Áp dụng: </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-desktop"></i>
+                    </div>
+                    <select name="apply" class="form-control" id="apply" >
+                        <option value="-1">Chọn</option>
+                        <?php foreach ($this->list_apply as $key=> $items){ 
+                            $sli2='';
+                                if($this->detail["apply"] == $key){
+                                   $sli2 = "selected = 'selected'"; 
+                                }
+                            ?>
+                        <option  value="<?php echo $key ?>"><?php echo $items ?></option>
+                        <?php }?>
+                    </select>
+                    <div class="input-group-addon">
+                        <i class="fa fa-desktop"></i>
+                    </div>
+                    <select name="percent" class="form-control" id="percent" >
+                        <option value="0">Chọn</option>
+                        <?php foreach ($this->list_percent as $items){
+                            if ($count >= $this->mid) break;
+                            $sli3='';
+                                if($this->detail["percent"] == $items){
+                                   $sli3 = "selected = 'selected'"; 
+                                }
+                            ?>
+                        <option <?php echo $sli3 ?> value="<?php echo $items ?>"> Trả trước <?php echo $items ?> %</option>
+                        <?php }?>
+                    </select>
+                </div>
+            </div>
+                <div style="display: none" class="addproducts">
+                    <div class="form-group ">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Tên sản phẩm </label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                            <input  type="text" class="form-control products_id" name="products_id[]" id="products_id" value="" placeholder="Sản phẩm trả góp">
+                            <span  id="add_products" class="input-group-addon"><i class="fa fa-plus-square"></i><a href="#">Thêm</a></span>
+                        </div>
+                    </div>
+                    </div>
+                <script>
+                        count=1;
+                        $('#add_products').click(function(e){
+                            e.preventDefault();
+                            count++;
+                            html = '<div id="dsadd_'+count+'" class="form-group">\n\
+                                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">\n\
+                                Tên sản phẩm '+count+' </label>\n\
+                                <div class="input-group">\n\
+                                <span class="input-group-addon"><i class="fa fa-desktop"></i></span>\n\
+                                <input type="text" class="form-control productids" name="products_id[]" id="products_id" value="" placeholder="Mã sản phẩm khuyến mãi">\n\
+                                    <span class="input-group-addon" onclick="removeBlock(' + count + ');return false;"><i class="fa fa-minus-square">Xóa</i></span>\n\
+                                </div></div>';
+                            $('.addproducts').append(html);
+                            $(".productids").each(function(i,obj){
+                            $(obj).autocomplete({
+                                source: availableTags,
+                                select: function(a, b) {
+                                    $(this).val(b.item.value);
+                                }
+                            });
+                            });
+                            
+                        });
+                    </script>
+            <div class="form-group">
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label" style="color: red">Thời gian : </label>
+                <div class="col-md-9">
+                    <div class="col-md-5">
+                        <?php
+                    $count=0;
+                    foreach ($this->list_cmonths as $items) {
+                        if ($count++ >= $this->mid) continue;
+                        ?>
+                        <label><input id="cmonths_<?php echo $items ?>" name="cmonths_<?php echo $items ?>"  type="checkbox" value="<?php echo $items ?>">  <?php echo $items ?> Tháng</label><br/>
+                    <?php } ?>
+                    </div>
+                    <div class="col-md-4">
+                        <?php
+                    $count2=0;
+                    foreach ($this->list_cmonths as $items) {
+                        if ($count2++ < $this->mid) continue;
+                        ?>
+                        <label><input id="cmonths_<?php echo $items ?>" name="cmonths_<?php echo $items ?>"  type="checkbox" value="<?php echo $key ?>">     <?php echo $items ?> Tháng</label><br/>
+                    <?php } ?>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="form-group">
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Hiệu lực: </label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-desktop"></i>
+                    </div>
+                    <input  type="text" class="form-control pull-right" name="day_created_end"  placeholder="Ngày tháng" id="reservation"/>
+                </div><!-- /.input group -->
+            <input type="hidden" name="id" id="id" value="<?php echo $this->detail["id"] ?>" />
+            </div>
+          
+        </div><!-- /.box-body -->
+        </div><!-- /.box-body -->
+                </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>
+   function removeBlock(num) {
+            $("#dsadd_" + num).remove();
+        }
+    $(document).ready(function() {
+        $('#apply').change(function(){
+            var id = $( "#apply option:selected" ).val();
+            if(id ==1){
+                $('.addproducts').show();
+            }
+            if(id ==0 || id==-1){
+                $('.addproducts').hide();
+                $('.products_id').val('');
+            }
+//            alert(id);
+        });
+        
+        
+    });
+    $('#save').click(function (e) {
+            e.preventDefault();
+            $('#wt').show();
+            $('#save').hide();
+            $.post("/admin/user/app-services/save-installment", $('form').serialize(), function (resp) {
+                $('.errblock').remove();
+                $.each(resp, function (i, obj) {
+                    var id = obj.id;
+                    var msg = obj.msg;
+                    
+                    if (msg != "ok") {
+                        alert(msg);
+                        $('#' + id).focus();
+                        $('#wt').hide();
+                        $('#save').show();
+                        return false;
+                    } else {
+                        var result = confirm('Lưu thành công \nTiếp tục chọn OK\nChọn Cancel trở về trang trước')
+                        window.location = "/admin/user/app-services/list-installment";
+                    }
+
+                });
+            }, 'json');
+        });
+</script>

@@ -1,0 +1,195 @@
+<div class="box-header with-border">
+    <div class="col-md-10"><h3><i class="fa fa-table"></i> Dịch vụ đã cài đặt</h3></div>
+    <div class="col-md-2"><a href="/app-services/edit" class="btn btn-primary right"><i class="fa fa-plus-circle"></i> Thêm cài đặt</a></div>
+</div><!-- /.box-header -->
+<!-- form start -->
+<div class="clearfix"></div>
+    <div class="box-body">
+        <form role="form" id="view-sales-day" method="get"  class="frmReport">
+            <div class="col-md-3">
+                <div class="form-group  input-group-sm">
+                    <select class="form-control" name="type" id="type">
+                        <?php
+                        foreach ($this->list_dv as $key => $items) {
+                            $select = '';
+                            if ($this->type == $key) {
+                                $select = 'selected = selected';
+                            }
+                            ?>
+                            <option <?php echo $select ?> value="<?php echo $key ?>"> <?php echo $items; ?></option>
+<?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group  input-group-sm">
+                    <select name="p" id="p" class="form-control" >
+                        <option value="0"> Tất cả  </option> 
+                        <?php
+                        foreach ($this->plist as $key => $val) {
+                            $slected = '';
+                            if ($val == $this->p) {
+                                $slected = 'selected = selected';
+                            }
+                            ?>
+                            <option <?php echo $slected ?> value="<?php echo $val ?>"><?php echo number_format($val) ?></option>
+    <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <div class="input-group input-group-sm">
+                        <?php
+                        $start_end = 'Date range picker';
+                        if ($this->start_end != null) {
+                            $start_end = $this->start_end;
+                        }
+                        ?>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default pull-right" id="daterange-btn">
+                                <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                                <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                        </span>
+
+                        <span class="input-group-btn">
+                            <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> Xem </i></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            </form>
+        <div class="clearfix"></div>
+        <div class="table-responsive">
+            <table class="table table-data table-striped table-bordered table-hover">
+                <tbody>
+
+                    <tr>
+                        <th><input name="select-all" type="checkbox" data-toggle="tooltip" title="Select All"/></th>
+                        <th>Chi nhánh</th>
+                        <th>Gói cài đặt</th>
+                        <th>Tiền</th>
+                        <th>Số lượng cài đặt</th>
+                        <th>Quản lý(15%)</th>
+                        <th>Nhân viên(40%)</th>
+                    </tr>
+                    <?php
+                    $no = 1;
+                    foreach ($this->list_vote as $list) {
+                        $storeid = $list["userid"];
+                        $total_sum = $this->total_sum[$storeid];
+                        $total_count = $this->total_count[$storeid];
+                        $cProducts = $this->cProducts[$storeid];
+                        $check_dat = $total_count/$cProducts * 100;
+                        if (round($check_dat, 2) > 30) {
+                            $color = "#3c8dbc";
+                        } else {
+                            $color = "red";
+                        }
+                        if (round($check_dat, 2) > 100) {
+                            $check_dat = 100;
+                        } 
+                        
+                        if (round($check_dat, 2) >= 30) { // đạt
+                            $color = "#3c8dbc";
+                            if (round($check_dat, 2) <= 45) {
+                                $nv = 5 / 100;
+                                $nvkt = 35 / 100;
+                                $ql = 15 / 100;
+                            } else {
+                                $nv = 7 / 100;
+                                $nvkt = 40 / 100;
+                                $ql = 18 / 100;
+                            }
+                        }
+                        
+                        if ($no % 2 == 0)
+                            $bgcolor = '#ccc';
+                        else
+                            $bgcolor = '#ffffff';
+                        $is_actived = $list["enabled"];
+                        ?>
+    <?php if ($list["username"] != "vote_all" && $list["username"] != "vote_saleonline") { ?>
+                            <tr bgcolor="<?echo $bgcolor; ?>" class="row-<?php echo $list["userid"]; ?>">
+                                <? $no++;?>
+                                <td><input type="checkbox" name="select-user[]" class="check-user minimal-red" value="<?php echo $list["userid"]; ?>"/></td>
+                                <td><?php echo $list["storename"]; ?></td>
+                                <td><?php echo $this->name_dv; ?></td>
+                                <td><?php echo number_format($total_sum); ?></td>
+                                <td><?php echo number_format($total_count); ?></td>
+                                <td><?php echo number_format($total_sum * $ql); ?></td>
+                                <td>
+                                
+                                <a onclick="show_sv('<?php echo $list["userid"]; ?>');" href="#"><?php echo number_format($total_sum * $nvkt); ?></a>
+                        
+                            <div class="frm_show_sv<?php echo $list["userid"]; ?>" style="display: none">
+                                <table class="table table-bordered table-hover table-condensed">
+                                    <tr>
+                                        <th>Tên nhân viên</th>
+                                        <th>Số tiền thưởng</th>
+                                    </tr>
+                                    <?php foreach ($this->array_sv[$list["userid"]] as $vl){ ?>
+                                    <tr>
+                                        <td><?php echo $this->lfullname[$vl["userid"]]; ?></td>
+                                        <td><?php echo number_format( ($vl["total"]/$this->sum_store[$list["userid"]]) *  ($total_sum * $nvkt) ); ?></td>
+                                    </tr>
+                                    <?php }?>
+                                </table>
+                            </div>
+                                </td>
+                            </tr>
+                    <?php } ?>
+                    <div id="ddelete" style="display:none;"></div>
+                    <?php
+                    $sum +=$total_sum;
+                    $sum2 +=$total_count;
+                    $___sSetup_charge1 += $total_sum * $ql;
+                    $___sSetup_charge2 += $total_sum * $nvkt;
+                    ?>
+<?php } ?>
+
+                <tr style="color: red ;font-size: 15px">
+                    <th><input onclick="checkme()" name="checkall" type="checkbox" data-toggle="tooltip" title="Select All"/></th>
+                    <th colspan="1">Tổng cộng</th>
+                    <th colspan="1"><strong>Tính đến <?php echo date("d-m-Y H:i:s"); ?>  </strong></th>
+
+                    <th colspan="1"><strong><?php echo number_format($sum) ?></strong></th>
+                    <th colspan="1"><strong><?php echo $sum2 ?></strong></th>
+                    <th colspan="1"><?php echo number_format($___sSetup_charge1); ?></th>
+                    <th colspan="1"><?php echo number_format($___sSetup_charge2) ?></th>
+                </tr>     
+                </tbody>
+
+            </table>
+        </div>
+    </div><!-- /.box-body -->
+<script>
+function show_sv(userid){
+    $('.frm_show_sv'+userid).toggle();
+}
+    $(document).ready(function () {
+        $('#type').change(function () {
+            var type = $("#type option:selected").val();
+            $('#p').html('');
+            var ajaxLink = '/app-services/get-price-service';
+            $.ajax({
+                method: 'get',
+                cache: false,
+                url: ajaxLink,
+                data: {type: type},
+                dataType: 'json',
+                success: function (resp) {
+                    console.log(resp);
+                    $('#p').html('<option value="0"> Tất cả</option>');
+                    $.each(resp, function (i) {
+                        html_price = '<option  value="' + resp[i].price + '">Gói ' + resp[i].price_format + '</option>';
+                        $('#p').append(html_price);
+                    });
+
+                }
+            });
+        });
+    });
+</script>

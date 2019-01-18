@@ -1,0 +1,106 @@
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="ion ion-clipboard"></i>
+        <h3 class="box-title">Danh sách TIỀN THƯỞNG</h3>
+    </div><!-- /.box-header -->
+    <form role="form" id="view-sales-day" method="get"  class="frmReport">
+        <div class="box-body">
+            <div style="float: left" class="form-group">
+            <div class="input-group" style="width: 300px">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <select name="group_name" id="group_name" class="form-control">
+                        <option value="all"> Công ty</option>
+                        <option value="all"> Phụ kiện</option>
+                    </select>
+                
+                </div>
+            </div>
+            <div style="float: left;width: 600px">
+                        <input  type="text" class="form-control pull-right" name="day_created_end" value="<?php echo $this->days_created_end ?>" placeholder="Tìm kiếm theo ngày tháng năm ..." id="reservation"/>
+                    </div>
+            <div style="float: left" class="form-group">
+                <button type="button" id="btnView" class="btn btn-primary">Xem</button>
+
+            </div>
+        </div><!-- /.box-body -->
+
+    </form>
+    <br/>
+    <br/>
+    <p style="font-size: 20px;color: red;font-weight: bold">Tổng doanh thu là :<?php echo number_format($this->sumtong) ?></p> 
+    <div class="box-body">
+        <div class="table-responsive">
+            <table class="table table-data table-striped table-bordered table-hover">
+                <tbody>
+
+                    <tr>
+                        <th><input name="select-all" type="checkbox" data-toggle="tooltip" title="Select All"/></th>
+                        <th>Loại sản  phẩm</th>
+                        <th>Số tiền bán được</th>
+                        <th>Số tiền thưởng pm</th>
+                        <th>Số tiền thưởng Make-money</th>
+                        <th>Tỷ trọng</th>
+                    </tr>
+                    <?php
+                    $no = 1;
+//                    $sumcount = 0;
+                    foreach ($this->menu_products as $list) {
+                        if ($no % 2 == 0)
+                            $bgcolor = '#ccc';
+                        else
+                            $bgcolor = '#ffffff';
+                        ?>
+                        <tr bgcolor="<?echo $bgcolor; ?>" class="row-<?php echo $list["id"]; ?>">
+                            <? $no++;?>
+                            <td><input type="checkbox" name="select-user[]" class="check-user minimal-red" value="<?php echo $list["itemid"]; ?>"/></td>
+                            <td><?php echo $list["title"]; ?></td>
+                            <td><?php echo number_format($list["sum"]) ?></td>
+                            <td><?php echo number_format($list["bonus"]) ?></td>
+                            <td></td>
+                            <td><?php echo round($list["sum"]/$this->sumtong * 100,2) ?>%</td>
+                        </tr>
+                <?php } ?>
+                  <?php  foreach ($this->menu_tablet as $list) {
+                        if ($no % 2 == 0)
+                            $bgcolor = '#ccc';
+                        else
+                            $bgcolor = '#ffffff';
+                        ?>
+                        <tr bgcolor="<?echo $bgcolor; ?>" class="row-<?php echo $list["id"]; ?>">
+                            <? $no++;?>
+                            <td><input type="checkbox" name="select-user[]" class="check-user minimal-red" value="<?php echo $list["itemid"]; ?>"/></td>
+                            <td><?php echo $list["title"]; ?></td>
+                            <td><?php echo number_format($list["sum"]) ?></td>
+                            <td><?php echo number_format($list["bonus"]) ?></td>
+                            <td></td>
+                            <td><?php echo round($list["sum"]/$this->sumtong * 100,2) ?>%</td>
+                        </tr>
+                <?php } ?>
+
+                </tbody>
+
+            </table>
+<!--            <div class="dat">Đạt</div>
+            <div class="nodat">Không đạt</div>-->
+        </div>
+    </div><!-- /.box-body -->
+
+</div><!-- /.box -->
+
+
+
+
+</div>
+</div>
+<script>
+    $().ready(function() {
+
+        $('#btnView').click(function(e) {
+            e.preventDefault();
+            $("#view-sales-day").attr("action", "/admin/user/make-money/report");
+            $("#view-sales-day").submit();
+        });
+    });
+</script>

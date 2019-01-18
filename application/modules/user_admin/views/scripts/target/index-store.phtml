@@ -1,0 +1,335 @@
+<?php
+    $storeid = $this->storeid;
+    $userid = $this->userid;
+?>
+<?php
+$_scty =0;
+$_tl =1;
+    foreach ($this->ptype as $key => $items) {
+        if($key ==1 || $key ==4){
+            $others +=  $this->sum_cty[$key];
+            $others_tg +=  $this->money_cty[$key];
+        }
+        if($key ==2 || $key ==5){
+            $apples +=  $this->sum_cty[$key];
+            $apples_tg +=  $this->money_cty[$key];
+        }
+        if($key ==1 || $key ==2 || $key ==4 || $key ==5){
+            $_scty +=  $this->sum_cty[$key];
+            $_mcty +=  $this->money_cty[$key];
+            $_pt_phone_other = round($this->sum_cty[$key]/$this->money_cty[$key]*100,2);
+//            if($_pt_phone_other <75){
+//               $_tl =0; 
+//            }
+        }
+        if($key==3 || $key==9 || $key ==6 || $key ==10 || $key ==12){
+            continue;
+        } else {
+            $m_hnam +=$this->totals_hnam[$key];
+            $tg_hnam += $this->total_hnam[$key];
+            
+        }
+    }
+    if(round($others/$others_tg*100,2) < 75 || round($apples/$apples_tg*100,2) <75){
+        $_tl =0; 
+    }
+
+        $_thuongthem = 0;
+        $_percent = round($_scty/$_mcty * 100, 2);
+        if ($_tl == 1 && $_percent >= 80) {
+            if ($_percent >= 80) {
+                $_thuongthem = 1000000;
+            }
+            $_them = $_percent - 100;
+            if ($_them >= 5) {
+                $_thuongthem += floor($_them / 5) * 500000;
+            }
+        }
+        //
+        if ($m_hnam/$tg_hnam * 100 >= 120) {
+            $number = 8000;
+        } else {
+            $number = 4000;
+        }
+        $_percent_other =  round($others/$others_tg*100,2);
+        $_percent_apple =  round($apples/$apples_tg*100,2);
+?>
+
+
+<?php
+$_other_target = $this->money_cty[1] + $this->money_cty[4];
+$_apple_target = $this->money_cty[2] + $this->money_cty[5];
+$_target = $_other_target + $_apple_target;
+
+$_other_sales = $this->sum_cty[1] + $this->sum_cty[4];
+$_apple_sales = $this->sum_cty[2] + $this->sum_cty[5];
+$_sales = $_other_sales + $_apple_sales;
+
+$pk_sales_hnam = $this->sum_hnam[3];
+$pk_target_hnam = $this->money_hnam[3];
+
+$pk_sales_cty = $this->sum_cty[3];
+$pk_target_cty = $this->money_cty[3];
+
+
+foreach ($this->ptype as $key => $items) {
+    foreach ($this->member as  $_items) {
+        $___often[$_items["userid"]][$key] = 0;
+        $___often_hnam[$_items["userid"]][$key] = 0;
+        if ($key == 1 || $key == 2 || $key == 4 || $key == 5) {
+            if ($key == 1 || $key == 4) { // khác
+                if($_other_sales / $_other_target * 100 >= 80){ //khác
+                    $often = 0.3;
+                }else{
+                    $often = 0.15;
+                }
+                $_____often_khac = $this->sum_cty[1] * $often / 100 + $this->sum_cty[4] * $often / 100;
+            }else{ // apple
+                if($_apple_sales / $_apple_target * 100 >= 80){ //apple
+                    $often = 0.1;
+                }else{
+                    $often = 0.05;
+                }
+                $_____often_apple = $this->sum_cty[2] * $often / 100 + $this->sum_cty[5] * $often / 100;
+            }
+
+            $___often[$_items["userid"]][$key] = $this->scty[$_items["userid"]][$key] * $often / 100;
+            $___often_hnam[$_items["userid"]][$key] = $this->tt_hnam[$_items["userid"]][$key] * $number;
+        }
+        
+//        if ($key == 10) {
+//            $___often[$_items["userid"]][$key] = floor($this->scty[$_items["userid"]][$key] / 1000000) * 10000;
+//            $___often_hnam[$_items["userid"]][$key] = floor($this->shnam[$_items["userid"]][$key] / 1000000) * 10000;
+//        }
+//        if ($key == 6) {
+//            $___often[$_items["userid"]][$key] = $this->scty[$_items["userid"]][$key]*0.75/100;
+//            $___often_hnam[$_items["userid"]][$key] = $this->shnam[$_items["userid"]][$key]*0.75/100;
+//        }
+        
+        
+        if ($key == 7 || $key == 8 || $key == 11) {
+            $___often[$_items["userid"]][$key] = $this->tt_cty[$_items["userid"]][$key] * 4000;
+            $___often_hnam[$_items["userid"]][$key] = $this->tt_hnam[$_items["userid"]][$key] * $number;
+        }
+        if($key ==3){
+            if($pk_sales_hnam/$pk_target_hnam*100 >=70 && $pk_sales_hnam/$pk_target_hnam*100 <=80){
+                $___often_hnam[$_items["userid"]][$key] = $this->shnam[$_items["userid"]][3] *1.5/100;
+            }else{
+                if($pk_sales_hnam/$pk_target_hnam*100 >80){
+                    $___often_hnam[$_items["userid"]][$key] = $this->shnam[$_items["userid"]][3] *3/100;
+                }
+            }
+        }
+
+    }
+    
+}
+$so_luong_cuahangtruong = $this->arr_mb[11];
+$so_luong_cuahangpho = $this->arr_mb[14];
+$tyle_ln_sr =0.75/100;
+$tien_ln_sr = (($this->sum_cty[6] + $this->sum_hnam[6])*$tyle_ln_sr)*40/100/($so_luong_cuahangpho+$so_luong_cuahangtruong);
+// tiên 99%
+$tyle_99 = $this->detail_recipe["tyle_may99"];
+$tien_99 = (($this->sum_cty[10] + $this->sum_hnam[10])*$tyle_99)*40/100/($so_luong_cuahangpho+$so_luong_cuahangtruong);
+ ?>
+<div class="box-header panel-default">
+    <div class="col-md-5">
+        <h2 style="font-weight: bold">Target  của <?php echo $this->detail_user["fullname"] ?></h2>
+    </div>
+     <form role="form" id="view-sales-day" method="get"  class="frmReport">
+        <div class="col-md-3">
+            <select class="form-control input-group-sm" name="month" id="month">
+<?php
+for($m=1;$m<= 12;$m++) {
+    $selected = '';
+    if ($this->month == $m) {
+        $selected = ' selected ="selected"';
+    }
+    ?>
+                            <option <?php echo $selected ?> value="<?php echo $m; ?>"> Tháng <?php echo $m; ?></option>
+                        <?php } ?>
+                    </select>
+        </div>
+        <div class="col-md-3">
+            <select class="form-control input-group-sm" name="year" id="year">
+                    <?php
+                    for($y=2014;$y<= date('Y') + 5;$y++) {
+                        $selected2 = '';
+                        if ($this->year == $y) {
+                            $selected2 = ' selected ="selected"';
+                        }
+                        ?>
+                        <option <?php echo $selected2 ?> value="<?php echo $y; ?>"> Năm <?php echo $y; ?></option>
+                    <?php } ?>
+                </select>
+        </div>
+         <?php if($this->suserid >0){ ?>
+        <input type="hidden" name="token" value="<?php echo $this->token ?>" />
+        <input type="hidden" name="userid" value="<?php echo $this->userid ?>" />
+        <input type="hidden" name="sync" value="1" />
+        <?php }?>
+        <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> Xem </i></button>
+         
+    </form>
+</div><!-- /.box-header -->
+<div class="box-body">
+    <div class="table-responsive">
+        <table class="table table-data table-striped table-bordered table-hover">
+            <tr>
+                <td>Gói cài đặt ios</td>
+                <td><?php echo number_format($this->money_ios) ?></td>
+            </tr>
+            <tr>
+                <td>Gói cài đặt android</td>
+                <td><?php echo number_format($this->money_android) ?></td>
+            </tr>
+            <tr>
+                <td>Gói bao bể màn hình</td>
+                <td><?php echo number_format($this->money_bbmh) ?></td>
+            </tr>
+            <tr>
+                <td>Gói bảo hành mở rộng 24</td>
+                <td><?php echo number_format($this->money_bhmr24) ?></td>
+            </tr>
+            <tr>
+                <td>Gói bảo hành máy cũ</td>
+                <td><?php echo number_format($this->money_bhmc) ?></td>
+            </tr>
+            <tr>
+                <td>Phí nhân công test máy</td>
+                <td>
+            <?php echo number_format($this->total_test) ?></td>
+            </tr>
+            <tr>
+                <td>Phí nhân công bảo hành</td>
+                <td>
+            <?php echo number_format($this->total_baohanh) ?></td>
+            </tr>
+            <tr>
+                <td>Máy LINE NEW & SR</td>
+                <td><?php echo number_format($tien_ln_sr) ?></td>
+            </tr>
+            <tr>
+                <td>Máy 99%</td>
+                <td><?php echo number_format($tien_99) ?></td>
+            </tr>
+        </table>
+    </div>
+    <b style="color: red;font-size: 15px">Tổng tiền doanh số máy là <?php echo number_format($this->total_money); ?></b><br/>
+    <b style="color: red;font-size: 15px">Tổng tiền thưởng PS <?php echo number_format($this->detail_recipe["often_store"]); ?></b>
+    <table class="table table-data table-striped table-bordered table-hover">
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên</th>
+                        <th>Tỷ trọng</th>
+                        <th>Tổng tiền</th>
+                        <th>Số nhân viên</th>
+                        <th>Tiền mỗi nhân viên(trung bình)</th>
+                    </tr>
+                    <?php
+                    $moneys_member1=0;
+                    foreach ($this->slist_reciped as $key => $items) {
+                        if($this->idregency != $items["idregency"]){
+                            continue;
+                        }
+                        $link = '';
+                        $money = ($this->total_money * $items["tytrong"] / 100) / $this->arr_mb[$items["idregency"]];
+                        
+                        $often_store = 0;
+                        $dh='';
+                        if ($items["idregency"] == 11) {
+                            $often_store = $this->detail_recipe["often_store"];
+                            $dh='(Đã cộng Tiền PS '.number_format($often_store).')';
+                        }
+                        
+                        $moneys_member1 += $money+$often_store;
+                        
+                        
+                        ?>
+                        <tr>
+                            <td><?php echo ++$stt ?></td>
+                            <td><?php echo $items["name"]; ?></td>
+                            <td><?php echo $items["tytrong"] ?>%</td>
+                            <td><?php echo number_format(($this->total_money * $items["tytrong"] / 100) + $often_store); ?><?php echo $dh ?></td>
+                            <td><?php echo number_format($this->arr_mb[$items["idregency"]]) ?></td>
+                            <td><?php echo number_format($moneys_member1) ?></td>
+                            <!--<td><?php // echo number_format($money)  ?>  <?php // echo $link;  ?></td>-->
+                        </tr>
+                    <?php } ?>
+                </table>
+    <p>Phụ kiện</p>
+    <b style="color: red;font-size: 15px">Tổng tiền doanh số phụ kiện là <?php echo number_format($this->total_money2); ?></b><br/>
+    <b style="color: red;font-size: 15px">Tổng tiền thưởng PS <?php echo number_format($this->detail_recipe["often_store_pk"]); ?></b>
+    <table class="table table-data table-striped table-bordered table-hover">
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên</th>
+                        <th>Tỷ trọng</th>
+                        <th>Tổng tiền</th>
+                        <th>Số nhân viên</th>
+                        <th>Tiền mỗi nhân viên(trung bình)</th>
+                    </tr>
+                    <?php
+                    $moneys_member2 =0;
+                    foreach ($this->slist_reciped2 as $key => $items) {
+                        if($this->idregency != $items["idregency"]){
+                            continue;
+                        }
+                        $link = '';
+                        $money = ($this->total_money2 * $items["tytrong"] / 100) / $this->arr_mb[$items["idregency"]];
+                        if ($items["idregency"] == 10) {
+//                            $link ='<a target="_blank" href="/admin/user/target/listmb">Xem chi tiết</a>';
+                            $this->arr_mb[$items["idregency"]] = $this->number_mb;
+                            $of = $items["tytrong"] / 100;
+                        }
+                        $often_store = 0;
+                        $dh='';
+                        if ($items["idregency"] == 11) {
+                            $often_store = $this->detail_recipe["often_store_pk"];
+                            $dh='(Đã cộng Tiền PS '.number_format($often_store).')';
+                        }
+                        
+                        $moneys_member2 += $money+$often_store;
+                        
+                        ?>
+                        <tr>
+                            <td><?php echo ++$stt ?></td>
+                            <td><?php echo $items["name"]; ?></td>
+                            <td><?php echo $items["tytrong"] ?>%</td>
+                            <td><?php echo number_format(($this->total_money2 * $items["tytrong"] / 100) + $often_store); ?><?php echo $dh ?></td>
+                            <td><?php echo number_format($this->arr_mb[$items["idregency"]]) ?></td>
+                            <td><?php echo number_format($moneys_member2) ?></td>
+                            <!--<td><?php // echo number_format($money)  ?>  <?php // echo $link;  ?></td>-->
+                        </tr>
+                    <?php } ?>
+                </table>
+    <div class="col-md-12">
+        <?php
+        $____money = $tien_99+$tien_ln_sr+$moneys_member1 + $moneys_member2 + $this->money_ios + $this->money_android + $this->money_bbmh + $this->money_bhmr24 + $this->money_bhmc+ $this->total_test + $this->total_baohanh;
+        if($_REQUEST["sync"]==1 && (int)$_REQUEST["userid"]>0 && $_REQUEST["month"] >0 && $_REQUEST["year"] >0){
+            $userid = $_REQUEST["userid"];
+            $month = $_REQUEST["month"];
+            $year = $_REQUEST["year"];
+            $detail = Business_Addon_Totaltarget::getInstance()->get_detail_by_userid_month_year($userid, $month, $year);
+            $data["userid"] = $userid;
+            $data["month"] = $month;
+            $data["year"] = $year;
+            $data["money"] = round($____money);
+            $data["storeid"] = $this->storeid;
+            if($detail){ // update
+                $data["end_datetime"] = date('Y-m-d H:i:s');
+                Business_Addon_Totaltarget::getInstance()->update($detail["id"],$data);
+            }else{ // insert
+                $data["datetime"] = date('Y-m-d H:i:s');
+                Business_Addon_Totaltarget::getInstance()->insert($data);
+            }
+        }
+        ?>
+        <p style="color: red;font-size: 25px">TỔNG TIỀN THƯỞNG : <?php echo number_format($____money) ?></p>
+    </div>
+</div><!-- /.box-body -->
+<script>
+function show_sv(userid){
+    $('.frm_show_sv'+userid).toggle();
+}
+</script>

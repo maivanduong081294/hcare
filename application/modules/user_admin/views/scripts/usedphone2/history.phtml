@@ -1,0 +1,35 @@
+<?php
+ if($this->auid==0){
+    if($this->detail != NULL){
+        $now = strtotime('now');
+        $dates = $this->detail["date1"];
+        $date1 = strtotime($this->detail["date1"]);
+        if($date1 >$now){
+            //echo "<span style='color:red'>Ngày bán gần đây nhất :$dates. IMEI này trong 30 ngày đổi trả. vui lòng vào phần mềm bán hàng để thu.</span>";
+        }
+    }
+    }
+?>
+<table id="bh" cellpadding="0" cellspacing="0">
+    <tr class="bhh" bgcolor="#CCCCCC">
+        <td width="150">Chi nhánh</td>
+        <td width="100">Giá đã báo</td>
+        <td width="100">Lúc</td>
+        <td width="300">Ghi chú</td>
+    </tr>
+    <? foreach ($this->listh as $ii) { ?>
+        <tr>
+            <td><? echo $ii["storename"]; ?></td>
+            <td><? echo $ii["price"]; ?></td>
+            <td><? echo date("d/m/Y H:i", strtotime($ii["datetime"])) ?></td>
+            <td><? echo $ii["note"]; ?></td>
+        </tr>
+    <? } ?>
+</table>
+<style>
+    #bh{border-left:1px solid #CCCCCC;border-top:1px solid #CCCCCC;}
+    #bh tr td{}
+    #bh tr{height:30px;}
+    #bh tr td{font-size:13px; padding:5px;border-right:1px solid #CCCCCC;border-bottom:1px solid #CCCCCC;}
+    .bhh{font-weight: bold; font-size: 14px;}
+</style>

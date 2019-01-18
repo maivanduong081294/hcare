@@ -1,0 +1,78 @@
+<div class="panel panel-default">
+    <div class="navbar-header col-sm-3">
+        <?php
+			if ($this->type==0) {
+				echo '<b>LẤY VOUCHER THEO GIÁ BGĐ</b>';
+			} else {
+				echo '<b>LẤY MÃ GIẢM GIÁ CÓ THAY ĐỔI GIÁ MUA KÝ GỬI</b>';
+			}
+		?>  
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="box-body">
+<form  name="data_frm" id="data_frm" method="post" target="hiddenIF"  enctype="multipart/form-data">
+    <iframe  name="hiddenIF" style="display: none" scrolling="auto"></iframe>
+    <input type="text" class="hidden" name="price" id="" value="-1" />
+            <div class="clearfix"></div>
+            <div class="col-md-3">
+                <label class="hidden"><input type="radio" name="price" id="" value="-1" />  Số khác</label>
+                <input min="0" class="form-control pricing price_orther " name="price_orther" id="price_orther" value="" placeholder="Nhập số tiền mới vào đây" />
+                <br/>
+                <?php
+					if ($this->type==0) {
+				?>
+					<select class="selects" name="dly_bbe" id="dly_bbe">
+						<option value="0">Chọn lý do cấp mã voucher</option>
+						<!-- <option value="10">Giảm máy lỗi (có giảm giá mua ký gửi)</option> -->
+						<option value="4">Nhân viên</option>
+						<option value="5">Đối tác</option>
+						<option value="1">Đại lý</option>
+						<option value="2">Bạn bè</option>
+						<option value="3">Giảm giá máy lỗi khi bán mới</option>
+						<option value="6">Chương Trình Khuyến Mãi</option>
+						<option value="7">Giảm giá máy thu được bán mới</option>
+						<option value="8">VT giảm giá</option>
+						<option value="9">500k cho XS</option>
+					</select>
+				<?php } else {?>
+					<select class="selects" name="dly_bbe" id="dly_bbe">
+						<option value="10">Giảm máy lỗi (có giảm giá mua ký gửi)</option>
+					</select>
+				
+				<?php } ?>
+                <br/>
+                <br/>
+                <div class="clearfix"></div>
+                <textarea name="note" id="note" class="form-control" placeholder="Nhập ghi chú giảm giá nếu có" ></textarea>
+            </div>
+            <div class="clearfix"></div>
+            <div class="box-footer">
+            <b id="complete" align="center" class="color_red size20"></b>
+            <button type="submit" onclick="savess();return false;" id="save"  class="btn btn-primary"><i class="fa fa-floppy-o"> Lấy mã </i></button>
+            <button style="display: none" type="button" id="wt" class="btn btn-primary"><i class="fa fa-spinner"> Đang xử lý</i></button>
+            </div>
+</form>
+    </div>
+<div id="del" style="display:none;"></div>
+<script>
+    $(function () {
+        $('.selects').select2();
+      });
+    function priceorther() {
+        $('.price_orther').removeClass('hidden');
+    }
+    function prices() {
+        $('.price_orther').removeClass('hidden').addClass('hidden');
+//        $('.price_orther').val(0);
+    }
+
+    $(".pricing").keyup(function () {
+        var price = this.value;
+        price = price.replace(/,/gi, "");
+        price = price + ".";
+        price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        var sprice = price.split(".");
+        $(this).val(sprice[0]);
+    });
+</script>

@@ -1,0 +1,121 @@
+<div class="box-header with-border">
+    <div class="col-md-5"><h3><i class="fa fa-table"></i> BẢNG LƯƠNG</h3></div>
+    <form name="data_frm1" id="data_frm1" method="get">
+    <div class="col-md-3">
+        <div class="form-group">
+                <select name="month" id="month" class="selects" style="width: 100%">
+                    <option value="0">Lựa chọn tháng</option>
+                    <?php for($i=1;$i<=12;$i++){
+                        $sl='';
+                        if($this->month == $i){
+                            $sl='selected="selected"';
+                        }
+                        ?>
+                    <option  <?php echo $sl; ?>  value="<?php echo $i ?>">Tháng <?php echo $i ?></option>
+                    <?php }?>
+                </select>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+                <select name="year" id="year" class="selects" style="width: 100%">
+                    <option value="0">Lựa chọn năm</option>
+                    <?php for($i=date('Y')-2;$i<= date('Y')+5;$i++){
+                        $sl='';
+                        if($this->year == $i){
+                            $sl='selected="selected"';
+                        }
+                        ?>
+                    <option  <?php echo $sl; ?>  value="<?php echo $i ?>">Năm <?php echo $i ?></option>
+                    <?php }?>
+                </select>
+        </div>
+    </div>
+    
+        <button type="submit"  class="btn btn-info btn-sm"><i class="fa fa-search"> </i>  <span class="hidden-xs"> Xem </span></button>
+    </form>
+</div><!-- /.box-header -->      
+<div class="clearfix"></div>
+<div class="box-body">
+<div class="table-responsive">
+    <table id="f_table4" class="table table-condensed table-bordered table-striped">
+        <thead>
+        <tr>
+            <th width="5">STT</th>
+            <th>TK Hnam</th>
+            <th>Thời gian</th>
+            
+            <th>Chức vụ</th>
+            <th>Bắt đầu làm - Thâm niên</th>
+            <th>Lương BHXH(<b>1</b>)</th>
+            <th>Lương(<b>2</b>)</th>
+            
+            <th>Trách nhiệm(<b>3</b>)</th>
+            <th>Lương cơ bản(<b>4</b>)</th>
+            <th>Ngày công</th>
+            <th>Thành tiền(<b>5</b>)</th>
+            
+            <th>Giờ tăng ca(<b>9</b>)</th>
+            <th>Tiền tăng ca = (4)/30/8*(9)(<b>6</b>)</th>
+            <th>Tạm ứng (<b>7</b>)</th>
+            <th>Giảm trừ BH = (<b>1</b>)*10,5% (<b>8</b>)</th>
+            <th>Thực lãnh = (5)+(6)-(7)-(8)</th>
+            <th>Ghi chú</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        $stt=0;
+        $date = date('Ymd');
+        foreach ($this->list as $val){
+            if($val["username"]=="hnam_quynhn" && $this->idregency !=36){
+                continue;
+            }
+            $id = $val["id"];
+            $token = md5("eluong2018".$id.$date);
+            ?>
+        <tr>
+            <td width="5">
+            <?php if($this->bgd==1){ ?>
+            <a data-toggle="tooltip" data-original-title="Chỉnh sửa " class="btn btn-sm btn-info" href="/admin/user/users/edit-luong?id=<?php echo $val["id"] ?>&token=<?php echo $token ?>"><i class="fa fa-edit"></i></a> <a data-toggle="tooltip" data-original-title="Xóa " onclick="del_luong(<?php echo $val["id"] ?>,'<?php echo $token ?>');return false;"  class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i></a>
+            <?php }?>
+            </td>
+            <td><?php echo $val["username"] ?></td>
+            <td><?php echo date('d/m/Y',  strtotime($val["from"])) ?> đến <?php echo date('d/m/Y',  strtotime($val["to"])) ?></td>
+            <td><?php echo $val["regency"] ?> [<?php echo $val["storename"] ?>]</td>
+            <td><?php echo date('d/m/Y',  strtotime($val["create_date"])) ?>[<?php echo $val["tham_nien"] ?>]</td>
+            
+            <td><?php echo number_format($val["luong_bhxh"]) ?></td>
+            <td><?php echo number_format($val["luong"]) ?></td>
+            <td><?php echo number_format($val["trach_nhiem"]) ?></td>
+            <td><?php echo number_format($val["co_ban"]) ?></td>
+            <td><?php echo $val["ngay_cong"] ?></td>
+            <td><?php echo number_format($val["thanh_tien"]) ?></td>
+            <td><?php echo $val["gio_tangca"] ?></td>
+            <td><?php echo number_format($val["tien_tangca"]) ?></td>
+            <td><?php echo number_format($val["tam_ung"]) ?></td>
+            <td><?php echo number_format($val["giam_tru_bhxh"]) ?></td>
+            <td><?php echo number_format($val["thuc_lanh"]) ?></td>
+            <td><?php echo $val["note"] ?></td>
+            
+        </tr>
+        <?php }?>
+        </tbody>
+    </table>
+
+<script>
+$(document).ready(function () {
+        $("#f_table4").DataTable({
+            "pageLength": 10
+            });
+    });
+    function del_luong(id,token){
+        var result = confirm('Bạn có chắc chắn muốn xóa dòng này');
+        if(result){
+            var url = '/admin/user/users/del?id='+id+'&token='+token;
+            window.location.href=url;
+        }
+    }
+</script>
+</div>
+</div>

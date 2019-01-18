@@ -1,0 +1,218 @@
+<div class="box box-primary">
+                                <div class="box-header">
+                                    <i class="ion ion-clipboard"></i>
+                                    <h3 class="box-title">Chỉ tiêu doanh số bán hàng tháng <?php
+                                    if($this->months ==  null){
+                                        echo date('m');
+                                    }else{
+                                        echo $this->months;
+                                    }
+                                    
+                                    
+                                    ?> chi nhánh <strong> <?php echo $this->vote_name; ?></strong></h3>
+                                    <div class="box-tools pull-right">
+                                        <ul class="pagination pagination-sm inline">
+                                            <li><a href="#">&laquo;</a></li>
+                                            <li><a href="#">1</a></li>
+                                            <li><a href="#">2</a></li>
+                                            <li><a href="#">3</a></li>
+                                            <li><a href="#">&raquo;</a></li>
+                                        </ul>
+                                    </div>
+                                </div><!-- /.box-header -->
+                                <div class="box-body">
+                                    <ul class="todo-list">
+                                        <table class="table table-data table-striped table-bordered">
+                                            <tbody>
+                                            <tr>
+                                                <th><input name="select-all" type="checkbox" data-toggle="tooltip" title="Select All"/></th>
+                                                <th>ID</th>
+                                                <th>Loại sản phẩm</th>
+                                                <th>Tổng tiền</th>
+                                                <th >Số lượng</th>
+                                                <th>Doanh số </th>
+                                                <th>Lựa chọn</th>
+                                            </tr>
+                                            <?php
+                                        foreach ($this->items as $list) {
+                                            $vote = $list["username"];
+                                            $creted_date = $list["created_date"];
+                                            $end_date = $list["end_date"];
+                                            $is_actived = $list["is_actived"];
+                                            ?>
+                                            <tr class="row-<?php echo $list["id"];?>">
+                                                <td><input type="checkbox" name="select-user[]" class="check-user minimal-red" value="<?php echo $list["id"]; ?>"/></td>
+                                                <td><?php echo $list["id"];?></td>
+                                                <td><?php echo $list["cate_product_name"];?></td>
+                                                <td><?php echo number_format($list["sum_prices"]);?> VND</td>
+                                                <td><?php echo $list["sum_numbers"];?> Sản phẩm</td>
+                                                <td>Tháng <?php echo $list["months_created"];?> / <?php echo $list["years_created"]; ?></td>
+                                                <td><a class="btn btn-flat btn-info btn-sm" data-toggle="tooltip" id="edit-<?php echo $list["id"]; ?>"  href="/admin/user/sales/edit-sales?id=<?php echo $list["id"]; ?>&month=<?php if($this->months==null){
+                                                    echo date('m');
+                                                }else{
+                                                    echo $this->months;
+                                                } ?>" ><i class="fa fa-edit"></i></a>
+                                                <?php if($is_actived == '0'):?>
+                                                <a id="retore-<?php echo $list["id"]; ?>" class="btn btn-flat btn-warning btn-sm" data-toggle="tooltip"  href="#"><i class="fa fa-reply"></i></a>
+                                                <?php else:?>
+                                                <a id="delete-<?php echo $list["id"]; ?>" class="btn btn-flat btn-danger btn-sm" data-toggle="tooltip" rels="<?php echo $list["id"]?>"  href="#"><i class="fa fa-trash-o"></i></a>
+                                                <?php endif;?>
+                                                </td>
+                                            </tr>
+                                             <div id="ddelete" style="display:none;"></div>
+                                            <script>
+                                                function checkme()
+                                                        {
+                                                            isCheck=document.frmPage.checkall.checked;
+                                                            elts=document.frmPage.elements['check[]'];
+                                                                if(!elts.length)
+                                                                {
+                                                                    elts.checked = isCheck;
+                                                                }
+                                                            else
+                                                            {
+                                                               for(i=0;i<elts.length;i++)
+                                                                  elts[i].checked=isCheck;
+                                                            }
+                                                        }
+                                                        function isCheckDetail(){
+                                                            result = 0;
+                                                            $('input:checkbox').each(function(){
+                                                                if ($(this).attr('checked') == true)
+                                                                    result = 1;
+                                                            });
+                                                            return result;
+                                                        }
+                                                 $().ready(function(){
+                                                            $('#delete-<?php echo $list["id"]?>').click(function(){ 
+                                                            result = isCheckDetail();
+                                                            id = $(this).attr('rels');
+//                                                            alert(id);return false;
+                                                            if (id != '')
+                                                                result = confirm('Bạn chắc chắn muốn xoá ?');
+                                                                if (result)
+                                                                $('#ddelete').load('/admin/user/sales/delete-sales?id='+id, function (){
+//                                                                    return false;
+                                                                    alert('Xoá  thành công.');
+                                                                    window.location.reload(true);
+                                                                    });
+                                                                });
+                                                        });
+                                                $().ready(function(){
+                                                    $("retore-<?php echo $list["id"]?>").click(function(){
+                                                        alert("Bạn vui lòng liên hệ bộ phận IT");
+                                                        return false;
+                                                    });
+                                                });
+                                            </script>
+                                            <?php
+                                            $sumprices += $list["sum_prices"];
+                                            $sumnumbers += $list["sum_numbers"];
+                                                    ?>
+                                            <?php }?>
+                                            <tr style="color: red;font-size: 15px">
+                                                <th colspan="3">Tổng cộng</th>
+                                                <th><strong> <?php echo number_format($sumprices).' VNĐ'?></strong></th>
+                                                <th colspan="3"><strong><?php echo $sumnumbers .' Sản phẩm'?></strong></th>
+                                            </tr>
+                                            </tbody>
+                                        
+                                        </table>
+                                    </ul>
+                                </div><!-- /.box-body -->
+                                <div class="box-footer clearfix no-border">
+                                <form  action="/admin/user/sales/add-sales">
+                                    <button class="btn btn-default pull-right"><i class="fa fa-plus"></i> Thêm chỉ tiêu</button>
+                                    </form>
+                                </div>
+                            </div><!-- /.box -->
+
+		<div class="box box-primary">
+   
+                                <div class="box-header">
+                                    <i class="ion ion-clipboard"></i>
+                                    <h3 class="box-title">Doanh số bán hàng tháng <?php
+                                    if($this->months ==  null){
+                                        echo date('m');
+                                    }else{
+                                        echo $this->months;
+                                    }
+                                    
+                                    
+                                    ?> chi nhánh <strong><?php echo $this->vote_name ?> </strong></h3>
+                                    <div class="box-tools pull-right">
+                                        <ul class="pagination pagination-sm inline">
+                                            <li><a href="#">&laquo;</a></li>
+                                            <li><a href="#">1</a></li>
+                                            <li><a href="#">2</a></li>
+                                            <li><a href="#">3</a></li>
+                                            <li><a href="#">&raquo;</a></li>
+                                        </ul>
+                                    </div>
+                                </div><!-- /.box-header -->
+                                <div class="box-body">
+                                    <ul class="todo-list">
+                                        <table class="table table-data table-striped table-bordered">
+                                            <tbody>
+                                                
+                                            <tr>
+                                                <th><input onclick="checkme()" name="checkall" type="checkbox" data-toggle="tooltip" title="Select All"/></th>
+                                                <th>ID</th>
+                                                
+                                                <th colspan="2">Công ty</th>
+                                                <th colspan="2">Hnam</th>
+                                                <th colspan="2">Linh kiện</th>
+                                                <th>Lựa chọn</th>
+                                            </tr>
+                                            <?php
+                                                    if($this->avg_cty_now > $this->sumPriceCTY){
+                                                        $back_ground = 'class="note-chua-dat"';
+                                                    }  else {
+                                                       $back_ground = 'class="note-dat-top"';
+//                                                       if($this->avg_number_cty_now > $list["countProductCTY"]){
+//                                                           
+//                                                       }
+                                                    }
+                                                    if($this->avg_xtay_now > $this->sumPriceXTAY){
+                                                        $back_ground2 = 'class="note-chua-dat"';
+                                                    }  else {
+                                                       $back_ground2 = 'class="note-dat"'; 
+                                                    }
+                                                    if($this->avg_lkien_now > $this->sumPriceLKIEN){
+                                                        $back_ground3 = 'class="note-chua-dat"';
+                                                    }  else {
+                                                       $back_ground3 = 'class="note-dat"'; 
+                                                    }
+                                                ?>
+                                            <tr class="row-<?php echo $list["user_id"];?>">
+                                                <td><input type="checkbox"  name="check[] value="<?php echo $list["user_id"] ?>"  class="check-user minimal-red"  /></td>
+                                                <td><?php echo $list["user_id"];?></td>
+                                                <td <?php echo $back_ground ?>><strong> <?php echo number_format($this->sumPriceCTY) ;?> VNĐ</strong></td>
+                                                <td><strong> <?php echo $this->countProductCTY ;?> Sản phẩm</strong></td>
+                                                <td <?php echo $back_ground2 ?>><strong> <?php echo number_format($this->sumPriceXTAY) ;?> VNĐ</strong></td>
+                                                <td><strong> <?php echo $this->countProductXTAY ;?> Sản phẩm</strong></td>
+                                                <td <?php echo $back_ground3 ?>><strong> <?php echo number_format($this->sumPriceLKIEN) ;?> VNĐ</strong></td>
+                                                <td><strong> <?php echo $this->countProductLKIEN ;?> Sản phẩm </strong></td>
+                                                <td><a class="btn btn-flat btn-info btn-sm" data-toggle="tooltip" id="edit-member" rel="" href="#"><i class="fa fa-eye"></i></a>
+                                                <?php if($is_actived == '0'):?>
+                                                <a id="restore-<?php echo $list["userid"]?>" class="btn btn-flat btn-warning btn-sm" data-toggle="tooltip" rels="" href="#"><i class="fa fa-reply"></i></a>
+                                                <?php else:?>
+                                                <a id="delete-<?php echo $list["userid"]?>" class="btn btn-flat btn-danger btn-sm" data-toggle="tooltip" rels=""  href="#"><i class="fa fa-trash-o"></i></a>
+                                                <?php endif;?>
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr style="color: red;font-size: 15px">
+                                                <th colspan="3">Tổng cộng</th>
+                                                <th colspan="2"><strong> <?php echo number_format($this->sumPriceCTY + $this->sumPriceXTAY + $this->sumPriceLKIEN).' VNĐ'?></strong></th>
+                                                <th colspan="4"><strong><?php echo ($this->countProductCTY + $this->countProductXTAY + $this->countProductLKIEN) .' Sản phẩm'?></strong></th>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </ul>
+                                </div><!-- /.box-body -->
+                                <div class="box-footer clearfix no-border">
+                                    <p class="note-chua-dat">Chưa đạt</p>
+                                    <p class="note-dat">Đạt</p>
+                                </div>
+                            </div>

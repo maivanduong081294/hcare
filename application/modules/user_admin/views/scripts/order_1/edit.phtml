@@ -1,0 +1,270 @@
+<link rel="stylesheet" href="/backend/plugins/select2/select2.min.css">
+<style>
+    .select2 {
+        width: 100% !important;
+    }
+</style>
+<form role="form" action="" class="frmReport">
+    
+    
+    <div class="col-md-12">
+        <!-- form start -->
+        <div class="box box-primary">
+            <div class="box-body">
+                <div align="center" class="box-header">
+                    <h3 style="font-size: 30px" class="box-title">FORM ĐẶT HÀNG HNAMMOBILE.COM</h3>
+                </div><!-- /.box-header -->
+                
+                
+                <div class="col-md-4">
+                    <div class="list-group">
+                    <a class="list-group-item active">
+                        <b>HNAMMOBILE.COM</b>
+                    </a>
+                        <a class="list-group-item">Nhân viên kinh doanh: <b class="size20"><?php echo $this->fname ?></b></a>
+                    <a class="list-group-item">Số điện thoại: <b class="size20"><?php echo $this->fphone ?></b></a>
+                    <a class="list-group-item">Email: <b class="size20"><?php echo $this->femail ?></b></a>
+                    <a class="list-group-item">Địa chỉ: 148 Nguyễn Cư Trinh, P. Nguyễn Cư Trinh, Q.1, TP.HCM</a>
+                    <a class="list-group-item">Hotline: 1900.2012</a>
+                  </div>
+                </div>
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <div class="list-group">
+                    <a class="list-group-item active">
+                        <b>NHÀ CUNG CẤP <div class="input-group input-group-sm">
+                        <div class="input-group-addon">
+                            <i class="fa fa-star"></i>
+                        </div><select name="supplier_id" id="supplier_id" class="form-control">
+                            <option value="0">Tất cả</option>
+                            <?php foreach ($this->lvendor as $items) { ?>
+                                <option data-id="<?php echo $items["name"] ?>" value="<?php echo $items["id"] ?>"><?php echo $items["name"] ?></option>
+                            <?php } ?>
+                        </select></div></b>
+                    </a>
+                    <a class="list-group-item">Nhân viên kinh doanh :
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-addon">
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <input name="staff_supplier" id="staff_supplier" class="form-control" placeholder="Nhập họ tên nhân viên kinh doanh nhà cung cấp" />
+                    </div>
+                    
+                    
+                    </a>
+                    <a class="list-group-item">Số điện thoại: 
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-addon">
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <input name="supplier_phone" id="supplier_phone" class="form-control" placeholder="Nhập số điện thoại nhà cung cấp" />
+                        </div>
+                    </a>
+                    <a class="list-group-item">Email: 
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-addon">
+                                <i class="fa fa-star"></i>
+                            </div><input name="supplier_email" id="supplier_email" class="form-control" placeholder="Nhập email nhà cung cấp" />
+                        </div>
+                    </a>
+                  </div>
+                </div>
+                <input type="hidden" name="supplier_name" id="supplier_name" />
+                <table class="table table-condensed table-bordered table-striped frm_new">
+                    <tr>
+                        <th width="120">Loại</th>
+                        <th >Sản phẩm</th>
+                        <th width="150">Màu sắc</th>
+                        <th width="200">Tên kế toán</th>
+                        <th width="80">Số lượng</th>
+                        <th width="130">Đơn giá</th>
+                        <th width="120">Loại chiết khấu</th>
+                        <th  width="120">Chiết khấu</th>
+                        <th width="40">TT</th>
+                    </tr>
+                    <tr>
+                        <td>
+                           <select name="productsid[]" id="productsid0" onchange="changes(0);return false;" class="form-control">
+                                <option value="0"> Tất cả</option>
+                                <?php foreach ($this->productsid as $key => $item) { ?>
+                                    <option value="<?php echo $key ?>"><?php echo $item ?></option>
+                                <?php } ?>
+                            </select> 
+                        </td>
+                        <td>
+                            <select class="form-control selects0" onchange="changes_product(0);return false;" name="pid[]" id="pid0">
+                                <option value="0">Tên sản phẩm...</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="pid_color[]" id="pid_color0" onchange="changes_color(0);return false;" class="form-control">
+                                <option value="0">Tất cả màu</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="accounting_name[]" id="accounting_name0" class="form-control">
+                                <option value="0">Tên kế toán</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" name="total[]" id="total0" placeholder="Số lượng..." >
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" onkeyup="format_price('price',0);return false;"  name="price[]" id="price0" value="" placeholder="Đơn giá..." >
+                        </td>
+                        <td>
+                            <select  name="type_discount[]" id="type_discount0" class="form-control">
+                                    <?php foreach ($this->ldiscount as $key=> $items){ ?>
+                            <option value="<?php echo $key;  ?>"><?php echo $items ?></option>
+                                    <?php }?>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" onkeyup="keyups('discount',0);return false;" name="discount[]" id="discount0" value="" placeholder="Chiết khấu..." >
+                        </td>
+                        <td></td>
+                    </tr>
+                </table>
+                
+                <button type="button" align="right" id="new" class="btn btn-default"><i class="fa fa-plus"> Thêm</i></button>
+                <hr/>
+                <textarea class="form-control" rows="5" name="note" id="note" placeholder="Nhập nội dung chiết khấu vào đây..."><?php echo $this->detail["note"] ?></textarea>
+            </div><!-- /.box-body -->
+            <div class="box-footer" align="right">
+                <button  type="submit" id="btnadd" class="btn btn-primary"><i class="fa fa-floppy-o"> Lưu tạm</i></button>
+                <button style="display: none" type="button" id="btndxl" class="btn btn-primary"><i class="fa fa-spinner"> Đang xử lý</i></button>
+                <input type="hidden" name="id" id="id" value="<?= $this->detail["id"]; ?>" />
+            </div>
+        </div>
+    </div>
+    <div id="del" style="display:none;"></div>
+</form>
+</div>
+<script src="/backend/plugins/select2/select2.full.min.js"></script>
+<script>
+    function keyups(id,nb){
+        var type = $('#type_discount'+nb+' option:selected').val();
+        if(type ==1 || type ==3){
+            format_price(id,nb);
+        }
+    }
+    
+    function format_price(id,nb){
+        var price = $("#"+id+nb).val();
+        price = price.replace(/,/gi, "");
+        price = price + ".";
+        price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        var sprice = price.split(".");
+        $("#"+id+nb).val(sprice[0]);
+    }
+    function changes(id){
+        var productsid = $('#productsid'+id).val();
+        $('#pid'+id).html('');
+            $('#pid'+id).html("<option value='0'>Tên sản phẩm...</option>");
+            var url = '/admin/user/ajax/get-products-wh';
+            $.ajax({
+                method: 'get',
+                cache: false,
+                url: url,
+                data: {productsid: productsid},
+                dataType: 'json',
+                success: function (resp) {
+                    $.each(resp, function (i) {
+                        var html = '<option  value="' + resp[i].itemid + '">' + resp[i].title + '</option>';
+                        $('#pid'+id).append(html);
+                    });
+                }
+            });
+            $(".selects"+id).select2();
+    }
+    function changes_product(id){
+        var pid = $('#pid'+id).val();
+            $('#pid_color'+id).html('');
+            $('#pid_color'+id).html("<option value='0'>Màu sản phẩm...</option>");
+            var url = '/admin/user/ajax/get-color-by-product-id';
+            $.ajax({
+                method: 'get',
+                cache: false,
+                url: url,
+                data: {product_id: pid},
+                dataType: 'json',
+                success: function (resp) {
+                    $.each(resp, function (i) {
+                        var html = '<option  value="' + resp[i].colorid + '">' + resp[i].name_color + '</option>';
+                        $('#pid_color'+id).append(html);
+                    });
+                }
+            });
+    }
+    function changes_color(id){
+        var pid = $('#pid'+id).val();
+        var colorid = $('#pid_color'+id).val();
+        $('#accounting_name'+id).html('');
+        $('#accounting_name'+id).html("<option value=''>Tên kế toán ...</option>");
+        var url = '/admin/user/ajax/get-title-kt-by-colorid';
+        $.ajax({
+            method: 'get',
+            cache: false,
+            url: url,
+            data: {product_id: pid, colorid: colorid},
+            dataType: 'json',
+            success: function (resp) {
+                $.each(resp, function (i) {
+                    var html = '<option  value="' + resp[i].name + '">' + resp[i].name + '</option>';
+                    $('#accounting_name'+id).append(html);
+                });
+            }
+        });
+    }
+    function del(id){
+        $('.block'+id).remove();
+    }
+   
+    $().ready(function () {
+        $('#supplier_id').change(function(){
+           var supplier_name =  $(this).find(':selected').data('id');
+           $('#supplier_name').val(supplier_name);
+        });
+        var number = 0;
+        $('#new').click(function(){
+            number++;
+            var html_new = '<tr class="block'+number+'"><td><select name="productsid[]" id="productsid'+number+'" onchange="changes('+number+');return false;" class="form-control "><option value="0"> Tất cả</option><?php foreach ($this->productsid as $key=> $items){ ?> <option value="<?php echo $key; ?>"><?php echo $items ?></option><?php }?></select></td>\n\
+                        <td><select class="form-control selects'+number+'" onchange="changes_product('+number+');return false;" name="pid[]" id="pid'+number+'"><option value="0">Tên sản phẩm...</option></select></td>\n\
+                        <td><select name="pid_color[]" id="pid_color'+number+'" onchange="changes_color('+number+');return false;" class="form-control"><option value="0">Tất cả màu</option></select></td>\n\
+                        <td><select name="accounting_name[]" id="accounting_name'+number+'" class="form-control"><option value="">Tên kế toán</option></select></td>\n\
+                        <td><input type="text" class="form-control" name="total[]" id="total'+number+'" placeholder="Số lượng..." ></td>\n\
+                        <td><input type="text" class="form-control" name="price[]" onkeyup="format_price(\'price\','+number+');return false;" id="price'+number+'" value="" placeholder="Đơn giá..." ></td>\n\
+                        <td><select name="type_discount[]" id="type_discount'+number+'" class="form-control"><?php foreach ($this->ldiscount as $key=> $items){ ?><option value="<?php echo $key;  ?>"><?php echo $items ?></option><?php }?></select></td>\n\
+                        <td><input type="text" class="form-control" onkeyup="keyups(\'discount\','+number+');return false;"  name="discount[]" id="discount'+number+'" value="" placeholder="Chiết khấu..." ></td>\n\
+                        <td><a onclick="del('+number+');return false;" class="btn btn-danger btn-sm" data-toggle="tooltip" href="#" data-original-title="" title=""><i class="fa fa-trash-o"></i></a></td></tr>';
+            $('.frm_new').append(html_new);
+        });
+        
+        //save
+        $('#btnadd').click(function (e) {
+            $('#btnadd').hide();
+            $('#btndxl').show();
+            e.preventDefault();
+            $.post("/admin/user/order/save", $('form').serialize(), function (resp) {
+                $.each(resp, function (i, obj) {
+                    var id = obj.id;
+                    var msg = obj.msg;
+                    if (msg != "ok") {
+                        alert(msg);
+                        $('#btnadd').show();
+                        $('#btndxl').hide();
+                        $('#' + id).focus();
+                        return false;
+                    } else {
+                        alert('Lưu thành công');
+                        window.location.href = '/admin/user/order/list';
+//                        location.reload();
+                    }
+
+                });
+            }, 'json');
+        });
+        $("#f_table").DataTable();
+    });
+
+</script>

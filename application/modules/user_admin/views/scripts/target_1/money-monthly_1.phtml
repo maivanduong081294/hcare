@@ -1,0 +1,89 @@
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="ion ion-clipboard"></i>
+        <h3 class="box-title">Tiền thưởng hàng tháng</h3>
+    </div><!-- /.box-header -->
+    <form role="form" id="view-sales-day" method="get"  class="frmReport">
+                <div class="box-body">
+                    <div style="float: left" class="form-group">
+                        <div class="input-group" style="width: 600px">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <select class="form-control" name="month" id="month">
+                                <?php foreach ($this->months as $m){ 
+                                    $selected = '';
+                                    if($this->month == $m){
+                                        $selected = ' selected ="selected"';
+                                    }
+                                    ?>
+                                <option <?php echo $selected ?> value="<?php echo $m; ?>"> Tháng <?php echo $m; ?></option>
+                                <?php }?>
+                            </select>
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <select class="form-control" name="year" id="year">
+                                <?php foreach ($this->years as $y){ 
+                                    $selected2 = '';
+                                    if($this->year == $y){
+                                        $selected2 = ' selected ="selected"';
+                                    }
+                                    ?>
+                                <option <?php echo $selected2 ?> value="<?php echo $y; ?>"> Năm <?php echo $y; ?></option>
+                                <?php }?>
+                            </select>
+                        </div><!-- /.input group -->
+
+                    </div>
+                    <div style="float: left" class="form-group">
+                        <button type="submit" id="btnView" class="btn btn-primary">Xem</button>
+                    </div>
+                </div><!-- /.box-body -->
+
+            </form>
+    
+    <div class="box-body">
+        <div class="col-md-8">
+            <div class="table-responsive">
+                <b style="color: red;font-size: 15px">Tổng tiền là <?php echo number_format($this->total_money + $this->detail_recipe["often_store"]); ?></b>
+                <table class="table table-data table-striped table-bordered table-hover">
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên</th>
+                        <th>Tổng tiền</th>
+                        <th>Số nhân viên</th>
+                        <th>Tiền mỗi nhân viên(trung bình)</th>
+                    </tr>
+                    <?php
+                    foreach ($this->slist_reciped as $key =>$items){
+                        $often_store =0;
+                        if($items["idregency"]==11){
+                            $often_store = $items["often_store"];
+                        }
+                        $link ='';
+                        $money = number_format(($this->total_money * $items["tytrong"]/100)/ $this->arr_mb[$items["idregency"]]);
+                        if($items["idregency"]==10){
+                            $money ='<a target="_blank" href="/admin/user/target/listmb">Xem chi tiết</a>';
+//                            $link ='<a target="_blank" href="/admin/user/target/listmb">Xem chi tiết</a>';
+                        }
+                        ?>
+                    <tr>
+                        <td><?php echo ++$stt ?></td>
+                        <td><?php echo $items["name"]; ?></td>
+                        <td><?php echo number_format(($this->total_money * $items["tytrong"]/100)+$often_store); ?></td>
+                        <td><?php echo number_format($this->arr_mb[$items["idregency"]]) ?></td>
+                        <td><?php echo $money ?></td>
+                        <!--<td><?php // echo $money ?>  <?php //echo $link; ?></td>-->
+                    </tr>
+                    <?php }?>
+                </table>
+            </div>
+        </div>
+        
+    </div><!-- /.box-body -->
+</div><!-- /.box -->
+<div id="ddelete" style="display:none;"></div>

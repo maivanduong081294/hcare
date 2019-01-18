@@ -1,0 +1,31 @@
+<table id="f_table_tmp" class="table table-bordered table-condensed table-striped">
+    <thead>
+    <tr>
+        <th width="10">STT</th>
+        <th>Tên khuyến mãi</th>
+        <th width="50">Trị giá</th>
+        <th width="60">Hoàn tiền</th>
+        <th width="200">Loại</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php $stt=0;
+    foreach ($this->list as $items){ ?>
+    <tr>
+        <td><?php echo ++$stt; ?></td>
+        <td><?php echo $items["title"] ?></td>
+        <td><?php echo number_format($items["price"]) ?></td>
+        <td><?php echo number_format($items["return_price"]) ?></td>
+        <td><?php echo $this->name_type_km[$items["type"]] ?></td>
+    </tr>
+    <?php }?>
+    </tbody>
+</table>
+<div id="del" style="display: none" />
+    <script>
+    $().ready(function () {
+        
+        $("#f_table_tmp").DataTable();
+    });
+
+</script>

@@ -1,0 +1,167 @@
+<link href="/backend/dist/css/report_fixtable.css" rel="stylesheet" type="text/css"/>
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="ion ion-clipboard"></i>
+        <h3 class="box-title">Danh số bán từ <span style="color: red"> <?php echo date('d/m/Y',  strtotime($this->created_date)); ?> </span> đến <span style="color: red"> <?php echo date('d/m/Y',  strtotime($this->end_date)); ?></span></h3>
+    </div><!-- /.box-header -->
+    <form role="form" id="view-sales-day" method="get"  class="frmReport">
+        <div class="box-body">
+            <div style="float: left" class="form-group">
+                <div class="input-group" style="width: 200px">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <select name="cated_id" id="cated_id" class="form-control">
+                        <option value="0"> Tất cả</option>
+                        <?php
+                        foreach ($this->menu_products as $items) {
+                            $sl = '';
+                            if ($this->itemid == $items["itemid"]) {
+                                $sl = 'selected = selected';
+                            }
+                            ?>
+                            <option <?php echo $sl ?> value="<?php echo $items["itemid"] ?>"> <?php echo $items["title"] ?></option>
+                        <?php } ?>
+                    </select>
+
+                </div>
+            </div>
+            <div style="float: left;width: 600px">
+                <input  type="text" class="form-control pull-right day_created_end" name="day_created_end" value="<?php echo $this->days_created_end ?>" placeholder="Tìm kiếm theo ngày tháng năm ..." id="reservation"/>
+            </div>
+            <div style="float: left" class="form-group">
+                <button type="button" id="btnView" class="btn btn-primary">Xem</button>
+
+            </div>
+        </div><!-- /.box-body -->
+
+    </form>
+    <form id="sampleForm" action="" method="post">
+        <div id="tableContainer" class="tableContainer">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" class="scrollTable">
+                <thead class="fixedHeader" id="fixedHeader">
+                    <tr class="alternateRow">
+                        <th  style="font-size: 12px;width: 70px">Chi nhánh & Chỉ tiêu</th>
+                        <?php
+                        foreach ($this->list_vote as $items) {
+                            $storeid = $items["userid"];
+                            ?>
+                            <th style="font-size: 12px;width: 70px"><?php echo $items["abbreviation"] ?></th>
+<?php } ?>
+                        <th style="font-size: 12px;width: 70px">Tổng</th>
+                    </tr>
+                </thead>
+                <tbody class="scrollContent">
+                    <tr>
+                        <td  style="font-size: 12px;width: 70px">Cty(CN Bán)</td>
+                        <?php foreach ($this->list_vote as $items) {
+                        $storeid = $items["userid"];
+                        $__total1 = (int) $this->sums[$storeid][1]/1000;
+                        $__count1 = (int) $this->count[$storeid][1];
+                            $__s1+=$__total1;
+                        ?>
+                        <td style="font-size: 12px;width: 70px"> <?php echo number_format($__total1); ?> / <?php echo number_format($__count1); ?> </td>
+                        <?php }?>
+                        <td style="font-size: 12px;width: 70px"><?php echo number_format($__s1); ?></td>
+                    </tr>
+                    <tr>
+                        <td  style="font-size: 12px;width: 70px">Hnam(CN Bán)</td>
+                        <?php foreach ($this->list_vote as $items) {
+                        $storeid = $items["userid"];
+                        $__total2 = (int) $this->sums[$storeid][2]/1000;
+                        $__count2 = (int) $this->count[$storeid][2];
+                            $__s2+=$__total2;
+                        ?>
+                        <td style="font-size: 12px;width: 70px"> <?php echo number_format($__total2); ?> / <?php echo number_format($__count2); ?> </td>
+                        <?php }?>
+                        <td style="font-size: 12px;width: 70px"><?php echo number_format($__s2); ?></td>
+                    </tr>
+                    <tr>
+                        <td  style="font-size: 12px;width: 70px">Phụ kiện(CN Bán)</td>
+                        <?php foreach ($this->list_vote as $items) {
+                        $storeid = $items["userid"];
+                        $__total3 = (int) $this->sums[$storeid][3]/1000;
+                        $__count3 = (int) $this->count[$storeid][3];
+                            $__s3+=$__total3;
+                        ?>
+                        <td style="font-size: 12px;width: 70px"> <?php echo number_format($__total3); ?> / <?php echo number_format($__count3); ?> </td>
+                        <?php }?>
+                        <td style="font-size: 12px;width: 70px"><?php echo number_format($__s3); ?></td>
+                    </tr>
+                        
+                    
+                    <tr>
+                        <td  style="font-size: 12px;width: 70px">Cty(Chỉ tiêu)</td>
+                        <?php foreach ($this->list_vote as $items) {
+                        $storeid = $items["userid"];
+                        $__total4 = (int) $this->sums2[$storeid][1]/1000;
+                        $__count4 = (int) $this->count2[$storeid][1];
+                            $__s4+=$__total4;
+                        ?>
+                        <td style="font-size: 12px;width: 70px"> <?php echo number_format($__total4); ?> / <?php echo number_format($__count4); ?> </td>
+                        <?php }?>
+                        <td style="font-size: 12px;width: 70px"><?php echo number_format($__s4); ?></td>
+                    </tr>
+                    <tr>
+                        <td  style="font-size: 12px;width: 70px">Hnam(Chỉ tiêu)</td>
+                        <?php foreach ($this->list_vote as $items) {
+                        $storeid = $items["userid"];
+                        $__total5 = (int) $this->sums2[$storeid][2]/1000;
+                        $__count5 = (int) $this->count2[$storeid][2];
+                            $__s5+=$__total5;
+                        ?>
+                        <td style="font-size: 12px;width: 70px"> <?php echo number_format($__total5); ?> / <?php echo number_format($__count5); ?> </td>
+                        <?php }?>
+                        <td style="font-size: 12px;width: 70px"><?php echo number_format($__s5); ?></td>
+                    </tr>
+                    <tr>
+                        <td  style="font-size: 12px;width: 70px">Phụ kiện(Chỉ tiêu)</td>
+                        <?php foreach ($this->list_vote as $items) {
+                        $storeid = $items["userid"];
+                        $__total6 = (int) $this->sums2[$storeid][3]/1000;
+                        $__count6 = (int) $this->count2[$storeid][3];
+                            $__s6+=$__total6;
+                        ?>
+                        <td style="font-size: 12px;width: 70px"> <?php echo number_format($__total6); ?> / <?php echo number_format($__count6); ?> </td>
+                        <?php }?>
+                        <td style="font-size: 12px;width: 70px"><?php echo number_format($__s6); ?></td>
+                    </tr>
+                <thead class="fixedHeader" id="fixedHeader">
+                    <tr class="alternateRow">
+                        <th  style="font-size: 12px;width: 70px"></th>
+                        <?php
+                        foreach ($this->list_vote as $items) {
+                            
+                            ?>
+                            <th style="font-size: 12px;width: 70px"><?php echo number_format($__total1) ?></th>
+<?php } ?>
+                            <th style="font-size: 12px;width: 70px"><?php echo number_format($__s1 + $__s2 + $__s3) ?></th>
+                    </tr>
+                </thead>
+                </tbody>
+                <thead class="fixedHeader" id="fixedHeader">
+                    <tr class="alternateRow">
+                        <td colspan="12"></td>
+                        <td colspan="4"><p style="font-size: 14px;color: red;font-weight: bold">Tổng doanh số bán được:</p></td>
+                        <td colspan="1"><p style="font-size: 14px;color: red;font-weight: bold"><?php echo number_format($__s1 + $__s2 + $__s3); ?>(Đơn vị x 1.000đ)</p></td>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </form>
+</div>
+<script>
+    $().ready(function () {
+
+        $('#btnView').click(function (e) {
+            e.preventDefault();
+            var cated_id = $('#cated_id').val();
+            if (cated_id == 0) {
+                $("#view-sales-day").attr("action", "/admin/user/sales/doanh-so-theo-thang");
+            } else {
+                $("#view-sales-day").attr("action", "/admin/user/make-money/chi-tiet-doanh-so-ban");
+            }
+            $("#view-sales-day").submit();
+        });
+    });
+</script>

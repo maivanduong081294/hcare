@@ -1,0 +1,21 @@
+<h1>LỊCH SỬ</h1>
+<div class="table-responsive">
+    <table class="table table-condensed table-striped table-bordered">
+        <tr>
+            <th>stt</th>
+            <th>Mã phiếu</th>
+            <th>Thao tác</th>
+            <th>Ngày thao tác</th>
+        </tr>
+        <?php
+        $stt=0;
+        foreach ($this->list as $list){ ?>
+        <tr>
+            <td><?php echo ++$stt ?></td>
+            <td><?php echo $list["id_guarantee"] ?></td>
+            <td><?php echo $this->istype[$list["type"]] ?></td>
+            <td><?php echo date('d/m/Y H:i:s',  strtotime($list["datetime"])) ?></td>
+        </tr>
+        <?php }?>
+    </table>
+</div>

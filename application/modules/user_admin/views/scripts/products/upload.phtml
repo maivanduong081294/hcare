@@ -1,0 +1,143 @@
+<?
+    $colors = $this->listcolor;
+    $itemid = $this->itemid;
+?>
+<table border="0" cellpadding="20" cellspacing="10" width="100%">
+  <tbody><tr>
+    <td style="padding: 5px;" align="center" valign="middle">
+    <table class="borderMain" border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tbody><tr valign="top">
+        <td><div class="header icon-48-article">Upload hình ảnh chi tiết</div></td>
+        <td align="right"><div class="toolbar">
+            <table class="toolbar"><tbody><tr>
+                 <td id="toolbar-cancel" class="button">
+                    <a class="toolbar" onclick="javascript:if(confirm('Bạn đã lưu thông tin và chắc chắn đóng?')) window.close()" href="#">
+                    <span title="Cancel" class="icon-32-delete"></span>
+                    Đóng</a>
+                </td>
+        </tr></tbody></table>
+        </div></td>
+      </tr>
+</tbody></table>
+<table class="borderMain spaceTop5px" border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tbody><tr>
+    <td>
+
+<form name="frmPage" id="frmPage" enctype="multipart/form-data" method="post" action="">
+    <input type="hidden" value="<? echo $this->itemid; ?>" name="itemid" id="itemid" />
+	<table class="adminerror spaceTop10px" border="0" cellpadding="0" cellspacing="0" width="100%">
+	    </table>
+    <br>
+    <div id="add" style="width:100%; text-align: left; margin: 0 0 10px 0; color:RED">
+        <? echo $this->msg ?>
+    </div>
+    <fieldset class="adminform"><legend>Thông tin hình ảnh chi tiết sản phẩm "<font color="RED"><? echo $this->name; ?></font>"</legend>
+    <table class="spaceTop5px" border="0" width="100%">
+    <tbody id="mainbody">
+        <?
+        $no = 0;
+	$myno = 0;
+            if (count($colors)>0){
+                foreach($colors as $cid => $data){
+        ?>
+        <tr width="100%">
+           <td style="font-weight:bold; border-bottom: 1px solid #eeeeee">Màu : <? echo $data['color'];?>
+               <input type="file" name="picture[]" rel="<?echo $cid; ?>----<? echo $no++;?>" />(Upload cho màu hiện tại)
+               <input type="submit" name="submit" class="submit" value="upload" />
+               </td>
+        </tr>
+        <tr width="100%">
+           <td style="border-bottom: 1px solid #eeeeee">
+               <div style="width:100%; float:left;">Màu hiện có:</div>
+               <div style="float:left; width:100%;" class="bthumb">
+                   <?
+
+                    if (count($data['thumb'])>0){
+                        $thumb = $data['thumb'];
+
+                        foreach($thumb as $k => $item){
+                            if ($myno==0){
+                            echo "<div class='thumb'>
+                                    <img src='".$this->imagepath.$item->home."' rel='$itemid----$cid----$k' />
+                                    <a style='padding:0; margin:0' href='javascript:void(0)' class='premove'>Remove | </a>
+                                    <a style='padding:0; margin:0' href='javascript:void(0)' class='pinfront'> Infront</a>
+                                 </div>
+                                ";
+
+                            }else{
+                                echo "<div class='thumb'>
+                                    <img src='".$this->imagepath.$item->home."' rel='$itemid----$cid----$k' />
+                                    <a href='javascript:void(0)' class='premove'>Remove</a>
+                                 </div>
+                                ";
+                            }
+                        }
+                        $myno++;
+                    }
+                   ?>
+               </div>
+           </td>
+        </tr>
+        <?
+
+            }//end foreach
+
+        }//end if color ?>
+    </tbody>
+    </table>
+</fieldset>
+
+</form>
+
+    </td>
+  </tr>
+</tbody></table>
+</td>
+  </tr>
+</tbody></table>
+<div id="deleted" style="display:none;"></div>
+<a href="" id="curhref"></a>
+<script type="text/javascript">
+
+$().ready(function(){
+    $('.submit').click(function(){
+        itemid = $(this).prev().attr('rel');
+        $(this).append("<input type='hidden' name='param' value='"+itemid+"' />");
+    });
+    $('.premove').click(function(){
+        result = confirm('Bạn có chắc chắn muốn xóa?');
+        if (result){
+            param = $(this).prev().attr('rel');
+
+            url = "/admin/user/products/delete-color-image-detail/?param="+param+"&"+Math.random();
+            $('#deleted').load(url, function(response){
+//                alert(response);
+                window.location.reload(true);
+            });
+        }
+    });
+
+    $('.pinfront').click(function(){
+        //result = confirm('Bạn có chắc chắn muốn xóa?');
+
+            param = $(this).prev().prev().attr('rel');
+
+            url = "/admin/user/products/infront-color-image-detail/?param="+param+"&"+Math.random();
+            //alert(url);
+            $('#deleted').load(url, function(response){
+//alert(response);
+                alert('Thanh cong');
+//                window.location.reload(true);
+            });
+
+    });
+});
+
+</script>
+
+<style>
+    .upload{padding:2px; background: RED; color:#ffffff;}
+    .thumb {width:80px; float: left;}
+    .thumb img{width:50px; height: 70px; margin: 10px 5px; float: left;}
+    .thumb a{float: left; margin:0 0 10px 10px;}
+</style>

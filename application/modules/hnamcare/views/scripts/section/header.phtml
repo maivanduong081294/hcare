@@ -1,0 +1,83 @@
+<?php
+$configuration = Zend_Registry::get('configuration');
+$base_url = isset($configuration->staticurl)?$configuration->staticurl:'/';
+?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta https-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+		<title><?php echo SEOPlugin::getTitle(); ?></title>
+		<meta name="description" content="<?php echo SEOPlugin::getDescriptions(); ?>" />
+		<?php if(SEOPlugin::getKeywords()): ?>
+		<meta name="keywords" content="<?php echo SEOPlugin::getKeywords(); ?>" />
+		<?php endif; ?>
+		<meta name="copyright" content="Công ty TNHH Thương mại Dịch vụ Di Động Sao Việt" />
+		<meta name="author" content="Công ty TNHH Thương mại Dịch vụ Di Động Sao Việt" />
+		<meta name="resource-type" content="Document" />
+		<meta name="distribution" content="Global" />
+		<meta name="revisit-after" content="1 days" />
+		<meta name="generator" content="Công ty TNHH Thương mại Dịch vụ Di Động Sao Việt" />
+		<meta http-equiv="x-dns-prefetch-control" content="on">
+		<link rel="dns-prefetch" href="https://stcv4.hnammobile.com/">
+		<meta property="og:url" content="<?php echo SEOPlugin::getSocialUrl(); ?>" />
+		<meta property="og:image" content="<?php echo SEOPlugin::getSocialImg(); ?>" />
+		<meta property="og:title" content="<?php echo SEOPlugin::getTitle(); ?>" />
+		<meta property="og:description" content="<?php echo SEOPlugin::getDescriptions(); ?>" />
+		<meta property="fb:app_id" content="228843560823977" />
+		<?php
+		if(isset($_GET['css']) and $_GET['css'] == 1) {
+			echo $this->headLink();
+		}
+		else {
+			$search = array("\r\n","\t",'  ',': ',' :','; ',' ;');
+			$replace = array('','','',':',':',';',';');
+			foreach ($this->headLink() as $key => $value){
+				if(strtolower($value->rel) != 'stylesheet') {
+					echo '<link rel="'.$value->rel.'" href="'.$value->href.'" type="'.$value->type.'">';
+				}
+				else {
+					$filepath = strrpos($value->href,'?');
+					$filepath = BASE_PATH.substr($value->href,0,$filepath);
+					if (file_exists($filepath)) {
+						$css = stream_get_contents(fopen($filepath, "rb"));
+						$css = trim($css);
+						$css = str_replace($search, $replace, $css);
+						echo '<style>'.$css.'</style>';
+					}
+				}
+			}
+		}
+		echo $this->headScript();
+		?>
+	</head>
+	<body class="<?php echo $this->classBody; ?>">
+		<header id="header">
+			<div class="header-top">
+				<div class="container">
+					<div class="header-top-wrapper">
+						<button id="menu-icon"><i class="fa fa-bars"></i></button>
+						<div class="row align-items-lg-center justify-content-lg-between">
+							<div class="logo col-lg-auto">
+								<a id="logo">
+									<img src="<?php echo $base_url; ?>/hcare/images/logo.png">
+								</a>
+							</div>
+							<div class="search col-lg-auto">
+								<form id="search-form" action="/tim-kiem" method="GET">
+									<div class="search-form-wrapper">
+										<input type="text" name="keyword" id="search-keyword" placeholder="Tra cứu dịch vụ sửa chữa">
+										<button type="submit" id="search-submit">
+											<i class="fa fa-search"></i>
+										</button>
+									</div>
+								</form>
+							</div>
+						</div>
+						<button id="search-icon"><i class="fa fa-search"></i></button>
+					</div>
+				</div>
+			</div>
+		</header>
+		<section id="content">

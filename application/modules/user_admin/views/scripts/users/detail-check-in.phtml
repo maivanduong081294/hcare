@@ -1,0 +1,111 @@
+<style>
+    .form-group{
+        padding-right: 15px;
+    }
+.datepicker{z-index:1151 !important;}
+.rowactived{
+    background: #D8CFCF;
+}
+</style>
+
+<div class="box box-primary">
+    <h3 class="box-title">Nhân viên <?php echo $this->uname; ?></strong></h3>
+    <form role="form" id="get-member" method="get"  class="frmReport">
+        <input type="hidden" name="userid" value="<?php echo $this->userid ?>" />
+        <div class="box-body">
+            <div style="float: left" class="form-group">
+                <div class="input-group" style="max-width: 600px">
+                    <?php if($this->bgd==1){ ?>
+                    <div class="input-group-addon">
+                        <i class="fa fa-laptop"></i>
+                    </div>
+                    <select class="form-control" id="month" name="month" >
+                        <option value="0"> User</option>
+                        <?php
+                        foreach ($this->luser as $items) {
+                            $slected = '';
+                            if ($items["userid"] == $this->userid) {
+                                $slected = 'selected = selected';
+                            }
+                            ?>
+                            <option <?php echo $slected ?> value="<?php echo $items["userid"] ?>">
+                             <?php echo $items["fullname"] ?>
+                            </option>
+                        <?php } ?>
+                    </select>
+                    <?php }?>
+                    <div class="input-group-addon">
+                        <i class="fa fa-laptop"></i>
+                    </div>
+                    <select class="form-control" id="month" name="month" >
+                        <option value="0"> Tháng</option>
+                        <?php
+                        foreach ($this->months as $items) {
+                            $slected = '';
+                            if ($items == $this->month) {
+                                $slected = 'selected = selected';
+                            }
+                            ?>
+                            <option <?php echo $slected ?> value="<?php echo $items ?>">
+                            Tháng    <?php echo $items ?>
+                            </option>
+                        <?php } ?>
+                    </select>
+                    <div class="input-group-addon">
+                        <i class="fa fa-laptop"></i>
+                    </div>
+                    <select class="form-control" id="year" name="year" >
+                        <option value="0"> Năm</option>
+                        <?php
+                        foreach ($this->years as $items) {
+                            $slected = '';
+                            if ($items == $this->year) {
+                                $slected = 'selected = selected';
+                            }
+                            ?>
+                            <option <?php echo $slected ?> value="<?php echo $items ?>">
+                             Năm   <?php echo $items ?>
+                            </option>
+                        <?php } ?>
+                    </select>
+                </div><!-- /.input group -->
+            </div>
+            
+            <div style="float: left" class="form-group">
+                <button type="submit" id="btnView" class="btn btn-primary">Xem</button>
+            </div>
+
+        </div><!-- /.box-body -->
+
+    </form>
+    <table cellpadding="0" border="0" width="100%" class="table table-data table-striped table-bordered">
+        <form method="post" name="frmPage" id="frmPage" action="" >
+            <input type="hidden" name="updateid" id="updateid" value="" />
+
+            <tbody>
+                <tr>
+                    <td width="15"><input type="checkbox" onclick="checkme()" name="checkall"></td>
+                    <td width="140">Tên nhân viên</td>
+                    <td width="360">Địa chỉ checkIn</td>
+                    <td width="100">Giờ checkIn</td>
+                    <td width="360">Địa chỉ checkOut</td>
+                    <td width="100">Giờ checkOut</td>
+                    <td>Địa điểm</td>
+                    <td width="80" class="bgTitleadmin1">Thao tác</td>
+                </tr>
+                <?php for($i=1;$i<=$this->number;$i++){ ?>
+                <tr>
+                    <td><?php echo $i; ?></td>
+                    <td><?php echo $this->uname; ?></td>
+                    <td><?php echo $this->address_checkin[$i]; ?></td>
+                    <td><?php echo $this->time_checkin[$i] ?></td>
+                    <td><?php echo $this->address_checkout[$i]; ?></td>
+                    <td><?php echo $this->time_checkout[$i] ?></td>
+                    <td><?php echo $this->location[$i]; ?></td>
+                    <td></td>
+                </tr>
+                <?php }?>
+        </form>
+    </table>
+</div>
+<div id="ddelete" style="display:none;"></div>

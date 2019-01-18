@@ -1,0 +1,83 @@
+<div class="box-header panel-default">
+    <div class="col-md-5">
+        <h2 style="font-weight: bold">Set tỷ lệ 99%</h2>
+    </div>
+     
+</div><!-- /.box-header -->
+<div class="box-body">
+    <div class="col-md-6">
+            <form  name="data_frm" id="data_frm" action="/admin/user/target/save-recipe2" method="get" target="hiddenIF"  enctype="multipart/form-data">
+            <iframe  name="hiddenIF" style="display: none" scrolling="auto"></iframe>
+            <div class="col-md-6">
+                <span>Chi nhánh</span>
+            <div class="form-group">
+                    <select  class="form-control" name="storeid" id="storeid">
+                        <option value="0">Tất cả chi nhánh</option>
+                        <?php
+                        foreach ($this->list_store as $store) {
+                            $selected0 = '';
+                            if ($this->detail["storeid"] == $store["userid"]) {
+                                $selected0 = ' selected ="selected"';
+                            }
+                            ?>
+                            <option <?php echo $selected0 ?> value="<?php echo $store["userid"]; ?>"><?php echo $store["storename"]; ?></option>
+                        <?php } ?>
+                    </select>
+            </div>
+            </div>
+            <div class="col-md-6">
+            <div class="form-group">
+                <span>Tháng</span>
+                <select class="form-control" name="month" id="month">
+    <?php
+    for($m=1;$m<= 12;$m++) {
+        $selected = '';
+        if((int)$this->detail["month"]==0){
+            $this->detail["month"] = date('m');
+        }
+        if ($this->detail["month"] == $m) {
+            $selected = ' selected ="selected"';
+        }
+        ?>
+            <option <?php echo $selected ?> value="<?php echo $m; ?>"> Tháng <?php echo $m; ?></option>
+                            <?php } ?>
+                        </select>
+            </div>
+            </div>
+            <div class="col-md-6">
+            <div class="form-group">
+                <span>Năm</span>
+            <select class="form-control" name="year" id="year">
+                    <?php
+                    for($y=2014;$y<= date('Y') + 5;$y++) {
+                        $selected2 = '';
+                        if((int)$this->detail["year"]==0){
+                            $this->detail["year"] = date('Y');
+                        }
+                        if ($this->detail["year"] == $y) {
+                            $selected2 = ' selected ="selected"';
+                        }
+                        ?>
+                        <option <?php echo $selected2 ?> value="<?php echo $y; ?>"> Năm <?php echo $y; ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            </div>
+            <div class="col-md-6">
+            <div class="form-group">
+                <span>Tỷ lệ máy 99%</span>
+                <input class="form-control" type="number" name="tyle_may99" id="tyle_may99" placeholder="Tỷ lệ máy 99%" value="<?php echo $this->detail["tyle_may99"] ?>" />
+            </div>
+            </div>
+            <div class="col-md-12">
+                <button type="button" id="save" onclick="savess();
+                            return false;" class="btn btn-primary "><i class="fa fa-floppy-o"></i>  Lưu</button>
+            </div>
+        </form>
+    </div>
+</div><!-- /.box-body -->
+<script>
+function show_sv(userid){
+    $('.frm_show_sv'+userid).toggle();
+}
+</script>

@@ -1,0 +1,135 @@
+<div class="box box-primary">
+    <div class="box-body">
+        <div class="box-header">
+            <h3 class="box-title"><button type="button" id="print" name="print" class="btn btn-primary"><i class="fa fa-print">  in phiếu chi</i></button></h3>
+        </div><!-- /.box-header -->
+        <div id="printf">
+            <style>
+                .size20{
+                    font-size: 20px !important;
+                }
+                .tables{
+                    font-size: 14px;
+                    width: 600px;
+                    height: 300px;
+                    margin:auto;
+                }
+                td{
+                    padding: 5px;
+                }
+            </style>
+
+            <div class="box1">
+                <!--<table>-->
+                <table class="table table-bordered table-striped table-condensed">
+                    <tr>
+                        <td colspan="6" align="center"><b class="size20">PHIẾU ỦY NHIỆM CHI </b>   <span> Số : UNC<?php echo $this->detail["id"] ?></span></td>
+                    </tr>
+                    <tr>
+                        <td align="center" colspan="6"><span>Ngày : <?php echo date('d/m/Y', strtotime($this->detail["bill_datetime"])) ?></span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="1" align="left">Họ tên :</td>
+                        <td colspan="5"><?php echo $this->detail["name"] ?></td>
+                    </tr>
+                    <tr>
+                        <td colspan="1" align="left">Lý do :</td>
+                        <td colspan="5"> <?php echo $this->detail["content"] ?></td>
+                    </tr>
+                    <tr>
+                        <td colspan="1" align="left">Số tiền :</td>
+                        <td colspan="5"><?php echo number_format($this->detail["money"]) ?>đ (<?php echo $this->vnd ?>)</td>
+                    </tr>
+                    <tr>
+                        <td colspan="1" align="left" colspan="1">Phòng ban: </td>
+                        <td  colspan="5"> <?php echo $this->name_department ?></td>
+                    </tr>
+                    <tr>
+                        <td colspan="1" align="left" colspan="1"> Chi cho: </td>
+                        <td  colspan="5"><?php echo $this->name_regency ?></td>
+                    </tr>
+                    
+                    <?php if($this->detail["dayout"] !=null){
+                        if($this->detail["dayout"] != "0000-00-00"){
+                            $dayout = date('d/m/Y', strtotime($this->detail["dayout"]));
+                        }else{
+                           $dayout =''; 
+                        }
+                        
+                    } ?>
+                    <tr>
+                        <td colspan="1" align="left" colspan="1">Kèm theo :</td>
+                        <td colspan="5"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="1" align="left">Mã hóa đơn :</td>
+                        <td colspan="5"><?php echo $this->detail["bills_id"] ?></td>
+                    </tr>
+                    <tr>
+                        <td colspan="1" align="left">Ngày ra hóa đơn : </td>
+                        <td colspan="5"><?php echo $dayout ?></td>
+                    </tr>
+                    <!-- <tr>
+                        <td align="left" colspan="5">Ngày  : <?php // echo date('d/m/Y', strtotime($this->detail["bill_datetime"])) ?></td>
+                    </tr> -->
+                    <tr>
+                    <td colspan="6">&nbsp;</td>
+                    </tr>					
+                    <tr height="70">
+                        <td valign="top" align="center" width="20%" style="font-size:12px;">NGƯỜI LẬP PHIẾU<br />
+                            (Ký,họ tên)
+                        </td>
+                        <td valign="top" align="center" width="17%" style="font-size:12px;">NGƯỜI NHẬN<br />
+                            (Ký,họ tên)
+                        </td>
+                        <td valign="top" align="center" width="15%" style="font-size:12px;">THỦ QUỸ <br />
+                            (Ký,họ tên)
+                        </td>
+                        <td valign="top" align="center" width="23%" style="font-size:12px;">KẾ TOÁN TRƯỞNG<br />
+                            (Ký,họ tên)
+                        </td>
+                        <td valign="top" align="center" width="25%" style="font-size:12px;">THỦ TRƯỞNG ĐƠN VỊ<br />
+                            (Ký,họ tên,đóng dấu)
+                        </td>
+
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="ddelete" style="display:none;"></div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#print").click(function (e) {
+            $( "table" ).addClass("tables");
+            var divContents = $("#printf").html();
+            var printWindow = window.open('', '', 'height=550,width=1280px');
+            printWindow.document.write('<html><head><title>IN PHIẾU CHI</title>');
+            printWindow.document.write('</head><body >');
+            printWindow.document.write(divContents);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        });
+        checkCtrl = false;
+        $('*').keydown(function (e) {
+            if (e.keyCode == '17') {
+                checkCtrl = true;
+            }
+        }).keyup(function (ev) {
+            if (ev.keyCode == '17') {
+                checkCtrl = false;
+            }
+        }).keydown(function (event) {
+            if (checkCtrl) {
+                if (event.keyCode == '80') {
+                    alert('Vui lòng nhấn nút in phiếu để in')
+                    checkCtrl = false;
+                }
+            }
+        });
+
+    });
+</script>

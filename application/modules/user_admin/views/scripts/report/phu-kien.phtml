@@ -1,0 +1,249 @@
+<link href="/backend/dist/css/fixtable.css" rel="stylesheet" type="text/css"/>
+<style>
+    @media (min-width: 1400px) {
+        .sheight{height: 400px !important;}
+    }
+    @media only screen and (max-width: 600px) {
+        .mwidth{
+            width: 50% !important;
+        }
+    } 
+    .form-group{
+        padding-left: 0px;
+    }
+</style>
+
+<div class="panel panel-default">
+    <div class="col-md-9">
+        <i class="fa fa-home"></i>
+        <b>Doanh số bán phụ kiện </b>
+    </div>
+</div>
+<form role="form" id="frm" method="get"  class="frmReport">
+    <input type="hidden" name="cated_name" id="cated_name" value="<?php echo $this->cated_name ?>" />
+    <div class="col-md-2 col-xs-6">
+        <div class="form-group input-group-sm ">
+            <select  name="menu" onchange="change_productsid_kmc();" id="menu" class="form-control">
+                <option value="">Loại phụ kiện</option>
+                <option value="-1" <?php  if ($this->menu == -1) echo " selected"; ?>>Tất cả</option>
+                <?php
+                $loaipk = array();
+                foreach ($this->accmenu as $menu) {
+                    $sl = '';
+                    if ($this->menu == $menu["id"]) {
+                        $sl = 'selected = selected';
+                    }
+                    ?>
+                    <option <?php echo $sl ?> value="<?php echo $menu["id"] ?>"> <?php echo $menu["name"] ?></option>
+                <?php } ?>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-2 col-xs-6">
+        <div class="form-group  input-group-sm">
+            <select name="option" id="option" class="form-control">
+                <option value="">Tất cả</option>
+            </select>
+        </div>
+    </div>
+    <?php /* ?>
+    <div class="col-md-2 col-xs-6">
+        <div class="form-group input-group-sm">
+            <select style="width: 100%" name="storeid"  id="storeid" class="selects form-control">
+                <option value="0"> Tất cả chi nhánh</option>
+                <?php
+                foreach ($this->list_vote as $items) {
+                    if($items["userid"]==253 || $items["userid"]==312){
+                        continue;
+                    }
+                    $sl = '';
+                    if ($this->storeid == $items["userid"]) {
+                        $sl = 'selected = selected';
+                    }
+                    ?>
+                    <option <?php echo $sl ?> value="<?php echo $items["userid"] ?>"> <?php echo $items["storename"] ?></option>
+                <?php } ?>
+
+            </select>
+        </div>
+    </div>
+    <?php */ ?>
+
+    <div class=" col-md-4 col-xs-12">
+        <div class="input-group-sm">
+            <?php
+            $start_end = 'Date range picker';
+            if ($this->start_end != null) {
+                $start_end = $this->start_end;
+            }
+            ?>
+            <span class="input-group-btn">
+                <button class="btn btn-default pull-left" id="daterange-btn">
+                    <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                    <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                    <i class="fa fa-caret-down"></i>
+                </button>
+            </span>
+            <input type="hidden" name="iexport" id="iexport" value="<?php echo $this->iexport ?>" />
+            <span class="input-group-btn">
+                <button type="submit" onclick="views_report();return false;" class="btn btn-info btn-flat"><i class="fa fa-search"> </i><span class="hidden-xs"> Xem</span></button>
+            </span>
+        </div>
+    </div>
+    <div class="col-md-2 hidden-xs">
+        <div class="col-md-3"><a href="#" target="_blank" onclick="export_by_cate();return false;" id="href_export_by_cate" class="btn btn-primary btn-sm "><i class="fa fa-file-excel-o"> Export </i></a></div>
+    </div>
+    <div class="clearfix"></div>
+</form>
+<div class="clearfix"></div>
+<div class="box-body">
+    <table class="table table-fixedheader table-bordered table-striped">
+        <thead>
+            <tr>
+                <th class="mwidth" width="<?php echo $this->col ?>%" height="30">Sản Phẩm</th>
+                <?php
+                foreach ($this->list_vote as $items) {
+                    $storeid = $items["userid"];
+                    ?>
+                    <th class="hidden-xs " width="<?php echo $this->col ?>%" height="30"><?php echo $items["abbreviation"] ?></th>
+                <?php } ?>
+                <th class="mwidth" width="<?php echo $this->col ?>%" height="30">Tổng</th>
+            </tr>
+        </thead>
+        <?php if(!empty($this->list)): ?>
+        <tbody class="sheight" style="height: 300px">
+            <?php
+            $i = 0;
+            $j = 0;
+            ?>
+            <?php foreach ($this->list as $item): ?>
+            <?php
+            $__s = 0;
+            $__c = 0;
+            ?>
+            <tr>
+                <td class="mwidth" width="<?php echo $this->col ?>%"><a href="/admin/user/report/sales-by-products-by-color?start_end=<?php echo $_GET['start_end']; ?>&products_id=<?php echo $item['products_id']; ?>" target="_blank"><?php echo $item['products_name']; ?></a></td>
+                <?php foreach ($this->list_vote as $vote): ?>
+                    <?php
+                    $__total = 0;
+                    $__count = 0;
+                    $storeid = $vote["userid"];
+                    $__total = (int) $this->sums[$storeid][$item['products_id']] / 1000;
+                    $__count = (int) $this->count[$storeid][$item['products_id']];
+                    $__s+=$__total;
+                    $__c+=$__count;
+                    ?>
+                    <td class="hidden-xs" width="<?php echo $this->col ?>%">
+                        <a href="/admin/user/report/get-bill-by-product?start_end=<?php echo $_GET['start_end']; ?>&products_id=<?php echo $item['products_id']; ?>&storeid=<?php echo $storeid; ?>" target="_blank">
+                        <?php echo number_format($__total); ?><br/>
+                        <?php echo number_format($__count); ?>
+                        <?php
+                        $ret_total[$i][$j] = $__total;
+                        $ret_count[$i][$j] = $__count;
+                        ?></a>
+                    </td>
+                    <?php
+                    $j++;
+                    if ($j > count($this->list_vote) - 1) {
+                        $j = 0;
+                    }
+                    ?>
+                <?php endforeach; ?>
+                <td class="mwidth" width="<?php echo $this->col ?>%">
+                    <?php echo number_format($__s); ?><br/>
+                    <?php echo number_format($__c); ?>
+                </td>
+                <?php $__tong_products +=$__s ?>
+                <?php $__tong_c +=$__c ?>
+                <?php
+                $__tong_products2 +=$__total;
+                $i++;
+                ?>
+            </tr>
+            <?php endforeach; ?>
+            <?php
+            for ($k = 0; $k < count($this->list); $k++) {
+                for ($h = 0; $h < count($this->list_vote); $h++) {
+                    $kh[$h] += $ret_total[$k][$h];
+                    $kh2[$h] += $ret_count[$k][$h];
+                }
+            }
+            ?>
+        </tbody>
+        <?php endif; ?>
+        <tr class="red">
+            <td class="mwidth" width="<?php echo $this->col ?>%" height="90">Tổng</td>
+            <?php for ($g = 0; $g < count($this->list_vote); $g++) { ?>
+                <td class="hidden-xs"  style="font-size: 12px;" width="<?php echo $this->col ?>%" height="90">
+                    <?php echo number_format($kh[$g]); ?> <br/>
+                    <?php echo number_format($kh2[$g]); ?> <br/>
+                </td>
+            <?php } ?>
+
+            <td class="mwidth" style="font-size: 11px;" width="<?php echo $this->col ?>%" height="90">
+                <?php echo number_format($__tong_products) ?><br/>
+                <?php echo number_format($__tong_c) ?>
+            </td>
+        </tr>
+    </table>
+    <b style="font-size: 14px;color: red;font-weight: bold">Tổng doanh số bán được: <?php echo number_format($__tong_products); ?>(Đơn vị x 1.000đ)</b>
+    <div class="row hidden-sm hidden-lg hidden-md">
+        <div class="col-xs-12">
+        <a href="#" target="_blank" onclick="export_by_cate();return false;" id="href_export_by_cate" class="btn btn-primary btn-sm "><i class="fa fa-file-excel-o"> Export </i></a>
+        </div>
+    </div>
+</div>
+<style>
+    table.table-fixedheader>thead tr th {
+        height: 54px;
+        display: flex;
+        align-items: center;
+    }
+</style>
+<script>
+    <?php
+        $loaipk = '';
+        foreach ($this->accmenusub as $key=>$itempk){
+            $temp = '';
+            foreach ($itempk as $subItem){
+                if($temp) {
+                    $temp.= ',';
+                }
+                $temp.= "'{$subItem['id']}':'{$subItem['name']}'";
+            }
+            if($loaipk) {
+                $loaipk.= ',';
+            }
+            $loaipk.= "'{$key}':{{$temp}}";
+        }
+    ?>
+    var loaipk = {<?php echo $loaipk; ?>};
+    var sub = <?php echo $this->option?$this->option:0; ?>;
+    jQuery(document).ready(function($){
+        if($('#menu').val()) {
+            var current = $('#menu').val();
+            var arr = loaipk[current];
+            var option = '<option value="">Tất cả</option>';
+            for (var index in arr) {
+                option += '<option value="'+index+'">'+arr[index]+'</option>';
+            }
+            $('#option').html(option);
+            if(sub) {
+                $('#option').val(sub);
+                $('#option').trigger('change');
+            }
+        }
+
+        $(document).on('change','#menu',function(e){
+            $('#option').val('');
+            $('#option').trigger('change');
+            var current = $(this).val();
+            var arr = loaipk[current];
+            var option = '<option value="">Tất cả</option>';
+            for (var index in arr) {
+                option += '<option value="'+index+'">'+arr[index]+'</option>';
+            }
+            $('#option').html(option);
+        });
+    });
+</script>

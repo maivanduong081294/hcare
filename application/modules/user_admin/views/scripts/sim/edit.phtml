@@ -1,0 +1,126 @@
+
+
+    <form role="form" action="" target="_blank" id="add_member" name="add_member" method="get" class="frmReport">
+    <div class="col-md-8">
+        <div class="box box-primary">
+                                <div class="box-header">
+                                    <h3 class="box-title">Thông tin cài đặt app - Hnammobile.com</h3>
+                                </div><!-- /.box-header -->
+                                <!-- form start -->
+                                <div style="margin-top: 30px"></div><hr/>
+                                    <div class="box-body">
+                                        <div class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Gói cài đặt: </label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                <i class="fa fa-desktop"></i>
+                                                </div>
+                                                    <select name="app_name" id="app_name" class="form-control">
+                                                    <option value="1">Gói cài đặt IOS 10 triệu</option>
+                                            </select>
+                                            </div>
+                                        </div>
+                                            
+                                        
+                                        <div id="charge_card" class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Mã cài đặt: </label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                <i class="fa fa-desktop"></i>
+                                            </div>
+                                                <input type="text" class="form-control" name="bill_id" id="bill_id" value="<?php echo $this->bill_id ?>" placeholder="Nhập mã cài đặt hợp lệ tại đây">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="box-footer">
+                                        <button type="submit" id="btnView" class="btn btn-primary">Lưu</button>
+                                        <input type="hidden" name="id" id="id" value="<?php echo $this->id ?>" />
+                                    </div>
+                                        
+                                        
+                                        
+                                    </div><!-- /.box-body -->
+
+</div>
+    <!--</div>-->
+
+                                
+                                   
+                                    <script>
+                                        function keys(e)
+                                        {
+                                            var keyword = null;
+                                            if (window.event)
+                                            {
+                                                keyword = window.event.keyCode;
+                                            } else
+                                            {
+                                                keyword = e.which; //NON IE;
+                                            } 
+                                            if (keyword < 48 || keyword > 57)
+                                            {
+                                                if (keyword == 48 || keyword == 127)
+                                                {
+                                                    return;
+                                                }
+                                            return false;
+                                            }
+                                        }
+                                        
+                                        $(".pricing").keyup(function(){
+                                            var price = this.value;
+                                            price = price.replace(/,/gi,"");
+                                            price = price + ".";
+                                            price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                            var sprice = price.split(".");
+                                            $(this).val(sprice[0]);
+                                        });
+                                      
+                                        
+                                    </script>
+    </div>
+                                    
+      </form>                          
+                                
+            <script>
+            function number_format(price) {
+                price = price.replace(/,/gi,"");
+                price = price + ".";
+                price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                return price;
+            }
+        </script>
+            <script>
+                $().ready(function(){
+                    $('#btnView').click(function(e){
+                        e.preventDefault();            
+                        $.post("/app-services/save",$('form').serialize(), function(resp){
+                            $('.errblock').remove();
+                            $.each(resp, function(i, obj){
+//                                alert('dsadas');return false;
+                                var id = obj.id; 
+                                var msg = obj.msg;
+                                if (msg != "ok") {
+                                    alert(msg);
+                                    return false;
+//                                    $('#'+id).focus();                   
+                                } else {
+                                    var result = confirm('Lưu thành công \nBạn có muốn tiếp tục thêm không\nChọn OK để tiếp tục thêm\nChọn Cancel trở về trang trước')
+                                    if(result){
+                                        
+                                    }else{
+                                        window.location = "/app-services";
+                                    }
+                                }
+
+                            });
+                        }, 'json');
+                    });
+                });
+            </script>
+            
+
+        
+    
+    
+    

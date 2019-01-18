@@ -1,0 +1,118 @@
+<?php
+$storeid = $this->storeid;
+$userid = $this->userid;
+   $so_luong_kythuat = $this->arr_mb[12];
+   $tyle_ln_sr =0.75/100;
+    $tien_ln_sr = ($this->sum_cty[6]+ $this->sum_hnam[6])*$tyle_ln_sr*20/100/($so_luong_kythuat);
+// tiên 99%
+$tyle_99 = $this->detail_recipe["tyle_may99"];
+$tien_99 = (($this->sum_cty[10] + $this->sum_hnam[10])*$tyle_99)*20/100/($so_luong_kythuat);
+?>
+
+<div class="box-header panel-default">
+    <div class="col-md-5">
+        <h2 style="font-weight: bold">Target  của <?php echo $this->detail_user["fullname"] ?></h2>
+    </div>
+     <form role="form" id="view-sales-day" method="get"  class="frmReport">
+        <div class="col-md-3">
+            <select class="form-control input-group-sm" name="month" id="month">
+<?php
+
+for($m=1;$m<= 12;$m++) {
+    $selected = '';
+    if ($this->month == $m) {
+        $selected = ' selected ="selected"';
+    }
+    ?>
+                            <option <?php echo $selected ?> value="<?php echo $m; ?>"> Tháng <?php echo $m; ?></option>
+                        <?php } ?>
+                    </select>
+        </div>
+        <div class="col-md-3">
+            <select class="form-control input-group-sm" name="year" id="year">
+                    <?php
+                    for($y=2014;$y<= date('Y') + 5;$y++) {
+                        $selected2 = '';
+                        if ($this->year == $y) {
+                            $selected2 = ' selected ="selected"';
+                        }
+                        ?>
+                        <option <?php echo $selected2 ?> value="<?php echo $y; ?>"> Năm <?php echo $y; ?></option>
+                    <?php } ?>
+                </select>
+        </div>
+         <?php if($this->suserid >0){ ?>
+        <input type="hidden" name="token" value="<?php echo $this->token ?>" />
+        <input type="hidden" name="userid" value="<?php echo $this->userid ?>" />
+        <input type="hidden" name="sync" value="1" />
+        <?php }?>
+        <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> Xem </i></button>
+         
+    </form>
+</div><!-- /.box-header -->
+<div class="box-body">
+    <div class="table-responsive">
+        <table class="table table-data table-striped table-bordered table-hover">
+            <tr>
+                <td>Gói cài đặt ios</td>
+                <td><?php echo number_format($this->money_ios) ?></td>
+            </tr>
+            <tr>
+                <td>Gói cài đặt android</td>
+                <td><?php echo number_format($this->money_android) ?></td>
+            </tr>
+            <tr>
+                <td>Phí nhân công cài đặt</td>
+                <td>
+            <?php echo number_format($this->arr_total_phinhancong[$this->storeid] *3000/ $this->arr_mb[12]) ?></td>
+            </tr>
+            <tr>
+                <td>Phí nhân công test máy</td>
+                <td>
+            <?php echo number_format($this->total_test) ?></td>
+            </tr>
+            <tr>
+                <td>Phí nhân công bảo hành</td>
+                <td>
+            <?php echo number_format($this->total_baohanh) ?></td>
+            </tr>
+            <tr>
+                <td>Máy LINE NEW & SR</td>
+                <td><?php echo number_format($tien_ln_sr) ?></td>
+            </tr>
+            <tr>
+                <td>Máy 99%</td>
+                <td><?php echo number_format($tien_99) ?></td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-12">
+        <?php
+        $money = $tien_99+$tien_ln_sr+ $this->money_ios + $this->money_android + $this->arr_total_phinhancong[$this->storeid] *3000/ $this->arr_mb[12] + $this->total_test + $this->total_baohanh;
+        if($_REQUEST["sync"]==1 && (int)$_REQUEST["userid"]>0 && $_REQUEST["month"] >0 && $_REQUEST["year"] >0){
+            $userid = $_REQUEST["userid"];
+            $month = $_REQUEST["month"];
+            $year = $_REQUEST["year"];
+            $detail = Business_Addon_Totaltarget::getInstance()->get_detail_by_userid_month_year($userid, $month, $year);
+            $data["userid"] = $userid;
+            $data["month"] = $month;
+            $data["year"] = $year;
+            $data["money"] = $money;
+            $data["storeid"] = $this->storeid;
+            if($detail){ // update
+                $data["end_datetime"] = date('Y-m-d H:i:s');
+                Business_Addon_Totaltarget::getInstance()->update($detail["id"],$data);
+            }else{ // insert
+                $data["datetime"] = date('Y-m-d H:i:s');
+                Business_Addon_Totaltarget::getInstance()->insert($data);
+            }
+        }
+        ?>
+        <p style="color: red;font-size: 25px">TỔNG TIỀN THƯỞNG : <?php echo number_format($money) ?></p>
+    </div>
+</div><!-- /.box-body -->
+<script>
+function show_sv(userid){
+    $('.frm_show_sv'+userid).toggle();
+}
+</script>

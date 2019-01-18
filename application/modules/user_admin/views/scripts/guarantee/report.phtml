@@ -1,0 +1,140 @@
+<style>
+    /*.bs-wizard {margin-top: 40px;}*/
+
+    /*Form Wizard*/
+
+</style>
+<div class="box-header">
+    <div class="col-md-12">
+        <p style="font-weight: bold;font-size: 20px"> BÁO CÁO TIỀN KBH</p>
+    </div>
+    <div class="col-md-12">
+        <form>
+            <div class="form-group col-md-3">
+                <input name="q" id="q" value="<?php echo $this->q ?>" class="form-control" placeholder="Nhập mã phiếu sửa chửa hoặc đúng imei" />
+            </div>
+            <div class="form-group col-md-4">
+                <div class="input-group input-group-sm">
+                    <?php
+                    $start_end = 'Date range picker';
+                    if ($this->start_end != null) {
+                        $start_end = $this->start_end;
+                    }
+                    ?>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default pull-right" id="daterange-btn">
+                            <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                            <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                            <i class="fa fa-caret-down"></i>
+                        </button>
+                    </span>
+                    <span class="input-group-btn">
+                        <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> <span class="hidden-xs">Xem </span></i></button>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="clear"></div>
+</div><!-- /.box-header -->
+<div class="box-body">
+    <div class="table-responsive">
+        <table id="f_tables" class="table table-condensed table-hover table-striped table-bordered">
+            <thead>
+            <tr>
+                <th width="10">STT</th>
+                <th>Mã phiếu</th>
+                <th>Ngày tạo phiếu</th>
+                <th>Tiền NCC</th>
+                <th>Tiền Hnam hỗ trợ</th>
+                <th>Tiền báo khách</th>
+                <th>Tiền thu khách</th>
+                <th>Còn bảo hành</th>
+                <th>NCC hỗ trợ</th>
+            </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th class="hidden-xs"></th>
+                    <th class="hidden-xs"></th>
+                    <th class="hidden-xs"></th>
+                    <th class="hidden-xs"></th>
+                    <th class="hidden-xs"></th>
+                    <th style="text-align:right">Total:</th>
+                    <th class="hidden-xs"></th>
+                    <th class="hidden-xs"></th>
+                    <th class="hidden-xs"></th>
+                </tr>
+            </tfoot>
+            <tbody>
+            <?php
+            $stt=0;
+            foreach ($this->list as $list){ ?>
+            <tr>
+                <td><?php echo ++$stt; ?></td>
+                <td><?php echo $list["id"] ?></td>
+                <td><?php echo date('d/m/Y H:i:s',  strtotime($list["datetime"])) ?></td>
+                <td><?php echo number_format($list["money_dvsc"]) ?></td>
+                <td><?php echo number_format($list["money_hnam"]) ?></td>
+                <td><?php echo number_format($list["money"]) ?></td>
+                <td><?php echo number_format($this->money_dathu[$list["id"]]) ?></td>
+                <td><?php echo $this->list_status_guarantee[$list["status_guarantee"]] ?></td>
+                <td><?php echo $this->list_ok[$list["ncc_ok"]] ?></td>
+            </tr>
+            <?php }?>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div id="ddelete"></div>
+<script>
+$().ready(function () {
+        $("#f_tables").DataTable({
+                "pageLength": 25,
+                "footerCallback": function ( row, data, start, end, display ) {
+                    var api = this.api(), data;
+                    // Remove the formatting to get integer data for summation
+                    var intVal = function ( i ) {
+                        return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '')*1 :
+                            typeof i === 'number' ?
+                                i : 0;
+                    };
+                    // Total over all pages
+                    total = api
+                        .column(6)
+                        .data()
+                        .reduce( function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0 );
+
+                    // Total over this page
+                    pageTotal = api
+                        .column(6, { page: 'current'} )
+                        .data()
+                        .reduce( function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0 );
+
+                    // Update footer
+                    $( api.column(6).footer() ).html(
+                            format_number(pageTotal)
+        //                '$'+pageTotal +' ( $'+ total +' total)'
+                    );
+                }
+                
+            });
+    });
+    function format_number(nStr)
+{
+	nStr += '';
+	x = nStr.split('.');
+	x1 = x[0];
+	x2 = x.length > 1 ? '.' + x[1] : '';
+	var rgx = /(\d+)(\d{3})/;
+	while (rgx.test(x1)) {
+		x1 = x1.replace(rgx, '$1' + ',' + '$2');
+	}
+	return x1 + x2;
+}
+</script>

@@ -1,0 +1,476 @@
+<style>
+    #paging_klinen{
+        height: 23px;
+        width: 600px;
+    }
+    #paging_klinen img {
+        height: 25px;
+        width: 28px;
+        margin-top: -3px;
+    }
+    #paging_klinen span{
+        /*font-size: 20px;*/
+        background: #f05920;
+        color: #ffffff;
+        padding :4px 10px;
+    }
+    .pagingItems{
+        background: #f3f3f3;
+        padding :4px 10px;
+        color: #777777;
+        font-weight: bold;
+        margin-top: 5px;
+    }
+    .pagingItems hover {
+        background: #f05920;
+    }
+</style>
+<div class="panel-default">
+    <div class="box-header">
+        <i class="ion ion-clipboard"></i>
+        <h3 class="box-title">Danh sách bảo hiểm</h3>
+    </div><!-- /.box-header -->
+    <form role="form" id="view-sales-day" method="get"  class="frmReport">
+        <?php if ($this->bgd == 1) { ?>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <select name="storeid" id="storeid" style="width: 100%" class="form-control selects">
+                        <option value="0">Tất cả chi nhánh</option>
+                        <?php
+                        foreach ($this->list_store as $key => $store) {
+                            $sl = '';
+                            if ($this->storeid == $store["userid"]) {
+                                $sl = 'selected="selected"';
+                            }
+                            ?>
+                            <option <?php echo $sl; ?> value="<?php echo $store["userid"] ?>"><?php echo $store["storename"] ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+        <?php } ?>
+        <div class="form-group  col-md-4">
+            <div class="input-group input-group-sm">
+                <?php
+                $start_end = 'Date range picker';
+                if ($this->start_end != null) {
+                    $start_end = $this->start_end;
+                }
+                ?>
+                <span class="input-group-btn">
+                    <button class="btn btn-default pull-right" id="daterange-btn">
+                        <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                        <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="form-group  col-md-4">
+            <?php /* ?>
+            <div class="input-group input-group-sm">
+                <input type="text" name="bill_imei" value="" id="bill_imei" placeholder="Nhập mã hóa đơn hoặc imei"/>
+            <div class="input-group input-group-sm">
+                <?php
+                $start_end = 'Date range picker';
+                if ($this->start_end != null) {
+                    $start_end = $this->start_end;
+                }
+                ?>
+                <span class="input-group-btn">
+                <button class="btn btn-default pull-right" id="daterange-btn">
+                    <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                    <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                    <i class="fa fa-caret-down"></i>
+                </button>
+            </span>
+
+                <span class="input-group-btn">
+                    <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> Tìm </i></button>
+                </span>
+            </div>
+            <?php */ ?>
+
+            <div class="input-group input-group-sm">
+                <input type="number" min="0" class="form-control" id="bill_imei" name="bill_imei" value="<?php if(isset($this->bill_imei)) echo $this->bill_imei; ?>" placeholder="Nhập mã hóa đơn hoặc IMEI">
+                <span class="input-group-btn">
+                    <button type="submit" id="save" class="btn btn-primary">
+                        <i class="fa fa-search"><span class="hidden-xs">Tìm kiếm</span></i></button>
+                    <button style="display: none" type="button" id="btnwaiting" class="btn btn-primary">
+                        <i class="fa fa-spinner"> Đang xử lý</i>
+                    </button>
+                </span>
+            </div>
+        </div>
+
+    </form>
+</div>
+<div class="clearfix"></div>
+<div class="box-body">
+    <div class="table-responsive">
+        <div class="col-md-12">
+            <div><?php echo $this->paging_template ?></div>
+        </div>
+        <div class="clearfix"></div>
+        <table id="f_tables" class="table table-data table-striped table-bordered table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th width="10">STT</th>
+                    <th>Thông tin</th>
+                    <th width="10">Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php
+            $no = 1;
+            foreach ($this->list as $key=>$list) {
+                $images = $list["image"]?explode(',',$list["image"]):array();
+                $imei_may = $list["imei_may"]?explode(',',$list["imei_may"]):array();
+                $users = $list["bhid_users"]?explode(',',$list["bhid_users"]):array();
+                $path = "/uploads/bao-hiem/".$list["id_addon_user"]."/";
+                if ($no % 2 == 0)
+                    $bgcolor = '#ccc';
+                else
+                    $bgcolor = '#ffffff';
+                $is_actived = $list["enabled"];
+                $enabled = $list["enabled"];
+                $updatedate = '';
+                if ($list["updatedate"] != NULL) {
+                    $updatedate = date('d/m/Y', strtotime($list["updatedate"]));
+                }
+                $date=date_create($list['create_date']);
+
+                $current_date = strtotime(date('Y-m-d 00:00:00'));
+                $bill_date = strtotime($list['create_date']);
+
+                $expired = $date;
+                $month = 1;
+                date_add($expired, date_interval_create_from_date_string("$month months 1 days"));
+                $expired = strtotime(date_format($expired,"Y/m/d 00:00:00"));
+
+                $free = date_create($list['create_date']);
+                $day = 7;
+                date_add($free, date_interval_create_from_date_string("$day days"));
+                $free = strtotime(date_format($free,"Y/m/d 00:00:00"));
+
+                $today = time();
+                $setfree = 0;
+                if($list['count']) {
+                    if($free < $today){
+                        $pirce = number_format($this->priceList[$list['dt_ma_vt']],0,',','.').'đ';
+                        $setfree = 1;
+                    }
+                    else {
+                        $pirce = 'Miễn phí';
+                        $setfree = 0;
+                    }
+                    $priceshow = $list['bh_price'];
+                    $mavt = $list['dt_ma_vt'];
+                }
+                else {
+                    $priceshow = $this->priceList[$list['products_id']];
+                    $mavt = $this->mavtList[$list['products_id']];
+                }
+                if(count($images)>1) {
+                    $datas =  explode(',',$list["group_data"]);
+                }
+                $anhgoc = $list["anhgoc"];
+                $imei_dt = (!empty($imei_may))?$imei_may[0]:'';
+                ?>
+                <?php if ($list["username"] != "vote_all") { ?>
+                    <tr bgcolor="<?php echo $bgcolor; ?>" class="row-<?php echo $list["itemid"]; ?>">
+                        <td>
+                            <?php echo $no ?><br>
+                        </td>
+                        <td class="text-left">
+                            <div><b>Mã ĐH:</b> <?php echo $list["id_addon_user"] ?></div>
+                            <div><b>Khách hàng:</b> <?php echo $list["fullname_addon"] ?></div>
+                            <div><b>CN:</b> <?php echo $this->storename[$list["vote_id"]] ?></div>
+                            <div><b>Gói:</b> <?php echo $list["products_name"] ?></div>
+                            <div><b>IMEI MD:</b> <?php echo $list["imes"] ?></div>
+                            <div><b>IMEI máy:</b>
+                                <?php
+                                if(!empty($imei_may)){
+                                    foreach ($imei_may as $key=>$imei) {
+                                        if($key)
+                                            echo ', ';
+                                        echo $imei;
+                                        if($key == $anhgoc) break;
+                                    }
+                                }
+                                ?>
+                            </div>
+
+                            <?php if(!empty($images)): ?>
+                            <div>
+                                <b>Ảnh gốc:</b> <br>
+                                <?php foreach ($images as $key=>$image): ?>
+                                    <a target="_blank" href="<?php echo $path.$image; ?>" title="<?php echo $this->users[$users[$key]]; ?>"><img width="50" height="50" src="<?php echo $path.$image; ?>" alt="<?php echo $this->users[$users[$key]]; ?>"></a>
+                                    <?php if($key == $anhgoc) break; ?>
+                                <?php endforeach; ?>
+                            </div>
+                            <?php endif; ?>
+                            <?php if(!empty($images) and count($images) > $anhgoc+1): ?>
+                                <div>
+                                    <b>Ảnh thay:</b> <br>
+                                    <?php foreach ($images as $key=>$image): ?>
+                                        <?php if($key > $anhgoc): ?>
+                                            <?php
+                                            $temp_datas = explode('|',$datas[$key]);
+                                            ?>
+                                            <div<?php if($key>$anhgoc+1) echo ' style="border-top:1px solid #ccc;padding-top: 5px"'?>>
+                                                <div class="pull-left" style="margin-right: 5px">
+                                                    <a target="_blank" href="<?php echo $path.$image; ?>" title="<?php echo $this->users[$users[$key]]; ?>"><img width="50" height="50" src="<?php echo $path.$image; ?>" alt="<?php echo $this->users[$users[$key]]; ?>"></a>
+                                                </div>
+                                                <div>
+                                                    <div>Thời gian: <?php echo date('d/m/Y H:i:s',strtotime($temp_datas[2])); ?></div>
+                                                    <div>Phiếu: <?php echo $temp_datas[1]; ?> - <?php echo $temp_datas[3]?'<span style="color: #ff0000">'.number_format($temp_datas[4],0,',','.').'đ</span>':'Miễn phí'?></div>
+                                                    <div>Lý do: <?php echo $temp_datas[0]; ?></div>
+                                                </div>
+                                            </div>
+                                            <div class="clear-fix"></div>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
+
+                            <?php $date = $list["create_date"]?>
+                            <div><b>Ngày bán:</b> <?php echo date('d/m/Y', strtotime($date)) ?></div>
+
+                        </td>
+                        <td>
+                            <?php if($expired > $today): ?>
+                                <?php
+                                $txt_button = $list['count']?"Thay ($pirce)":"Kích hoạt";
+                                ?>
+                                <?php if($list['count']>$anhgoc+1): ?>
+                                    <a target="_blank" onclick="printBaoHiem('<?php echo $list["id_addon_user"] ?>','<?php echo $imei_may[count($imei_may)-1]; ?>')" title="In giấy A5" style="margin-right: 5px;padding-left: 5px;padding-right: 5px;" class="btn btn-success">Phiếu Thay</a>
+                                <?php endif; ?>
+                                <?php if($list['count']): ?>
+                                    <a target="_blank" onclick="printBaoHanh('<?php echo $list["id_addon_user"] ?>','<?php echo $imei_dt; ?>')" title="In phiếu bảo hành" style="margin-right: 5px;padding-left: 5px;padding-right: 5px;" class="btn btn-success">Phiếu BH</a>
+                                <?php endif; ?>
+                                <?php if($list['count'] or (!$list['count'] and $bill_date > $current_date) or $this->user_id == 8): ?>
+                                    <a title="Đăng ảnh" onclick="uploadBaoHiem('<?php echo $list["id_addon_user"] ?>','<?php echo $list["imes"] ?>','<?php echo $imei_dt; ?>','<?php echo $list["products_id"]; ?>',<?php echo $setfree; ?>,'<?php echo $mavt; ?>',0)" href="javascript:void(0)" class="btn btn-success"><?php echo $txt_button; ?></a>
+                                <?php endif; ?>
+                                <?php if($list['count']): ?>
+                                    <a title="Đăng ảnh" onclick="uploadBaoHiem('<?php echo $list["id_addon_user"] ?>','<?php echo $list["imes"] ?>','<?php echo $imei_dt; ?>','<?php echo $list["products_id"]; ?>',2,'<?php echo $mavt; ?>',0)" href="javascript:void(0)" class="btn btn-danger">Thay miễn phí 30 ngày</a>
+                                    <?php if(in_array($this->user_id,array(8,436)) and !$anhgoc): ?>
+                                        <a title="Thay IMEI" onclick="uploadBaoHiem('<?php echo $list["id_addon_user"] ?>','<?php echo $list["imes"] ?>','','<?php echo $list["products_id"]; ?>',0,'<?php echo $mavt; ?>',1)" href="javascript:void(0)" class="btn btn-success">Thêm IMEI</a>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <a href="javascript:void(0)" class="btn btn-danger">Hết hạn</a>
+                            <?php endif; ?>
+                        </td>
+
+                    </tr>
+                    <? $no++;?>
+                <?php } ?>
+
+
+            <?php } ?>
+            </tbody>
+        </table>
+    </div>
+    <div id="popup">
+        <div id="popup-overlay"></div>
+        <div id="popup-content">
+            <form action="#" method="post" id="formUploadBaoHiem">
+                <div class="form-group">
+                    <label for="image">Hình ảnh</label>
+                    <input type="file" id="image" name="image" required="true">
+                </div>
+                <div class="form-group" id="newimei">
+                    <label for="imes_may">IMEI máy</label>
+                    <input type="text" id="imes_may" name="imes_may" required="true" placeholder="imei máy">
+                </div>
+                <div class="form-group" id="change_bill">
+                    <label for="Lý do thay">Mã phiếu thu</label>
+                    <input type="text" id="cbillid" name="cbillid" required="true" placeholder="Mã phiếu thu">
+                </div>
+                <div class="form-group" id="change_note">
+                    <label for="Lý do thay">Lý do</label>
+                    <input type="text" id="note" name="note" required="true" placeholder="Lý do thay">
+                </div>
+                <div class="form-group">
+                    <input class="btn btn-primary" id="submitBHCL" type="submit" value="Đăng">
+                    <input type="hidden" id="itemid" name="itemid">
+                    <input type="hidden" id="bill_id" name="bill_id">
+                    <input type="hidden" id="ma_vt" name="ma_vt">
+                    <input type="hidden" id="anhgoc2" name="anhgoc2">
+                    <input type="hidden" id="free" name="free">
+                    <input type="hidden" id="imes_md" name="imes_md">
+                    <input type="hidden" id="keycache" name="keycache" value="<?php echo $this->key; ?>">
+                </div>
+            </form>
+            <a id="popup-close" href="#" class="btn btn-primary">x</a>
+        </div>
+    </div>
+</div><!-- /.box-body -->
+<div id="ddelete" style="display:none;"></div>
+<script type="text/javascript">
+    function printBaoHiem(bill,imes) {
+        $.ajax({
+            type: "POST",
+            url: "/admin/user/guaranteepk/print-bao-hiem",
+            data: {'bill_id': bill,'imes_may': imes},
+            success : function (data){
+                var json = JSON.parse(data);
+                if(json['stt'] == 1) {
+                    var printWindow = window.open('', '', 'height=670,width=1280');
+                    printWindow.document.write(json['html']);
+                    printWindow.document.close();
+                    printWindow.print();
+                }
+                else {
+                    alert('Phiếu in này bị lỗi');
+                }
+            }
+        });
+    }
+    function printBaoHanh(bill,imes) {
+        $.ajax({
+            type: "POST",
+            url: "/admin/user/guaranteepk/print-bao-hanh",
+            data: {'bill_id': bill,'imes_may': imes},
+            success : function (data){
+                var json = JSON.parse(data);
+                if(json['stt'] == 1) {
+                    var printWindow = window.open('', '', 'height=670,width=1280');
+                    printWindow.document.write(json['html']);
+                    printWindow.document.close();
+                    printWindow.print();
+                }
+                else {
+                    alert('Phiếu in này bị lỗi');
+                }
+            }
+        });
+    }
+    function uploadBaoHiem(bill,imes,imes_may,itemid,free,mavt,anhgoc2) {
+        $('#popup').show();
+        $('#formUploadBaoHiem #bill_id').val(bill);
+        $('#formUploadBaoHiem #imes_md').val(imes);
+        $('#formUploadBaoHiem #itemid').val(itemid);
+        $('#formUploadBaoHiem #free').val(free);
+        $('#formUploadBaoHiem #ma_vt').val(mavt);
+        $('#formUploadBaoHiem #anhgoc2').val(anhgoc2);
+        if(imes_may) {
+            $('#formUploadBaoHiem #newimei').hide();
+            console.log(free);
+            if(free == 1) {
+                $('#formUploadBaoHiem #change_bill').show();
+                $('#formUploadBaoHiem #cbillid').prop('required', true);
+            }
+            else {
+                $('#formUploadBaoHiem #change_bill').hide();
+                $('#formUploadBaoHiem #cbillid').prop('required',false);
+            }
+            $('#formUploadBaoHiem #change_note').show();
+            $('#formUploadBaoHiem #note').prop('required',true);
+            $('#formUploadBaoHiem #imes_may').val(imes_may);
+        }
+        else {
+            $('#formUploadBaoHiem #newimei').show();
+            $('#formUploadBaoHiem #change_bill').hide();
+            $('#formUploadBaoHiem #cbillid').prop('required',false);
+            $('#formUploadBaoHiem #change_note').hide();
+            $('#formUploadBaoHiem #note').prop('required',false);
+            $('#formUploadBaoHiem #imes_may').val('');
+        }
+    }
+
+    $(document).on('click','#print',function(e){
+        var content = $("#phieu-content .print-content").html();
+        var printWindow = window.open('', '', 'height=670,width=1280');
+        printWindow.document.write(content);
+        printWindow.document.close();
+        printWindow.print();
+    });
+
+    $(document).on('click','#popup-overlay,#popup-close',function(e){
+        $('#popup').hide();
+    });
+
+    $(document).on('submit','#formUploadBaoHiem',function(e){
+        e.preventDefault();
+        var form = $(this);
+        var formData = new FormData(form[0]);
+        $.ajax({
+            type: "POST",
+            url: "/admin/user/guaranteepk/upload-bao-hiem",
+            data: formData,
+            contentType: false,
+            beforeSend: function() {
+                jQuery('#submitBHCL').prop('disabled',true);
+            },
+            processData: false,
+            success : function (data){
+                var json = JSON.parse(data);
+                if(json['stt'] == 1) {
+                    alert('Lưu thành công');
+                    location.reload();
+                }
+                else {
+                    alert('Lưu thất bại');
+                    console.log(data);
+                }
+                jQuery('#submitBHCL').prop('disabled',false);
+            }
+        });
+    })
+
+    $(document).ready(function(){
+        $("#f_tables").DataTable();
+    })
+</script>
+<style>
+    div#popup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 999999;
+        display: none;
+    }
+    a#popup-close {
+        position: absolute;
+        top: -16px;
+        right: -16px;
+        border-radius: 100%;
+    }
+    div#popup-overlay {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+    }
+    div#popup-content {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 326px;
+        background: #fff;
+        box-shadow: 0 0 10px #00000070;
+        border-radius: 5px;
+        padding: 10px;
+        transform: translate(-50%, -50%);
+    }
+    #popup .form-group label {
+        margin-bottom: 4px !important;
+        display: inline-block !important;
+    }
+    #popup .form-group input {
+        border-radius: 3px;
+        width: 100%;
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        outline: none;
+    }
+    #popup .form-group:last-child {
+        margin-bottom: 0;
+    }
+</style>

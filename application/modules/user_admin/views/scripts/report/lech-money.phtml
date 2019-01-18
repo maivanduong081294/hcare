@@ -1,0 +1,112 @@
+<link rel="stylesheet" href="/backend/plugins/daterangepicker/daterangepicker-bs3.css">
+<link rel="stylesheet" href="/backend/plugins/select2/select2.min.css">
+<script src="https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js" ></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js" ></script>
+<script src="http://cdn.datatables.net/buttons/1.2.4/js/buttons.html5.min.js" ></script>
+<style>
+    .select2 {
+        width: 100% !important;
+    }
+</style>
+<div class="panel-default">
+<form role="form" action="" class="frmReport">
+    
+        <div class="box-header">
+            <h3 class="box-title">DANH SÁCH LỆCH TIỀN MUA HÀNG KÝ GỬI</h3>
+        </div><!-- /.box-header -->
+        </form>
+</div>
+<div class="box-body">
+<form method="get">
+        <div class="input-group input-group-sm col-md-6">
+			
+                    <div class="input-group-addon">
+                        <i class="fa fa-star"></i>
+                    </div>
+                    <select name="month" id="month" class="form-control col-xs-12">
+                        <option value="0">Tất cả</option>
+                        <?php
+                        foreach ($this->months as $key=> $m) {
+                            $sl = '';
+                            if ($this->month == $m) {
+                                $sl = 'selected = selected';
+                            }
+                            ?>
+                            <option  <?php echo $sl ?> value="<?php echo $m ?>"> Tháng <?php echo $m ?></option>
+                        <?php } ?>
+                    </select>
+                    <div class="input-group-addon">
+                        <i class="fa fa-star"></i>
+                    </div>
+                    <select name="year" id="year" class="form-control col-xs-12">
+                        <?php
+                        foreach ($this->years as $key=> $y) {
+                            $sl = '';
+                            if ($this->year == $y) {
+                                $sl = 'selected = selected';
+                            }
+                            ?> 
+                            <option data="<?php echo $y ?>" <?php echo $sl ?> value="<?php echo $y ?>"> Năm <?php echo $y ?></option>
+                        <?php } ?>
+                    </select>
+                    
+                    <span class="input-group-btn">
+                        <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> Xem </i></button>
+                        </span>
+                    
+                    
+                  </div>
+        
+        </form>
+        
+        <table id="f_table" class="table table-data table-bordered table-striped export_table">
+            <thead>
+                <tr>
+                    <th width="10">STT</th>
+                    <th>Mã mua hàng HNAM</th>
+                    <th>IMEI</th>
+                    <th>Giá mua HNAM</th>
+                    <th>Mã bán hàng VT</th>
+                    <th>Giá bán VT</th>                    
+                    <th>Ngày</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                <?php foreach ($this->list as $items){ ?>
+					<tr>
+						<td><?php echo ++$stt; ?></td>
+						<td><?php echo $items["id"]; ?></td>
+						<td><?php echo $items["imei"]; ?></td>
+						<td><?php echo number_format($items["price"]); ?></td>
+						<td><?php echo $items["billid"]; ?></td>
+						<td><?php echo number_format($items["price2"]); ?></td>
+						<td><?php echo date('d/m/Y',  strtotime($items["datetime"])); ?></td>
+
+					</tr>
+                <?php }?>
+            </tbody>
+        </table> 
+    
+<div id="del" style="display:none;"></div>
+</div>
+<script src="/backend/plugins/input-mask/jquery.inputmask.js"></script>
+<script src="/backend/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script src="/backend/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+<script>
+    $("[data-mask]").inputmask();
+    $("#datemask").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+    $("#datemask2").inputmask("mm/dd/yyyy", {"placeholder": "mm/dd/yyyy"});
+</script>
+<script src="/backend/plugins/select2/select2.full.min.js"></script>
+<script>
+    
+$(document).ready(function() {
+    $('.export_table').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'excel'
+        ]
+    } );
+} );
+</script>

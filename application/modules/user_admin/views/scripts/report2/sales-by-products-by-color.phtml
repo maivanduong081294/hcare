@@ -1,0 +1,155 @@
+<link href="/backend/dist/css/fixtable.css" rel="stylesheet" type="text/css"/>
+<style>
+    @media (min-width: 1400px) {
+        .sheight{height: 500px !important;}
+    }
+    @media only screen and (max-width: 600px) {
+        .mwidth{
+            width: 50% !important;
+        }
+    } 
+    .form-group{
+        padding-left: 0px;
+    }
+</style>
+        <form role="form" id="frm" method="get"  class="frmReport">
+            <input type="hidden" name="products_id" id="products_id" value="<?php echo $this->products_id ?>" />
+            
+            <div class="col-md-3">
+                <b style="font-size: 20px"><?php echo $this->detail["title"].$this->detail["bonus_mobile"]; ?></b>
+                <div class="form-group">
+                    <div class="input-group input-group-sm">
+                        <?php
+                        $start_end = 'Date range picker';
+                        if ($this->start_end != null) {
+                            $start_end = $this->start_end;
+                        }
+                        ?>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default pull-left" id="daterange-btn">
+                                <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                                <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                        </span>
+
+                        <span class="input-group-btn">
+                            <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> <span class="hidden-xs">Xem</span> </i></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    <div class="clearfix"></div>
+    <div class="box-body">
+        <table class="table table-condensed table-hover table-bordered table-striped">
+                <tr>
+                    <th width="10">STT</th>
+                    <th>Chi nhánh</th>
+                    <?php foreach ($this->color as $key=> $color){ ?>
+                    <th style="width: 300px" width="300" colspan="2"><?php echo $this->name_color[$color] ?></th>
+                    <?php }?>
+                </tr>
+                <?php
+                $stt=0;
+                foreach ($this->list_vote as $vote){ 
+                    if($vote["userid"]==253 || $vote["userid"]==312){
+                        continue;
+                    }
+                    
+                    ?>
+                <tr>
+                    <td><?php echo ++$stt ?></td>
+                    <td><?php echo $vote["abbreviation"] ?></td>
+                    <?php foreach ($this->color as $color){ ?>
+                    <td style="width: 200px" width="200"><?php echo number_format($this->total_color[$vote["userid"]][$color]) ?></td>
+                    <td style="width: 100px" width="100"><?php echo number_format($this->count_color[$vote["userid"]][$color]) ?></td>
+                    <?php
+                    $stotal[$color]+=$this->total_color[$vote["userid"]][$color];
+                    $scount[$color]+=$this->count_color[$vote["userid"]][$color];
+                    }?>
+                </tr>
+                <?php }?>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <?php foreach ($this->color as $color){ ?>
+                    <td><?php echo number_format($stotal[$color]) ?></td>
+                    <td><?php echo number_format($scount[$color]) ?></td>
+                    <?php }?>
+                </tr>
+        </table>
+    </div>
+<script>
+    function detailsales(catedid) {
+        var productsid = $("#productsid option:selected").val();
+        var flag = $("#flag option:selected").val();
+        var is_apple = $("#is_apple option:selected").val();
+        var is_type = $("#is_type option:selected").val();
+        var storeid = $("#storeid option:selected").val();
+        var start_end = $("#start_end").val();
+        $("#hrf_detail" + catedid).attr("href", "/admin/user/report/sales?cated_id=" + catedid + "&productsid=" + productsid + "&flag=" + flag + "&start_end=" + start_end+ "&is_apple=" + is_apple+ "&is_type=" + is_type+ "&storeid=" + storeid);
+        var href = $("#hrf_detail" + catedid).attr('href');
+        window.location = href;
+    }
+    function hrf() {
+        var productsid = $("#productsid option:selected").val();
+        var flag = $("#flag option:selected").val();
+        var start_end = $("#start_end").val();
+        $("#hrf_detail").attr("href", "/admin/user/target/money-monthly?productsid=" + productsid + "&flag=" + flag + "&start_end=" + start_end);
+    }
+    $().ready(function () {
+        $('#cated_id').change(function (e) {
+            e.preventDefault();
+            var cated_name = $("#cated_id option:selected").text();
+            $('#cated_name').val(cated_name);
+        });
+
+
+        $('#productsid').change(function () {
+            var productsid = $('#productsid option:selected').val();
+            $('#cated_id').html('');
+            $('#cated_id').html('<option value="0"> Tất cả</option>');
+            var ajaxLink = '/admin/user/ajax/get-menu';
+            $.ajax({
+                method: 'get',
+                cache: false,
+                url: ajaxLink,
+                data: {productsid: productsid},
+                dataType: 'json',
+                success: function (resp) {
+                    console.log(resp);
+                    $.each(resp, function (i) {
+                        html_cated_id = '<option  value="' + resp[i].itemid + '">' + resp[i].title + '</option>';
+                        $('#cated_id').append(html_cated_id);
+                    });
+
+                }
+            });
+        });
+
+
+        $('#export').click(function (e) {
+            e.preventDefault();
+            var cated_id = $('#cated_id').val();
+            if (cated_id == 0) {
+                alert('Vui lòng chọn loại để export');
+                return false;
+            } else {
+                $("#frm").attr("action", "/admin/user/reportf/export-sales");
+            }
+            $("#frm").submit();
+        });
+        $('#export_lite').click(function (e) {
+            e.preventDefault();
+            var cated_id = $('#cated_id').val();
+            if (cated_id == 0) {
+                alert('Vui lòng chọn loại để export');
+                return false;
+            } else {
+                $("#frm").attr("action", "/admin/user/reportf/export-sales-lite");
+            }
+            $("#frm").submit();
+        });
+    });
+</script>

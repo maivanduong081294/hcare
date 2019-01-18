@@ -1,0 +1,410 @@
+    <div class="box-header">
+        <h3 class="box-title">TRA CỨU PHIẾU BẢO HÀNH</h3>
+    </div><!-- /.box-header -->
+    <div class="col-md-4">
+        <form>
+        <div class="form-group">
+                <div class="input-group input-group-sm">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <input type="text" class="form-control" required="required" name="kq" id="kq" value="<?php echo $this->kq ?>" placeholder="Nhập mã phiếu bảo hành sửa chữa">
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-info btn-flat"><i class="fa fa-search"> <span class="hidden-xs">Tìm kiếm </span></i></button>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="clearfix"></div>
+    <?php if($this->list != NULL){ ?>
+    <table class="table table-bordered table-condensed table-hover table-striped">
+        <tr>
+            <th width="10">STT</th>
+            <th>Mã phiếu</th>
+            <th>Tên sản phẩm</th>
+            <th>IMEI</th>
+            <th>Ngày báo phí</th>
+            <th>Tình trạng bảo hành</th>
+            <th>Đồng ý hỗ trợ</th>
+            <th>TBSC báo</th>
+            <th>Tiền dự kiến báo khách</th>
+            <th>Ghi chú</th>
+            <th>#</th>
+        </tr>
+        <?php 
+        $stt=0;
+        foreach ($this->list as $val){ 
+            $id_guaranteeid = (int)$val["id"];
+            $skey2="BHVT2016HNAM";
+            $tokenss = md5($skey2 . $val["id"]);
+            $changesss = $this->money_dvsc[$id_guaranteeid]*15/100;
+            if($changesss >0 && $changesss <100000){
+                $changesss =100000;
+            }
+            $ncc_ok = $this->sncc_ok[$id_guaranteeid];
+            $price_tmp = $this->money_dvsc[$id_guaranteeid];
+            if($this->status[$id_guaranteeid] ==1){
+                if($ncc_ok==2 && $this->sflag[$id_guaranteeid]==2){
+                    $price_tmp = $this->money_dvsc[$id_guaranteeid] + $changesss;
+                }
+            }else{
+                $price_tmp = $this->money_dvsc[$id_guaranteeid] + $changesss;
+            }
+            
+            
+            $disabled='';
+            if($this->status[$id_guaranteeid] ==2){
+                $disabled='disabled=""';
+            }
+            ?>
+        <tr>
+        <input type="hidden" name="flag<?php echo $id_guaranteeid ?>" id="flag<?php echo $id_guaranteeid ?>" value="<?php echo (int)$val["flag"] ?>" />
+        <input type="hidden" name="ids<?php echo $id_guaranteeid ?>" id="ids<?php echo $id_guaranteeid ?>" value="<?php echo $val["id"] ?>" />
+        <input type="hidden" name="id_guaranteeid<?php echo $id_guaranteeid ?>" id="id_guaranteeid<?php echo $id_guaranteeid ?>" value="<?php echo $val["id"] ?>" />
+        <input type="hidden" name="status_guarantee<?php echo $id_guaranteeid ?>" id="status_guarantee<?php echo $id_guaranteeid ?>" value="<?php echo (int)$val["status_guarantee"] ?>" />
+            <td><?php echo ++$stt; ?></td>
+            <td><a href="/admin/user/guarantee/detail?id=<?php echo $val["id"] ?>&token=<?php echo $tokenss; ?>" target="_blank">#<?php echo $val["id"] ?></a></td>
+            <td><?php echo $val["item_name"] ?></td>
+            <td><?php echo $val["imei"] ?></td>
+            <td>
+                <?php 
+                if($this->datetime[$id_guaranteeid]!= NULL ){
+                    echo date('d/m/Y',  strtotime($this->datetime[$id_guaranteeid]));
+                }else{
+                    echo "Hiện tại ".date('d/m/Y');
+                }
+                
+                ?>
+            </td>
+            <td><?php echo $this->sstatus_guarantee2[$val["id"]] ?></td>
+            <td>
+                <select onchange="blurls(<?php echo $id_guaranteeid ?>);" class="form-control" name="ncc_ok<?php echo $id_guaranteeid ?>" id="ncc_ok<?php echo $id_guaranteeid ?>">
+                    <?php foreach ($this->list_ok as $key=> $st){ 
+                    $sl='';
+                    if($this->sncc_ok[$id_guaranteeid] ==$key){
+                        $sl=' selected="selected"';
+                    }
+                    ?>
+                <option <?php echo $sl; ?> value="<?php echo $key ?>"><?php echo $st; ?></option>
+                    <?php }?>
+                </select>
+            </td>
+            <td>
+                <input onkeydown="blurls(<?php echo $id_guaranteeid ?>);" onkeyup="blurls(<?php echo $id_guaranteeid ?>);" <?php echo $disabled; ?> type="text" value="<?php echo number_format($this->money_dvsc[$id_guaranteeid]) ?>"  class="form-control pricing" placeholder="Vui lòng nhập báo giá" id="money_dvsc_<?php echo $id_guaranteeid ?>" name="money_dvsc_<?php echo $id_guaranteeid ?>" />
+            </td>
+            <td><input disabled="" value="<?php echo number_format($price_tmp) ?>" type="text" class="form-control" placeholder="Giá dự kiến báo khách" id="price_tmp<?php echo $id_guaranteeid ?>" name="price_tmp<?php echo $id_guaranteeid ?>" /></td>
+            <td><textarea class="form-control" placeholder="Nhập ghi chú..." id="note<?php echo $id_guaranteeid ?>" name="note<?php echo $id_guaranteeid ?>"><?php echo $this->snote[$id_guaranteeid] ?></textarea></td>
+            <td>
+                <?php
+                $fa='fa-plus';
+                $btn='btn-danger';
+                if($val["id"] >0){
+                    $fa='fa-edit';
+                   $btn='btn-info'; 
+                }
+                
+                ?>
+                <a onclick="add_bhsc(<?php echo $id_guaranteeid ?>);return false;" title="Thêm" class="btn <?php echo $btn; ?> btn-sm"><i class="fa <?php echo $fa ?>"></i></a>
+            </td>
+        </tr>
+        <?php }?>
+    </table>
+    <?php }?>
+    <div class="clearfix"></div>
+    <p style="font-weight: bold;font-size: 20px">DANH SÁCH ĐÃ XỬ LÝ</p>
+    <form>
+    <div class="form-group col-md-3">
+        <select id="uid" name="uid" class="form-control">
+                <option value="0"> Danh sách đơn vị ngoài Hnam</option>
+                <?php foreach ($this->get_list_bhsc_orther as $key=> $st){ 
+                    $sl='';
+                    if($this->uid ==$key){
+                        $sl=' selected="selected"';
+                    }
+                    ?>
+                <option <?php echo $sl; ?> value="<?php echo $key ?>"><?php echo $st; ?></option>
+                <?php }?>
+        </select>
+    </div>
+    <div class="form-group col-md-3">
+        <select id="ncc_ok" name="ncc_ok" class="form-control">
+                <option value="0"> Đồng ý hỗ trợ</option>
+                <?php foreach ($this->list_ok as $key=> $st){ 
+                    $sl='';
+                    if($this->ncc_ok ==$key){
+                        $sl=' selected="selected"';
+                    }
+                    ?>
+                <option <?php echo $sl; ?> value="<?php echo $key ?>"><?php echo $st; ?></option>
+                <?php }?>
+        </select>
+    </div>
+    <div class="form-group col-md-2">
+        <select id="status" name="status" class="form-control">
+                <option value="0"> Trạng thái</option>
+                <?php foreach ($this->list_status_bhsc as $key=> $st){ 
+                    $sl='';
+                    if($this->sstatus ==$key){
+                        $sl=' selected="selected"';
+                    }
+                    ?>
+                <option <?php echo $sl; ?> value="<?php echo $key ?>"><?php echo $st; ?></option>
+                <?php }?>
+        </select>
+    </div>
+    <div class="form-group col-md-4">
+        <div class="input-group input-group-sm">
+            <?php
+            $start_end = 'Date range picker';
+            if ($this->start_end != null) {
+                $start_end = $this->start_end;
+            }
+            ?>
+            <span class="input-group-btn">
+                <button class="btn btn-default pull-right" id="daterange-btn">
+                    <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                    <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                    <i class="fa fa-caret-down"></i>
+                    
+                </button>
+                
+            </span>
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-info btn-flat"><i class="fa fa-search"> <span class="hidden-xs">Tìm kiếm </span></i></button>
+            </span>
+        </div>
+        
+    </div>
+        <div class="clearfix"></div>
+    </form>
+	<div class="box-body">
+    <table id="f_tables" class="table table-bordered table-condensed table-hover table-striped">
+        <thead>
+        <tr>
+            <th width="10">STT</th>
+            <th>Mã phiếu</th>
+            <th>Tên sản phẩm</th>
+            <th>IMEI</th>
+            <th>Ngày báo phí</th>
+            <th>Tình trạng bảo hành</th>
+            <th>Đồng ý hỗ trợ</th>
+            <th>TBSC báo</th>
+            <th>Tiền dự kiến báo khách</th>
+            <th>Ghi chú</th>
+            <th>Trạng thái</th>
+            <th>#</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php 
+        $stt=0;
+        foreach ($this->slist as $val){
+            $id_guaranteeid = $val["id_guaranteeid"];
+            $__id = $val["id"];
+            $skey2="BHVT2016HNAM";
+            $ztoken2 = md5($skey2 . $id_guaranteeid);
+            ?>
+        <tr>
+            <td><?php echo ++$stt; ?></td>
+            <td><a href="/admin/user/guarantee/detail?id=<?php echo $id_guaranteeid ?>&token=<?php echo $ztoken2; ?>" target="_blank">#<?php echo $val["id_guaranteeid"] ?></a></td>
+            <td><?php echo $this->sitem_name[$val["id_guaranteeid"]] ?></td>
+            <td><?php echo $this->simei[$val["id_guaranteeid"]] ?></td>
+            <td>
+                <?php echo date('d/m/Y',  strtotime($val["datetime"]));?>
+            </td>
+            <td><?php echo $this->sstatus_guarantee[$val["id_guaranteeid"]] ?></td>
+            <td><?php echo $this->list_ok[$val["ncc_ok"]]; ?></td>
+            <td>
+                <?php echo number_format($val["money_dvsc"]);?>
+            </td>
+            <td><?php echo number_format($val["money"]);?></td>
+            <td>
+                <?php echo $val["note"] ?>
+            </td>
+            <td>
+                <?php if((int)$this->bgd==1){ ?>
+                            <?php if($this->status[$__id] != 2){ ?>
+                <select onchange="change_status_bhsc(<?php echo $__id ?>);"  name="status_<?php echo $__id ?>" id="status_<?php echo $__id ?>" class="form-control">
+                                <?php foreach ($this->list_status_bhsc as $key=> $st){ ?>
+                                <option value="<?php echo $key ?>"><?php echo $st; ?></option>
+                                <?php }?>
+                            </select>
+                            <?php } else {
+                                echo 'Đã xử lý';
+                            }?>
+                    <?php } else{
+                        echo $this->list_status_bhsc[$this->status[$__id]];
+                    }
+                ?>
+                
+            </td>
+            
+            <td>
+            <?php if($this->status[$__id] != 2){ 
+                $token =  md5($this->skey2.$__id);
+                ?>
+                <a href="/admin/user/guarantee/edit?ids=<?php echo $__id ?>&token=<?php echo $token ?>" title="Chỉnh sửa" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
+            <?php }?>
+            </td>
+        </tr>
+        <?php }?>
+        </tbody>
+    </table>
+	</div>
+    <div class="clearfix"></div>
+<script>
+    function change_status_bhsc(id){
+        var status = $('#status_'+id+' option:selected').val();
+        var url = '/admin/user/guarantee/statusbhsc?id='+id+'&status='+status;
+        window.location.href=url;
+    }
+    $().ready(function () {
+        $("#f_tables").DataTable({
+                "pageLength": 100,
+                "footerCallback": function ( row, data, start, end, display ) {
+                    var api = this.api(), data;
+                    // Remove the formatting to get integer data for summation
+                    var intVal = function ( i ) {
+                        return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '')*1 :
+                            typeof i === 'number' ?
+                                i : 0;
+                    };
+                    // Total over all pages
+                    total = api
+                        .column(5)
+                        .data()
+                        .reduce( function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0 );
+
+                    // Total over this page
+                    pageTotal = api
+                        .column(5, { page: 'current'} )
+                        .data()
+                        .reduce( function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0 );
+
+                    // Update footer
+                    $( api.column(5).footer() ).html(
+                            format_number(pageTotal)
+        //                '$'+pageTotal +' ( $'+ total +' total)'
+                    );
+                }
+                
+            });
+    });
+   $(".pricing").keyup(function(){
+        var price = this.value;
+        price = price.replace(/,/gi,"");
+        price = price + ".";
+        price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        var sprice = price.split(".");
+        $(this).val(sprice[0]);
+    });
+    function blurls(id){
+        var flag = $('#flag'+id).val();
+        var status_guarantee = $('#status_guarantee'+id).val();
+        var ncc_ok = $('#ncc_ok'+id+' option:selected').val();
+        
+        var money_dvsc = $('#money_dvsc_'+id).val();
+        money_dvsc = replace_number(money_dvsc);
+        if(money_dvsc.length ==0){
+            money_dvsc =0;
+        }
+        var charges = parseInt(money_dvsc)*15/100;
+        if(charges>0 && charges<100000){
+            charges = 100000;
+        }
+        var price_tmp = parseInt(money_dvsc);
+        
+        var phi='';
+        if(status_guarantee=="1"){
+            if(ncc_ok==2 && parseInt(flag)==2){
+                phi='changre 15%';
+                $('#phi').html(phi);
+                price_tmp = price_tmp+charges;
+            }
+        }else{
+            price_tmp = price_tmp+charges;
+            phi='changre 15%';
+            $('#phi').html(phi);
+        }
+        
+        $('#price_tmp'+id).val(price_tmp);
+        format_price3('#price_tmp'+id,'');
+    }
+    function add_bhsc(id){
+//        var price = $('#price_'+id).val();
+        var flag = $('#flag'+id).val();
+        var status_guarantee = $('#status_guarantee'+id).val();
+        var ncc_ok = $('#ncc_ok'+id+' option:selected').val();
+        
+        var money_dvsc = $('#money_dvsc_'+id).val();
+        money_dvsc = replace_number(money_dvsc);
+        if(money_dvsc.length ==0){
+            money_dvsc =0;
+        }
+        var charges = parseInt(money_dvsc)*15/100;
+        if(charges>0 && charges<100000){
+            charges = 100000;
+        }
+        var price_tmp = parseInt(money_dvsc);
+        
+        var phi='';
+        if(status_guarantee=="1"){
+            if(ncc_ok==2 && parseInt(flag)==2){
+                phi='changre 15%';
+                $('#phi').html(phi);
+                price_tmp = price_tmp+charges;
+            }
+        }else{
+            price_tmp = price_tmp+charges;
+            phi='changre 15%';
+            $('#phi').html(phi);
+        }
+        
+        $('#price_tmp'+id).val(price_tmp);
+        format_price3('#price_tmp'+id,'');
+        
+        var id_guaranteeid = $('#id_guaranteeid'+id).val();
+        var money_hnam = $('#money_hnam'+id).val();
+        if(!money_hnam){
+           money_hnam=0; 
+        }
+        var note = $('#note'+id).val();
+        var url = '/admin/user/guarantee/addbhsc?id_guaranteeid=' + id_guaranteeid+'&money_dvsc='+money_dvsc+'&money_hnam='+money_hnam+'&ncc_ok='+ncc_ok+'&flag='+flag+'&status_guarantee='+status_guarantee+'&ids='+id+'&note='+note;
+        
+        var result = confirm('Bạn có chắc chắn muốn tiếp tục!');
+        if(result){
+            $.get(url, {}, function(resp){
+                alert('Lưu thành công');
+                window.location.replace('/admin/user/guarantee/edit');
+            });
+            
+        }
+        
+    }
+    function format_price(id){
+        var price = $("#"+id).val();
+        price = price.replace(/,/gi, "");
+        price = price + ".";
+        price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        var sprice = price.split(".");
+        $("#"+id).val(sprice[0]);
+    }
+    function format_number(nStr)
+{
+	nStr += '';
+	x = nStr.split('.');
+	x1 = x[0];
+	x2 = x.length > 1 ? '.' + x[1] : '';
+	var rgx = /(\d+)(\d{3})/;
+	while (rgx.test(x1)) {
+		x1 = x1.replace(rgx, '$1' + ',' + '$2');
+	}
+	return x1 + x2;
+}
+</script>

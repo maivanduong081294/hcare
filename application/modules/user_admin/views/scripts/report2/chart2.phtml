@@ -1,0 +1,165 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<!-- Latest compiled and minified CSS -->
+<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+ Optional theme 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+ Latest compiled and minified JavaScript 
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>-->
+
+<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>-->
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+
+<!--
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>-->
+  
+<script>
+// phụ kiện
+    $(function () {
+    $('#container_acc').highcharts({
+        title: {
+            text: 'Phụ kiện ',
+            x: -20 //center
+        },
+        colors: ['#0066FF','#f7a35c'],
+        subtitle: {
+            text: 'Xem theo giá trị sản phẩm',
+            x: -20
+        },
+        xAxis: {
+            categories: [<?echo $this->date_acc;?>]
+        },
+        yAxis: {
+            title: {
+                text: 'Số tiền (x 1.000.000)'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: ' vnđ'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: <?echo $this->seri_acc;?>
+    });
+});
+
+// phụ kiện
+    $(function () {
+    $('#container_acc_sl').highcharts({
+        title: {
+            text: 'Phụ kiện ',
+            x: -20 //center
+        },
+        colors: ['#0066FF','#f7a35c'],
+        subtitle: {
+            text: 'Xem theo số lượng bán sản phẩm',
+            x: -20
+        },
+        xAxis: {
+            categories: [<?echo $this->date_acc_sl;?>]
+        },
+        yAxis: {
+            title: {
+                text: 'Số lượng'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: ' sp'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: <?echo $this->seri_acc_sl;?>
+    });
+});
+
+</script>
+
+<div class="box box-primary">
+    <div class="box-header">
+        <div class="col-md-9">
+            <i class="ion ion-clipboard"></i>
+            <h4 class="box-title">Báo cáo tổng quan</h4>
+        </div>
+        <div class="col-md-3">
+            <form method="get" id="v" name="v">
+                <div class="form-group">
+                    <div class="input-group input-group-sm">
+                        <?php
+                        $start_end = 'Date range picker';
+                        if ($this->start_end != null) {
+                            $start_end = $this->start_end;
+                        }
+                        ?>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default pull-right" id="daterange-btn">
+                                <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                                <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                        </span>
+
+                        <span class="input-group-btn">
+                            <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> Xem </i></button>
+                        </span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div><!-- /.box-header -->
+    <div class="clearfix"></div>
+    <div class="box-body">
+        <div class="col-md-6">
+            <div id="container_acc" style="min-width: 310px; height: 350px; margin: 0 auto; margin-top:0px;"></div>
+        </div>
+        <!--//biểu đồ số lượng-->
+        
+        <div class="col-md-6">
+            <div id="container_acc_sl" style="min-width: 310px; height: 350px; margin: 0 auto; margin-top:0px;"></div>
+        </div>
+        <div class="col-md-12">
+            <p>Trình bình doanh số bán  trong ngày</p>
+        </div>
+        <div class="col-md-12">
+            <table style="font-size: 15px;font-weight: bold" class="table-bordered table-condensed" >
+                <tr>
+                    <th></th>
+                    <th>Phụ kiện</th>
+                </tr>
+                <tr>
+                    <td>Công ty</td>
+                    <td><?php echo $this->sum_acc_cty ?></td>
+                </tr>
+                <tr>
+                    <td>Hnam</td>
+                    <td><?php echo $this->sum_acc_hnam ?></td>
+                </tr>
+                <tr>
+                    <td>Tổng</td>
+                    <td><?php echo $this->sum_acc ?></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

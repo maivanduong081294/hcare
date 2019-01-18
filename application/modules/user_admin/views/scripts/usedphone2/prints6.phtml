@@ -1,0 +1,137 @@
+<div id="usedphone" style="margin-left:10px;">
+    <p style="padding:10px 0"><a href="/admin/user/usedphone2/list">Back</a></p>
+    <h1>Phần mềm thu máy cũ</h1>
+    <p>
+        <input onclick="in_voucher();return false;" class="btn2" style="margin:10px; padding:5px; color:#ffffff; background-color: orange" type="button" value="IN PHIẾU" name="in" id="in"/>
+    </p> 
+    <div id="frmBGS" style="font-family:arial;margin-left:100px;width:600px;">
+            <p style="font-size:12px;padding:55px 0 5px 0;border-bottom:1px solid #CCCCCC;">
+                Mã voucher: <strong><?php echo $this->detail["id"];?></strong>
+            </p>
+            <p style="text-align:center;font-size:13px;padding:5px;">
+                Voucher tiền mặt dành cho Samsung S6 hoặc S6 Edge                  
+            </p>
+            <p style="text-align:center;font-size:10px;border-bottom:1px solid #CCCCCC;padding:5px 0 5px 0;">
+                <b style="font-size:20px;"><?php echo number_format($this->detail2["vprice"]);?>đ</b>                     
+            </p>
+			<?php if ($this->detail["fullname"]!=""){?>
+            <p style="padding:10px 0 5px 5px;; width:100%;float:left">
+                <span style="font-size:12px;float:left;width:150px">Họ tên</span>
+                <b style="font-size:12px;font-weight:normal"><?php echo $this->detail["fullname"];?></b>
+            </p>
+			<?php }?>
+			<?php if ($this->detail["address"]!=""){?>
+            <p style="padding:5px;;width:100%;float:left">
+                <span style="font-size:12px;float:left;width:150px">Địa chỉ</span>
+                <b style="font-size:12px;font-weight:normal"><?php echo $this->detail["address"];?></b>
+            </p>
+			<?php }?>
+			<?php if($this->detail["email"]!=""){?>
+            <p style="padding:5px;;width:100%;float:left">
+                <span style="font-size:12px;float:left;width:150px">Email</span>
+                <b style="font-size:12px;font-weight:normal"><?php echo $this->detail["email"];?></b>
+            </p>
+			<?php }?>
+			<?php if ($this->detail["phone"]!=""){?>
+            <p style="padding:5px;;width:100%;float:left">
+                <span style="font-size:12px;float:left;width:150px">Điện thoại</span>
+                <b style="font-size:12px;font-weight:normal"><?php echo $this->detail["phone"];?></b>
+            </p>
+			<?php }?>
+            <p style="padding:5px;;width:100%;float:left;display:none;">
+<!--                <span style="font-size:12px;">Voucher có hiệu lực trong ngày </span>
+                <b style="font-size:12px;font-weight:normal"><?php echo date("d/m/Y");?></b>-->
+                <span style="font-size:12px;float:left;width:150px">Voucher có hiệu lực trong ngày</span>
+                <b style="font-size:12px;font-weight:normal"><?php echo date("d/m/Y");?></b>
+            </p>
+            <p style="padding:5px;;width:100%;float:left">
+                <span style="font-size:12px;float:left;width:150px">Smart phone đổi</span>
+                <b style="font-size:12px;font-weight:normal"><?php echo $this->detail2["name"];?></b>
+            </p>
+            <p style="padding:5px;;width:100%;float:left">
+                <span style="font-size:12px;float:left;width:150px">Đổi sang sản phẩm</span>
+                <b style="font-size:12px;font-weight:normal"><?php echo $this->change_name;?></b>
+            </p>
+            <p style="padding:5px;;width:100%;float:left;display:none">
+                <span style="font-size:12px;float:left;width:150px">IMEI</span>
+                <b style="font-size:12px;font-weight:normal"><?php echo $this->detail2["imei"];?></b>
+            </p>
+            <p style="padding:5px;;width:100%;float:left;">
+                <span style="font-size:12px;float:left;width:400px">Xác nhận của khách hàng (ghi rõ họ tên)</span>
+            </p>
+            
+    </div>
+    <div id="frmBG" style="font-family:arial;width:300px;display: none;">
+            <p style="font-size:12px;padding:60px 0 5px 0;border-bottom:1px solid #CCCCCC; width:300px; margin: 0 auto;">
+                Mã voucher: <strong><?php echo $this->detail["id"];?></strong>
+            </p>
+            <p style="text-align:center;font-size:13px;padding:5px;margin-top: -15px;width:300px; margin: 0 auto;">
+                Voucher tiền mặt dành cho Samsung S6 hoặc S6 Edge                       
+            </p>
+            <p style="text-align:center;font-size:10px;border-bottom:1px solid #CCCCCC;margin-top: -15px;padding:5px 0 5px 0;width:300px; margin: 0 auto;">
+                <b style="font-size:20px;"><?php echo number_format($this->detail2["vprice"]);?>đ</b>                     
+            </p>
+            <?php if ($this->detail["fullname"]!=""){?>
+                <p style="padding:10px 0 5px 5px;margin-top: -15px; width:300px;;margin:0 auto">
+                    <span style="font-size:12px;">Họ tên</span>
+                    <b style="font-size:12px;font-weight:normal;"><?php echo $this->detail["fullname"];?></b>
+                </p>
+            <?php }?>
+            <?php if ($this->detail["address"]!=""){?>
+            <p style="padding:5px;;margin-top: -13px; width:300px;;margin:0 auto">
+                <span style="font-size:12px;">Địa chỉ</span>
+                <b style="font-size:12px;font-weight:normal;"><?php echo $this->detail["address"];?></b>
+            </p>
+			<?php }?>
+			<?php if ($this->detail["email"]!=""){?>
+            <p style="padding:5px;;margin-top: -13px; width:300px;;margin:0 auto">
+                <span style="font-size:12px;">Email</span>
+                <b style="font-size:12px;font-weight:normal"><?php echo $this->detail["email"];?></b>
+            </p>
+			<?php }?>
+			<?php if ($this->detail["phone"]!=""){?>
+            <p style="padding:5px;;margin-top: -13px; width:300px;;margin:0 auto">
+                <span style="font-size:12px;">Điện thoại</span>
+                <b style="font-size:12px;font-weight:normal;"><?php echo $this->detail["phone"];?></b>
+            </p>
+			<?php }?>
+            <p style="padding:5px;;margin-top: -13px; width:300px;margin:0 auto;display:none;">
+                <span style="font-size:12px;">Voucher có hiệu lực trong ngày </span>
+                <b style="font-size:12px;font-weight:normal"><?php echo date("d/m/Y");?></b>
+            </p>
+            <p style="padding:5px;;margin-top: -13px; width:300px;margin:0 auto">
+                <span style="font-size:12px;">Smart phone đổi</span>
+                <b style="font-size:12px;font-weight:normal"><?php echo $this->detail2["name"];?></b>
+            </p>
+            <p style="padding:5px;;margin-top: -13px; width:300px;margin:0 auto">
+                <span style="font-size:12px;">Đổi sang sản phẩm</span>
+                <b style="font-size:12px;font-weight:normal"><?php echo $this->change_name;?></b>
+            </p>
+            <p style="padding:5px 0 0 0;margin-top: -13px; width:300px;margin:0 auto;display:none">
+                <span style="font-size:12px;">IMEI</span>
+                <b style="font-size:12px;font-weight:normal"><?php echo $this->detail2["imei"];?></b>
+            </p>
+            <p style="padding:5px 0 0 0;margin-top: -13px; width:400px;margin:0 auto;">
+                <span style="font-size:12px;">Xác nhận của khách hàng (ghi rõ họ tên)</span>                
+            </p>
+    </div>
+    <div>
+        
+    </div>
+        
+        
+</div>
+
+<script>
+     function in_voucher(){
+        var divContents = $("#frmBG").html();
+            var printWindow = window.open('', '', 'height=600,width=1000');
+            printWindow.document.write('<html><head><title>DIV Contents</title>');
+            printWindow.document.write('</head><body >');
+            printWindow.document.write(divContents);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+    }
+</script>
+

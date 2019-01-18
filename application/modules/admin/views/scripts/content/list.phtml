@@ -1,0 +1,58 @@
+<div id="centerCont"> 
+<strong>Content >> </strong> List
+<br />
+<br />
+<table border="0" cellspacing="0" cellpadding="0" class="mainTab" width="100%">
+  <tr>
+  	<td width="10%" class="tabTit">ContentId</td>
+    <td width="46%" class="tabTit">Content Name</td>
+     <td width="14%" class="tabTit">Action</td>	
+  </tr>
+<?php 
+	if($this->paginator != null && count($this->paginator) > 0)
+	{        
+		$i = 1;
+		foreach($this->paginator as $item)
+		{
+			$cls = "hligh1";
+			if($i%2 == 0 && $i != 0)
+				$cls = "hligh2";
+			$i++;	
+			$arrParams = array();
+			if($item['params'] != ''){
+				$arrParams = unserialize($item['params']);
+			}			
+			$strParams = '';
+			if(is_array($arrParams) && count($arrParams) > 0){
+				foreach($arrParams as $key => $value){
+					$strParams .= '{' . $key . ':' . $value . '}';
+				}
+			}
+			
+?>
+  <tr>
+	<td class="<?php echo $cls; ?>"><?php echo $item['contentid']; ?></td>
+	<td class="<?php echo $cls; ?>"><?php echo $item['contentname']; ?></td>	
+	<td class="<?php echo $cls; ?>" align="center">
+     <a href="/admin/content/edit/id/<?php echo $item['contentid'];?>">
+        <img src="/images/admin/edit.png" alt="Edit" title="Edit" />
+     </a> 
+     <a href="/admin/content/delete/id/<?php echo $item['contentid'];?>">
+        <img src="/images/admin/delete.png" alt="Delete" title="Delete" onclick="return showConFirmBox();"/>
+     </a>
+	</td>
+  </tr>
+ <?php
+        }
+    }
+  ?>    
+</table>
+<br />
+<p>
+	<input type="button" class="button" value=" Create New" onclick="window.location.href='/admin/content/edit/id'">
+</p>
+<br />
+<p style="text-align: center;">
+<?php echo $this->paginationControl($this->paginator, 'Sliding', Zend_View_Helper_PaginationControl::getDefaultViewPartial()); ?>
+</p>  
+</div>

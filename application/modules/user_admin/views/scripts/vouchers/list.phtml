@@ -1,0 +1,68 @@
+<div class="box-header panel-danger">
+    <h3 class="box-title col-md-8">DANH SÁCH LẤY VOUCHER</h3>
+    <div class="col-md-4">
+<select onchange="change_voucher();" class="form-control" id="i_type" name="i_type">
+    <option value="-1">Tất cả</option>
+    <?php foreach ($this->list_type_ctkm as $key=> $val){ 
+        $sl='';
+        if($this->i_type == $key){
+            $sl='selected="selected"';
+        }
+        ?>
+    <option <?php echo $sl; ?> value="<?php echo $key ?>"><?php echo $val ?></option>
+    <?php }?>
+</select>
+</div>
+</div><!-- /.box-header -->
+
+<div class="clearfix"></div>
+<div class="box-body">
+        <table class="f_table2 table table-bordered table-condensed table-striped">
+        <thead>
+        <tr>
+            <th width="10">STT
+            </th>
+            <th>Tên chương trình khuyến mãi
+            </th>
+            <th width="100">Giá trị voucher</th>
+            <th  width="200">Sản phẩm áp dụng trên web</th>
+            <th width="100">#</th>
+        </tr>
+        </thead>
+        <tbody>
+    <?php
+    $stt=0;
+    foreach ($this->list as $items) {
+        if ($items["code_expired"] != NULL && $items["code_expired"] != "0000-00-00 00:00:00") {
+            if (strtotime($items["code_expired"]) < strtotime('now')) {
+                continue;
+            }
+        }
+        $token = md5($this->skey . $items["id"] . $this->parentid);
+        ?>
+            <tr>
+                <td><?php echo ++$stt ?></td>
+                <td><a class="btn" onclick="get_voucher_web(<?php echo $items["id"] ?>, '<?php echo $token ?>');return false;"><?php echo $items["note"]; ?></a></td>
+                <td><?php echo number_format($items["code_value"]); ?></td>
+                <td><textarea class="form-control" rows="3" cols="20"><?php echo $items["itemid"]; ?></textarea></td>
+                <td><button type="button" onclick="get_voucher_web(<?php echo $items["id"] ?>, '<?php echo $token ?>');return false;" class="btn btn-danger btn-lg"> <i class="fa fa-gift" aria-hidden="true"></i> Lấy voucher</button></td>
+            </tr>
+<?php } ?>
+    </tbody>
+    </table>
+    </div>
+</div>
+<script>
+function change_voucher(){
+    var i_type = $('#i_type option:selected').val();
+    var url = "/admin/user/vouchers/list?i_type="+i_type;
+    window.location.href =url;
+}
+$(document).ready(function () {
+        $(".f_table2").DataTable({
+            "pageLength": 25
+        });
+        $('#myTable').filterTable({filterExpression: 'filterTableFindAll'});
+
+    });
+</script>

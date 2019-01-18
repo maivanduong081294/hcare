@@ -1,0 +1,104 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script>
+$(function () {
+    $('#container').highcharts({
+        title: {
+            text: 'Audio',
+            x: -20 //center
+        },
+        colors: ['#0066FF','#f7a35c','#000000'],
+        subtitle: {
+            text: 'Biểu đồ',
+            x: -20
+        },
+        xAxis: {
+            categories: [<?echo $this->dates;?>]
+        },
+        yAxis: {
+            title: {
+                text: 'Số lượng'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: ' sp'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: <?echo $this->sdata;?>
+    });
+});
+</script>
+<div class="box box-primary">
+    <div class="box-header">
+        <div class="col-md-9">
+            <i class="ion ion-clipboard"></i>
+            <h4 class="box-title">Báo cáo tổng quan audio</h4>
+        </div>
+        <div class="col-md-3">
+            <form method="get" id="v" name="v">
+                <div class="form-group">
+                    <div class="input-group input-group-sm">
+                        <?php
+                        $start_end = 'Date range picker';
+                        if ($this->start_end != null) {
+                            $start_end = $this->start_end;
+                        }
+                        ?>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default pull-right" id="daterange-btn">
+                                <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                                <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                        </span>
+
+                        <span class="input-group-btn">
+                            <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> Xem </i></button>
+                        </span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div><!-- /.box-header -->
+    <div class="clearfix"></div>
+    <div class="box-body">
+        <div class="col-md-12">
+            <div id="container" style="min-width: 310px; height: 350px; margin: 0 auto; margin-top:0px;"></div>
+        </div>
+        <div class="col-md-12">
+            <p>Tổng số lượng </p>
+        </div>
+        <div class="col-md-12">
+            <table style="font-size: 15px;font-weight: bold" class="table-bordered table-condensed" >
+                <tr>
+                    <th></th>
+                    <th>Loại</th>
+                    <th>Số lượng</th>
+                </tr>
+                <?php foreach ($this->list_type as $key=> $val){ 
+                    $totals += $this->totals[$key];
+                    ?>
+                <tr>
+                    <td><?php echo ++$stt ?></td>
+                    <td><?php echo $val ?></td>
+                    <td><?php echo number_format($this->totals[$key]) ?></td>
+                </tr>
+                <?php }?>
+                <tr>
+                    <td colspan="3">Tổng : <?php echo number_format($totals) ?></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

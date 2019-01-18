@@ -1,0 +1,68 @@
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="fa fa-desktop"></i>
+        <h3 class="box-title">PHẦN MỀM THU MÁY CŨ CHI NHÁNH: <?echo $this->storename;?></h3>
+    </div><!-- /.box-header -->
+    <div class="col-md-6">
+        <div class="panel panel-default panel-success">
+            <div class="panel-heading"><b>NHẬP THÔNG TIN KHÁCH HÀNG - IN VOUCHER GIẢM GIÁ MUA ĐIỆN THOẠI</b></div>
+                 <div class="panel-body">
+                     <form method="post" id="frmBG" action="/admin/user/usedphone/save-customer">
+                            <input type="hidden" name="cid" value="0"/>
+                            <input type="hidden" name="storeid" value="<?echo $this->sid;?>"/>
+                            <input type="hidden" name="usedphone_id" value="<?echo $this->usedphone_id;?>"/>
+                            <p>Giá máy thu vào: <b style="color: red;font-size: 20px">  <?echo number_format($this->price);?>đ</b></p>
+                            <p>Voucher trị giá: <b style="color: red;font-size: 20px">  <?echo number_format($this->price_voucher);?>đ</b></p>
+                            <p>IMEI: <b style="color: red;font-size: 20px">  <?echo $this->imei;?></b></p>
+                            <span>Họ tên:</span>
+                            <input type="text"  name="fullname" id="fullname" placeholder="Nhập họ tên khách hàng" class="form-control" />
+                            <span>Địa chỉ:</span>
+                            <input type="text" name="address" id="address" placeholder="Nhập địa chỉ khách hàng" class="form-control" />
+                            <span>Email:</span>
+                            <input type="text" name="email" id="email" placeholder="Nhập Email " class="pricing form-control" />
+                            <span>Điện thoại:</span>
+                            <input type="text" name="phone" id="phone" placeholder="Nhập số điện thoại" class="pricing form-control" />
+                            <br/>
+                            <p>
+                                <input type="submit" class="btn btn-warning" value="Lưu" name="submit" id="submit" />
+                                <input class="btn2 btn btn-warning" type="button" value="In" name="in" id="in" style="display:none;"/>
+                            </p>        
+                        </form>
+                  </div>
+         </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<script>
+    $().ready(function(){
+         $("#submit").click(function(e){
+             e.preventDefault();
+             var fullname = $("#fullname").val();
+             var address = $("#address").val();
+             var phone = $("#phone").val();
+             if (fullname == "") {
+                 alert("Vui lòng nhập họ tên khách hàng.");
+                 $("#fullname").focus();
+                 return;
+             }
+             if (address == "") {
+                 alert("Vui lòng nhập địa chỉ khách hàng.");
+                 $("#address").focus();
+                 return;
+             }
+             if (phone == "") {
+                 alert("Vui lòng nhập số điện thoại khách hàng.");
+                 $("#phone").focus();
+                 return;
+             }
+             var url = "/admin/user/usedphone/save-customer";
+             $.post(url, $("#frmBG").serialize(), function(resp){
+                    alert("Lưu thành công!");
+                    $("#cid").val(resp);
+                    $("#submit").show();
+                    window.location = "/admin/user/usedphone/info?id="+resp;
+             });
+         });
+    });
+</script>
+

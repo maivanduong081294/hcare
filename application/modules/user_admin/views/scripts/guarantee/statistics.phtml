@@ -1,0 +1,566 @@
+
+<script src="https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js" ></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js" ></script>
+<script src="http://cdn.datatables.net/buttons/1.2.4/js/buttons.html5.min.js" ></script>
+    <div class="box-header panel-default">
+        <div class="col-md-12">
+                <h3 class="box-title">THỐNG KÊ BẢO HÀNH SỬA CHỮA</h3>
+        </div>
+        <div class="col-md-12">
+            <form id="frm">
+            <div class="form-group col-md-2 col-xs-6">
+                    <div class="input-group input-group-sm">
+                        <select name="storeid"  id="storeid" class="selects input-sm">
+                            <?php
+                            $sl0='';
+                            $sl1='';
+                            $sl2='';
+                            if($this->storeid ==-2){
+                                $sl2 = 'selected = "selected"';
+                            }
+                            if($this->storeid ==-1){
+                                $sl0 = 'selected = "selected"';
+                            }
+                            if($this->storeid ==0){
+                                $sl1 = 'selected = "selected"';
+                            }
+                            ?>
+                                <option <?php echo $sl2; ?> value="-2"> Tất cả (trừ BHSC 67)</option>
+                                <option <?php echo $sl0; ?> value="-1"> Tất cả chi nhánh(trừ KBH)</option>
+                                <option <?php echo $sl1; ?> value="0"> Kho bảo hành</option>
+                                <?php
+                                foreach ($this->list_store as $items) {
+                                    $sl = '';
+                                    if ($this->storeid == $items["userid"]) {
+                                        $sl = 'selected = "selected"';
+                                    }
+                                    ?>
+                                    <option  <?php echo $sl ?> value="<?php echo $items["userid"] ?>"> <?php echo $items["storename"] ?></option>
+                                <?php } ?>
+
+                            </select>
+                    </div>
+            </div>
+            
+            <div class="form-group col-md-2  col-xs-6">
+                <select class="form-control"  style="width: 100%" name="flag" id="flag">
+                    <option value="0">Loại Cty/Hnam</option>
+                    <option <?php if($this->flag==1){ echo "selected";} ?> value="1">Công ty</option>
+                    <option <?php if($this->flag==2){ echo "selected";} ?> value="2">Hnam</option>
+                </select>
+            </div>
+                <div class="col-md-2 col-xs-6">
+                    <select name="isxuat" id="isxuat" class="form-control right">
+                        <option <?php if((int)$this->isxuat==-1){echo 'selected="selected"';} ?>  value="-1">Tất cả</option>
+                        <option <?php if((int)$this->isxuat==0){echo 'selected="selected"';} ?>  value="0">Chưa xuất</option>
+                        <option <?php if((int)$this->isxuat==1){echo 'selected="selected"';} ?> value="1">Đã xuất</option>
+                    </select>
+                </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <div class="input-group input-group-sm">
+                        <?php
+                        $start_end = 'Date range picker';
+                        if ($this->start_end != null) {
+                            $start_end = $this->start_end;
+                        }
+                        ?>
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default pull-right" id="daterange-btn">
+                                <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                                <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                        </span>
+                            <button type="submit" onclick="viewsss();return false;" class="btn btn-info"><i class="fa fa-search"> <span class="hidden-xs">Xem </span></i></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+            
+        </div>
+        
+        <div class="clear"></div>
+       
+    </div><!-- /.box-header -->
+    <div class="box-body">
+            <table id="export_table" class="table table-condensed table-striped table-bordered">
+            <thead>
+            <tr>
+                <th width="10">Số phiếu</th>
+                <th class="hidden-xs">Ngày BH</th>
+                <th class="hidden-xs">Ngày xu?t</th>
+                <th class="hidden-xs">Loại</th>
+                <th>Máy</th>
+                <th width="60">Imei</th>
+                <th class="hidden-xs">Chi nhành</th>
+                <th class="hidden-xs">Tên ĐVSC</th>
+                <th class="hidden-xs">Tổng chi</th>
+                <!--<th class="hidden-xs">T?m t�nh</th>-->
+                <th>Hnam hỗ trợ</th>
+                <th class="hidden-xs">Khuyến mãi</th>
+                <th>Thu tiền Khách</th>
+                <th>Bao bể</th>
+                <th>Bảo hành mở rộng</th>
+                <th>Quốc tế</th>
+                <th>Chênh lệch</th>
+                <th>BHKhác</th>
+            </tr>
+            </thead>
+            
+            <tbody>
+            <?php
+            $st = (int)$_REQUEST["st"];
+            $stt=0;
+            $baobe =0;
+            $quoc_te =0;
+            $bhkhac =0;
+            foreach ($this->list as $items){
+                if($this->storeid==-2){
+                    if($items["storeid"]==764){
+                        continue;
+                    }
+                }
+                
+                $total_dvsc +=$items["money_dvsc"];
+                $total_price_tmp +=$items["price_tmp"];
+                $total_money_hnam +=$items["money_hnam"]; //2
+                $total_money_voucher +=$items["money_voucher"];
+                $total_money +=$items["money"]; //1
+                $total_advance_payment +=$items["advance_payment"];
+                $total_tiendathu +=$tiendathu;
+                $total_thucte +=$items["money"] +$items["money_hnam"]-$items["money_dvsc"];
+            }
+            
+            foreach ($this->list as $items){
+                if($this->storeid==-2){
+                    if($items["storeid"]==764){
+                        continue;
+                    }
+                }
+                if($items["money"] >0){
+                    $list1[] = $items;
+                }
+                if($items["money_hnam"] >0){
+                    $list2[] = $items;
+                }
+                if($items["bhkhac"]==3){ // bao bể
+                        $baobe+=$items["money_hnam"];
+                        if($items["money_hnam"] >0){
+                            $list3[] = $items;
+                        }
+                    } else { 
+                        if($items["bhkhac"] !=4){
+                            if($items["check_bbmh"]==1){
+                                $baobe+=$items["money_hnam"];
+                                if($items["money_hnam"] >0){
+                                    $list3[] = $items;
+                                }
+                            } 
+                        } 
+                    }
+                if($items["bhkhac"]==4){ // bảo hành mở rộng
+                        $baohanhmorong+=$items["money_hnam"];
+                            if($items["money_hnam"] >0){
+                                $list4[] = $items;
+                            }
+                    } else {
+                        if($items["bhkhac"] !=3){
+                            if($items["check_bhmr"]==1){
+                                $baohanhmorong+=$items["money_hnam"];
+
+                                if($items["money_hnam"] >0){
+                                    $list4[] = $items;
+                                }
+
+                            }
+                        }
+                    }
+                   
+                if($items["bhkhac"]==2){
+                    $quoc_te+=$items["money_hnam"];
+                    if($items["money_hnam"] >0){
+                        $list5[] = $items;
+                    }
+                }  
+                if($items["bhkhac"]==1){
+                    $bhkhac+=$items["money_hnam"];
+                        if($items["money_hnam"] >0){
+                            $list6[] = $items;
+                        }
+                }
+
+        }
+            
+            
+            
+        $list = $this->list;
+        if($st==1){
+            $list = $list1;
+        }
+        if($st==2){
+            $list = $list2;
+        }
+        if($st==3){
+            $list = $list3;
+        }
+        if($st==4){
+            $list = $list4;
+        }
+        if($st==5){
+            $list = $list5;
+        }
+        if($st==6){
+            $list = $list6;
+        }
+        
+            foreach ($list as $items){
+                if($this->storeid==-2){
+                    if($items["storeid"]==764){
+                        continue;
+                    }
+                }
+                $total_dvsc2 +=$items["money_dvsc"];
+                $total_price_tmp2 +=$items["price_tmp"];
+                $total_money_hnam2 +=$items["money_hnam"]; //2
+                $total_money_voucher2 +=$items["money_voucher"];
+                $total_money2 +=$items["money"]; //1
+                $total_advance_payment2 +=$items["advance_payment"];
+                $total_thucte2 +=$items["money"] +$items["money_hnam"]-$items["money_dvsc"];
+                
+                if($items["bhkhac"]==3){ // bao bể
+                        $baobe2+=$items["money_hnam"];
+                    } else { 
+                        if($items["bhkhac"] !=4){
+                            if($items["check_bbmh"]==1){
+                                $baobe2+=$items["money_hnam"];
+                            } 
+                        } 
+                    }
+                if($items["bhkhac"]==4){ // bảo hành mở rộng
+                        $baohanhmorong2+=$items["money_hnam"];
+                    } else {
+                        if($items["bhkhac"] !=3){
+                            if($items["check_bhmr"]==1){
+                                $baohanhmorong2+=$items["money_hnam"];
+                            }
+                        }
+                    }
+                   
+                if($items["bhkhac"]==2){
+                    $quoc_te2+=$items["money_hnam"];
+                }  
+                if($items["bhkhac"]==1){
+                    $bhkhac2+=$items["money_hnam"];
+                }
+                
+                
+                
+                $skey2="BHVT2016HNAM";
+                $tokenss = md5($skey2 . $items["id"]);
+                $flag='';
+                if($items["flag"]==1){
+                   $flag='Công ty'; 
+                }
+                if($items["flag"]==2){
+                   $flag='Hnam'; 
+                }
+                $dukienchi = $items["money_dvsc"]-$items["money_hnam"]-$items["money"]-$items["money_voucher"];
+                if($this->storename[$items["storeid"]]==NULL){
+                    $this->storename[$items["storeid"]] ='KBH';
+                }
+                ?>
+                
+                <tr style="height: 50px">
+                <td><a href="/admin/user/guarantee/detail?id=<?php echo $items["id"] ?>&token=<?php echo $tokenss; ?>" target="_blank">#<?php echo $items["id"]; ?></a></td>
+                <td class="hidden-xs"><?php echo date('d/m/Y',  strtotime($items["datetime"])); ?></td>
+                <td class="hidden-xs">
+                    <?php  if($this->isxuat==1){ ?>
+                    <?php echo date('d/m/Y',  strtotime($items["date_out"])); ?>
+                    <?php } ?>
+                </td>
+                <td class="hidden-xs"><?php echo $flag ?></td>
+                <td><?php echo $items["item_name"]; ?></td>
+                <td><?php echo $items["imei"]; ?></td>
+                <td><?php echo $this->storename[$items["storeid"]]; ?></td>
+                <td>
+                    <?php foreach ($this->s_warranty[$items["id"]] as $_item) { ?> 
+                                - <?php echo $this->name_producers[$_item["id_warranty"]]; ?> <br/>
+                            <?php } ?>
+                </td>
+                <td><?php echo number_format($items["money_dvsc"]); ?></td>
+                <td><?php echo number_format($items["money_hnam"]); ?></td>
+                <td><?php echo number_format($items["money_voucher"]); ?></td>
+                <td><?php echo number_format($items["money"]); ?></td>
+                
+                <td>
+                    <?php if($items["bhkhac"]==3){ // bao bể
+                        echo number_format($items["money_hnam"]);
+                    } else { 
+                        if($items["bhkhac"] !=4){
+                            if($items["check_bbmh"]==1){
+                                echo number_format($items["money_hnam"]);
+                            } 
+                        } 
+                    } 
+                    ?>
+                
+                </td>
+                <td>
+                    <?php if($items["bhkhac"]==4){ // bảo hành mở rộng
+                        echo number_format($items["money_hnam"]);
+                    } else {
+                        if($items["bhkhac"] !=3){
+                            if($items["check_bhmr"]==1){
+                                echo number_format($items["money_hnam"]);
+                            }
+                        }
+                    }?>
+                
+                </td>
+                <td>
+                    <?php if($items["bhkhac"]==2){
+                        echo number_format($items["money_hnam"]);
+                    } ?>
+                </td>
+                <td><?php echo number_format($items["money"] +$items["money_hnam"]-$items["money_dvsc"]); ?></td>
+                <td>
+                    <?php if($items["bhkhac"]==1){
+                        echo number_format($items["money_hnam"]);
+                    } ?>
+                </td>
+            </tr>
+            
+            <?php }
+            
+            $totalsss = $total_money_hnam-$total_thucte;
+            ?>
+            
+            <tr>
+                <td>.</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><?php echo number_format($total_dvsc2); ?></td>
+                <td><?php echo number_format($total_money_hnam2); ?></td>
+                <td><?php echo number_format($total_money_voucher2); ?></td>
+                <td><?php echo number_format($total_money2); ?></td>
+                <td><?php echo number_format($baobe2); ?></td>
+                <td><?php echo number_format($baohanhmorong2); ?></td>
+                <td><?php echo number_format($quoc_te2); ?></td>
+                <td><?php echo number_format($total_thucte2); ?></td>
+                <td><?php echo number_format($bhkhac2); ?></td>
+            </tr> 
+            </tbody>
+            <tr>
+                <td colspan="17"><a href="#" onclick="hrf(1);return false;" id="hrf_detail1">Tiền nộp về anh quân:<?php echo number_format($total_money); ?></a> </td>
+            </tr>
+            <tr>
+                <td colspan="17"><a href="#"  onclick="hrf(2);return false;" id="hrf_detail2">Tiền hnam bảo hành:<?php echo number_format($total_money_hnam); ?></a></td>
+            </tr>
+            <tr>
+                <td colspan="17"><a href="#"  onclick="hrf(3);return false;" id="hrf_detail3">Tiền bao bể màn hành:<?php echo number_format($baobe); ?></a></td>
+            </tr>
+            <tr>
+                <td colspan="17"><a href="#"  onclick="hrf(4);return false;" id="hrf_detail4">Tiền bảo hành mở rộng:<?php echo number_format($baohanhmorong); ?></a></td>
+            </tr>
+            <tr>
+                <td colspan="17"><a href="#"  onclick="hrf(5);return false;" id="hrf_detail5">Tiền quốc tế:<?php echo number_format($quoc_te); ?></a></td>
+            </tr>
+            <tr>
+                <td colspan="17"><a href="#" onclick="hrf(6);return false;"  id="hrf_detail6" >Tiền khác:<?php echo number_format($bhkhac); ?></a></td>  
+            </tr>
+            <tr>
+                <td colspan="17">Tiền chênh lệch:<?php echo number_format($total_thucte); ?></td>  
+            </tr>
+            <tr>
+                <td colspan="17">Tổng tiền Hnam bảo hành trong tháng:<?php echo number_format($totalsss); ?></td> 
+            </tr>
+            
+            
+        </table>
+    </div>
+<div class="modal fade" id="updates">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div class="show_frm"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="history">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div class="history"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="ddelete"></div>
+<script>
+    function hrf(st) {
+        var isxuat = $("#isxuat option:selected").val();
+        var flag = $("#flag option:selected").val();
+        var storeid = $("#storeid option:selected").val();
+        var start_end = $("#start_end").val();
+        $("#hrf_detail" + st).attr("href", "/admin/user/guarantee/statistics?storeid=" + storeid + "&flag=" + flag + "&isxuat=" + isxuat+"&st="+st+ "&start_end=" + start_end);
+        var href = $("#hrf_detail" + st).attr('href');
+        window.location = href;
+    }
+    
+    function exportsss(){
+        $('#iexport').val(1);
+        $('#frm').submit();
+    }
+    function viewsss(){
+        $('#iexport').val(0);
+        $('#frm').submit();
+    }
+    function change_ok(id){
+        var ok = $('#ok'+id+' option:selected').val();
+        var result = confirm('B?n ch?c ch?n mu?n th?c hi?n ?');
+        if (result)
+            $('#ddelete').load('/admin/user/guarantee/ok-customer?id=' + id+"&ok="+ok, function () {
+                alert('L?u thành c�ng.');
+                window.location.reload(true);
+            });
+    }
+    function bhang(id){
+        var result = confirm('B?n ch?c ch?n mu?n th?c hi?n ?');
+        if (result)
+            $('#ddelete').load('/admin/user/guarantee/bhang?id=' + id, function () {
+                alert('L?u thành c�ng.');
+                window.location.reload(true);
+            });
+    }
+    function history(id){
+        $.ajax
+        ({
+           method: "POST",
+           url: "/admin/user/guarantee/history",
+           data: { id_guarantee:id},
+           dataType: "html",
+            success: function(data){
+              $('.history').html(data);
+              $('#history').modal('show');
+            }
+        });
+    }
+    function del_enabled(id,token){
+       var result = confirm('B?n ch?c ch?n mu?n h?y ?');
+        if (result)
+            $('#ddelete').load('/admin/user/guarantee/del-enabled?id=' + id+"&token="+token, function () {
+                alert('H?y thành c�ng.');
+                window.location.reload(true);
+            });
+   }
+    
+    function transfers(id,transfers,token){
+        var result = confirm('B?n ch?c ch?n x�c nh?n?');
+        if (result)
+            $('#ddelete').load('/admin/user/guarantee/transfers?id=' + id+"&transfers="+transfers+"&token="+token, function () {
+                alert('K�ch ho?t thành c�ng.');
+                window.location.reload(true);
+            });
+    }
+   function actives(id,status_where,token){
+       var result = confirm('B?n ch?c ch?n mu?n k�ch ho?t x�c nh?n?');
+        if (result)
+            $('#ddelete').load('/admin/user/guarantee/active?id=' + id+"&status_where="+status_where+"&token="+token, function () {
+                alert('K�ch ho?t thành c�ng.');
+                window.location.reload(true);
+            });
+   }
+    function closess(){
+        showss();
+    }
+    function showss(){
+       $('#adds').show();
+       $('.frm_add').html('');
+       $('#closes').hide(); 
+    }
+    function hidess(){
+       $('#adds').hide(); 
+       $('#closes').show(); 
+    }
+    function adds(){
+        step_1();
+        hidess();
+        $.ajax
+        ({
+           method: "POST",
+           url: "/admin/user/guarantee/search",
+           data: {},
+           dataType: "html",
+            success: function(data){
+              $('.frm_add').html(data);
+            }
+        });
+    }
+    function updates(id,token){
+        $.ajax
+        ({
+           method: "POST",
+           url: "/admin/user/guarantee/update",
+           data: { id:id, token:token },
+           dataType: "html",
+            success: function(data){
+                console.log(data);
+              $('.show_frm').html(data);
+              $('#updates').modal('show');
+            }
+        });
+    }
+    function prints(id,token){
+        $.ajax
+        ({
+           method: "POST",
+           url: "/admin/user/guarantee/print",
+           data: { id:id, token:token },
+           dataType: "html",
+            success: function(data){
+                console.log(data);
+              $('.show_frm').html(data);
+              $('#updates').modal('show');
+            }
+        });
+    }
+//    $().ready(function () {
+//        $("#export_table").DataTable(
+//            {
+//                "pageLength": 50
+//            }
+//        );
+//    });
+    
+function format_number(nStr)
+{
+	nStr += '';
+	x = nStr.split('.');
+	x1 = x[0];
+	x2 = x.length > 1 ? '.' + x[1] : '';
+	var rgx = /(\d+)(\d{3})/;
+	while (rgx.test(x1)) {
+		x1 = x1.replace(rgx, '$1' + ',' + '$2');
+	}
+	return x1 + x2;
+}
+
+$(document).ready(function() {
+    $('#export_table').DataTable( {
+        "pageLength": 50,
+        dom: 'Bfrtip',
+        buttons: [
+            'excel'
+        ]
+    } );
+} );
+</script>

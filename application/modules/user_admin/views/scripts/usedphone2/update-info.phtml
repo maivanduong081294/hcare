@@ -1,0 +1,87 @@
+<script src="/backend/plugins/ckeditor/ckeditor.js"></script>
+<style>
+    #info{font-size:14px; margin:20px;}
+    #info table tr td{font-size:14px;}
+    input{padding:10px; font-size: 14px; width: 400px;}
+</style>
+<h1>Cập nhật thông tin máy</h1>
+<?if ($this->hasItemid > 0){?>
+<form id="info">
+    <input type="hidden" name="itemid" id="itemid" value="<?php echo $this->data["itemid"]; ?>" />
+    <input type="hidden" name="usedid" id="usedid" value="<?php echo $this->usedid; ?>" />
+    <div class="col-md-6">
+        <div class="panel panel-default panel-success">
+            <div class="panel-heading"><i class="fa fa-refresh"></i> CẬP NHẬT THÔNG TIN MÁY</div>
+                 <div class="panel-body">
+                     <span>Tên sản phẩm:</span>
+                     <input type="text" name="title" class="form-control" placeholder="Nhập tên sản phẩm " id="title" value="<?=($this->data['title']);?>">
+                     <span>Giá Hnam:</span>
+                     <input placeholder="Nhập giá hnam vào đây" class="form-control" type="text" name="price"  id="price" value="">
+                     <span>Giá CTY:</span>
+                     <input placeholder="Nhập giá cty vào đây" class="form-control" type="text" name="original_price"  id="original_price" value="">
+                     <span>Bảo hành:</span>
+                     <input type="text" class="form-control" name="warranty"  id="warranty" value="<?=($this->data['warranty'] == '' ? '12 tháng' : $this->data['warranty'] );?>">
+                  </div>
+         </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default panel-success">
+            <div class="panel-heading"><i class="fa fa-refresh"></i> CẬP NHẬT THÔNG TIN MÁY</div>
+                 <div class="panel-body">
+                     <span>Tổng quan:</span>
+                     <textarea class="form-control" name="fullcontent" id="fullcontent"><?php echo $this->des;?></textarea> 
+                  </div>
+        </div>
+    </div>
+    
+<script type="text/javascript">
+  $(function () {
+	CKEDITOR.config.height = 500;        // 500 pixels.
+	CKEDITOR.config.height = '25em';     // CSS length.
+	CKEDITOR.config.height = '300px';    // CSS length.
+	CKEDITOR.config.font_defaultLabel = 'Arial';
+	CKEDITOR.config.fontSize_defaultLabel = '16px';  
+    CKEDITOR.replace('fullcontent');    
+  });
+	
+	
+</script>
+<br />
+    <?if ($this->checked==0){?>
+    <button class="btn btn-danger" id="public"><i class="fa fa-upload"></i> Đăng web</button>
+    <button  id="public2" class="btn btn-success hide"><i class="fa fa-check-circle"></i> Hoàn tất</button>
+    <?}else{?>
+    <b class="red btn btn-success"><i class="fa fa-upload"></i> Đã đăng lên kho máy cũ!!!</b>
+    <?}?>
+            
+</form>
+<script>
+function get_editor_data()
+{
+    return true;
+}
+
+$().ready(function(){
+    $("#public").click(function(e){
+        e.preventDefault();
+        $("#public").hide();
+        var url = "/admin/user/usedphone2/update-info";
+        get_editor_data();
+        $.post(url, $("#info").serialize(), function(resp){
+            if (resp.err == 0) {
+                alert("Đã đăng vào kho máy cũ!");
+                $("#public").hide();
+                $("#public2").show();
+            } else {
+                alert("Lỗi trong quá trình đăng. Vui lòng thử lại!");
+                $("#public").show();
+            }
+            
+        }, "json");
+    });
+});
+
+</script>
+<?}else{?>
+<h1 style="font-weight: bold;color: red">Máy chưa cập nhật mã sản phẩm</h1>
+<?}?>    

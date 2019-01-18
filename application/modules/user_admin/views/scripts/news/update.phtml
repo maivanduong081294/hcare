@@ -1,0 +1,64 @@
+<input type="hidden" name="newsid1" id="newsid1"/>
+<input type="hidden" name="cateid1" id="cateid1"/>
+<div style="margin:30px;">
+  <h2 style="margin-bottom:10px;">Chuyển danh mục cho tin: <b style="color:orangeorange"><?=$this->detail["title"];?></b></h2>
+  Đến <select name="newsid" id="newsid">
+  <?
+  foreach($this->menu2 as $k2=>$v2){
+  $info = $v2["info"];
+  //var_dump($info);die();
+  ?>
+    <option value="<?=$info["delta"];?>-<?=$info["menuname"]?>" ><?=$this->menu1[$info["menuname"]];?></option>
+  <?}?>
+  </select>
+
+
+  <?	
+  $i=0;
+  foreach($this->menu2 as $k2=>$v2){
+  $info=$v2["sub"];
+  if ($i++==0) $display=""; else $display="display:none";
+  ?>
+  <select name="cateid" class="cateid" id="<?=$k2;?>" style="<?=$display;?>">
+    <?foreach($info as $k3=>$v3){
+    ?>
+      <option value="<?=$k3;?>"><?=$v3;?></option>
+    <?}?>
+  </select>
+  <?}?>
+  <input type="button" name="go" id="go" value="Chuyển" />
+</div>
+
+<script>
+$().ready(function(){
+  $("#newsid").change(function(){
+    var _id = $(this).val();
+    var arr = _id.split("-");
+    var id = arr[1];
+    var value = arr[0];
+    $("#newsid1").val(value);
+    $(".cateid").hide();
+    $(".cateid").attr("disabled","disabled");
+    $("#"+id).removeAttr("disabled").show();
+    $("#cateid1").val($("#"+id).val());
+    //console.log($("#newsid1").val());
+    //console.log($("#cateid1").val());
+  });
+  $(".cateid").change(function(){
+      $("#cateid1").val($(this).val());
+  });
+  setTimeout(function(){
+    $("#newsid").change();
+  }, 100);
+  $("#go").click(function(){
+    var newsid = $("#newsid1").val();
+    var cateid = $("#cateid1").val();
+    var itemid = <?=$this->itemid;?>;
+    var url = "/admin/user/news/update?newsid="+newsid+"&cateid="+cateid+"&itemid="+itemid;
+    $.post(url, function(resp){
+      alert("Thành công");
+    });
+    
+  });
+});
+</script>

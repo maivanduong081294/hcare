@@ -1,0 +1,1030 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="44fefe64-4fa4-480a-96a3-58a02a804edc" name="Default" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="-186182331">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="96" />
+          <entry key="project.open.time.0" value="1" />
+          <entry key="project.open.time.1" value="8" />
+          <entry key="project.open.time.10" value="4" />
+          <entry key="project.open.time.105" value="1" />
+          <entry key="project.open.time.11" value="2" />
+          <entry key="project.open.time.12" value="2" />
+          <entry key="project.open.time.122" value="1" />
+          <entry key="project.open.time.13" value="1" />
+          <entry key="project.open.time.130" value="1" />
+          <entry key="project.open.time.14" value="3" />
+          <entry key="project.open.time.15" value="1" />
+          <entry key="project.open.time.16" value="1" />
+          <entry key="project.open.time.17" value="2" />
+          <entry key="project.open.time.2" value="10" />
+          <entry key="project.open.time.21" value="1" />
+          <entry key="project.open.time.24" value="1" />
+          <entry key="project.open.time.26" value="1" />
+          <entry key="project.open.time.29" value="1" />
+          <entry key="project.open.time.3" value="3" />
+          <entry key="project.open.time.33" value="1" />
+          <entry key="project.open.time.4" value="1" />
+          <entry key="project.open.time.43" value="1" />
+          <entry key="project.open.time.44" value="2" />
+          <entry key="project.open.time.45" value="1" />
+          <entry key="project.open.time.47" value="4" />
+          <entry key="project.open.time.48" value="6" />
+          <entry key="project.open.time.49" value="4" />
+          <entry key="project.open.time.5" value="3" />
+          <entry key="project.open.time.50" value="4" />
+          <entry key="project.open.time.51" value="1" />
+          <entry key="project.open.time.52" value="1" />
+          <entry key="project.open.time.53" value="3" />
+          <entry key="project.open.time.54" value="3" />
+          <entry key="project.open.time.55" value="2" />
+          <entry key="project.open.time.56" value="1" />
+          <entry key="project.open.time.57" value="1" />
+          <entry key="project.open.time.58" value="2" />
+          <entry key="project.open.time.59" value="2" />
+          <entry key="project.open.time.6" value="2" />
+          <entry key="project.open.time.60" value="1" />
+          <entry key="project.open.time.64" value="1" />
+          <entry key="project.open.time.68" value="1" />
+          <entry key="project.open.time.7" value="2" />
+          <entry key="project.open.time.73" value="1" />
+          <entry key="project.open.time.74" value="2" />
+          <entry key="project.open.time.8" value="2" />
+          <entry key="project.open.time.81" value="1" />
+          <entry key="project.open.time.89" value="1" />
+          <entry key="project.open.time.96" value="1" />
+          <entry key="project.open.time.97" value="1" />
+          <entry key="project.open.time.98" value="1" />
+          <entry key="project.opened" value="105" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="dummy" value="8" />
+          <entry key="php" value="32159" />
+          <entry key="phtml" value="24247" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="HTML" value="11" />
+          <entry key="PHP" value="56394" />
+          <entry key="PLAIN_TEXT" value="8" />
+          <entry key="SQL" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="ascx" value="1" />
+          <entry key="ini" value="1" />
+          <entry key="jpg" value="1" />
+          <entry key="lua" value="1" />
+          <entry key="php" value="344" />
+          <entry key="phtml" value="194" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="ASP" value="1" />
+          <entry key="Image" value="1" />
+          <entry key="Ini" value="1" />
+          <entry key="PHP" value="538" />
+          <entry key="PLAIN_TEXT" value="1" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/modules/hnam/controllers/SimController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="531">
+              <caret line="145" column="25" lean-forward="true" selection-start-line="145" selection-start-column="25" selection-end-line="145" selection-end-column="25" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Zend/Business/HelpersNew/Sim.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="258">
+              <caret line="17" column="39" lean-forward="true" selection-start-line="17" selection-start-column="39" selection-end-line="17" selection-end-column="39" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/modules/hnam/controllers/ComplainController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="257">
+              <caret line="84" column="8" lean-forward="true" selection-start-line="84" selection-start-column="8" selection-end-line="84" selection-end-column="39" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Zend/Business/Addon/General.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="323">
+              <caret line="76" column="54" selection-start-line="76" selection-start-column="48" selection-end-line="76" selection-end-column="54" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/sim/delete-list-sim.phtml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="408">
+              <caret line="24" column="32" lean-forward="true" selection-start-line="24" selection-start-column="32" selection-end-line="24" selection-end-column="32" />
+              <folding>
+                <element signature="n#style#0;n#div#1;n#form#0;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/sim/update-type.phtml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="323">
+              <caret line="19" column="52" selection-start-line="19" selection-start-column="52" selection-end-line="19" selection-end-column="52" />
+              <folding>
+                <element signature="n#style#0;n#select#0;n#div#0;n#form#0;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#select#0;n#div#1;n#form#0;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#2;n#form#0;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/sim/update-price.phtml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="126">
+              <caret line="18" column="59" selection-start-line="18" selection-start-column="59" selection-end-line="18" selection-end-column="59" />
+              <folding>
+                <element signature="n#style#0;n#div#1;n#form#0;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/complain/add.phtml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="48" column="176" lean-forward="true" selection-start-line="48" selection-start-column="28" selection-end-line="48" selection-end-column="176" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>products_id</find>
+      <find>$detail</find>
+      <find>simsodep</find>
+      <find>IT Tools</find>
+      <find>đặt cọc</find>
+      <find>vong-quay</find>
+      <find>appleft.phtml</find>
+      <find>appleft</find>
+      <find>xuatU</find>
+      <find>vote_name</find>
+      <find>$_tele</find>
+      <find>salesOr</find>
+      <find>getPrint</find>
+      <find>$total</find>
+      <find>$checkVongQuay1</find>
+      <find>CN.HHN.01053</find>
+      <find>type</find>
+      <find>Khi xác nhận thanh toán vui lòng kiểm tra thông tin giá web</find>
+      <find>$vongQuay1</find>
+      <find>save(</find>
+      <find>checkmă</find>
+      <find>&gt;list</find>
+      <find>Tài liệu,Hd,Tìm kiếm</find>
+      <find>excute</find>
+      <find>$_gener</find>
+      <find>insert into</find>
+      <find>Business_HelpersNew_Sim</find>
+      <find>addAction</find>
+      <find>\t</find>
+      <find>simType</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>div&gt;</replace>
+      <replace>font-size: 15px</replace>
+    </replaceStrings>
+    <dirStrings>
+      <dir>C:\xampp56\htdocs\hnamappbh_production\application\modules\admin</dir>
+      <dir>C:\xampp56\htdocs\hnamappbh_production\application</dir>
+      <dir>C:\xampp56\htdocs\hnamappbh_production</dir>
+      <dir>C:\xampp56\htdocs\hnamappbh_production\application\modules</dir>
+      <dir>C:\xampp\htdocs\hnamappbh_production\Zend\Business\Ws</dir>
+      <dir>C:\xampp\htdocs\hnamappbh_production\Zend\Business</dir>
+      <dir>C:\xampp\htdocs\hnamappbh_production\application\modules\hnam\views\scripts\statistical</dir>
+      <dir>C:\xampp\htdocs\hnamappbh_production\application\modules</dir>
+      <dir>C:\xampp\htdocs\hnamappbh_production\application\modules\user_admin\controllers</dir>
+      <dir>C:\xampp\htdocs\hnamappbh_production\application\modules\hnam\controllers</dir>
+      <dir>C:\xampp\htdocs\hnamappbh_production\application\modules\hnam\views\scripts\order</dir>
+      <dir>C:\xampp\htdocs\hnamappbh_production\application</dir>
+      <dir>C:\xampp\htdocs\hnamappbh_production</dir>
+    </dirStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/section/appleft_2.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/controllers/SectionController.php" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/section/appleft_1.phtml" />
+        <option value="$PROJECT_DIR$/Zend/Business/Addon/Tonkhoimei2.php" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/order/pos.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/payorder/get-sim.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/order/pos2-mobile.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/order/pos2.phtml" />
+        <option value="$PROJECT_DIR$/Zend/Business/Addon/Sim.php" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/addon/so-ban-top.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/controllers/AddonController.php" />
+        <option value="$PROJECT_DIR$/Zend/Business/Addon/Complain.php" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/preorder-iphone-2018.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/preorder-v-smart.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/list-v-smart.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/payorder/update.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/print-sales.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/user_admin/views/scripts/guaranteepk/check-bao-hiem.phtml" />
+        <option value="$PROJECT_DIR$/Zend/Business/Addon/UsersProducts.php" />
+        <option value="$PROJECT_DIR$/application/modules/user_admin/controllers/GuaranteepkController.php" />
+        <option value="$PROJECT_DIR$/application/modules/user_admin/views/scripts/report/phu-kien.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/list-asus-max-pro-m2.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/preorder-asus-max-pro-m2.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/list-oppo-f9-xanh-phi-thuy.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/preorder-oppo-f9-xanh-phi-thuy.phtml" />
+        <option value="$PROJECT_DIR$/Zend/Business/Addon/ProductProperties.php" />
+        <option value="$PROJECT_DIR$/application/modules/user_admin/views/scripts/report/nuoc-hoa.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/preorder-xiaomi-mi-mix-3.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/list-xiaomi-mi-mix-3.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/order-fast.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/preorder-nokia-81.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/list-nokia-81.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/list-galaxy-watch.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/preorder-galaxy-watch.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/section/appleft.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/xuat-users-products-year.phtml" />
+        <option value="$PROJECT_DIR$/Zend/Business/Addon/Cart.php" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/controllers/StatisticalController.php" />
+        <option value="$PROJECT_DIR$/application/modules/user_admin/controllers/ReportController.php" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/controllers/PayorderController.php" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/payorder/print-gh3.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/order/checkmaw.phtml" />
+        <option value="$PROJECT_DIR$/Zend/Business/Addon/ProductsColor.php" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/controllers/OrderController.php" />
+        <option value="$PROJECT_DIR$/Zend/Business/Ws/ProductsItem.php" />
+        <option value="$PROJECT_DIR$/Zend/Business/Addon/Options.php" />
+        <option value="$PROJECT_DIR$/Zend/Business/Addon/General.php" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/sim/update-price.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/sim/update-type.phtml" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/controllers/SimController.php" />
+        <option value="$PROJECT_DIR$/application/modules/hnam/views/scripts/sim/delete-list-sim.phtml" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-7" />
+    <option name="width" value="1471" />
+    <option name="height" value="1047" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="hnamappbh_production" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hnamappbh_production" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hnamappbh_production" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hnamappbh_production" type="462c0819:PsiDirectoryNode" />
+              <item name="application" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hnamappbh_production" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hnamappbh_production" type="462c0819:PsiDirectoryNode" />
+              <item name="application" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hnamappbh_production" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hnamappbh_production" type="462c0819:PsiDirectoryNode" />
+              <item name="application" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+              <item name="hnam" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hnamappbh_production" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hnamappbh_production" type="462c0819:PsiDirectoryNode" />
+              <item name="application" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+              <item name="hnam" type="462c0819:PsiDirectoryNode" />
+              <item name="controllers" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hnamappbh_production" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hnamappbh_production" type="462c0819:PsiDirectoryNode" />
+              <item name="application" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+              <item name="hnam" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hnamappbh_production" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hnamappbh_production" type="462c0819:PsiDirectoryNode" />
+              <item name="application" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+              <item name="hnam" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="scripts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hnamappbh_production" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hnamappbh_production" type="462c0819:PsiDirectoryNode" />
+              <item name="application" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+              <item name="hnam" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="scripts" type="462c0819:PsiDirectoryNode" />
+              <item name="complain" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hnamappbh_production" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hnamappbh_production" type="462c0819:PsiDirectoryNode" />
+              <item name="application" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+              <item name="hnam" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="scripts" type="462c0819:PsiDirectoryNode" />
+              <item name="order" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hnamappbh_production" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hnamappbh_production" type="462c0819:PsiDirectoryNode" />
+              <item name="application" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+              <item name="hnam" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="scripts" type="462c0819:PsiDirectoryNode" />
+              <item name="sim" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hnamappbh_production" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hnamappbh_production" type="462c0819:PsiDirectoryNode" />
+              <item name="application" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+              <item name="hnam" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="scripts" type="462c0819:PsiDirectoryNode" />
+              <item name="statistical" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hnamappbh_production" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hnamappbh_production" type="462c0819:PsiDirectoryNode" />
+              <item name="application" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+              <item name="user_admin" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hnamappbh_production" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hnamappbh_production" type="462c0819:PsiDirectoryNode" />
+              <item name="application" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+              <item name="user_admin" type="462c0819:PsiDirectoryNode" />
+              <item name="controllers" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hnamappbh_production" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hnamappbh_production" type="462c0819:PsiDirectoryNode" />
+              <item name="www" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hnamappbh_production" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hnamappbh_production" type="462c0819:PsiDirectoryNode" />
+              <item name="Zend" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hnamappbh_production" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hnamappbh_production" type="462c0819:PsiDirectoryNode" />
+              <item name="Zend" type="462c0819:PsiDirectoryNode" />
+              <item name="Business" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hnamappbh_production" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hnamappbh_production" type="462c0819:PsiDirectoryNode" />
+              <item name="Zend" type="462c0819:PsiDirectoryNode" />
+              <item name="Business" type="462c0819:PsiDirectoryNode" />
+              <item name="WsNew" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="com.intellij.database.dataSource.DataSourceTemplate" value="MySQL" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\hnamappbh_production\application\modules\hnam\views\scripts\sim" />
+      <recent name="C:\xampp\htdocs\hnamappbh_production\application\modules\hnam\controllers" />
+      <recent name="C:\xampp\htdocs\hnamappbh_production\Zend\Business\WsNew" />
+      <recent name="C:\xampp\htdocs\hnamappbh_production\application\modules\hnam\views\scripts\statistical" />
+      <recent name="C:\xampp\htdocs\hnamappbh_production\application\modules\user_admin\views\scripts\report" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="44fefe64-4fa4-480a-96a3-58a02a804edc" name="Default" comment="" />
+      <created>1534921180345</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1534921180345</updated>
+      <workItem from="1534921181659" duration="8253000" />
+      <workItem from="1534951452018" duration="45000" />
+      <workItem from="1534988961425" duration="15409000" />
+      <workItem from="1535078105231" duration="1279000" />
+      <workItem from="1535102850131" duration="2249000" />
+      <workItem from="1535161775326" duration="8390000" />
+      <workItem from="1535337116938" duration="4086000" />
+      <workItem from="1535423111432" duration="2598000" />
+      <workItem from="1535507465228" duration="7167000" />
+      <workItem from="1535596180487" duration="6871000" />
+      <workItem from="1535616602482" duration="3713000" />
+      <workItem from="1535709844158" duration="1513000" />
+      <workItem from="1535766729233" duration="3697000" />
+      <workItem from="1536034384071" duration="1706000" />
+      <workItem from="1536046949376" duration="1774000" />
+      <workItem from="1536053546157" duration="598000" />
+      <workItem from="1536112053545" duration="3781000" />
+      <workItem from="1536268422254" duration="336000" />
+      <workItem from="1536270987661" duration="44000" />
+      <workItem from="1536308905686" duration="2896000" />
+      <workItem from="1536573979361" duration="996000" />
+      <workItem from="1536630045127" duration="356000" />
+      <workItem from="1536717061050" duration="3782000" />
+      <workItem from="1536735602382" duration="2590000" />
+      <workItem from="1536826374952" duration="2248000" />
+      <workItem from="1536891796941" duration="76000" />
+      <workItem from="1536892898668" duration="50000" />
+      <workItem from="1536893310274" duration="6491000" />
+      <workItem from="1537154628572" duration="16650000" />
+      <workItem from="1537237744380" duration="5408000" />
+      <workItem from="1537257621073" duration="1256000" />
+      <workItem from="1537770917363" duration="3966000" />
+      <workItem from="1537947720884" duration="1734000" />
+      <workItem from="1538012482137" duration="20293000" />
+      <workItem from="1538098767971" duration="24553000" />
+      <workItem from="1538184781982" duration="10819000" />
+      <workItem from="1538357851327" duration="14164000" />
+      <workItem from="1538444653338" duration="28198000" />
+      <workItem from="1538531267505" duration="11641000" />
+      <workItem from="1538626820807" duration="805000" />
+      <workItem from="1538628781694" duration="3867000" />
+      <workItem from="1538704745177" duration="11450000" />
+      <workItem from="1538792522142" duration="6989000" />
+      <workItem from="1538963019633" duration="3278000" />
+      <workItem from="1539137747149" duration="9658000" />
+      <workItem from="1539222201296" duration="4269000" />
+      <workItem from="1539308358142" duration="9467000" />
+      <workItem from="1539395068743" duration="4269000" />
+      <workItem from="1539578009875" duration="1221000" />
+      <workItem from="1539581973212" duration="4847000" />
+      <workItem from="1539765987469" duration="3558000" />
+      <workItem from="1539826814883" duration="2969000" />
+      <workItem from="1539856117809" duration="81000" />
+      <workItem from="1539916487352" duration="566000" />
+      <workItem from="1539922246990" duration="704000" />
+      <workItem from="1539936301578" duration="1732000" />
+      <workItem from="1539940730493" duration="870000" />
+      <workItem from="1539999369993" duration="1262000" />
+      <workItem from="1540191966983" duration="7147000" />
+      <workItem from="1540258868550" duration="14911000" />
+      <workItem from="1540345788123" duration="595000" />
+      <workItem from="1540431485664" duration="17731000" />
+      <workItem from="1540517732840" duration="19108000" />
+      <workItem from="1540604060783" duration="873000" />
+      <workItem from="1540781349544" duration="9896000" />
+      <workItem from="1540863420785" duration="13455000" />
+      <workItem from="1540956202220" duration="10700000" />
+      <workItem from="1541036533425" duration="20214000" />
+      <workItem from="1541149359287" duration="1403000" />
+      <workItem from="1541208373197" duration="1861000" />
+      <workItem from="1541381482638" duration="4738000" />
+      <workItem from="1541468095739" duration="11009000" />
+      <workItem from="1541556728246" duration="10849000" />
+      <workItem from="1541643307420" duration="8131000" />
+      <workItem from="1541727580262" duration="8427000" />
+      <workItem from="1541817795967" duration="6443000" />
+      <workItem from="1541986680049" duration="9669000" />
+      <workItem from="1542076333293" duration="8917000" />
+      <workItem from="1542101507178" duration="648000" />
+      <workItem from="1542159693843" duration="4454000" />
+      <workItem from="1542246286065" duration="1024000" />
+      <workItem from="1542247344324" duration="8225000" />
+      <workItem from="1542333083783" duration="1366000" />
+      <workItem from="1542419903321" duration="2557000" />
+      <workItem from="1542591564018" duration="4195000" />
+      <workItem from="1542677526619" duration="10454000" />
+      <workItem from="1542765146715" duration="12490000" />
+      <workItem from="1542850538999" duration="5745000" />
+      <workItem from="1542937444829" duration="2397000" />
+      <workItem from="1543196853250" duration="2335000" />
+      <workItem from="1543291974660" duration="11515000" />
+      <workItem from="1543368860660" duration="20054000" />
+      <workItem from="1543549949357" duration="6802000" />
+      <workItem from="1543628106517" duration="4715000" />
+      <workItem from="1543802637247" duration="7364000" />
+      <workItem from="1543889389309" duration="4456000" />
+      <workItem from="1543973763779" duration="2712000" />
+      <workItem from="1544064694709" duration="4179000" />
+      <workItem from="1544146585024" duration="3067000" />
+      <workItem from="1544178904392" duration="190000" />
+      <workItem from="1544233214087" duration="1197000" />
+      <workItem from="1544405878714" duration="1458000" />
+      <workItem from="1544492616678" duration="6054000" />
+      <workItem from="1544579135422" duration="3991000" />
+      <workItem from="1544849490097" duration="2070000" />
+      <workItem from="1545035516655" duration="1682000" />
+      <workItem from="1545097234135" duration="1108000" />
+      <workItem from="1545188776364" duration="14953000" />
+      <workItem from="1545270144449" duration="8093000" />
+      <workItem from="1545356776274" duration="612000" />
+      <workItem from="1545363325378" duration="1775000" />
+      <workItem from="1545442793695" duration="1608000" />
+      <workItem from="1545615511786" duration="1498000" />
+      <workItem from="1545701813075" duration="6540000" />
+      <workItem from="1545788211910" duration="4237000" />
+      <workItem from="1545874908366" duration="6093000" />
+      <workItem from="1545965295526" duration="9896000" />
+      <workItem from="1546047658193" duration="614000" />
+      <workItem from="1546395474666" duration="6133000" />
+      <workItem from="1546417860597" duration="2695000" />
+      <workItem from="1546479748659" duration="5610000" />
+      <workItem from="1546934888957" duration="7862000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="706338000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-7" y="0" width="1471" height="1047" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Favorites" order="0" side_tool="true" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.20269312" />
+      <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Docker" order="0" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="1" show_stripe_button="false" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="2" sideWeight="0.49456128" visible="true" weight="0.2354874" />
+      <window_info anchor="bottom" id="Event Log" order="3" sideWeight="0.50543875" side_tool="true" weight="0.2354874" />
+      <window_info anchor="bottom" id="Version Control" order="4" weight="0.3274918" />
+      <window_info anchor="bottom" id="Message" order="5" />
+      <window_info anchor="bottom" id="Find" order="6" />
+      <window_info anchor="bottom" id="Run" order="7" />
+      <window_info anchor="bottom" id="Debug" order="8" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="11" />
+      <window_info anchor="right" id="Database" order="0" weight="0.32978722" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="1" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="2" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="3" weight="0.25" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/application/modules/user_admin/controllers/GuaranteepkController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="274">
+          <caret line="240" column="53" selection-start-line="240" selection-start-column="53" selection-end-line="240" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/print-sales.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="1257" column="66" selection-start-line="1257" selection-start-column="66" selection-end-line="1257" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/list-asus-max-pro-m2.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="204" selection-start-line="17" selection-start-column="204" selection-end-line="17" selection-end-column="204" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/preorder-oppo-f9-xanh-phi-thuy.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="199" selection-start-line="18" selection-start-column="199" selection-end-line="18" selection-end-column="199" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/list-oppo-f9-xanh-phi-thuy.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="204" selection-start-line="17" selection-start-column="204" selection-end-line="17" selection-end-column="204" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/preorder-asus-max-pro-m2.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="199" selection-start-line="18" selection-start-column="199" selection-end-line="18" selection-end-column="199" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Zend/Business/Addon/ProductProperties.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1853">
+          <caret line="109" column="9" selection-start-line="109" selection-start-column="9" selection-end-line="109" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/user_admin/views/scripts/report/nuoc-hoa.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2159">
+          <caret line="127" column="30" selection-start-line="127" selection-start-column="30" selection-end-line="127" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/preorder-nokia-81.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="199" selection-start-line="18" selection-start-column="199" selection-end-line="18" selection-end-column="199" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/list-xiaomi-mi-mix-3.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="204" selection-start-line="17" selection-start-column="204" selection-end-line="17" selection-end-column="204" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/order-fast.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2363">
+          <caret line="139" column="46" selection-start-line="139" selection-start-column="46" selection-end-line="139" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/preorder-xiaomi-mi-mix-3.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="199" selection-start-line="18" selection-start-column="199" selection-end-line="18" selection-end-column="199" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/list-nokia-81.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="204" selection-start-line="17" selection-start-column="204" selection-end-line="17" selection-end-column="204" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Zend/Business/Addon/Imei.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="224">
+          <caret line="136" column="20" selection-start-line="136" selection-start-column="20" selection-end-line="136" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/user_admin/views/scripts/report/phu-kien.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="616">
+          <caret line="136" column="191" selection-start-line="136" selection-start-column="191" selection-end-line="136" selection-end-column="191" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/user_admin/controllers/SectionController.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/controllers/SectionController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2584">
+          <caret line="152" column="27" selection-start-line="152" selection-start-column="21" selection-end-line="152" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/section/appleft.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="286" selection-start-line="10" selection-start-column="286" selection-end-line="10" selection-end-column="286" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/list-galaxy-watch.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="204" selection-start-line="17" selection-start-column="204" selection-end-line="17" selection-end-column="204" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/preorder-galaxy-watch.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" column="6" selection-start-line="19" selection-start-column="6" selection-end-line="19" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/bootstrap.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="22" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="595">
+          <caret line="35" column="31" selection-start-line="35" selection-start-column="31" selection-end-line="36" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/user_admin/controllers/IndexController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" column="47" selection-start-line="19" selection-start-column="47" selection-end-line="19" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Zend/Business/Addon/Cart.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="335">
+          <caret line="379" column="24" selection-start-line="379" selection-start-column="24" selection-end-line="379" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/controllers/PayorderController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="12087">
+          <caret line="711" column="34" selection-start-line="711" selection-start-column="34" selection-end-line="711" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Zend/Business/WsNew/VongQuay.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="6" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/payorder/print-gh3.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2618">
+          <caret line="154" column="53" selection-start-line="154" selection-start-column="53" selection-end-line="154" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Zend/Business/Addon/Users.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="12" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/user_admin/controllers/ReportController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36635">
+          <caret line="2155" column="48" selection-start-line="2155" selection-start-column="48" selection-end-line="2155" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Zend/Business/Common/AcceptByCated.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="42" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/xuat-users-products-year.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="73" selection-start-line="13" selection-start-column="66" selection-end-line="13" selection-end-column="73" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Zend/Business/WsNew/NewsItem.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6800">
+          <caret line="400" column="33" selection-start-line="400" selection-start-column="33" selection-end-line="400" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/controllers/StatisticalController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="84235">
+          <caret line="4955" column="77" selection-start-line="4955" selection-start-column="77" selection-end-line="4958" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/controllers/OrderController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10302">
+          <caret line="606" column="9" selection-start-line="606" selection-start-column="9" selection-end-line="606" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Zend/Business/Ws/ProductsItem.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="259">
+          <caret line="254" column="10" selection-start-line="254" selection-start-column="10" selection-end-line="254" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Zend/Business/Addon/ProductsColor.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="327">
+          <caret line="145" column="14" selection-start-line="145" selection-start-column="14" selection-end-line="145" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/order/checkmaw.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="480">
+          <caret line="54" column="71" selection-start-line="54" selection-start-column="71" selection-end-line="54" selection-end-column="71" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/statistical/salesday.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="504" column="46" lean-forward="true" selection-end-line="582" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Zend/Business/Addon/Options.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="531">
+          <caret line="2813" column="24" selection-start-line="2813" selection-start-column="24" selection-end-line="2813" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/complain/add.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="48" column="176" lean-forward="true" selection-start-line="48" selection-start-column="28" selection-end-line="48" selection-end-column="176" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Zend/Business/Addon/AccessByLink.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2142">
+          <caret line="126" column="20" selection-start-line="126" selection-start-column="20" selection-end-line="126" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Zend/Business/Addon/UsersProducts.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="556">
+          <caret line="4216" column="35" selection-start-line="4216" selection-start-column="27" selection-end-line="4216" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Zend/Business/Addon/Addon.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="377">
+          <caret line="506" column="24" selection-start-line="506" selection-start-column="24" selection-end-line="506" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/sim/add-list-sim.phtml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Zend/Business/Addon/General.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="76" column="54" selection-start-line="76" selection-start-column="48" selection-end-line="76" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/controllers/ComplainController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="257">
+          <caret line="84" column="8" lean-forward="true" selection-start-line="84" selection-start-column="8" selection-end-line="84" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/sim/update-price.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="18" column="59" selection-start-line="18" selection-start-column="59" selection-end-line="18" selection-end-column="59" />
+          <folding>
+            <element signature="n#style#0;n#div#1;n#form#0;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Zend/Business/HelpersNew/Sim.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="258">
+          <caret line="17" column="39" lean-forward="true" selection-start-line="17" selection-start-column="39" selection-end-line="17" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/sim/update-type.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" column="52" selection-start-line="19" selection-start-column="52" selection-end-line="19" selection-end-column="52" />
+          <folding>
+            <element signature="n#style#0;n#select#0;n#div#0;n#form#0;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#select#0;n#div#1;n#form#0;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#form#0;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/controllers/SimController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="531">
+          <caret line="145" column="25" lean-forward="true" selection-start-line="145" selection-start-column="25" selection-end-line="145" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/modules/hnam/views/scripts/sim/delete-list-sim.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="24" column="32" lean-forward="true" selection-start-line="24" selection-start-column="32" selection-end-line="24" selection-end-column="32" />
+          <folding>
+            <element signature="n#style#0;n#div#1;n#form#0;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

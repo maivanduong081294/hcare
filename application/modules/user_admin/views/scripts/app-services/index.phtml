@@ -1,0 +1,142 @@
+<div class="box box-primary panel-default">
+    <div class="box-header">
+        <div class="col-md-6">
+            <h2 style="font-weight: bold">DANH SÁCH CÀI ĐẶT APP IOS HNAMMOBILE.COM</h2>
+        </div>
+        <div class="col-md-6">
+        <form role="form" id="view-sales-day" method="get"  class="frmReport">
+            <div class="form-group  right">
+                    <div class="input-group input-group-sm">
+                        <?php
+                        $start_end = 'Date range picker';
+                        if ($this->start_end != null) {
+                            $start_end = $this->start_end;
+                        }
+                        ?>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default pull-right" id="daterange-btn">
+                                <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                                <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                        </span>
+
+                        <span class="input-group-btn">
+                            <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> Xem </i></button>
+                        </span>
+                    </div>
+                </div>
+            
+    </form>
+    </div>
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        <div class="table-responsive">
+            <table class="table table-data table-striped table-bordered table-hover">
+                <tbody>
+                    <tr>
+                        <th><input name="select-all" type="checkbox" data-toggle="tooltip" title="Select All"/></th>
+                        <th>Chi nhánh</th>
+                        <th>Gói cài đặt</th>
+                        <th>Apple bán</th>
+                        <th>Free(Hnam)</th>
+                        <th>Free(Ngoài)</th>
+                        <th>Tính phí</th>
+                        <th>Quản lý(15%)</th>
+                        <th>Nhân viên(40%)</th>
+                        <th>% Free</th>
+                        <th>% Tính phí</th>
+                        <th>Tỷ trọng</th>
+                        <!--<th width="80">Thao tác</th>-->
+                    </tr>
+                    <?php
+                    $no = 1;
+                    foreach ($this->list_vote as $list) {
+                        $storeid = $list["userid"];
+                        $cProducts = $this->cProducts[$storeid];
+                        $cSetup_hnam = $this->cSetup_hnam[$storeid];
+                        $cSetup_other = $this->cSetup_other[$storeid];
+                        $cSetup_charge = $this->total_count[$storeid];
+                        $__sSetup_charge = $this->total_sum[$storeid];
+                        $cSetup = $cSetup_hnam + $cSetup_other + $cSetup_charge;
+                        $check_dat = ($cSetup / $cProducts) * 100;
+                        $check_hnam = ($cSetup_hnam / $cProducts) * 100;
+                        $check_other = ($cSetup_other / $cProducts) * 100;
+                        $check_charge = ($cSetup_charge / $cProducts) * 100;
+                        $check_free = $check_hnam + $check_other;
+                        if (round($check_free, 2) >= 50) {
+                            $color1 = "#3c8dbc";
+                        } else {
+                            $color1 = "red";
+                        }
+                        if (round($check_charge, 2) >= 30) {
+                            $color2 = "#3c8dbc";
+                        } else {
+                            $color2 = "red";
+                        }
+                        if (round($check_dat, 2) >= 80) {
+                            if (round($check_charge, 2) >= 30 && round($check_free, 2) >= 50) {
+                                $color = "#3c8dbc";
+                            } else {
+                                $color = "red";
+                            }
+                        } else {
+                            $color = "red";
+                        }
+                        if (round($check_dat, 2) > 100) {
+                            $check_dat = 100;
+                        }
+                        $is_actived = $list["enabled"];
+                        ?>
+                        <tr bgcolor="<?echo $bgcolor; ?>" class="row-<?php echo $list["userid"]; ?>">
+                            <? $no++;?>
+                            <td><input type="checkbox" name="select-user[]" class="check-user minimal-red" value="<?php echo $list["userid"]; ?>"/></td>
+                            <td><?php echo $list["storename"]; ?></td>
+                            <td>Gói cài đặt IOS trị giá 10 triệu</td>
+                            <td><?php echo $cProducts ?></td>
+                            <td><?php echo $cSetup_hnam ?></td>
+                            <td><?php echo $cSetup_other ?></td>
+                            <td><?php echo $cSetup_charge ?></td>
+                            <td><?php echo number_format($__sSetup_charge * 15 / 100); ?></td>
+                            <td><?php echo number_format($__sSetup_charge * 40 / 100); ?></td>
+                            <td style="background: <?php echo $color1 ?> ; color: #FFF"><?php echo round($check_free, 2); ?>%</td>
+                            <td style="background: <?php echo $color2 ?> ; color: #FFF"><?php echo round($check_charge, 2) ?>%</td>
+                            <td style="background: <?php echo $color ?> ; color: #FFF" width="70"><?php echo round($check_dat, 2) ?>%</td>
+                            <!--<td>-->
+                                <!--<a class="btn  btn-info btn-sm" data-toggle="tooltip" id="copy"  href="/admin/user/app-services/by-vote?vote_id=<?php echo $list["userid"]; ?>&month=<?php echo $this->months ?>" target="_blank"><i class="fa fa-eye"></i></a>-->
+                                <!--<a id="delete" class="btn  btn-danger btn-sm" data-toggle="tooltip" rels=""  href="#"><i class="fa fa-trash-o"></i></a>-->
+                            <!--</td>-->
+                        </tr>
+                    <div id="ddelete" style="display:none;"></div>
+                    <?php
+                    $sSetup_hnam +=$cSetup_hnam;
+                    $sSetup_other +=$cSetup_other;
+                    $sSetup_charge +=$cSetup_charge;
+                    $total_products +=$cProducts;
+                    $___sSetup_charge1 += $__sSetup_charge * 15 / 100;
+                    $___sSetup_charge2 += $__sSetup_charge * 40 / 100;
+                    ?>
+<?php } ?>
+
+                <tr style="color: red ;font-size: 15px">
+                    <th><input onclick="checkme()" name="checkall" type="checkbox" data-toggle="tooltip" title="Select All"/></th>
+                    <th colspan="1">Tổng cộng</th>
+                    <th colspan="1"><strong>Tính đến <?php echo date("d-m-Y H:i:s"); ?>  </strong></th>
+                    <th colspan="1"><strong><?php echo $total_products ?> SP Bán ra </strong></th>
+                    <th colspan="1"><strong><?php echo $sSetup_hnam ?> lượt cài </strong></th>
+                    <th colspan="1"><strong><?php echo $sSetup_other ?> lượt cài </strong></th>
+                    <th colspan="1"><strong><?php echo $sSetup_charge ?> lượt cài </strong></th>
+                    <th colspan="1"><?php echo number_format($___sSetup_charge1); ?></th>
+                    <th colspan="1"><?php echo number_format($___sSetup_charge2) ?></th>
+                    <th colspan="3"></th>
+                    <!--<th colspan="1"></th>-->
+                </tr>     
+                </tbody>
+
+            </table>
+            <div class="btn btn-sm dat"> <i class="fa fa-thumbs-up"> Đạt</i></div>
+            <div class="btn btn-sm nodat"><i class="fa fa-thumbs-down"> Không đạt </i></div>
+        </div>
+    </div><!-- /.box-body -->
+</div><!-- /.box -->
+</div>

@@ -1,0 +1,101 @@
+<script type="text/javascript" src="http://www.hnammobile.com/fckeditor/fckeditor.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<style>
+    #info{font-size:14px; margin:20px;}
+    #info table tr td{font-size:14px;}
+    input{padding:10px; font-size: 14px; width: 400px;}
+</style>
+<h1>Cập nhật giá máy cũ</h1>
+<?if ($this->hasItem > 0){?>
+<form id="info">
+    <input type="hidden" name="itemid" id="itemid" value="<?echo $this->data["itemid"];?>" />
+    <input type="hidden" name="usedid" id="usedid" value="<?echo $this->usedid;?>" />
+    <table cellpadding="20" width="100%">
+        <tr>
+            <td align="right" width="110" valign="top">
+                Tên sản phẩm</td>
+            <td style="padding-left: 5px;">
+                <input readonly="readonly" type="text" name="title"  id="title" value="<?=($this->data['title']);?>">
+            </td>
+        </tr>
+        <tr>
+            <td align="right" width="110" valign="top">
+                Giá Hnam</td>
+            <td style="padding-left: 5px;">
+                <input readonly="readonly" type="text" name="price"  id="price" value="">
+            </td>
+        </tr>
+        <tr>
+            <td align="right" width="110" valign="top">
+                Giá Công ty</td>
+            <td style="padding-left: 5px;">
+                <input readonly="readonly" type="text" name="original_price"  id="original_price" value="">
+            </td>
+        </tr>
+        <tr id="loginTr">
+            <td align="right" width="110" valign="top">
+                Bảo hành</td>
+            <td style="padding-left: 5px;">
+                <input readonly="readonly" type="text" name="warranty"  id="warranty" value="<?=($this->data['warranty'] == '' ? '12 tháng' : $this->data['warranty'] );?>">
+            </td>
+        </tr>
+        <tr id="loginTr">
+            <td align="right" width="110" valign="top">
+                Giá mới</td>
+            <td style="padding-left: 5px;">
+                <input type="text" name="newprice" id="newprice" value="">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+        
+        <tr id="loginTr">
+            <td>
+                &nbsp;
+            </td>
+            <td>
+                <button id="public">Đăng web</button>
+                <button id="public2" class="hide">Hoàn tất</button>
+            </td>
+        </tr>
+    </table>
+</form>
+<script>
+
+$().ready(function(){
+    $("#public").click(function(e){
+        e.preventDefault();
+        var nprice = $("#newprice").val();
+        if (nprice == ""){
+            alert("Vui lòng nhập giá mới!");
+            $("#newprice").focus();
+            return;
+        }
+        $("#public").hide();
+        var url = "/admin/user/usedphone/update-info2";
+        $.post(url, $("#info").serialize(), function(resp){
+            if (resp.err == 0) {
+                alert("Đã cập nhật giá!");
+                $("#public").hide();
+                $("#public2").show();
+            } else {
+                alert("Lỗi trong quá trình cập nhật. Vui lòng thử lại!");
+                $("#public").show();
+            }
+            
+        }, "json");
+    });
+});
+
+</script>
+<?}else{?>
+<h1>Máy chưa cập nhật mã sản phẩm</h1>
+<?}?>    

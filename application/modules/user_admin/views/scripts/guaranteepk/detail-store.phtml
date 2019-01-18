@@ -1,0 +1,358 @@
+<div class="box box-primary">
+    <form  name="data_frm" id="data_frm" method="post" action="/admin/user/guaranteepk/updates" target="hiddenIF"  enctype="multipart/form-data">
+    <iframe  name="hiddenIF" style="display: none" scrolling="auto"></iframe>
+    <input type="hidden"   name="token" value="<?php echo $this->token?>">
+    <input type="hidden"   name="id" value="<?php echo $this->detail["id"]?>">
+    <div class="box-header">
+        <div class="col-md-10">
+            <h3 class="box-title">Chi tiết phiếu bảo hành - <b>Mã phiếu : <?php echo $this->detail["id"]?></b></h3> 
+            <div class="row">
+                    <div class="row bs-wizard hidden-xs" style="border-bottom:0;">
+                        <div class="col-xs-3 step_1 bs-wizard-step disabled">
+                          <div class="text-center bs-wizard-stepnum">Bước 1</div>
+                          <div class="progress"><div class="progress-bar"></div></div>
+                          <a href="#" class="bs-wizard-dot"></a>
+                          <div class="bs-wizard-info text-center">Tìm kiếm và nhập thông tin khách hàng.</div>
+                        </div>
+
+                        <div class="col-xs-3 bs-wizard-step disabled step_2"><!-- complete -->
+                          <div class="text-center bs-wizard-stepnum">Bước 2</div>
+                          <div class="progress"><div class="progress-bar"></div></div>
+                          <a href="#" class="bs-wizard-dot"></a>
+                          <div class="bs-wizard-info text-center">Nhập thông tin phiếu bảo hành</div>
+                        </div>
+
+                        <div class="col-xs-3 bs-wizard-step disabled step_3"><!-- complete -->
+                          <div class="text-center bs-wizard-stepnum">Bước 3</div>
+                          <div class="progress"><div class="progress-bar"></div></div>
+                          <a href="#" class="bs-wizard-dot"></a>
+                          <div class="bs-wizard-info text-center">Nhập tên nhân viên lấy máy và xác nhận</div>
+                        </div>
+
+                        <div class="col-xs-3 bs-wizard-step disabled step_4"><!-- active -->
+                          <div class="text-center bs-wizard-stepnum">Bước 4</div>
+                          <div class="progress"><div class="progress-bar"></div></div>
+                          <a href="#" class="bs-wizard-dot"></a>
+                          <div class="bs-wizard-info text-center"> Nhân viên sửa chữa và Hoàn tất</div>
+                        </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary right" ><i class="fa fa-save" > Lưu</i></button>
+            <a title="In biên nhận cho khách" data-toggle="tooltip" onclick="prints(<?php echo $this->detail["id"] ?>,'<?php echo $this->token; ?>');return false;"  class="btn btn-warning"><i class="fa fa-print" aria-hidden="true"> IN </i></a>
+            <br/>
+            <?php if($this->detail["isdel"]==0){ ?>
+            <span style="color: red">Nếu chưa in và chưa chọn nhân viên sữa chữa thì bạn có thể Xóa khi thông tin phiếu bị sai </span> <button onclick="delbystore('<?php echo $this->detail["id"]?>','<?php echo $this->token?>');return false;" class="btn btn-danger right" ><i class="fa fa-remove" > Xóa</i></button>
+            <?php }?>
+        </div>
+    </div>
+    <?php
+        $purchase_date = '';
+        if(strtotime($this->detail["purchase_date"])>0){
+            $purchase_date = date('d/m/Y',  strtotime($this->detail["purchase_date"]));
+        }
+    ?>
+    <div class="table-responsive">
+    <table class="table table-condensed table-bordered table-striped">
+        <tr>
+            <th width="50%">THÔNG TIN KHÁCH HÀNG</th>
+            <th width="50%">THÔNG TIN SẢN PHẨM</th>
+        </tr>
+        <tr>
+            <td colspan="2">Ngày tiếp nhận: <?php echo date('d/m/Y H:i:s',  strtotime($this->detail["datetime"])) ?></td>
+        </tr>
+        <tr>
+            <td>Họ Tên : <?php echo $this->detail_customer["fullname"] ?></td>
+            <td>MODEL : <?php echo $this->detail["item_name"] ?></td>
+        </tr>
+        <tr>
+            <td>Địa chỉ : <?php echo $this->detail_customer["address"] ?></td>
+            <td>Số IMEI : <?php echo $this->detail["imei"] ?></td>
+            
+            
+        </tr>
+        <?php
+            $purchase_date = '';
+            if(strtotime($this->detail["purchase_date"])>0){
+                $purchase_date = date('d/m/Y',  strtotime($this->detail["purchase_date"]));
+            }
+        ?>
+        <tr>
+            <td>Điện thoại : <?php echo $this->detail_customer["phone"] ?></td>
+            <td>Số SERI : <?php echo $this->detail["seri"] ?></td>
+            
+        </tr>
+        <tr>
+            <td>Hư hỏng : <?php echo $this->detail["damages"] ?></td>
+            <td>Ngày mua : <?php echo $purchase_date ?></td>
+        </tr>
+        <tr>
+            <td>Tình trạng tiếp nhận : <?php echo $this->detail["status_receive"] ?></td>
+            <td>Tình trạng bảo hành của máy: <?php echo $this->status_guarantee ?></td>
+        </tr>
+        <tr>
+            <td>Phụ kiện kèm theo : <?php echo $this->detail["acc_attach"] ?></td>
+            <td>
+                
+                <!--Báo giá :--> 
+                <?php if((int)$this->detail["money"] ==0){ ?>
+<!--                <div class="input-group input-group-sm col-md-6">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <input type="text" min="0" class="form-control" onkeyup="format_price('money');" id="money" name="money" value="<?php // echo number_format($this->detail["money"]) ?>" placeholder="Nhập báo giá từ hãng vào đây">
+                </div>-->
+                <?php } else {?>
+                <?php // echo number_format($this->detail["money"]) ?>
+                <?php }?>
+            </td>
+        </tr>
+        <tr>
+            <td>Ghi chú : <?php echo $this->detail["note"] ?></td>
+            <td>Nhân viên : 
+                <?php if($this->detail["receiver_id"] ==0){ ?>
+                    <div class="form-group">
+                        <div class="input-group col-md-6">
+                            <div class="input-group-addon">
+                                <i class="fa fa-text-width"></i>
+                            </div>
+                            <select style="width: 100%" onchange="change_receiver();" class="selects"  name="receiver_id" id="receiver_id">
+                                <option value="">Chọn tên nhân viên</option>
+                                <?php foreach ($this->sreceiver as $items){ 
+                                    $sl='';
+                                    if($this->detail["receiver_id"] == $items["userid"]){
+                                       $sl = 'selected="selected"'; 
+                                    }
+                                    ?>
+                                <option <?php echo $sl ?> value="<?php echo $items["userid"] ?>"><?php echo $items["fullname"] ?></option>
+                                <?php }?>
+                            </select>
+                        </div>
+                    </div>
+                    <?php } else { ?>
+                    <b class="size20"> <?php echo  $this->receiver[$this->detail["receiver_id"]] ?></b>
+                    <?php }?>
+            
+            </td>
+        </tr>
+        <tr>
+            <td>Chi nhánh : <?php echo $this->storename[$this->detail["storeid"]] ?></td>
+            <td>
+<!--            <td>ĐVSC: 
+                <?php if((int)$this->detail["money_dvsc"] ==0){ ?>
+                <div class="input-group input-group-sm col-md-6">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <input type="text" min="0" class="form-control" onkeyup="format_price('money_dvsc');" id="money_dvsc" name="money_dvsc" value="<?php // echo number_format($this->detail["money_dvsc"]) ?>" placeholder="ĐVSC">
+                </div>
+                <?php } else {?>
+                <?php // echo number_format($this->detail["money_dvsc"]) ?>
+                <?php }?>
+            </td>-->
+                
+                Ghi chú nội bộ: <?php echo $this->detail["note2"] ?>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <!--Hnam Hỗ trợ:--> 
+                <?php if((int)$this->detail["money_hnam"] ==0){ ?>
+<!--                <div class="input-group input-group-sm col-md-6">
+                    <div class="input-group-addon">
+                        <i class="fa fa-text-width"></i>
+                    </div>
+                    <input type="text" min="0" class="form-control" onkeyup="format_price('money_hnam');" id="money_hnam" name="money_hnam" value="<?php // echo number_format($this->detail["money_hnam"]) ?>" placeholder="HNAM">
+                </div>-->
+                <?php } else {?>
+                <?php // echo number_format($this->detail["money_hnam"]) ?>
+                <?php }?>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">Ghi chú: <textarea placeholder="Nhập ghi chú vào đây..." class="form-control" required="required" name="note" id="note" rows="5" ><?php echo $this->detail["note"] ?></textarea></td>
+        </tr>
+        
+        <tr>
+            <td colspan="2">
+                <div class="table-responsive">
+                <table class="table table-bordered table-condensed table-striped">
+                    <tr>
+                        <th width="10">STT</th>
+                        <th width="200">Tên đơn vị bảo hành</th>
+                        <th width="200">Ngày hẹn</th>
+                        <th width="300">Trạng thái</th>
+                        <th>Ghi chú</th>
+                        <th width="200">Số biên nhận</th>
+                        <th width="200">Nhân viên</th>
+                    </tr>
+                    <?php
+                    $stt=0;
+                    foreach ($this->warranty as $items){ ?>
+                            <tr>
+                                <td><?php echo ++$stt; ?></td>
+                                <td><?php echo $this->name_producers[$items["id_warranty"]] ?></td>
+                                <td><?php echo date('d/m/Y',  strtotime($items["dealine"])); ?></td>
+                                <td><?php echo $this->status_complete[$this->detail["complete"]] ?></td>
+                                <td><?php echo $items["note"] ?></td>
+                                <td><?php echo $items["receipt"] ?></td>
+                                <td><?php echo $items["creator"] ?></td>
+                            </tr>
+                    <?php }?>
+                </table>
+                </div>
+                
+            </td>
+        </tr>
+    </table>
+    </div>
+    <div class="box-footer">
+        <div class="col-md-8">
+            <?php if($this->detail["receiver_id3"] >0){ ?>
+            <?php if($this->detail["complete"] >1){ ?>
+            <?php if((int)$this->detail["iddepartment"] ==0){ ?>
+            <div class="form-group col-md-6">
+                <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Xuất phụ kiện : </label>
+                <div class="input-group input-group-sm">
+                    <div class="input-group-addon">
+                        <i class="fa fa-star"></i>
+                    </div>
+                    <select name="iddepartment" onchange="change_department();" id="iddepartment" class="selects">
+                        <option value="0">Phòng ban/Khách lẻ</option>
+                        <option value="99999">Khách lẻ</option>
+                        <?php foreach ($this->list_department as $items){ 
+                            $sl = '';
+                            if ($this->complete == $items["id"]) {
+                                $sl = 'selected = selected';
+                            }
+                            ?>
+                        <option <?php echo $sl ?> value="<?php echo $items["id"] ?>" ><?php echo $items["name"] ?></option>
+                        <?php }?>
+                    </select>
+                </div>
+            </div>
+                <div class="form-group col-md-6 frm_store hidden">
+                <div class="input-group input-group-sm">
+                    <div class="input-group-addon">
+                        <i class="fa fa-star"></i>
+                    </div>
+                    <select style="width: 100%" name="storeid_out" id="storeid_out" class="selects">
+                        <option value="0">Chi nhánh/Khách lẽ</option>
+                        <option value="99999">Khách lẻ</option>
+                        <?php foreach ($this->list_store as $items){ 
+                            ?>
+                        <option  value="<?php echo $items["userid"] ?>" ><?php echo $items["storename"] ?></option>
+                        <?php }?>
+                    </select>
+                </div>
+            </div>
+            <?php } else {?>
+                <?php if($this->detail["iddepartment"] ==99999){ ?>
+                    Đã xuất cho khách lẻ
+                <?php } else { ?>
+                <b>Đã xuất qua : Phòng ban: <?php echo $this->department[$this->detail["iddepartment"]] ?> - 
+                    <?php if((int)$this->detail["storeid_out"] >0){
+                        echo $this->storename[$this->detail["storeid_out"]];
+                    } ?>
+                </b>
+                <?php }?>
+                <?php }?>
+            <?php }?>
+            <?php }?>
+                
+        </div>
+    </div>
+</div>
+<input type="hidden" name="receiver" id="receiver" value="<?php echo $this->detail["receiver"] ?>" />
+</form>
+    <div class="modal fade" id="updates">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div class="show_frm"></div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="hidden" id="ddelete"></div>
+<script>
+    function delbystore(id,token){
+        var result = confirm('Bạn có chắc muốn hủy phiếu này không?');
+            if (result){
+                $('#ddelete').load('/admin/user/guaranteepk/delbystore?id=' + id+'&token='+token, function () {
+                    alert('Hủy thành công');
+                    window.location.href = '/admin/user/guaranteepk/list'
+                });
+            }
+        
+    }
+    function change_department(){
+        var iddepartment = $('#iddepartment option:selected').val();
+        if(iddepartment ==10){
+            $('.frm_store').removeClass('hidden');
+        }else{
+           $('.frm_store').removeClass('hidden').addClass('hidden'); 
+        }
+    }
+    function prints(id,token){
+        $.ajax
+        ({
+           method: "POST",
+           url: "/admin/user/guaranteepk/print",
+           data: { id:id, token:token },
+           dataType: "html",
+            success: function(data){
+                console.log(data);
+              $('.show_frm').html(data);
+              $('#updates').modal('show');
+            }
+        });
+    }
+    function change_receiver(){
+        var receiver = $("#receiver_id option:selected").text();
+        $('#receiver').val(receiver);
+    }
+     function format_price(id){
+        var price = $("#"+id).val();
+        price = price.replace(/,/gi, "");
+        price = price + ".";
+        price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        var sprice = price.split(".");
+        $("#"+id).val(sprice[0]);
+    }
+    
+    function shows(){
+        $('#save').hide();
+        $('#wt').show();
+    }
+    function hides(){
+        $('#save').show();
+        $('#wt').hide();
+    }
+    function notification (msg,id){
+        alert(msg);
+        $('.tb').html('');
+        $('#'+id).focus(); 
+        var msg_add = '<i class="fa fa-times-circle-o"> '+msg+' </i>';
+        $('#'+id+"_tb").html(msg_add); 
+        hides();
+//        location.reload();
+    }
+    function completes(msg){
+        $('.tb').html('');
+        var msg_add = '<i class="fa fa-check" aria-hidden="true"> </i>'+msg+'';
+        alert(msg);
+        $('#complete').html(msg_add);
+        window.location.reload(true);
+    }
+    $( document ).ready(function() {
+        step_3();
+        <?php if((int)$this->detail["complete"] >1){ ?>
+            step_4();    
+        <?php }?>
+    });
+</script>

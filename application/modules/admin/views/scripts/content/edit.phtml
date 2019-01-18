@@ -1,0 +1,36 @@
+<script>
+  $(document).ready(function()
+  {
+    $("#frmContent").validate();
+  });
+</script>
+
+<div id="centerCont"> 
+<strong>Content >> </strong> Edit
+<br />
+<br />
+<form name="frmContent" id="frmView" action="/admin/content/save" method="post">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="mainTab">
+<tr>
+ <td class="hligh2" width="20%"><label for="contentname">Content Name</label><span class="require">*</span></td>
+ <td class="hligh2">   
+   <input type="text" name="contentname" id="contentname" 
+   value="<?php echo $this->data->contentname; ?>" style="width:200px" maxlength="50"
+   title="Bạn phải nhập tên View" class="required">
+   </td>
+</tr>
+<tr>
+ <td class="hligh1" width="20%"><label for="module">Content</label></td>
+ <td class="hligh1">   
+ 	<textarea id="fullcontent" name="fullcontent" rows=5 style="width:90%" ><?echo $this->data->content ?></textarea>  
+ </td>
+</tr>
+
+</table>
+<br />
+<p>
+<input type="button" name="cancel" value="Cancel" onclick="window.location='/admin/content/list'"  class="button"/>
+<input type="submit" name="submit" value="Submit" class="button"/>
+<input type="hidden" name="id" value="<?php echo $this->data->contentid; ?>" />
+</p>
+</form>

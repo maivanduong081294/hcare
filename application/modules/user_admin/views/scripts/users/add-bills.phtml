@@ -1,0 +1,602 @@
+<link rel="stylesheet" href="/backend/plugins/daterangepicker/daterangepicker-bs3.css">
+<link rel="stylesheet" href="/backend/plugins/select2/select2.min.css">
+<script src="https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js" ></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js" ></script>
+<script src="http://cdn.datatables.net/buttons/1.2.4/js/buttons.html5.min.js" ></script>
+<style>
+    .select2 {
+        width: 100% !important;
+    }
+</style>
+<div class="panel-default">
+<form role="form" action="" class="frmReport">
+        <div class="box-header">
+            <h3 class="box-title">Nhập phiếu chi</h3>
+        </div><!-- /.box-header -->
+        <div id="frm_add" style="display: none" class="box-body">
+            <div class="col-md-6">
+                <!-- form start -->
+                <div>
+                    <div class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Số phiếu chi : </label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-laptop"></i>
+                            </div>
+                            <input type="text" class="form-control" name="number_pc" id="number_pc" value="<?php echo $this->number_pc ?>" placeholder="Số phiếu chi...">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Tên : </label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-laptop"></i>
+                            </div>
+                            <input type="text" class="form-control" name="name" id="name" value="<?php echo $this->detail["name"] ?>" placeholder="Chi tiền mua xe trúng thưởng...">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Ngày chi : </label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-laptop"></i>
+                            </div>
+                            <input type="text" class="form-control" name="bill_datetime" id="bill_datetime" placeholder="dd/mm/yyyy" value="<?php if (!empty($this->detail)) echo date('d/m/Y', strtotime($this->detail["bill_datetime"])); ?>" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Mô tả : </label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-laptop"></i>
+                            </div>
+                            <textarea class="form-control" name="content" id="content" placeholder="Nhập nội dung vào đây..."><?php echo $this->detail["content"] ?></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Mã hóa đơn : </label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-laptop"></i>
+                            </div>
+                            <input type="text" class="form-control" name="bills_id" id="bills_id" value="<?php echo $this->detail["bills_id"] ?>" placeholder="Mã hóa đơn...">
+                        </div>
+                    </div>
+                    <?php
+                    $dayout = '';
+                    if($this->detail["dayout"] !=null){
+                            if($this->detail["dayout"] != "0000-00-00"){
+                               $dayout = date('d/m/Y',  strtotime($this->detail["dayout"]));
+                            }
+                        }
+                     ?>
+                    <div class="form-group">
+                        <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Ngày ra hóa đơn : </label>
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-laptop"></i>
+                            </div>
+                            <input type="text" class="form-control" name="dayout" id="dayout" placeholder="dd/mm/yyyy" value="<?php  echo $dayout ; ?>" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                        </div>
+                    </div>
+                </div><!-- /.box-body -->
+            </div>
+            <div class="col-md-6">
+                <div class="box-body">
+                <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Số tiền : </label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-laptop"></i>
+                        </div>
+                        <input type="text" class="form-control pricing" name="money" id="money" value="<?php echo number_format($this->detail["money"]) ?>" placeholder="Nhập số tiền chi...10.000.000">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Hình thức : </label>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-laptop"></i></span>
+                        <select class="form-control" name="formality" id="formality">
+                            <option value="0">Hình thức...</option>
+                            <?php foreach ($this->lformality as $key => $items) { 
+                                $sel = '';
+                                if($this->detail["formality"] == $key){
+                                    $sel = 'selected ="selected"';
+                                }
+                                ?>
+                                <option <?php echo $sel; ?> value="<?php echo $key ?>"><?php echo $items; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" id="banks" style="display: none">
+                    <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Ngân hàng : </label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-laptop"></i>
+                        </div>
+                        <select class="form-control select2" name="bank" id="bank">
+                            <option value="0">Tên ngân hàng...</option>
+                            <?php foreach ($this->lbank as $key => $items) { 
+                                $sel = '';
+                                if($this->detail["bank"] == $key){
+                                    $sel = 'selected ="selected"';
+                                }
+                                ?>
+                                <option <?php echo $sel; ?> value="<?php echo $key ?>"><?php echo $items; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Phân loại : </label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-laptop"></i>
+                        </div>
+                        <select class="form-control" name="costid" id="costid">
+                            <option value="0">Phân loại...</option>
+                            <?php foreach ($this->lcost as $key => $items) { 
+                                $sel = '';
+                                if($this->detail["costid"] == $items["id"]){
+                                    $sel = 'selected ="selected"';
+                                }
+                                ?>
+                                <option <?php echo $sel; ?> value="<?php echo $items["id"] ?>"><?php echo $items["name"]; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Các chi phí : </label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-laptop"></i>
+                        </div>
+                        <select class="form-control" name="cost_detail" id="cost_detail">
+                            <option value="0">Chi phí...</option>
+                            <?php foreach ($this->lcost_detail as $key => $items) { 
+                                $sel = '';
+                                if($this->detail["cost_detail"] == $items["id"]){
+                                    $sel = 'selected ="selected"';
+                                }
+                                ?>
+                                <option <?php echo $sel; ?> value="<?php echo $items["id"] ?>"><?php echo $items["name"]; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Phòng ban : </label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-laptop"></i>
+                        </div>
+                        <select onchange="change_department('department','storeid');return false;" class="form-control" name="department" id="department">
+                            <option value="0">Các phòng ban...</option>
+                            <?php foreach ($this->ldepartment as $key => $items) { 
+                                $sel = '';
+                                if($this->detail["departmentid"] == $items["id"]){
+                                    $sel = 'selected ="selected"';
+                                }
+                                ?>
+                                <option <?php echo $sel; ?> value="<?php echo $items["id"] ?>"><?php echo $items["name"]; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+                    <div  class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Chức vụ : </label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-laptop"></i>
+                        </div>
+                        <?php if($this->detail["departmentid"] ==10){ ?>
+                        <select class="form-control" name="storeid" id="storeid">
+                            <option value="0">Chức vụ</option>
+                            <?php foreach ($this->lstore as $key => $items) { 
+                                $sel = '';
+                                if($this->detail["storeid"] == $items["userid"]){
+                                    $sel = 'selected ="selected"';
+                                }
+                                ?>
+                                <option <?php echo $sel; ?> value="<?php echo $items["userid"] ?>"><?php echo $items["storename"]; ?></option>
+                            <?php } ?>
+                        </select>
+                        <?php } else { ?>
+                        <select class="form-control" name="storeid" id="storeid">
+                            <option value="0">Chức vụ</option>
+                            <?php foreach ($this->lregency as $key => $items) { 
+                                $sel = '';
+                                if($this->detail["storeid"] == $items["id"]){
+                                    $sel = 'selected ="selected"';
+                                }
+                                ?>
+                                <option <?php echo $sel; ?> value="<?php echo $items["id"] ?>"><?php echo $items["name"]; ?></option>
+                            <?php } ?>
+                        </select>
+                        <?php }?>
+                    </div>
+                </div>
+                
+            </div>
+            </div>
+                
+        </div>
+        <div class="box-footer" align="right">
+            <a id="exports" onclick="exports(1);return false;" class="btn btn-success"><i class="fa fa-file-excel-o"> Export Excel</i></a>
+            <button type="submit" id="show" onclick="shows();return false;" class="btn btn-primary"><i class="fa fa-plus"> Thêm phiếu chi </i></button>
+            <button type="submit" style="display: none" id="btnadd" class="btn btn-primary"><i class="fa fa-floppy-o"> Lưu </i></button>
+            <button type="submit" style="display: none" id="close" onclick="closes();return false;" class="btn btn-primary"><i class="fa fa-times"> Đóng... </i></button>
+            <button style="display: none" type="button" id="btndxl" class="btn btn-primary"><i class="fa fa-spinner"> Đang xử lý</i></button>
+                    <input type="hidden" name="id" id="id" value="<?= $this->detail["id"]; ?>" />
+                </div>
+        
+        </form>
+<form method="get">
+        <div class="input-group input-group-sm col-md-6">
+                    <div class="input-group-addon">
+                        <i class="fa fa-star"></i>
+                    </div>
+            <select class="form-control" onchange="change_department('departments','storeids');return false;" name="departments" id="departments">
+                            <option value="0">Các phòng ban...</option>
+                            <?php foreach ($this->ldepartment as $key => $items) { 
+                                $sel = '';
+                                if($this->id_departments == $items["id"]){
+                                    $sel = 'selected ="selected"';
+                                }
+                                ?>
+                                <option <?php echo $sel; ?> value="<?php echo $items["id"] ?>"><?php echo $items["name"]; ?></option>
+                            <?php } ?>
+                        </select>
+                    <div class="input-group-addon">
+                        <i class="fa fa-star"></i>
+                    </div>
+            <?php if($this->id_departments ==10){ ?>
+                        <select class="form-control" name="storeids" id="storeids">
+                            <option value="0">Chức vụ...</option>
+                            <?php foreach ($this->lstore as $key => $items) { 
+                                $sel = '';
+                                if($this->id_storeid == $items["userid"]){
+                                    $sel = 'selected ="selected"';
+                                }
+                                ?>
+                                <option <?php echo $sel; ?> value="<?php echo $items["userid"] ?>"><?php echo $items["storename"]; ?></option>
+                            <?php } ?>
+                        </select>
+                        <?php } else { ?>
+                        <select class="form-control" name="storeids" id="storeids">
+                            <option value="0">Chức vụ...</option>
+                            <?php foreach ($this->lregency as $key => $items) { 
+                                $sel = '';
+                                if($this->id_storeid == $items["id"]){
+                                    $sel = 'selected ="selected"';
+                                }
+                                ?>
+                                <option <?php echo $sel; ?> value="<?php echo $items["id"] ?>"><?php echo $items["name"]; ?></option>
+                            <?php } ?>
+                        </select>
+                        <?php }?>
+                    <div class="input-group-addon">
+                        <i class="fa fa-star"></i>
+                    </div>
+                    <select name="month" id="month" class="form-control col-xs-12">
+                        <option value="0">Tất cả</option>
+                        <?php
+                        foreach ($this->months as $key=> $m) {
+                            $sl = '';
+                            if ($this->month == $m) {
+                                $sl = 'selected = selected';
+                            }
+                            ?>
+                            <option  <?php echo $sl ?> value="<?php echo $m ?>"> Tháng <?php echo $m ?></option>
+                        <?php } ?>
+                    </select>
+                    <div class="input-group-addon">
+                        <i class="fa fa-star"></i>
+                    </div>
+                    <select name="year" id="year" class="form-control col-xs-12">
+                        <?php
+                        foreach ($this->years as $key=> $y) {
+                            $sl = '';
+                            if ($this->year == $y) {
+                                $sl = 'selected = selected';
+                            }
+                            ?>
+                            <option data="<?php echo $y ?>" <?php echo $sl ?> value="<?php echo $y ?>"> Năm <?php echo $y ?></option>
+                        <?php } ?>
+                    </select>
+                    
+                    <span class="input-group-btn">
+                        <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> Xem </i></button>
+                        </span>
+                    
+                    
+                  </div>
+        
+        </form>
+</div>
+<div class="box-body">
+        <table id="f_table" class="table table-data table-bordered table-striped export_table">
+            <thead>
+                <tr>
+                    <th width="10">STT</th>
+                    <th width="50">Số PC</th>
+                    <th>Tên</th>
+                    <th>Ngày chi</th>
+                    <th>Nội dung</th>
+                    <th>Số tiền</th>
+                    <!--<th>Hình thức</th>-->
+                    <th>Phân loại</th>
+                    <th>Các chi phí</th>
+                    <th>Phòng ban</th>
+                    <th>Chi nhánh</th>
+                    <th>Mã hóa đơn</th>
+                    <th>Ngày ra hóa đơn</th>
+                    <th width="80">TT</th>
+                </tr>
+            </thead>
+<!--            <tfoot>
+                <tr>
+                    <th colspan="5" style="text-align:right">Total:</th>
+                    <th colspan="8"></th>
+                </tr>
+            </tfoot>-->
+            <tbody>
+                <?php foreach ($this->list as $items){ 
+                    if($items["dayout"] != "0000-00-00"){
+                        if($items["dayout"] != null){
+                            $items["dayout"] = date('d/m/Y',  strtotime($items["dayout"]));
+                        }
+                        
+                    }else{
+                        $items["dayout"] = '';
+                    }
+                    
+                    ?>
+                <tr>
+                    <td><?php echo ++$stt; ?></td>
+                    <td><?php echo "Số: PC".$items["number_pc"]; ?></td>
+                    <td><?php echo $items["name"]; ?></td>
+                    <td><?php echo date('d/m/Y',  strtotime($items["bill_datetime"])); ?></td>
+                    <td><?php echo $items["content"]; ?></td>
+                    <td><?php echo number_format($items["money"]); ?></td>
+                    <!--<td><?php // echo $this->lformality[$items["formality"]]; ?></td>-->
+                    <td><?php echo $this->name_cost[$items["costid"]]; ?></td>
+                    <td><?php echo $this->name_cost_detail[$items["cost_detail"]]; ?></td>
+                    <td><?php echo $this->name_department[$items["departmentid"]]; ?></td>
+                    <td>
+                        <?php if($items["departmentid"] ==10 && $items["storeid"] >0){ ?>
+                        <?php echo $this->storename[$items["storeid"]]; ?>
+                        <?php } else if($items["storeid"] ==0) {?>
+                        
+                            <?php echo "Tất cả"; ?>
+                        <?php } else {?>
+                            <?php echo $this->name_regency[$items["storeid"]]; ?>
+                        <?php }?>
+                    </td>
+                    <td><?php echo $items["bills_id"]; ?></td>
+                    <td><?php echo $items["dayout"] ?></td>
+                    <td>
+                        <a target="_blank" title="Print phiếu chi" class="btn btn-primary btn-sm" data-toggle="tooltip" rels="<?php echo $item["userid"] ?>"  href="/admin/user/users/print-bills?&id=<?php echo $items["id"] ?>"><i class="fa fa-print"></i></a>
+                        <a  title="Edit" class="btn btn-primary btn-sm" data-toggle="tooltip" rels="<?php echo $item["userid"] ?>"  href="/admin/user/users/add-bills?&id=<?php echo $items["id"] ?>"><i class="fa fa-edit"></i></a>
+                        <a onclick="del(<?php echo $items["id"] ?>);return false;" title="Delete" class="btn btn-danger btn-sm" data-toggle="tooltip" href="#"><i class="fa fa-trash-o"></i></a>
+                    </td>
+                </tr>
+                <?php }?>
+            </tbody>
+        </table> 
+</div>
+<div id="del" style="display:none;"></div>
+
+<script src="/backend/plugins/input-mask/jquery.inputmask.js"></script>
+<script src="/backend/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script src="/backend/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+<script>
+    $("[data-mask]").inputmask();
+    $("#datemask").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+    $("#datemask2").inputmask("mm/dd/yyyy", {"placeholder": "mm/dd/yyyy"});
+</script>
+<script src="/backend/plugins/select2/select2.full.min.js"></script>
+<script>
+    function exports(at){
+        var month = $( "#month option:selected" ).val();
+        var year = $( "#year option:selected" ).val();
+        var departments = $( "#departments option:selected" ).val();
+        var storeids = $( "#storeids option:selected" ).val();
+        $("#exports").attr("href", "/admin/user/report/export-bill-delegate?month="+month+"&year="+year+"&ac="+at+"&departments="+departments+"&storeids="+storeids);
+        var href = $("#exports").attr('href');
+        window.location = href;
+    }
+    <?php if($this->detail["id"] >0){ ?>
+    $( window ).load(function() {
+        shows();
+      });
+    <?php }?>
+    function shows(){
+        $('#frm_add').show();
+        $('#show').hide();
+        $('#btnadd').show();
+        $('#close').show();
+    }
+    function closes(){
+        var month = $('#month').val();
+        var year = $('#year').val();
+        window.location.href = "/admin/user/users/add-bills?month="+month+"&year="+year;
+        $('#frm_add').hide();
+        $('#show').show();
+        $('#close').hide();
+        $('#btnadd').hide();
+    }
+    function del(id) {
+        if (id != '')
+            result = confirm('Bạn chắc chắn muốn huỷ thông tin này không ?');
+        if (result)
+            $('#del').load('/admin/user/users/del-bills?&id=' + id, function () {
+                alert('Huỷ  thành công.');
+                window.location.reload(true);
+            });
+    }
+    function change_department(department,storeid){
+        var id_department = $('#'+department+' option:selected').val();
+            $('#'+storeid).html('');
+            if(id_department !=10){
+                var ajaxLink = '/admin/user/regency-department/get-regency';
+                $.ajax({
+                    method: 'get',
+                    cache: false,
+                    url: ajaxLink,
+                    data: {id_department: id_department},
+                    dataType: 'json',
+                    success: function (resp) {
+                        console.log(resp);
+                        $('#'+storeid).html('<option value="' + resp[0].regency_all + '"> Chức vụ</option>');
+                        $.each(resp, function (i) {
+                            var html_regency = '<option  value="' + resp[i].id_regency + '">' + resp[i].name + '</option>';
+                            $('#'+storeid).append(html_regency);
+                        });
+
+                    }
+                });
+            }else{
+                $('#'+storeid).html('<option value="0"> Chức vụ</option>');
+                var htmls = '<?php foreach ($this->lstore as $key => $items) {$sel = '';if($this->detail["storeid"] == $items["userid"]){$sel = 'selected ="selected"';}?><option <?php echo $sel; ?> value="<?php echo $items["userid"] ?>"><?php echo $items["storename"]; ?></option><?php } ?>';
+                $('#'+storeid).append(htmls);
+            }
+    }
+    $().ready(function () {
+        //select
+        $(".select2").select2();
+        //
+        $('#btnadd').click(function (e) {
+            $('#btnadd').hide();
+            $('#btndxl').show();
+            e.preventDefault();
+            $.post("/admin/user/users/save-bills", $('form').serialize(), function (resp) {
+                $.each(resp, function (i, obj) {
+                    var id = obj.id;
+                    var msg = obj.msg;
+                    var type_member = $('#type_member').val();
+                    if (msg != "ok") {
+                        alert(msg);
+                        $('#btnadd').show();
+                        $('#btndxl').hide();
+                        $('#' + id).focus();
+                        return false;
+                    } else {
+                        alert('Lưu thành công');
+                        var month = $('#month').val();
+                        var year = $('#year').val();
+                        window.location.href = "/admin/user/users/add-bills?month="+month+"&year="+year;
+                    }
+
+                });
+            }, 'json');
+        });
+
+
+        $(".pricing").keyup(function () {
+            var price = this.value;
+            price = price.replace(/,/gi, "");
+            price = price + ".";
+            price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            var sprice = price.split(".");
+            $(this).val(sprice[0]);
+        });
+        
+
+//        $("#f_table").DataTable({
+//                "pageLength": 1000,
+//                "footerCallback": function ( row, data, start, end, display ) {
+//                    
+//                    var api = this.api(), data;
+//
+//                    // Remove the formatting to get integer data for summation
+//                    var intVal = function ( i ) {
+//                        return typeof i === 'string' ?
+//                            i.replace(/[\$,]/g, '')*1 :
+//                            typeof i === 'number' ?
+//                                i : 0;
+//                    };
+//
+//                    // Total over all pages
+//                    total = api
+//                        .column(5)
+//                        .data()
+//                        .reduce( function (a, b) {
+//                            return intVal(a) + intVal(b);
+//                        }, 0 );
+//
+//                    // Total over this page
+//                    pageTotal = api
+//                        .column(5, { page: 'current'} )
+//                        .data()
+//                        .reduce( function (a, b) {
+//                            return intVal(a) + intVal(b);
+//                        }, 0 );
+//
+//                    // Update footer
+//                    $( api.column(5).footer() ).html(
+//                            format_number(pageTotal)
+//        //                '$'+pageTotal +' ( $'+ total +' total)'
+//                    );
+//                }
+//                
+//            });
+        
+        // formality.change
+        
+        $('#formality').change(function(){
+            var formality = $('#formality').val();
+            if(formality ==2){
+                $('#banks').show();
+            }else{
+                $('#bank').val(0);
+                $('#banks').hide();
+            }
+        });
+        
+        // phân loại
+         $('#costid').change(function(){
+             var html;
+             $('#cost_detail').html('<option value="0">Chi phí...</option>');
+            var type = $('#costid').val();
+            url = '/admin/user/users/get-list-by-costid';
+            $.ajax({
+            method: 'get',
+            cache: false,
+            url: url,
+            data: {costid: type},
+            dataType: 'json',
+            success: function (resp) {
+                $.each(resp, function (i) {
+                    html = '<option  value="' + resp[i].id + '">' + resp[i].name + '</option>';
+                    $('#cost_detail').append(html);
+                });
+            }
+        });
+        });
+        
+    });
+function format_number(nStr)
+{
+	nStr += '';
+	x = nStr.split('.');
+	x1 = x[0];
+	x2 = x.length > 1 ? '.' + x[1] : '';
+	var rgx = /(\d+)(\d{3})/;
+	while (rgx.test(x1)) {
+		x1 = x1.replace(rgx, '$1' + ',' + '$2');
+	}
+	return x1 + x2;
+}
+$(document).ready(function() {
+    $('.export_table').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'excel'
+        ]
+    } );
+} );
+</script>

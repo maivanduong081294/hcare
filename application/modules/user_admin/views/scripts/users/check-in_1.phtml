@@ -1,0 +1,285 @@
+<div class="box box-primary">
+    <div class="box-header">
+        <h3 class="box-title">CHECKED IN HẰNG NGÀY</h3>
+    </div><!-- /.box-header -->
+    <form runat="server" id="frmCodePC">
+        <div>
+            <script src="http://maps.google.com/maps?hl=it&amp;file=api&amp;v=2&amp;sensor=true&amp;" type="text/javascript"></script>
+            <script type="text/javascript">
+                var map;
+                var geocoder;
+
+                function addAddressToMap(response)
+                {
+                    if (!response || response.Status.code != 200)
+                    {
+                        alert("Sorry, we were unable to geocode that address");
+                    }
+                    else
+                    {
+                        place = response.Placemark[0];
+
+                        point = new GLatLng(place.Point.coordinates[1], place.Point.coordinates[0]);
+                        document.getElementById('address').innerHTML = place.address;
+                        var str = place.address;
+                        var a = str.lastIndexOf(",")
+                        a = a + 1
+                        var country = str.substring(a)
+                        document.getElementById('country').innerHTML = country;
+                        var address = place.address;
+                        $('#address').val(address);
+                        console.log(address);
+//                        return false;
+
+                    }
+                }
+
+
+                function searchGeolocation()
+                {
+                    if (navigator.geolocation)
+                    {
+                        navigator.geolocation.getCurrentPosition(function (position)
+                        {
+                            geocoder = new GClientGeocoder();
+                            document.getElementById('latitude').innerHTML = position.coords.latitude;
+                            document.getElementById('longitude').innerHTML = position.coords.longitude;
+                            coordinates = position.coords.latitude + "," + position.coords.longitude;
+                            geocoder.getLocations(coordinates, addAddressToMap);
+
+                        });
+                    } else
+                    {
+                        document.getElementById('latitude').innerHTML = "Unknown";
+                        document.getElementById('longitude').innerHTML = "Unknown";
+                        document.getElementById('address').innerHTML = "Unknown";
+                        alert("I'm sorry, but geolocation services are not supported by your browser.");
+                    }
+                }
+
+
+            </script>
+
+
+
+            <div id="latitude">loading...</div>
+            <script type="text/javascript">
+                document.getElementById('latitude').style.display = 'none';
+            </script>
+
+            <div id="longitude">loading...</div>
+            <script type="text/javascript">
+                document.getElementById('longitude').style.display = 'none';
+            </script>
+
+            <div id="address">loading...</div>
+            <script type="text/javascript">
+                document.getElementById('address').style.display = 'none';
+            </script>
+
+            <div id="country">loading...</div>
+
+            <script type="text/javascript">
+                document.getElementById('country').style.display = 'none';
+            </script>
+
+
+
+            <script type="text/javascript">
+
+                searchGeolocation();
+
+            </script>
+        </div>
+
+        <div class="box-body">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label"  id="text-align-label">Tên nhân viên : </label>
+                    <div  class="input-group" style="width:405px">
+                        <span class="input-group-addon"><i class="fa fa-plus-square"></i></span>
+                        <input type="text" disabled="true" class="form-control" value="<?php echo $this->f_name; ?>" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label"  id="text-align-label">Địa điểm : </label>
+                    <div  class="input-group" style="width:405px">
+                        <span class="input-group-addon"><i class="fa fa-plus-square"></i></span>
+                        <select name="storeid" <?php echo $this->disabled; ?> id="storeid" class="form-control">
+                            <option value="0">Lựa chọn địa điểm</option>
+                            <?php
+                            foreach ($this->location as $key=> $item) {
+                                ?>
+                                <option value="<?php echo $key ?>"><?php echo $item ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label"  id="text-align-label">Mô tả thêm(nếu có) : </label>
+                    <div  class="input-group" style="width:405px">
+                        <span class="input-group-addon"><i class="fa fa-plus-square"></i></span>
+                        <textarea class="form-control" name="des" id="des" ></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div id="pcBlock" style="float:right">
+                    <!-- campture for destop -->
+                    <video style="border:1px solid #CCCCCC;" id="video"  height="480"  width="640" autoplay></video>
+                    <br />
+                    <p><button class="btn btn-primary" id="snap0">Đang xử lý...</button></p>
+                    <p><button class="btn btn-primary" id="snap">CHỤP</button></p>
+                    <canvas style="display:none;" id="canvas" width="640" height="480"></canvas>
+                    <!-- campture for destop -->
+                </div>
+            </div>
+
+        </div>
+        <div class="box-footer">
+            <button type="submit" id="btnAdd" class="btn btn-primary">Lưu</button>
+            <button type="button" id="btnWt" style="display: none;" class="btn btn-primary">Đang xử lý...</button>
+            <input type="hidden" name="address" id="address" />
+        </div>
+
+
+    </form>
+</div>
+<script>
+    $().ready(function(){
+                $("#snap0").hide();
+                $("#complete").click(function(){
+                    $('#wt').show();
+                    $('#complete').hide();
+                    ids = $('#id').val();
+                    var pid = $('#products_id').val();
+                    var imei = $('#imei_new').val();
+                    var step0 = $("#step0").val();
+                    var step1 = $("#step1").val();
+//                    if (step0 == 0 || step1==0) {
+//                        alert("Bạn chưa hoàn tất chụp ảnh!!!");
+//                    } else {
+                        $.post("/api/send-mail?&id=" + ids+'&products_id='+pid+'&imei='+imei, $('form').serialize(), function (resp) {
+                                $('.errblock').remove();
+                                $.each(resp, function (i, obj) {
+                                    var id = obj.id;
+                                    var msg = obj.msg;
+                                    if (msg != "ok") {
+                                        alert(msg);
+                                        $('#wt').hide();
+                                        $('#complete').show();
+                                        $('#' + id).focus();
+                                        return false;
+                                    } else {
+                                        alert('Lưu thành công !');
+                                        $('#wt').hide();
+                                        $('#complete').show();
+                                        close();
+                                    }
+                                });
+                            }, 'json');
+                        
+//                        
+//                        $('#ddelete').load('/api/send-mail?&id=' + id, function () {
+//                            if()
+//                            alert('Hoàn tất chụp hình.');
+//                            close();
+//                        });
+//                        close();
+//                    }
+                });
+            });
+                // Put event listeners into place
+            window.addEventListener("DOMContentLoaded", function() {
+                // Grab elements, create settings, etc.
+                var canvas = document.getElementById("canvas"),
+                    context = canvas.getContext("2d"),
+                    video = document.getElementById("video"),
+                    videoObj = { "video": true },
+                    errBack = function(error) {
+                        console.log("Video capture error: ", error.code); 
+                    };
+                // Put video listeners into place
+                if(navigator.getUserMedia) { // Standard
+                        navigator.getUserMedia(videoObj, function(stream) {
+                            video.src = stream;
+                            video.play();
+                        }, errBack);
+                    } else if(navigator.webkitGetUserMedia) { // WebKit-prefixed
+                        navigator.webkitGetUserMedia(videoObj, function(stream){
+                            video.src = window.URL.createObjectURL(stream);
+                            video.play();
+                        }, errBack);
+                    }
+                    else if(navigator.mozGetUserMedia) { // Firefox-prefixed
+                        navigator.mozGetUserMedia(videoObj, function(stream){
+                            video.src = window.URL.createObjectURL(stream);
+                            video.play();
+                        }, errBack);
+                    }
+                    // Trigger photo take
+                    document.getElementById("snap").addEventListener("click", function(e) {
+                        e.preventDefault();
+                        $("#snap").hide();
+                        $("#snap0").show();
+                        context.drawImage(video, 0, 0, 640, 480);
+                        var image = convertCanvasToImage(canvas);
+                        var imageSrc = $(image).attr("src");
+                        $("#imageSrc").val(imageSrc);
+                        var type = $("#name").val();
+                        $.post("/api/capture-submit-pack", $("#frmCodePC").serialize(),function(resp){
+                            
+                            $.each(resp, function (i, obj) {
+                                
+                                var id = obj.id;
+                                var msg = obj.msg;
+                                if(msg != "ok") {
+                                    alert(msg);
+                                    return false;
+                                }else{
+                                    if (resp!="") {
+                                //ok
+                                        $("#snap").show();
+                                        $("#snap0").hide();
+                                        //type: chụp loại
+                                        //0: Mặt trước
+                                        //1: Mặt sau
+                                        id = $('#id').val();
+                                        //các tham số gọi API []
+                                        $('#ddelete').load('/api/update-saleonline?id='+id+'&type='+type, function (resp){
+                                            $('.errblock').remove();
+                                        });
+        //                                if(type == 1){
+        //                                    $('#ddelete').load('/api/send-mail?id='+id, function (resp){
+        //                                        $('.errblock').remove();
+        //                                    });
+        //                                }
+                                        //ex: /api/process?id=[ID]&type=[TYPE]&imgResult=[RESP]
+                                        //gọi ajax cập nhật DB
+                                        $('#img'+type).attr('src', '<?php echo $this->link; ?>-'+type+'.png');
+                                        alert("Upload Thành công!");
+                                        $("#r"+type).addClass("hide").fadeIn(200);
+                                        $("#r"+type+"1").removeClass("hide").fadeIn(200);
+                                        $("#step"+type).val(1);
+
+                                    } else {
+                                        alert("Lỗi trong quá trình chụp ảnh!");
+                                    }
+                                }
+                            });
+                            
+                            
+                            
+                            
+                        },"json");
+                    });
+                }, false);
+                function convertCanvasToImage(canvas) {
+                    var image = new Image();
+                    image.src = canvas.toDataURL("image/png");
+                    return image;
+                }
+//                "*,*": {
+//                    "media-stream-camera": 1
+//                  }
+        </script>  

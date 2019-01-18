@@ -1,0 +1,55 @@
+<div class="box-header with-border">
+    <div class="col-md-10"><h3><i class="fa fa-table"></i> Các chương trình thu máy</h3></div>
+    <div class="col-md-2"></div>
+</div><!-- /.box-header -->
+<!-- form start -->
+<div class="clearfix"></div>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped table-condensed">
+        <tr>
+            <th width="10">STT</th>
+            <th>Tên chương trình</th>
+            <th>Người tạo</th>
+            <th>Thời gian tạo</th>
+            <th width="40"></th>
+        </tr>
+        <?php foreach ($this->list as $val){
+            
+            ?>
+        <tr>
+            <td><?php echo ++$stt; ?></td>
+            <td><?php echo $val["name"]; ?></td>
+            <td><?php echo $val["creator"] ?></td>
+            <td><?php echo date('d/m/Y',  strtotime($val["datetime"])) ?></td>
+            <td>
+                <button onclick="del(<?php echo $val["id"] ?>);return false;" title="Xóa chương trình" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+            </td>
+        </tr>
+        <?php }?>
+    </table>
+</div>
+
+<div class="col-md-offset-3 col-md-6">
+    <form  name="data_frm" id="data_frm"  method="post"  target="hiddenIF"  enctype="multipart/form-data">
+       <input type="hidden" name="id" id="id" value="<?php echo $this->detail["id"] ?>" />
+       <iframe  name="hiddenIF" style="display: none" scrolling="auto"></iframe>
+       <div class="form-group">
+           <div class="input-group input-group-sm">
+               <input  type="text" class="form-control pull-right" name="name" id="name" value="<?php echo $this->keywork ?>" placeholder="Nhập tên chương trình mới"/>
+               <span class="input-group-btn" style="margin-right: 10px">
+                   <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-plus-circle"> Thêm </i></button>
+               </span>
+           </div>
+       </div>
+    </form>
+</div>
+<div class="clearfix"></div>
+<script>
+    function del(id){
+        var result = confirm('Bạn có chắc chắn muốn xóa');
+        if(result){
+            var url = '/admin/user/usedphone2/del?id='+id;
+            window.location.href=url;
+        }
+    }
+    </script>

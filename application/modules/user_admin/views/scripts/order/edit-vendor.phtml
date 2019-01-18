@@ -1,0 +1,498 @@
+<link rel="stylesheet" href="/backend/plugins/select2/select2.min.css">
+<style>
+    .select2 {
+        width: 100% !important;
+    }
+    #form-upload { padding: 10px; border-radius: 5px;}
+    #progress { border: 1px solid #ccc; width: 100%; height: 20px; margin-top: 10px;text-align: center;position: relative;border-radius: 10px;}
+    #bar { background: #57A564; height: 20px; width: 0px;border-radius: 10px;}
+    #percent { position: absolute; left: 50%; top: 0px;color: #fff}
+  </style>
+  <iframe  name="frm_hidden" style="display: none" scrolling="auto"></iframe>
+  <form role="form" id="frm" action="" target="frm_hidden" method="post" class="frmReport" enctype="multipart/form-data">
+      <input type="hidden" id="ack" name="ack" value="<?php echo $this->ack ?>" />
+    <div class="col-md-12">
+        <!-- form start -->
+        <div class="box box-primary">
+            <div class="box-body">
+                <div align="center" class="box-header">
+                    <div class="col-md-4">
+                        <p>Mã ĐH: <?php echo $this->detail["po"] ?></p>
+                        <p>Ngày tạo ĐH: <?php echo date('d/m/Y',  strtotime($this->detail["datetime"]))?></p>
+                    </div>
+                    <div class="col-md-4">
+                        <h3 style="font-size: 30px" class="box-title">FORM ĐẶT HÀNG HNAMMOBILE.COM</h3>
+                    </div>
+                </div><!-- /.box-header -->
+                <div class="col-md-4">
+                    <div class="list-group">
+                    <a class="list-group-item active">
+                        <b>HNAMMOBILE.COM</b>
+                    </a>
+                        <a class="list-group-item">Nhân viên kinh doanh: <b class="size20"><?php echo $this->detail_user["fullname"] ?></b></a>
+                    <a class="list-group-item">Số điện thoại: <b class="size20"><?php echo "0".$this->detail_user["phone"] ?></b></a>
+                    <a class="list-group-item">Email: <b class="size20"><?php echo $this->detail_user["email"] ?></b></a>
+                    <a class="list-group-item">Địa chỉ: 148 Nguyễn Cư Trinh, P. Nguyễn Cư Trinh, Q.1, TP.HCM</a>
+                    <a class="list-group-item">Hotline: 1900.2012</a>
+                  </div>
+                </div>
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <div class="list-group">
+                    <a class="list-group-item active">
+                        <b>NHÀ CUNG CẤP : <?php echo $this->detail["supplier_name"] ?></b>
+                    </a>
+                    <a class="list-group-item">Nhân viên kinh doanh :
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-addon">
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <input name="staff_supplier" value="<?php echo $this->detail["staff_supplier"] ?>" id="staff_supplier" class="form-control" placeholder="Nhập họ tên nhân viên kinh doanh nhà cung cấp" />
+                    </div>
+                    
+                    
+                    </a>
+                    <a class="list-group-item">Số điện thoại: 
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-addon">
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <input name="supplier_phone" id="supplier_phone" value="<?php echo $this->detail["supplier_phone"] ?>" class="form-control" placeholder="Nhập số điện thoại nhà cung cấp" />
+                        </div>
+                    </a>
+                    <a class="list-group-item">Email: 
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-addon">
+                                <i class="fa fa-star"></i>
+                            </div><input name="supplier_email" value="<?php echo $this->detail["supplier_email"] ?>" id="supplier_email" class="form-control" placeholder="Nhập email nhà cung cấp" />
+                        </div>
+                    </a>
+                  </div>
+                </div>
+                <input type="hidden" name="supplier_name" id="supplier_name" value="<?php echo $this->detail["supplier_name"] ?>" />
+                <!--<div class="table-responsive">-->
+                <?php if($this->ack==0){ ?>
+                <table class="table table-condensed table-bordered table-striped frm_new">
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th width="150">Màu sắc</th>
+                        <th width="80">Số lượng</th>
+                        <th width="110">Đơn giá</th>
+                        <th width="120">Loại chiết khấu</th>
+                        <th  width="120">Chiết khấu trước</th>
+                        <th width="30">TT</th> 
+                    </tr>
+                    <?php foreach ($this->list_order as $key=> $items){ ?>
+                    <div class="hidden" id="name_pid_<?php echo $items["id"] ?>"><?php echo $this->name_pid[$items["pid"]] ?></div>
+                    <input type="hidden" name="status_imei[]" id="status_imei" value="<?php echo $items["status_imei"] ?>" />
+                    <input type="hidden" name="idorder[]" id="idorder" value="<?php echo $items["id"] ?>" />
+                    
+                    <tr>
+                       <td><?php echo $items["accounting_name"] ?></td>
+                        <td><?php echo $this->name_color[$items["pid_color"]]; ?></td>
+                        <td>
+                            <input type="text" value="<?php echo $items["total"] ?>" class="form-control" name="totals[]"  placeholder="Số lượng..." >
+                        </td>
+                        <td>
+                            <input type="text" value="<?php echo number_format($items["price"]) ?>" class="form-control"  onkeyup="format_price('price',<?php echo $key; ?>);return false;" id="price<?php echo $key ?>" name="prices[]"  placeholder="Đơn giá..." >
+                        </td>
+                        <td>
+                            <select name="type_discount[]" id="type_discount<?php echo $key; ?>" class="form-control">
+                                    <?php foreach ($this->ldiscount as $key2=> $_items){ 
+                                        $sl='';
+                                        if($items["type_discount"] == $key2){
+                                           $sl= 'selected="selected"'; 
+                                        }
+                                        $discount ='';
+                                        if((int)$items["discount"] >0){
+                                           $discount = number_format($items["discount"]); 
+                                        }
+                                        ?>
+                            <option <?php echo $sl; ?> value="<?php echo $key2;  ?>"><?php echo $_items ?></option>
+                                    <?php }?>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control pricing"  name="discount[]" onkeyup="keyups('discount',<?php echo $key; ?>);return false;" id="discount<?php echo $key; ?>" value="<?php  echo $discount ?>" placeholder="Chiết khấu..." >
+                        </td>
+                        <td>
+                        <a  onclick="addimei('<?php echo $items["id"] ?>',<?php echo $items["total"] ?>);return false;" class="btn btn-primary btn-sm" data-toggle="tooltip" href="#" data-original-title="" title="Thêm imei"><i class="fa fa-info"></i></a>
+                        </td>
+                    </tr>
+                    <?php }?>
+                </table>
+                <?php }?>
+            <!--</div>-->
+                <hr/>
+                <span>Chiết khấu:</span>
+                <textarea class="form-control" rows="5" name="note" id="note"  placeholder="Nhập nội dung ghi chú vào đây..."><?php echo $this->detail["note"] ?></textarea>
+                
+            </div><!-- /.box-body -->
+            <div class="box-footer" >
+                <div class="col-md-9">
+                <?php for($i=0;$i<5;$i++){ ?>
+                            <div class="col-md-2">
+                                <a onclick="show_img('<?php echo $this->img[$i] ?>');return false;"> <img id="img<?php echo $i; ?>" src="<?php echo $this->img[$i] ?>" alt="no-img" style="border: 1px solid #ccc;border-radius: 5px"  width="128" height="128" /></a>
+                                <p>Hình chụp hóa đơn</p>
+                                <p><input name="image[]" id="image<?php echo $i ?>" onchange='Test.UpdatePreview(<?php echo $i ?>,this)' type="file" /></p>
+
+                            </div>
+                        <?php }?>
+                <div class="col-md-12">
+                    <button type="button" class="btn btn-info" onclick="uploads();return false;"><i class="fa fa-upload"> Upload</i></button>
+                </div>
+                <br/>
+            </div>
+                
+                
+                
+                
+                <div class="" style="float: right">
+                <?php if($this->detail["status"] !=2){ ?>
+                    <button style="float: right" type="submit" id="btnadd" class="btn btn-primary"><i class="fa fa-floppy-o"> Lưu tạm</i></button>
+                    <button style="display: none" type="button" id="btndxl" class="btn btn-primary"><i class="fa fa-spinner"> Đang xử lý</i></button>
+                
+                <?php } else{
+                    $_seckey = "HNAM_ORDER_2016";
+                    $token = md5($this->detail["id"].$_seckey);
+                    ?>
+                        <a  class="btn btn-success" data-toggle="tooltip" title="Export PDF"   href="/admin/user/order/pdf?id=<?php echo $this->detail["id"] ?>&token=<?php echo $token; ?>"><i class="fa fa-file-pdf-o">  Export PDF</i></a>
+                        <a  class="btn btn-primary" data-toggle="tooltip" title="Export EXCEL"   href="/admin/user/order/excel?id=<?php echo $this->detail["id"] ?>&token=<?php echo $token; ?>"><i class="fa fa-file-excel-o">  Export EXCEL</i></a>
+                <?php }?>
+                    </div>
+                <input type="hidden" name="link" value="<?php echo $this->uri ?>" id="link" />
+                <input type="hidden" name="id" id="id" value="<?= $this->detail["id"]; ?>" />
+                <input type="hidden" name="supplier_id" id="supplier_id" value="<?= $this->detail["supplier_id"]; ?>" />
+            </div>
+        </div>
+        
+    </div>
+    <div id="del" style="display:none;"></div>
+</form>
+</div>
+<div class="modal fade" id="show_imgs">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <img class="image img-responsive" id="imgs"  src="" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal6">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" style="font-weight: bold">FORM THÊM IMEI</h4>
+            </div>
+            
+                <div class="modal-body">
+                    <div align="center" ><p style="color: red;font-weight: bold"> Sản phẩm : <b id="nn"></b> (Số lượng IMEI cần nhập là <strong id="total_imeis"></strong>)</p></div>
+                    
+                    <div class="row">
+                        <div>
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li id="homes" role="presentation" class="active"><a href="#home"  aria-controls="home" role="tab" data-toggle="tab">IMEI</a></li>
+                                <li id="ufile" role="presentation"><a href="#uploadfile"   aria-controls="uploadfile" role="tab" data-toggle="tab">Upload file</a></li>
+                            </ul>
+                            
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="home">
+                                    <br/>
+                                    <form name="frm_imei" id="frm_imei" action="" enctype="multipart/form-data" method="post">
+                                        <input type="hidden" name="total_imei" id="total_imei" class="form-control">
+                                        <div class="slist_imei">
+                                    </div>
+                                    <table style="display: none"  class="table table-striped table-bordered frm_imei">
+                                        <tr>
+                                            <th width="100">STT</th>
+                                            <th>IMEI</th>
+                                            <th width="100">Thao tác</th>
+                                        </tr>
+
+                                    </table>
+                                        <div class="box-footer">
+                                            <div class="col-md-9"  align="center">
+                                                <span style="color: red;font-weight: bold" id="err"></span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <button  type="button" id="save" class="btn btn-primary"><i class="fa fa-floppy-o"> Lưu</i></button>
+                                                <button style="display: none" type="button" id="wt" class="btn btn-primary"><i class="fa fa-spinner"> Đang xử lý</i></button>
+                                            </div>
+                                            <input type="hidden" name="detail_orderid" id="detail_orderid" />
+                                        </div>
+                                    </form>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="uploadfile">
+                                    <br/>
+                                    <iframe  name="hiddenIF" style="display: none" scrolling="auto"></iframe>
+                                    <form id="formData" method="post" target="hiddenIF" action="/admin/user/order/save-upload" enctype="multipart/form-data">
+                                        <input type="hidden" name="total_imei2" id="total_imei2" class="form-control">
+                                        <div class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">File Upload :<span style="color: red">(*.xls or *.xlsx) </span></label>
+                                            <div class="input-group col-md-4">
+                                            <input type="file" name="file"  id="select-file"/>
+                                            <br/>
+                                            <div>
+                                                <button type="submit" class="btn btn-info " value="Upload" id="submit-upload"><i class="fa fa-upload"> Upload </i></button>
+                                                <button style="display: none" type="button" id="wt2" class="btn btn-primary"><i class="fa fa-spinner"> Đang xử lý</i></button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <input type="hidden" name="detail_orderid2" id="detail_orderid2" />
+                                      </form>
+                                    <div align="center" style="color: red" id="result">
+                                      </div>
+                                </div>
+                            </div>
+                          </div>
+                        
+                    </div>
+                </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script src="/backend/plugins/select2/select2.full.min.js"></script>
+<script>
+    function keyups(id,nb){
+        var type = $('#type_discount'+nb+' option:selected').val();
+        if(type ==1 || type ==3){
+            format_price(id,nb);
+        }
+    }
+    
+    function format_price(id,nb){
+        var price = $("#"+id+nb).val();
+        price = price.replace(/,/gi, "");
+        price = price + ".";
+        price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        var sprice = price.split(".");
+        $("#"+id+nb).val(sprice[0]);
+    }
+    function show_img(img){
+        $('#imgs').attr("src",img);
+        $('#show_imgs').modal('show');
+    }
+    function uploadthanhcong (msg){
+        $('#result').html(msg);
+        alert(msg);
+//        location.reload();
+    }
+    function uploadthatbai (msg){
+        $('#result').html(msg);
+        alert(msg);
+    }
+    
+    $('#save').click(function (e) {
+            $('#save').hide();
+            $('#wt').show();
+            e.preventDefault();
+            $.post("/admin/user/order/save-imei", $('form').serialize(), function (resp) {
+                $.each(resp, function (i, obj) {
+                    var id = obj.id;
+                    var msg = obj.msg;
+                    if (msg != "ok") {
+                        alert(msg);
+                        $('#save').show();
+                        $('#wt').hide();
+                        $('#' + id).focus();
+                        return false;
+                    } else {
+                        alert('Lưu thành công');
+                        $('#save').show();
+                        $('#wt').hide();
+                        $('#myModal6').modal('hide');
+//                        location.reload();
+                    }
+
+                });
+            }, 'json');
+        });
+        
+    function resets(){
+        $( "#ufile" ).removeClass( "active" );
+        $( "#homes" ).addClass( "active" );
+        $( "#uploadfile" ).removeClass( "active" );
+        $( "#home" ).addClass( "active" );
+    }    
+    function addimei(id,total){
+        var name_pid = $('#name_pid_'+id).html();
+        $('.addrow').remove();
+        $('#detail_orderid').val(id);
+        $('#detail_orderid2').val(id);
+        $('#total_imei').val(total);
+        $('#total_imei2').val(total);
+        $('#total_imeis').html(total);
+        $('#nn').html(name_pid);
+        var url = '/admin/user/ajax/get-detail-order-imei';
+            $.ajax({
+                method: 'get',
+                cache: false,
+                url: url,
+                data: {detail_orderid: id},
+                dataType: 'json',
+                success: function (resp) {
+                    if(resp[0].imei =="nok"){
+                        resets();
+                        $('#ufile').show();
+                        $('.frm_imei').hide();
+                        var html_imei = '<div class="form-group"><label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Nhập IMEI : </label><div class="input-group"><div class="input-group-addon"><i class="fa fa-laptop"></i></div><textarea name="listimei" id="listimei" class="form-control" placeholder="Nhập imei vào, 1 imei cách nhau xuống dòng" rows="5" ></textarea></div></div>';
+                        $('.slist_imei').html(html_imei);
+                    }else{
+                        resets();
+                        $('#ufile').hide();
+                        $('.frm_imei').show();
+                        $('.slist_imei').html('');
+                        var num=0;
+                        $.each(resp, function (i) {
+                            num++;
+                            var html = '<tr class="addrow"><td> <input type="hidden" name ="ids[]" value="'+resp[i].id+'" />  <label for="warranty_info_id" align="right" class=" control-label" id="text-align-label">IMEI '+num+': </label> </td><td><input class="form-control" value="'+resp[i].imei+'" type="text" name="imei[]" id="imei" /></td><td></td></tr>';
+                            $('.frm_imei').append(html);
+                        });
+                    }
+                }
+            });
+        $('#myModal6').modal('show');
+    }
+    $(function(){
+    Test = {
+        UpdatePreview: function(id,obj){
+          // if IE < 10 doesn't support FileReader
+          if(!window.FileReader){
+             // don't know how to proceed to assign src to image tag
+          } else {
+             var reader = new FileReader();
+             var target = null;
+             
+             reader.onload = function(e) {
+              target =  e.target || e.srcElement;
+               $("#img"+id).prop("src", target.result);
+             };
+              reader.readAsDataURL(obj.files[0]);
+          }
+        }
+    };
+});
+    function uploads(){
+        $("#frm").attr("action", "/admin/user/order/upload");
+        $('#frm').submit();
+    }
+    function changes(id){
+        var productsid = $('#productsid'+id).val();
+        $('#pid'+id).html('');
+            $('#pid'+id).html("<option value='0'>Tên sản phẩm...</option>");
+            var url = '/admin/user/ajax/get-products-wh';
+            $.ajax({
+                method: 'get',
+                cache: false,
+                url: url,
+                data: {productsid: productsid},
+                dataType: 'json',
+                success: function (resp) {
+                    $.each(resp, function (i) {
+                        var html = '<option  value="' + resp[i].itemid + '">' + resp[i].title + '</option>';
+                        $('#pid'+id).append(html);
+                    });
+                }
+            });
+            $(".select"+id).select2();
+    }
+    function changes_product(id){
+        var pid = $('#pid'+id).val();
+            $('#pid_color'+id).html('');
+            $('#pid_color'+id).html("<option value='0'>Màu sản phẩm...</option>");
+            var url = '/admin/user/ajax/get-color-by-product-id';
+            $.ajax({
+                method: 'get',
+                cache: false,
+                url: url,
+                data: {product_id: pid},
+                dataType: 'json',
+                success: function (resp) {
+                    $.each(resp, function (i) {
+                        var html = '<option  value="' + resp[i].colorid + '">' + resp[i].name_color + '</option>';
+                        $('#pid_color'+id).append(html);
+                    });
+                }
+            });
+    }
+    function changes_color(id){
+        var pid = $('#pid'+id).val();
+        var colorid = $('#pid_color'+id).val();
+        $('#accounting_name'+id).html('');
+        $('#accounting_name'+id).html("<option value=''>Tên kế toán ...</option>");
+        var url = '/admin/user/ajax/get-title-kt-by-colorid';
+        $.ajax({
+            method: 'get',
+            cache: false,
+            url: url,
+            data: {product_id: pid, colorid: colorid},
+            dataType: 'json',
+            success: function (resp) {
+                $.each(resp, function (i) {
+                    var html = '<option  value="' + resp[i].name + '">' + resp[i].name + '</option>';
+                    $('#accounting_name'+id).append(html);
+                });
+            }
+        });
+    }
+    function del(id){
+        var result = confirm('Bạn chắc chắn muốn hủy không?');
+        if (result)
+        $('#del').load('/admin/user/order/del?id='+id, function (){
+            alert('Hủy thành công.');
+            window.location.reload(true);
+        });
+    }
+   function removes(id){
+        $('.block'+id).remove();
+    }
+    $().ready(function () {
+        var number = 0;
+//        $('#new').click(function(){
+//            var html_new = '<tr class="block'+number+'"><td><select name="productsid[]" id="productsid'+number+'" onchange="changes('+number+');return false;" class="form-control"><option value="0"> Tất cả</option><?php foreach ($this->productsid as $key=> $items){ ?> <option value="<?php echo $key; ?>"><?php echo $items ?></option><?php }?></select></td>\n\
+//                        <td><select class="form-control select'+number+'" onchange="changes_product('+number+');return false;" name="pid[]" id="pid'+number+'"><option value="0">Tên sản phẩm...</option></select></td>\n\
+//                        <td><select name="pid_color[]" id="pid_color'+number+'" onchange="changes_color('+number+');return false;" class="form-control"><option value="0">Tất cả màu</option></select></td>\n\
+//                        <td><select name="accounting_name[]" id="accounting_name'+number+'" class="form-control"><option value="">Tên kế toán</option></select></td>\n\
+//                        <td><input type="text" class="form-control" name="total[]" id="total'+number+'" placeholder="Số lượng..." ></td>\n\
+//                        <td><input type="text" class="form-control pricing" name="price[]" onkeyup="format_price('+number+');return false;" id="price'+number+'" value="" placeholder="Đơn giá..." ></td>\n\
+//                        <td><select name="type_discount[]" id="type_discount0" class="form-control"><?php foreach ($this->ldiscount as $key=> $items){ ?><option value="<?php echo $key;  ?>"><?php echo $items ?></option><?php }?></select></td>\n\
+//                        <td><input type="text" class="form-control pricing"  name="discount[]" id="discount'+number+'" value="" placeholder="Chiết khấu..." ></td>\n\
+//                        <td><a onclick="removes('+number+');return false;" class="btn btn-danger btn-sm" data-toggle="tooltip" href="#" data-original-title="" title=""><i class="fa fa-trash-o"></i></a></td></tr>';
+//            $('.frm_new').append(html_new);
+//            number++;
+//        });
+        
+        //save
+        $('#btnadd').click(function (e) {
+            $('#btnadd').hide();
+            $('#btndxl').show();
+            e.preventDefault();
+            $.post("/admin/user/order/save-vendor", $('form').serialize(), function (resp) {
+                $.each(resp, function (i, obj) {
+                    var id = obj.id;
+                    var msg = obj.msg;
+                    if (msg != "ok") {
+                        alert(msg);
+                        $('#btnadd').show();
+                        $('#btndxl').hide();
+                        $('#' + id).focus();
+                        return false;
+                    } else {
+                        alert('Lưu thành công');
+                        location.reload();
+                    }
+
+                });
+            }, 'json');
+        });
+
+        $("#f_table").DataTable();
+    });
+
+</script>

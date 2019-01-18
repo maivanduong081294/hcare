@@ -1,0 +1,17 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<h1><?echo $this->title?></h1>
+<p><?echo $this->img;?></p>
+<p>Gía: <?echo $this->price;?></p>
+<p>Hotline: 1900 2012</p>
+<table border="1" cellpadding="5" cellspacing="0" width="100%">
+    <?foreach($this->flist as $row){
+        if ($row["value"]=="") continue;
+        ?>
+        <tr>
+            <td><?echo $row["name"];?></td>
+            <td><?echo $row["value"];?></td>
+        </tr>
+    <?}?>
+</table>
+<?echo $this->data1;?>
+<?echo $this->data2;?>

@@ -1,0 +1,247 @@
+<script type="text/javascript" src="/user_admin/js/jquery-1.7.1.min.js"></script>
+<script src="http://www.hnammobile.com/v4/autocomplete/jquery.auto.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="http://www.hnammobile.com/v4/autocomplete/jquery.auto.css" type="text/css" media="all" />
+
+<?if (!$this->ispost){?>
+<div id="usedphone" style="margin-left:10px;">
+    <p style="padding:10px 0"><a href="/vote/cpanel">Back</a></p>
+    <h1>Phần mềm thu máy cũ</h1>
+    <div id="history">
+    </div>
+			<div style="line-height:1.5em; font-size:14px;width:90%;margin-top:20px;">
+			<h3 style="text-decoration:underline">Lưu ý khi báo giá máy cũ cho khách</h3>
+<p><b>Máy Hot</b> Hot (máy được khách hàng đang quan tâm nhiều trong thời điểm có người đang muốn bán lại máy đó):
+    <b style="color:red">từ mức giá phần mềm báo cao nhất + thêm trong khoảng 10%</b></p>
+
+<p><b>Máy bình thường</b> (máy được khách hàng quan tâm ở mức vừa phải, vẫn đang bán tại hnam hoặc model mới ra mắt được khoảng trên dưới 6 tháng):
+    <b style="color:red">từ mức giá phần mềm báo cao nhất - thêm trong khoảng 10% hoặc canh mức giá trung bình ở giữa mức giá thấp nhất và cao nhất.</b></p>
+
+<p><b>Máy không Hot</b> (máy ít được quan tâm, model cũ, đã ra mắt được gần 1 năm, hoặc hết bán): 
+<b style="color:red">từ mức giá phần mềm báo thấp nhất + hoặc - thêm trong khoảng 10%</b></p>
+<p>
+    <b style="color:green">Lưu ý:</b><br />
+    <b style="color:green">Trong khoảng 10% tức là từ 1% đến 10% là tùy do tư duy của các em trong thời điểm đó mà cân nhắc</b><br />
+    <b style="color:green">Nếu trên web sản phẩm không có giá hoặc khó quyết định mua hay không thì có thể gọi điện cho BGD nhờ tư vấn thêm</b>
+</p>
+		</div>
+
+    <form method="post" id="frmBG">
+        <input type="hidden" name="storeid" value="<?echo $this->sid;?>"/>
+        <p style="font-size:20px;color:orange">Chi nhánh: <?echo $this->storename;?></p>
+        <p><span>Tên máy</span><input type="text" name="name" id="name" placeholder="Nhập tên máy" class="input" value="<?echo $this->name;?>" style="width:400px; padding: 10px;"/></p>
+        <p><span>IMEI</span><input type="text" name="imei" id="imei" placeholder="Nhập IMEI máy" class="input" value="<?echo $this->imei;?>" /> <a href="#" class="info">Xem lịch sử báo giá</a></p>
+        <p><span>Giá máy mới</span><input type="text" name="price" id="price" placeholder="Nhập gía máy" class="pricing input" value="<?echo $this->price;?>" /></p>
+        <input type="hidden" name="itemid" id="itemid" class="" value="" />
+        <input type="hidden" name="names" id="names" class="" value="" />
+        <p><span>Phân loại máy</span>
+            <select name="type" class="input">
+                <option value="0" <?if ($this->type == 0) echo "selected";?>>APPLE Siêu HOT</option>
+                <option value="1" <?if ($this->type == 1) echo "selected";?>>APPLE</option>
+                <option value="2" <?if ($this->type == 2) echo "selected";?>>Máy bán chạy</option>
+                <option value="3" <?if ($this->type == 3) echo "selected";?>>Máy bán bình thường</option>
+                <option value="4" <?if ($this->type == 4) echo "selected";?>>Máy bán chậm</option>
+                <option value="5" <?if ($this->type == 5) echo "selected";?>>LIKE NEW</option>
+            </select> 
+            <span class="red">Lưu ý: Nếu là máy mua trong 1 tháng (LIKE NEW) chọn trạng thái LIKE NEW</span>
+        </p>
+        <p>
+            <span>Phát hành voucher</span>
+            <select id="hasvoucher" name="hasvoucher" class="input">
+                <option value="" >---Chọn---</option>
+                <option value="10" >Không</option>
+            </select>  
+            <span class="red">Lưu ý: Nếu muốn không xuất voucher cho khách thì chọn "Không"</span>
+        </p>
+        <p>Máy APPLE siêu HOT bao gồm: <b>iPhone 6, iPhone 6 Plus, iPad Air 2, iPad Mini 3</b></p>
+        <p><span>Thời gian bảo hành</span>
+            <select name="warranty" class="input">
+                <option value="1">Hết bảo hành</option>
+                <option value="2">3-6 tháng</option>
+                <option value="3">6-9 tháng</option>
+                <option value="4">9-12 tháng</option>
+                <option value="5">Đã sử dụng từ 16-30 ngày</option>
+                <option value="6">Đã sử dụng từ 2-15 ngày</option>
+            </select>
+        </p>
+        <p><span>Tình trạng cấn, rớt</span>
+            <select name="can" class="input">
+                <option value="1">Không cấn, rớt</option>
+                <option value="2">Cấn, rớt nhẹ</option>
+                <option value="3">Cấn, rớt nặng</option>
+                <option value="4">Cấn, rớt quá nặng</option>
+            </select>
+        </p>
+        <p><span>Tình trạng trầy sước</span>
+            <select name="rot" class="input">
+                <option value="1">Không trầy</option>
+                <option value="2">Trầy nhẹ</option>
+                <option value="3">Trầy nặng</option>
+                <option value="4">Trầy quá nặng</option>
+            </select>
+        </p>
+        <p><span>Tình trạng sửa chữa</span>
+            <select name="repair" class="input">
+                <option value="1">Chưa sửa chữa</option>
+                <option value="2">Đã qua bảo hành chính hãng</option>
+                <option value="3">Sữa chữa dịch vụ</option>
+            </select>
+        </p>
+        <p>
+            (Nếu thiếu phụ kiện nào thì nhập giá bán mới vào ô tương ứng để trừ vào giá thu máy. VD: 120000)
+        </p>
+        <p><span>Thiếu phụ kiện cáp</span>
+            <input type="text" name="cable" value="0" class="input pricing"/> đ
+        </p>
+        <p><span>Thiếu phụ kiện sạc</span>
+            <input type="text" name="charge" value="0" class="input pricing"/> đ
+        </p>
+        <p><span>Thiếu phụ kiện tai nghe</span>
+            <input type="text" name="headphone" value="0" class="input pricing"/> đ
+        </p>
+        <p style="color:red;">
+            <input type="checkbox" name="vouchers6" value="1" onclick="alert('Nếu khách không có máy cũ thì click chọn vào ô thông tin tạm cho samsung s6');"/> Khách bán máy cũ lấy voucher 1.500.000đ mua Samsung S6
+        </p>
+        <p style="color:red;">
+            <input type="checkbox" name="vouchers6" value="2" onclick="alert('Nếu khách không có máy cũ thì click chọn vào ô thông tin tạm cho samsung s6');"/> Khách bán máy cũ lấy voucher 1.700.000đ mua Samsung S6 Edge
+        </p>
+        <p style="color:blue;">
+            <input id="type_voucher" type="checkbox" name="type_voucher" value="1" /> Thông tin tạm cho samsung s6 (Chọn nếu khách không có máy cũ, muốn phát hành voucher S6 thì click chọn)
+        </p>
+        <p>
+            <input type="submit" value="Tính giá thu vào" name="submit" id="submit" />
+        </p>        
+        <div id="result">
+            
+        </div>
+    </form>
+</div>
+<style>
+    form{margin:20px; font-size: 14px;}
+    #usedphone p{padding:5px 0;}
+    .input{padding:5px; width:200px; font-size:14px;}
+    #usedphone p span:first-child{float:left; margin: 10px 10px 0 0; width:150px;}
+    #submit,.btn2{font-size:20px; padding:5px; background-color: orange; color:#ffffff; cursor:pointer}
+    #result span{font-size:20px; color:red;}
+    #pricekh{padding:5px; font-size: 20px;}
+    .info{color:blue!important; font-size: 13px!important; font-style: italic!important}
+    #history{position: absolute; left: 600px; top:400px;}
+</style>
+<script>
+    $().ready(function(){
+        
+        $("#frmBG").submit(function(e){
+            e.preventDefault();
+            
+            //check product name
+            var name = $("#name").val();
+            var isValidName = name.indexOf("--");
+                
+            if (isValidName >= 0) {
+                var url = "/admin/user/usedphone";
+                $.post(url, $(this).serialize(), function(resp){
+                    $("#result").html(resp);
+                },"html");
+            }else{
+                alert("Vui lòng chọn tên sản phẩm trong danh sách gợi ý!!!");
+                $("#name").focus();
+            }    
+        });
+                
+        $(".info").click(function(e){
+            e.preventDefault();
+            var imei = $("#imei").val();
+            if (imei == null || imei.length==0) {
+                alert("Vui lòng nhập IMEI");
+            } else {                
+                var url="/admin/user/usedphone2/history?imei="+imei+"&rand="+Math.random();
+                $.get(url, {}, function(resp){
+                    $("#history").html(resp);
+                });
+            }
+        });
+        $("#imei").blur(function(){
+            if ($(this).val() != null) {
+                $(".info").click();
+            }
+        });
+        
+        $(".pricing").keyup(function(){
+            var price = this.value;
+            price = price.replace(/,/gi,"");
+            price = price + ".";
+            price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            var sprice = price.split(".");
+            $(this).val(sprice[0]);
+        });
+    });
+</script>
+<?}else{?>
+    Giá mua đề xuất: <span><?echo $this->cur_price;?></span><br /><br />
+    Gía có thể giao động từ <span><?echo $this->min_price;?></span> đến <span><?echo $this->max_price;?></span>
+    <br><br>
+    Giá báo khách hàng<input type="text" name="pricekh" id="pricekh" class="pricing" value=""/><br><br>
+    <input type="button" name="baokh" id="baokh" class="btn2" value="Báo giá cho khách" /><br /><br />
+    -------------------------<br /><br />
+    Gía bán ra dự kiến: <span><?echo $this->cur_price_sell;?></span><br /><br />
+    Gía bán có thể giao động từ <span><?echo $this->min_price_sell;?></span> đến <span><?echo $this->max_price_sell;?></span>
+    <script>
+        $().ready(function(){
+            $("#baokh").click(function(){   
+                var pricekh = $("#pricekh").val();
+                var hasvoucher = $("#hasvoucher").val();
+                if (pricekh == "") {
+                        alert("Vui lòng nhập giá báo cho khách để lưu!");
+                        $("#pricekh").focus();
+                        return;
+                }
+                var hasvoucher = $("#hasvoucher").val();
+                if (hasvoucher != "") {
+                    $("#type_voucher").val(hasvoucher).attr("checked","checked");
+                }
+                var url = "/admin/user/usedphone2/save";
+                $.get(url, $("#frmBG").serialize(), function(resp){
+                    
+                    alert("Đã lưu thông tin thành công");
+                    window.location = '/admin/user/usedphone2/customer?id='+resp;
+                }, "html");
+            })            
+            $(".pricing").keyup(function(){
+                var price = this.value;
+                price = price.replace(/,/gi,"");
+                price = price + ".";
+                price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                var sprice = price.split(".");
+                $(this).val(sprice[0]);
+            });
+        });
+        
+    </script>
+<? } ?>
+<script>
+    $(function() {
+        var pnames = [
+            <?echo $this->pnames;?>
+        ];
+        $("#name").autocomplete({
+            source: pnames,
+            select: function (a, b) {
+                $(this).val(b.item.value);            
+            }
+        });
+        
+        $("#name").blur(function(){
+            var phonename = $("#name").val();
+            var phonenameEncode = encodeURIComponent(phonename);
+            var url = "/admin/user/usedphone2/get-price?name=" + phonenameEncode;
+            $.get(url, function(resp){
+                if (resp != null && resp != "") {
+                    $("#price").val(resp.price);
+                    $("#itemid").val(resp.itemid);
+                    $("#names").val(resp.name);
+                    $(".pricing").keyup();
+                }
+            }, "json");
+        });
+        
+    });
+</script>

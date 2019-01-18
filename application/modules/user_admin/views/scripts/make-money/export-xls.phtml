@@ -1,0 +1,38 @@
+<?php
+header("Pragma: public");
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Cache-Control: pre-check=0, post-check=0, max-age=0");
+header("Pragma: no-cache");
+header("Expires: 0");
+header("Content-Transfer-Encoding: none");
+header("Content-Type: application/vnd.ms-excel;");
+header("Content-type: application/x-msexcel");
+header("Content-Disposition: attachment; filename=".$this->cated_name." ".date('Ymd').".xls");
+?>
+
+<meta charset="utf-8">
+<table class=""  border="1">
+    <tr>
+        <th>STT</th>
+        <th>Tên Model</th>
+        <th>IMEI</th>
+        <th>Ngày bán</th>
+        <th>Tên Chi nhánh</th>
+        <th>Tên khách hàng</th>
+        <th>Số điện thoại</th>
+    </tr>
+    <?php
+    $no=0;
+    foreach ($this->data as $list){
+        ?>
+    <tr>
+        <td> <?php echo ++$no ?></td>
+        <td> <?php echo $list["products_name"] ?></td>
+        <td> <?php echo $list["imes"] ?></td>
+        <td> <?php echo $list["create_date"] ?></td>
+        <td> <?php echo $list["vote_name"] ?></td>
+        <td> <?php echo $list["fullname_addon"] ?></td>
+        <td> <?php echo "0".$list["phone_addon"] ?></td>
+    </tr>
+    <?php }?>
+</table>

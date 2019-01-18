@@ -1,0 +1,109 @@
+<script>
+    $(document).ready(function () {
+        //CTRL_A
+        checkCtrl = false
+        $('*').keydown(function (e) {
+            if (e.keyCode == '17') {
+                checkCtrl = true
+            }
+        }).keyup(function (ev) {
+            if (ev.keyCode == '17') {
+                checkCtrl = false
+            }
+        }).keydown(function (event) {
+            if (checkCtrl) {
+                if (event.keyCode == '80') {
+                    alert('Vui lòng nhấn nút in phiếu để in')
+                    checkCtrl = false
+                }
+            }
+        })
+    })
+</script>
+<style>
+    .font-sum{
+         color: red;font-size: 20px;font-weight: bold
+    }
+</style>
+<div class="box box-primary">
+
+
+    <div class="box-header">
+        <i class="ion ion-clipboard"></i>
+        <h3 class="box-title">Danh sách Xiaomi của các chi nhánh </strong></h3>
+    </div>
+    <form role="form" id="view-sales-day" method="get"   class="frmReport">
+        <div class="box-body">
+            <div style="float: left" class="form-group">
+                <div class="input-group" style="width: 600px">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <input  type="text" name="day_created_end" class="form-control" id="reservation" value="<?php echo $this->days_created_end ?>" placeholder="Ngày tháng năm ..."  />
+                </div><!-- /.input group -->
+            </div>
+            <div style="float: left" class="form-group">
+                <button type="button" id="btnView" class="btn btn-primary">Xem</button>
+            </div>
+        </div><!-- /.box-body -->
+    </form>
+    <div class="box-body" style="clear: both">
+        <div class="table-responsive">
+            <table class="table table-data table-striped table-bordered table-hover  table-condensed">
+                <tbody>
+                    <tr>
+                        <th width="20"><input onclick="checkme()" name="checkall" type="checkbox" data-toggle="tooltip" title="Select All"/></th>
+                        <th width="100">Chi nhánh</th>
+                        <th width="20">Máy/Số lượng</th>
+                        <th width="20">Phụ kiện/Số lượng</th>
+                    </tr>
+                    <?php
+                    foreach ($this->list_vote as $list) {
+                        $storeid = $list["userid"];
+                        $__total = (int)$this->sums[$storeid];
+                        $__soluong = (int)$this->tongsoluong[$storeid];
+                        
+                        // tong 2 cai
+                        $__total_tong = (int)$this->sums_tong[$storeid] - $__total;
+                        $__soluong_tong = (int)$this->tongsoluong_tong[$storeid] -$__soluong;
+                        ?>
+                        <tr class="row-<?php echo $id; ?>">
+                            <td ><input type="checkbox"  name="check[]" value="<?php echo $id; ?>"  class="check-user minimal-red"  /></td>
+                            <td><?php echo $list["storename"]; ?></td>
+                            <td><?php echo number_format($__total); ?>/<?php echo number_format($__soluong); ?></td>
+                            <td><?php echo number_format($__total_tong); ?>/<?php echo number_format($__soluong_tong); ?></td>
+                        </tr>
+                        
+                        <?php 
+                            $___tongtien  +=$__total;
+                            $___tongsoluong += $__soluong;
+                            
+                            $___tongtien_pk  +=$__total_tong;
+                            $___tongsoluong_pk += $__soluong_tong;
+                        
+                        ?>
+                    <?php } ?>
+                </tbody>
+                <tr>
+                    <td colspan="2" class="font-sum">Tổng cộng</td>
+                    <td  class="font-sum"><?php echo number_format($___tongtien) ?>/<?php echo number_format($___tongsoluong) ?></td>
+                    <td  class="font-sum"><?php echo number_format($___tongtien_pk) ?>/<?php echo number_format($___tongsoluong_pk) ?></td>
+                    
+                    
+                </tr>
+            </table>
+        </div>
+    </div><!-- /.box-body -->
+</div><!-- /.box -->
+</div>
+</div>
+<div id="ddelete" style="display:none;"></div>
+<script>
+    $().ready(function () {
+        $('#btnView').click(function (e) {
+            e.preventDefault();
+            $("#view-sales-day").attr("action", "/vote/thong-ke-xiaomi");
+            $("#view-sales-day").submit();
+        });
+    });
+</script>

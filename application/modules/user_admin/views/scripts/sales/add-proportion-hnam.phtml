@@ -1,0 +1,101 @@
+<!--<div class="row">
+    <div class="col-md-6">-->
+        <div class="box box-primary">
+                                <div class="box-header">
+                                    <h3 class="box-title">Nhập liệu bonus hàng hnam</h3>
+                                </div><!-- /.box-header -->
+                                <!-- form start -->
+                                <form role="form" action="" class="frmReport">
+                                    <div class="box-body">
+                                        <div class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label"  id="text-align-label">Tên chi nhánh : </label>
+                                            <div  class="input-group" style="width:405px">
+                                                <span class="input-group-addon"><i class="fa fa-list"></i></span>
+                                                <select name="vote-name" class="form-control">
+                                                    <option value="0">Lựa chọn tên chi nhánh</option>
+                                                    <?php foreach ($this->vote as $list) { ?>
+                                                    <option value="<?php echo $list['userid'] ?>"><?php echo $list['vote_name'] ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        
+                                         <div class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Doanh số tháng : </label>
+                                            <div  class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                <select style="width: 180px;height:34px" id="month_create" name="month_create" >
+                                                    <?php foreach ($this->months as  $month) { ?>
+                                                    <option value="<?php echo $month ?>">
+                                                        Tháng <?php echo $month ?>
+                                                    </option>
+                                                    <?php } ?>
+                                                </select>
+                                                <select style="width: 185px;height:34px" id="year_create" name="year_create">
+                                                    <option value="<?php echo date('Y') ?>">
+                                                        Năm <?php echo date('Y') ?>
+                                                    </option>
+                                                </select>
+                                            </div> 
+                                           
+                                        </div>
+                                        
+                                        
+                                        
+                                      
+                                        <div class="form-group">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Bouns Hàng hnam : </label>
+                                            <div  class="input-group" style="width:405px">
+                                                <span class="input-group-addon"><i class="fa fa-desktop"></i></span>
+                                                    <input type="text" class="form-control" name="bouns" id="bouns" value="" placeholder="Nhập tiền thưởng hàng Hnam">
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                    </div><!-- /.box-body -->
+
+                                    <div class="box-footer">
+                                        <button type="submit" id="btnAdd" class="btn btn-primary">Lưu</button>
+                                        <input type="hidden" name="vipid" id="vipid" value="" />
+                                    </div>
+                                </form>
+            <script>
+                $().ready(function(){
+                    $('#btnAdd').click(function(e){
+                        e.preventDefault();
+                        var name = $('#cated-name option:selected').data("name") ;
+                        $.post("/admin/user/sales/save-proportion-hnam?cated_pname="+name,$('form').serialize(), function(resp){
+                            $('.errblock').remove();
+//                            alert(name);return false;
+                            $.each(resp, function(i, obj){
+                                var id = obj.id; 
+                                var msg = obj.msg; 
+
+                                if (msg != "ok") {
+
+//                                    $('#'+id).parent().append(' <span class="errblock red" style="padding:3px 0 10px 0">'+msg+'</span>');
+                                    alert(msg);
+                                    return false;
+//                                    $('#'+id).focus();                   
+                                } else {
+                                    alert("Thêm thành công");
+                                    window.location = "/admin/user/sales/list-proportion-hnam";
+                                }
+
+                            });
+                        }, 'json');
+                    });
+                });
+                function convertDate(vnDate) {
+                    try {
+                        var vnDateArr = vnDate.split("/");
+                        var rDate = vnDateArr.reverse();
+                        return rDate.join("-");
+                    } catch (err){
+                        return vnDate;
+                    }
+                }
+            </script>
+        </div>
+<!--    </div>
+</div>-->

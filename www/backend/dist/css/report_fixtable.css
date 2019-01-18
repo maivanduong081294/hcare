@@ -1,0 +1,124 @@
+    table, td, a {
+        color: #000;
+        font: normal normal 12px Verdana, Geneva, Arial, Helvetica, sans-serif
+    }
+    .box-body{
+        padding: 0px;
+    }
+    .box{
+        margin-bottom: 0px;
+    }
+    div.tableContainer {
+        clear: both;
+        border: 1px solid #963;
+        /*height: 450px;*/
+        overflow: auto;
+        /*width: 756px;*/
+    }
+    \html div.tableContainer/* */ {
+        padding: 0 16px 0 0;
+        /*width: 740px;*/
+    }
+    html>body div.tableContainer {
+        height: auto;
+        padding: 0;
+    }
+    head:first-child+body div[class].tableContainer {
+        /*height: 450px;*/
+        overflow: hidden;
+        /*width: 756px*/
+    }
+    div.tableContainer table {
+        float: left;
+        width: 100%
+    }
+    \html div.tableContainer table/* */ {
+        margin: 0 -16px 0 0
+    }
+    html>body div.tableContainer table {
+        float: none;
+        margin: 0;
+        /*width: 740px*/
+    }
+    head:first-child+body div[class].tableContainer table {
+        /*width: 756px*/
+    }
+    thead.fixedHeader tr {
+        position: relative;
+        top: expression(document.getElementById("tableContainer").scrollTop);
+    }
+    head:first-child+body thead[class].fixedHeader tr {
+        display: block;
+    }
+    thead.fixedHeader th {
+        background: #3C8DBC;
+        border-left: 1px solid #EB8;
+        border-right: 1px solid #B74;
+        border-top: 1px solid #EB8;
+        font-weight: normal;
+        /*padding: 4px 3px;*/
+        text-align: left;
+        color: #FFF;
+    }
+
+    thead.fixedHeader a, thead.fixedHeader a:link, thead.fixedHeader a:visited {
+        color: #FFF;
+        display: block;
+        text-decoration: none;
+        width: 100%
+    }
+    thead.fixedHeader a:hover {
+        color: #FFF;
+        display: block;
+        text-decoration: underline;
+        width: 100%
+    }
+    head:first-child+body tbody[class].scrollContent {
+        display: block;
+        height: 362px;
+        overflow: auto;
+        width: 100%
+    }
+    tbody.scrollContent td, tbody.scrollContent tr.normalRow td {
+        /*background: #FFF;*/
+        border-bottom: none;
+        border-left: 1px solid #CCC;
+        border-right: 1px solid #CCC;
+        border-top: 1px solid #DDD;
+        /*padding: 2px 3px 3px 4px*/
+    }
+
+    tbody.scrollContent tr.alternateRow td {
+        background: #EEE;
+        border-bottom: none;
+        border-left: 1px solid #CCC;
+        border-right: 1px solid #CCC;
+        border-top: 1px solid #DDD;
+        /*padding: 2px 3px 3px 4px*/
+    }
+    head:first-child+body thead[class].fixedHeader th {
+        /*width: 390px*/
+    }
+
+    head:first-child+body thead[class].fixedHeader th + th {
+        /*width: 6%*/
+    }
+
+    head:first-child+body thead[class].fixedHeader th + th + th {
+        border-right: none;
+        /*padding: 4px 4px 4px 3px;*/
+        /*width: 316px*/
+    }
+    head:first-child+body tbody[class].scrollContent td {
+        /*width: 200px*/
+    }
+
+    head:first-child+body tbody[class].scrollContent td + td {
+        /*width: 240px*/
+    }
+
+    head:first-child+body tbody[class].scrollContent td + td + td {
+        border-right: none;
+        /*padding: 2px 4px 2px 3px;*/
+        /*width: 300px*/
+    }

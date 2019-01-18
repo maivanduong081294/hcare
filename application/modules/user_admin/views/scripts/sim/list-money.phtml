@@ -1,0 +1,278 @@
+<style>
+    #paging_klinen{
+        height: 23px;
+        width: 600px;
+    }
+    #paging_klinen img {
+        height: 25px;
+        width: 28px;
+        margin-top: -3px;
+    }
+    #paging_klinen span{
+        /*font-size: 20px;*/
+        background: #f05920;
+        color: #ffffff;
+        padding :4px 10px;
+    }
+    .pagingItems{
+        background: #f3f3f3;
+        padding :4px 10px;
+        color: #777777;
+        font-weight: bold;
+        margin-top: 5px;
+    }
+    .pagingItems hover {
+        background: #f05920;
+    }
+</style>
+<div class="box box-primary">
+    <div class="box-header">
+        <div class="col-md-6">
+            <i class="ion ion-clipboard"></i>
+            <h3 class="box-title">TIỀN SIM XUỐNG CỬA HÀNG HNAMMOBILE.COM</h3>
+        </div>
+        <div class="col-md-6">
+            <form role="form" id="view-sales-day" method="get"  class="frmReport">
+                <div class="form-group">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-btn">
+                            <button type="button" id="add" onclick="adds();return false;"  class="btn btn-primary btn-flat"><i class="fa fa-plus"> Thêm</i></button>
+                        </span>
+                        <div class="input-group-addon">
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <select class="form-control" name="storeid" id="storeid">
+                            <option value="">Tất cả</option>
+                            <?php
+                            foreach ($this->items2 as $list2) {
+                                $selected = '';
+                                if ($this->vote_id == $list2["userid"]) {
+                                    $selected = 'selected = selected';
+                                }
+                                ?>
+                                    <option <?php echo $selected ?> value="<?php echo $list2["userid"] ?>">
+                                    <?php echo $list2["storename"] ?>
+                                    </option>
+<?php } ?>
+                        </select>
+                        <span class="input-group-btn">
+                            <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> Xem </i></button>
+                        </span>
+                    </div><!-- /.input group -->
+                </div>
+            </form>
+        </div>
+    </div><!-- /.box-header -->
+    <form>
+    <div style="display: none" class="box-body frm_add col-md-6">
+                <div class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Cửa hàng: </label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-desktop"></i>
+                        </div>
+                        <select name="vote_id" id="vote_id" class="form-control">
+                            <option value="0">Lựa chọn cửa hàng</option>
+                            
+                            <?php foreach ($this->items2 as $list){ 
+                                $seleted =  '';
+                                if($this->vote_id == $list["userid"]){
+                                    $seleted = 'selected = "selected"';
+                                }
+                                ?>
+                                <option <?php echo $seleted ?> value="<?php echo $list["userid"] ?>"><?php echo $list["storename"] ?></option>
+                            <?php }?>
+                        </select>
+                    </div>
+                </div>
+                <div id="charge_card" class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Số tiền: </label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-desktop"></i>
+                        </div>
+                        <input type="text" class="form-control pricing" name="money" id="money" value="<?php echo $this->detail["money"] ?>" placeholder="Nhập số tiền đến các cửa hàng">
+                    </div>
+                </div>
+                <div id="charge_card" class="form-group">
+                    <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Mô tả: </label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-desktop"></i>
+                        </div>
+                        <textarea class="form-control" value="<?php echo $this->detail["des"] ?>" name="des" id="des" placeholder="Nhập mô tả vào đây nếu có"></textarea>
+                    </div>
+                </div>
+                <div class="box-footer">
+                    <button type="button" id="save" class="btn btn-primary"><i class="fa fa-floppy-o"> Lưu</i></button>
+                    <button style="display: none" type="button" id="wt" class="btn btn-primary"><i class="fa fa-spinner"> Đang xử lý ...</i></button>
+                    <button  type="button" onclick="closes();return false;" id="close" class="btn btn-primary"><i class="fa fa-times"> Đóng ...</i></button>
+                    <input type="hidden" name="id" id="id" value="<?php echo $this->detail["id"] ?>" />
+                </div>
+            </div><!-- /.box-body -->
+    </form>  
+    <div class="row">
+        <div class="col-md-12">
+            <div><?php echo $this->paging_template ?></div>
+        </div>
+    </div>
+    <div class="box-body">
+        <div class="table-responsive">
+            <table id="f_table" class="table table-data table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th><input name="select-all" type="checkbox" data-toggle="tooltip" title="Select All"/></th>
+                        <th>STT</th>
+                        <th>Chi nhánh</th>
+                        <th> Số tiền</th>
+                        <th>Ngày tạo</th>
+                        <th>Thao tác</th>
+                    </tr>
+                <thead>
+                <tbody>
+                    <?php
+                    $no = 1;
+                    foreach ($this->items as $list) {
+                        $is_actived = $list["enabled"];
+                        $enabled = $list["enabled"];
+                        ?>
+    <?php if ($list["username"] != "vote_all") { ?>
+                            <tr  class="row-<?php echo $list["itemid"]; ?>">
+
+                                <td width="20"><input type="checkbox" name="select-user[]" class="check-user minimal-red" value="<?php echo $list["id"]; ?>"/></td>
+                                <td width="30"><?php echo $no ?></td>
+                                <td width="200"><?php echo $list["storename"] ?></td>
+                                <td>
+        <?php echo number_format($list["money"]) ?>
+                                </td>
+                                <td width="150">
+        <?php echo $list["createdate"] ?>
+                                </td>
+                                <td width="100">
+                                    <?php if ($enabled == 0): ?>
+                                    <a onclick="rest(<?php echo $list["id"]; ?>);return false;" class="btn btn-flat btn-warning btn-sm" data-toggle="tooltip"  href="#"><i class="fa fa-reply"></i></a>
+                                    <?php else: ?>
+                                        <a onclick="del(<?php echo $list["id"]; ?>);return false;" class="btn btn-danger btn-sm" data-toggle="tooltip"  href="#"><i class="fa fa-trash-o"></i></a>
+        <?php endif; ?>
+                                </td>
+                            </tr>
+                            <? $no++;?>
+    <?php } ?>
+                    <div id="ddelete" style="display:none;"></div>
+
+                    <?php
+                    $sum +=$list["money"];
+                    ?>
+<?php } ?>
+                </tbody>
+                <?php
+                $total =0;
+                if($this->vote_id >0){
+                    $total = $this->total_vote[$this->vote_id]*30000;
+                }else{
+                    $total = $this->total*30000;
+                } ?>
+                <tr style="color: red ;font-size: 15px">
+                    <th><input onclick="checkme()" name="checkall" type="checkbox" data-toggle="tooltip" title="Select All"/></th>
+                    <th colspan="2">Tổng cộng</th>
+                    <th colspan="1"><strong><?php echo number_format($sum) ?> -- Tiền sử dụng  :  <?php echo number_format($total); ?></strong></th>
+                    <th colspan="1"><strong><?php echo date("d-m-Y H:i:s"); ?>  </strong></th>
+                    <th colspan="1"></th>
+                </tr>
+
+            </table>
+        </div>
+    </div><!-- /.box-body -->
+
+</div><!-- /.box -->
+
+
+
+
+</div>
+</div>
+<script>
+    function del(id){
+        if (id != '')
+            result = confirm('Bạn chắc chắn muốn hủy không ?');
+        if (result)
+            $('#ddelete').load('/admin/user/sim/del?&id=' + id, function () {
+                alert('Huỷ  thành công.');
+                window.location.reload(true);
+            });
+    }
+    $().ready(function () {
+        function keys(e)
+        {
+            var keyword = null;
+            if (window.event)
+            {
+                keyword = window.event.keyCode;
+            } else
+            {
+                keyword = e.which; //NON IE;
+            }
+            if (keyword < 48 || keyword > 57)
+            {
+                if (keyword == 48 || keyword == 127)
+                {
+                    return;
+                }
+                return false;
+            }
+        }
+        $(".pricing").keyup(function () {
+            var price = this.value;
+            price = price.replace(/,/gi, "");
+            price = price + ".";
+            price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            var sprice = price.split(".");
+            $(this).val(sprice[0]);
+        });
+        $('#check_sim').change(function () {
+            window.location = "<?= Globals::getBaseUrl(); ?>/admin/user/sim/list?check_sim=" + $('#check_sim').val() + "&cateid=" + $('#cateid').val();
+        });
+    });
+    $( document ).ready(function() {
+    $('#save').click(function (e) {
+            $('#save').hide();
+            $('#wt').show();
+            e.preventDefault();
+            $.post("/admin/user/sim/save-money", $('form').serialize(), function (resp) {
+                $('.errblock').remove();
+                $.each(resp, function (i, obj) {
+                    var id = obj.id;
+                    var msg = obj.msg;
+                    if (msg != "ok") {
+                        alert(msg);
+                        $('#'+id).focus();
+                        $('#save').show();
+                        $('#wt').hide();
+                        return false;
+                    } else {
+                        window.location = "/admin/user/sim/list-money";
+                    }
+
+                });
+            }, 'json');
+        });
+        
+    $("#f_table").DataTable();
+});
+function adds(){
+    resets();
+    $('.frm_add').show();
+    $('#close').show();
+}
+function closes(){
+    resets();
+    $('.frm_add').hide();
+    $('#add').show();
+}
+function resets(){
+    $('#add').hide();
+    $('#wt').hide();
+    $('#close').hide();
+
+}
+</script>

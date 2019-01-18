@@ -1,0 +1,276 @@
+<style>
+table {
+  table-layout: fixed; 
+  width: 100%;
+  *margin-left: -100px;/*ie7*/
+  
+}
+td, th {
+  vertical-align: top;
+  border: 1px solid #ccc;
+  padding:10px;
+  width:100px;
+}
+th {
+/*  position:absolute;
+  *position: relative;*/
+  left:0; 
+  width:100px;
+  border: 0px;
+}
+.outer {position:relative}
+.inner {
+  overflow-x:scroll;
+  overflow-y:visible;
+  width:1300px; 
+height: 500px  
+}
+.box1 td, th{
+    background: transparent;
+}
+</style>
+<div class="panel-default">
+    <br/>
+    <form id="frm_target">
+        <div class="col-md-2 col-xs-6">
+        <div class="form-group input-group-sm">
+            <select style="width: 100%" name="storeid" id="storeid" class="selects form-control">
+                <option value="0"> Tất cả chi nhánh</option>
+                <?php
+                foreach ($this->list_store as $items) {
+                    if($items["userid"]==253 || $items["userid"]==312){
+                        continue;
+                    }
+                    $sl = '';
+                    if ($this->storeid == $items["userid"]) {
+                        $sl = 'selected = selected';
+                    }
+                    ?>
+                    <option <?php echo $sl ?> value="<?php echo $items["userid"] ?>"> <?php echo $items["storename"] ?></option>
+                <?php } ?>
+
+            </select>
+        </div>
+    </div>
+        <div class="col-md-2 col-xs-6">
+            <div class="form-group input-group-sm ">
+                <select  name="productsid" onchange="change_productsid_kmc();" id="productsid" class="form-control">
+                    <?php
+                    foreach ($this->list_hnammobile as $key => $value) {
+                        $sl = '';
+                        if ($this->productsid == $key) {
+                            $sl = 'selected = selected';
+                        }
+                        ?>
+                        <option data="<?php echo $value ?>" <?php echo $sl ?> value="<?php echo $key ?>"> <?php echo $value ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3 col-xs-6">
+            <div class="form-group input-group-sm">
+                <select style="width: 100%" name="cated_id"  id="cated_id" class="selects form-control">
+                    <option value="0"> Brand</option>
+                    <?php
+                    foreach ($this->menu as $items) {
+                        $sl = '';
+                        if ($this->itemid == $items["itemid"]) {
+                            $sl = 'selected = selected';
+                        }
+                        
+                        ?>
+                        <option data="<?php echo $items["title"] ?>" <?php echo $sl ?> value="<?php echo $items["itemid"] ?>"> <?php echo $items["title"] ?></option>
+                    <?php } ?>
+
+                </select>
+            </div>
+        </div>
+        <div class="col-md-2 col-xs-6">
+            <div class="form-group input-group-sm ">
+                <select  name="month" id="month" class="form-control">
+                    <?php
+                    for ($i = 1; $i <= 12; $i++) {
+                        $sl = '';
+                        if ($this->month == $i) {
+                            $sl = ' selected="selected"';
+                        }
+                        ?>
+                        <option <?php echo $sl ?> value="<?php echo $i ?>">Tháng <?php echo $i ?></option>
+<?php } ?>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-2 col-xs-6">
+            <div class="form-group input-group-sm ">
+                <select  name="year" id="year" class="form-control">
+                    <?php
+                    for ($i = 2017; $i <= 2020; $i++) {
+                        $sl = '';
+                        if ($this->year == $i) {
+                            $sl = ' selected="selected"';
+                        }
+                        ?>
+                        <option <?php echo $sl ?> value="<?php echo $i ?>">Năm <?php echo $i ?></option>
+<?php } ?>
+                </select>
+            </div>
+        </div>
+        <button onclick="xem_target();return false;" class="btn btn-primary btn-sm"><i class="fa fa-search"></i> Xem</button>
+        <div class="clearfix"></div>
+        <div class="col-md-2 col-xs-6">
+            <div class="form-group input-group-sm ">
+                <input type="number" min="0" value="<?php echo $this->sl ?>" name="sl" id="sl" class="form-control" placeholder="Nhập số lượng..." />
+            </div>
+        </div>
+        <button onclick="luu_target();return false;"  class="btn btn-danger btn-sm"><i class="fa fa-save"></i> Save</button>
+        <a href="/admin/user/target/settargetproductsbybrand" style="float: right" class="btn btn-danger"><i class="fa fa-plus"></i> Set target sản phẩm theo brand</a>
+        <input type="hidden" name="ids" id="ids" value="<?php echo  $this->detail["id"]?>" />
+    </form>
+</div>
+<div class="clearfix"></div>
+<div class="box-body">
+<div class="outer">
+  <div class="inner">
+      <table >
+          <tr>
+              <th></th>
+              <?php foreach ($this->list_store as $key=> $store){
+                  if($this->storeid >0 && $this->storeid != $store["userid"]){
+                      continue;
+                  }
+                ?>
+              <td><?php echo $store["storename"]; ?><span style="font-size: 10px;color: red">(Target/Đạt)</span></td>
+            <?php }?>
+          </tr>
+          
+          <?php
+          
+          foreach ($this->menu as $menu){
+              
+              $cate_id = $menu["itemid"];
+              if($menu["itemid"] != $this->array_menu[$menu["itemid"]]){
+                    continue;
+                }
+              ?>
+        <tr>
+            <th><?php echo $menu["title"]; ?></th>
+            <?php
+            
+            foreach ($this->list_store as $key=> $store){
+                if($this->storeid >0 && $this->storeid != $store["userid"]){
+                      continue;
+                  }
+                $storeid = $store["userid"];
+                $tong_target[$storeid] += $this->total_storeid_cated[$storeid][$cate_id];
+                $tong_sale[$storeid] +=$this->total_sale[$storeid][$cate_id];
+                foreach ($this->array_cated[$storeid][$cate_id] as $v){
+                    $products_id = $v["products_id"];
+                    $money[$storeid] += $this->total_sale_by_itemid[$storeid][$products_id]*$this->price_by_itemid[$products_id];
+                }
+                
+                ?>
+            <td <?php if($this->detail["id"] >0 && $this->detail["id"] == $this->ids_storeid_cated[$storeid][$cate_id]){ ?> style="background: #ccc;color: #fff !important" <?php }?>><a href="/admin/user/target/bybrand?storeid=<?php echo $this->storeid ?>&productsid=<?php echo $this->productsid ?>&cated_id=<?php echo $this->itemid ?>&month=<?php echo $this->month ?>&year=<?php echo $this->year ?>&ids=<?php echo $this->ids_storeid_cated[$storeid][$cate_id]; ?>"><?php echo number_format($this->total_storeid_cated[$storeid][$cate_id]); ?> </a> / <?php echo number_format($this->total_sale[$storeid][$cate_id]) ?></td>
+            <?php }?>
+        </tr>
+        <?php }?>
+        <tr>
+            <th>Tổng target</th>
+            <?php foreach ($this->list_store as $key=> $store){
+                if($this->storeid >0 && $this->storeid != $store["userid"]){
+                      continue;
+                  }
+                  $storeid = $store["userid"];
+                ?>
+            <td ><?php echo number_format($tong_target[$storeid])."/".  number_format($tong_sale[$storeid]) ?></td>
+            <?php }?>
+        </tr>
+        <tr>
+            <th>Tỷ lệ đạt</th>
+            <?php foreach ($this->list_store as $key=> $store){
+                if($this->storeid >0 && $this->storeid != $store["userid"]){
+                      continue;
+                  }
+                  $storeid = $store["userid"];
+                  $phantram = round($tong_sale[$storeid]/$tong_target[$storeid]*100,2);
+                ?>
+            <td ><?php echo $phantram ?>%</td>
+            <?php }?>
+        </tr>
+        <tr>
+            <th>Tiền thưởng</th>
+            <?php foreach ($this->list_store as $key=> $store){
+                if($this->storeid >0 && $this->storeid != $store["userid"]){
+                      continue;
+                  }
+                  $storeid = $store["userid"];
+                  $phantram = round($tong_sale[$storeid]/$tong_target[$storeid]*100,2);
+                  $__total_money =0;
+                  if($phantram >50){
+                      if($phantram <70){
+                          $__total_money = $money[$storeid];
+                      }else{
+                          if($phantram <80){ //10%
+                              $__total_money = $money[$storeid] + $money[$storeid]*10/100;
+                          }else{
+                              if($phantram <90){ // 20%
+                                  $__total_money = $money[$storeid] + $money[$storeid]*20/100;
+                              }else{ // 30%
+                                  $__total_money = $money[$storeid] + $money[$storeid]*30/100;
+                              }
+                          }
+                      }
+                      
+                      
+                  }
+                ?>
+            <td ><?php echo number_format($__total_money) ?></td>
+            <?php }?>
+        </tr>
+    </table>
+  </div>
+</div>
+</div>
+<script>
+    function xem_target(){
+        $('#ids').val(0);
+        $("#frm_target").attr("action", "/admin/user/target/bybrand");
+        $("#frm_target").submit();
+    }
+    function luu_target(){
+        $.post("/admin/user/target/savebybrand", $('#frm_target').serialize(), function (resp) {
+            $.each(resp, function (i, obj) {
+                 var id = obj.id;
+                var msg = obj.msg;
+                var url = obj.url;
+                if (msg != "ok") {
+                    alert(msg);
+                    $('#' + id).focus();
+                    return false;
+                }else{
+                    alert('Đặt target thành công');
+                    window.location = url;
+                }
+            });
+        }, 'json');
+    }
+    function change_productsid_kmc() {
+        var productsid = $('#productsid option:selected').val();
+        $('#cated_id').html('');
+        $('#cated_id').html('<option value="0"> Tất cả</option>');
+        var ajaxLink = '/admin/user/ajax/get-menu';
+        $.ajax({
+            method: 'get',
+            cache: false,
+            url: ajaxLink,
+            data: {productsid: productsid},
+            dataType: 'json',
+            success: function (resp) {
+                console.log(resp);
+                $.each(resp, function (i) {
+                    html_cated_id = '<option  value="' + resp[i].itemid + '">' + resp[i].title + '</option>';
+                    $('#cated_id').append(html_cated_id);
+                });
+            }
+        });
+    }
+</script>

@@ -1,0 +1,31 @@
+<div class="box box-primary">
+                                <div class="box-header">
+                                    <h3 class="box-title">Xem Thống kê bán hàng theo tháng </h3>
+                                </div><!-- /.box-header -->
+                                <!-- form start -->
+                                <form role="form" action="/admin/user/sales/" class="frmReport">
+                                    <div class="box-body">
+                                        
+                                         <div class="form-group" style="padding-top: 10px">
+                                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Xem tháng : </label>
+                                            <div class="col-sm-8">
+                                                <select style="width: 80px" id="month_create" name="month" >
+                                                    <?php foreach ($this->months as $mth){ ?>
+                                                    <option value="<?php echo $mth ?>">
+                                                        Tháng <?php echo $mth ?>
+                                                    </option>
+                                                    <?php } ?>
+                                                </select>
+                                                <?php //echo $this->formSelect("month", $this->cur_month, array("class"=>""), $this->months); ?>
+                                            </div>          
+                                        </div>
+
+                                    </div><!-- /.box-body -->
+
+                                    <div class="box-footer">
+                                        <button type="submit" id="btnView" class="btn btn-primary">Xem</button>
+                                        <!--<a href="#" id="btnView">Lưu</a>-->
+                                    </div>
+                                </form>
+            
+</div>

@@ -1,0 +1,291 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script>
+$(function () {
+    $('#container2').highcharts({
+
+        chart: {
+            type: 'column'
+        },
+
+        title: {
+            text: 'Doanh số từng chi nhánh theo giá trị'
+        },
+
+        xAxis: {
+            categories: [<? echo $this->vote_name ?>]
+        },
+
+        yAxis: {
+            allowDecimals: false,
+            min: 0,
+            title: {
+                text: 'Tiền (x 1.000)'
+            }
+        },
+
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.x + '</b><br/>' +
+                    this.series.name + ': ' + this.y + '<br/>' +
+                    'Total: ' + this.point.stackTotal;
+            }
+        },
+
+        plotOptions: {
+            column: {
+                stacking: 'normal'
+            }
+        },
+
+        series: [
+        {name: 'ĐT-cũ',
+            data: <? echo $this->phone_old ?>,
+            stack: 'dt'
+        },
+        {
+            name: 'ĐT',
+            data: <? echo $this->phone_cty ?>,
+            stack: 'dt'
+        }, {
+            name: 'MTB',
+            data: <? echo $this->tablet_cty ?>,
+            stack: 'mtb'
+        },{
+            name: 'MTB-cũ',
+            data: <? echo $this->tablet_old ?>,
+            stack: 'mtb'
+        }, {
+            name: 'ĐHTM',
+            data: <? echo $this->watch_cty ?>,
+            stack: 'watch'
+        }]
+    });
+});
+
+$(function () {
+    $('#container').highcharts({
+
+        chart: {
+            type: 'column'
+        },
+
+        title: {
+            text: 'Doanh số từng chi nhánh theo số lượng'
+        },
+
+        xAxis: {
+            categories: [<? echo $this->vote_name ?>]
+        },
+
+        yAxis: {
+            allowDecimals: false,
+            min: 0,
+            title: {
+                text: 'Số lượng'
+            }
+        },
+
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.x + '</b><br/>' +
+                    this.series.name + ': ' + this.y + '<br/>' +
+                    'Total: ' + this.point.stackTotal;
+            }
+        },
+
+        plotOptions: {
+            column: {
+                stacking: 'normal'
+            }
+        },
+
+        series: [
+        {name: 'ĐT-cũ',
+            data: <? echo $this->cphone_old;?>,
+            stack: 'dt'
+        },
+        {
+            name: 'ĐT',
+            data: <? echo $this->cphone_cty ?>,
+            stack: 'dt'
+        }, {
+            name: 'MTB',
+            data: <? echo $this->ctablet_cty ?>,
+            stack: 'mtb'
+        },{
+            name: 'MTB-cũ',
+            data: <? echo $this->ctablet_old ?>,
+            stack: 'mtb'
+        }, {
+            name: 'ĐHTM',
+            data: <? echo $this->cwatch_cty ?>,
+            stack: 'watch'
+        }]
+    });
+});
+</script>
+<?php
+    //điện thoại khác
+    $s_dienthoai_khac = (int)$this->sum_all[1][3][3][0];
+    $c_dienthoai_khac = (int)$this->count_all[1][3][3][0];
+    // điện thoại khác cũ
+    $s_dienthoai_khac_old = (int)$this->sum_all[1][3][4][0];
+    $c_dienthoai_khac_old = (int)$this->count_all[1][3][4][0];
+    // điện thoại apple
+    $s_dienthoai_apple = (int)$this->sum_all[1][3][3][1];
+    $c_dienthoai_apple = (int)$this->count_all[1][3][3][1];
+    // điện thoại apple cũ
+    $s_dienthoai_apple_old = (int)$this->sum_all[1][3][4][1];
+    $c_dienthoai_apple_old = (int)$this->count_all[1][3][4][1];
+
+    
+    // máy tính bảng khác
+    $s_mtb_khac     = (int)$this->sum_all[1][5][3][0];
+    $c_mtb_khac     = (int)$this->count_all[1][5][3][0];
+    // máy tính bảng khác cũ
+    $s_mtb_khac_old     = (int)$this->sum_all[1][5][4][0];
+    $c_mtb_khac_old     = (int)$this->count_all[1][5][4][0];
+    // máy tính bảng apple
+    $s_mtb_apple     = (int)$this->sum_all[1][5][3][1];
+    $c_mtb_apple     = (int)$this->count_all[1][5][3][1];
+    // máy tính bảng apple cũ
+    $s_mtb_apple_old     = (int)$this->sum_all[1][5][4][1];
+    $c_mtb_apple_old     = (int)$this->count_all[1][5][4][1];
+    
+    // Phụ kiện hnam
+    $s_phukien      = (int)$this->sum_all[2][4][3][0];
+    $c_phukien      = (int)$this->count_all[2][4][3][0];
+    // Laptop
+    $s_laptop       = (int)$this->sum_all[2][6][3][0];
+    $c_laptop       = (int)$this->count_all[2][6][3][0];
+    // đồng hồ thông minh cty
+    $s_dhtm         = (int)$this->sum_all[1][8][3][0];
+    $c_dhtm         = (int)$this->count_all[1][8][3][0];
+    // đồng hồ thông minh ccũ
+    $s_dhtm_old         = (int)$this->sum_all[1][8][4][0];
+    $c_dhtm_old         = (int)$this->count_all[1][8][4][0];
+    // kho máy cũ
+    $s_khomaycu = $s_dienthoai_khac_old + $s_dienthoai_apple_old + $s_mtb_khac_old + $s_mtb_apple_old +$s_dhtm_old;
+    $c_khomaycu = $c_dienthoai_khac_old + $c_dienthoai_apple_old + $c_mtb_khac_old + $c_mtb_apple_old +$c_dhtm_old;
+    
+    $sum = $s_dienthoai_khac + $s_dienthoai_apple+ $s_mtb_apple + $s_mtb_khac + $this->kmcu[1] + $s_dhtm;
+    $count = $c_dienthoai_khac + $c_dienthoai_apple + $c_mtb_apple + $c_mtb_khac + $this->ckmcu[1] + $c_dhtm;
+
+    ?>
+<div class="box box-primary">
+    <div class="col-md-9">
+        <div class="box-header">
+            <i class="ion ion-clipboard"></i>
+            <h4 class="box-title">Báo cáo tổng quan</h4>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <br/>
+        <form >
+            <div class="input-group input-group-sm right">
+                <?php 
+                    $start_end='Date range picker';
+                    if($this->start_end !=null){
+                        $start_end = $this->start_end;
+                    }
+                    ?>
+                    <span class="input-group-btn">
+                    <button class="btn btn-default pull-right" id="daterange-btn">
+                          <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                          <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                        <i class="fa fa-caret-down"></i>
+                      </button>
+                    </span>
+                    
+                    <span class="input-group-btn">
+                    <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> Xem </i></button>
+                    </span>
+            </div>
+        </form>
+    </div>
+    <div class="box-body">
+        
+        <div class="col-md-12">
+            <div id="container2" style=" height: 350px; margin: 0 auto; margin-top:0px;"></div>
+        </div>
+        <div class="col-md-12">
+            <b><p style="color: red;font-size: 20px">Doanh số: <?php echo number_format($sum) ?></p></b>
+        </div>        
+        <div class="col-md-12">
+            <table style="font-size: small;font-weight: bold" class="table-bordered table-condensed" >
+                <tr>
+                    <th></th>
+                    <th colspan="2">CTY</th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Doanh thu</td>
+                    <td>Số lượng</td>
+                </tr>
+                
+                
+                <tr>
+                    <td>Điện thoại khác</td>
+                    <td><?php echo number_format($s_dienthoai_khac) ?></td>
+                    <td><?php echo number_format($c_dienthoai_khac) ?></td>
+                </tr>
+                <tr>
+                    <td>Điện thoại Apple</td>
+                    <td><?php echo number_format($s_dienthoai_apple) ?></td>
+                    <td><?php echo number_format($c_dienthoai_apple) ?></td>
+                </tr>
+                <tr>
+                    <td>MTB khác</td>
+                    <td><?php echo number_format($s_mtb_khac) ?></td>
+                    <td><?php echo number_format($c_mtb_khac) ?></td>
+                </tr>
+                <tr>
+                    <td>MTB Apple</td>
+                    <td><?php echo number_format($s_mtb_apple) ?></td>
+                    <td><?php echo number_format($c_mtb_apple) ?></td>
+                </tr>
+                
+<!--                <tr>
+                    <td>Phụ kiện</td>
+                    <td><?php // echo number_format($s_phukien) ?></td>
+                    <td><?php // echo number_format($c_phukien) ?></td>
+                </tr>
+                <tr>
+                    <td>Laptop</td>
+                    <td><?php // echo number_format($s_laptop) ?></td>
+                    <td><?php // echo number_format($c_laptop) ?></td>
+                </tr>-->
+                <tr>
+                    <td>Đồng hồ thông minh</td>
+                    <td><?php echo number_format($s_dhtm) ?></td>
+                    <td><?php echo number_format($c_dhtm) ?></td>
+                </tr>
+                
+                <tr>
+                    <td>Kho máy cũ</td>
+                    <td><?php echo number_format($this->kmcu[1]) ?></td>
+                    <td><?php echo number_format($this->ckmcu[1]) ?></td>
+                </tr>
+                
+                
+                <tr>
+                    <td>Tổng</td>
+                    <td><?php echo number_format($sum) ?></td>
+                    <td><?php echo number_format($count) ?></td>
+                </tr>
+            </table>
+            <p class="small" style="color:red"><i>(Đơn vị tính x 1.000)</i></p>
+        </div>
+        
+         <div class="col-md-12">
+            <div id="container" style=" height: 350px; margin: 0 auto; margin-top:0px;"></div>
+        </div><!--
+        <div class="col-md-12">
+            <b><p style="color: red;font-size: 20px">Tổng số lượng:  <?php echo $this->count ?></p></b>
+        </div>-->
+        
+        
+    </div>
+</div>

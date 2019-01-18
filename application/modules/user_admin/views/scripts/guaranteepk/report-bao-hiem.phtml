@@ -1,0 +1,293 @@
+<style>
+    #paging_klinen{
+        height: 23px;
+        width: 600px;
+    }
+    #paging_klinen img {
+        height: 25px;
+        width: 28px;
+        margin-top: -3px;
+    }
+    #paging_klinen span{
+        /*font-size: 20px;*/
+        background: #f05920;
+        color: #ffffff;
+        padding :4px 10px;
+    }
+    .pagingItems{
+        background: #f3f3f3;
+        padding :4px 10px;
+        color: #777777;
+        font-weight: bold;
+        margin-top: 5px;
+    }
+    .pagingItems hover {
+        background: #f05920;
+    }
+</style>
+<div class="panel-default">
+    <div class="box-header">
+        <i class="ion ion-clipboard"></i>
+        <h3 class="box-title">Báo cáo tổng hợp bảo hiểm</h3>
+    </div><!-- /.box-header -->
+    <form role="form" id="view-sales-day" method="get"  class="frmReport">
+        <?php if ($this->bgd == 1) { ?>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <select name="storeid" id="storeid" style="width: 100%" class="form-control selects">
+                        <option value="0">Tất cả chi nhánh</option>
+                        <?php
+                        foreach ($this->list_stores as $key => $store) {
+                            $sl = '';
+                            if ($this->storeid == $store["userid"]) {
+                                $sl = 'selected="selected"';
+                            }
+                            ?>
+                            <?php if(!in_array($store["userid"], array(764,167))): ?>
+                            <option <?php echo $sl; ?> value="<?php echo $store["userid"] ?>"><?php echo $store["storename"] ?></option>
+                            <?php endif; ?>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+        <?php } ?>
+        <div class="form-group  col-md-4">
+            <div class="input-group input-group-sm">
+                <?php
+                $start_end = 'Date range picker';
+                if ($this->start_end != null) {
+                    $start_end = $this->start_end;
+                }
+                ?>
+                <span class="input-group-btn">
+            <button class="btn btn-default pull-right" id="daterange-btn">
+                <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                <i class="fa fa-caret-down"></i>
+            </button>
+        </span>
+
+                <span class="input-group-btn">
+                <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> Tìm </i></button>
+            </span>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="clearfix"></div>
+<div class="box-body">
+    <div class="table-responsive">
+        <div class="col-md-12">
+            <div><?php echo $this->paging_template ?></div>
+        </div>
+        <div class="clearfix"></div>
+        <table id="f_tables" class="table table-data table-striped table-bordered table-hover table-condensed">
+            <?php if(!$this->storeid): ?>
+                <?php if($this->mobile): ?>
+                    <thead>
+                    <tr>
+                        <th width="100">Loại SP</th>
+                        <?php foreach($this->type as $key_type=>$type): ?>
+                            <th width="40"><?php echo $type ?></th>
+                        <?php endforeach; ?>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($this->list_store as $store_id => $store): ?>
+                        <tr>
+                            <td><?php echo $store; ?></td>
+                            <?php foreach($this->type as $key_type=>$type): ?>
+                                <td><?php echo $this->list[$key_type][$store_id]; ?></td>
+                            <?php endforeach; ?>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                <?php else: ?>
+                    <thead>
+                    <tr>
+                        <th width="200">Loại SP</th>
+                        <?php foreach ($this->list_store as $key => $store): ?>
+                            <th width="40"><?php echo $store ?></th>
+                        <?php endforeach; ?>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach($this->type as $key_type=>$type): ?>
+                        <tr>
+                            <td><?php echo $type; ?></td>
+                            <?php foreach ($this->list_store as $store_id => $store): ?>
+                                <td><?php echo $this->list[$key_type][$store_id]; ?></td>
+                            <?php endforeach; ?>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                <?php endif; ?>
+            <?php else: ?>
+                <thead>
+                <tr>
+                    <th width="100">Loại SP</th>
+                    <?php foreach($this->type as $key_type=>$type): ?>
+                        <th width="100"><?php echo $type ?></th>
+                    <?php endforeach; ?>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($this->products as $product_id => $product): ?>
+                    <tr>
+                        <td><?php echo $product['products_name']; ?></td>
+                        <?php foreach($this->type as $key_type=>$type): ?>
+                            <td><?php echo $this->list[$key_type][$product_id]; ?></td>
+                        <?php endforeach; ?>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            <?php endif; ?>
+        </table>
+    </div>
+</div><!-- /.box-body -->
+<div id="ddelete" style="display:none;"></div>
+<script type="text/javascript">
+    function printBaoHiem(bill,imes) {
+        $.ajax({
+            type: "POST",
+            url: "/admin/user/guaranteepk/print-bao-hiem",
+            data: {'bill_id': bill,'imes_may': imes},
+            success : function (data){
+                var json = JSON.parse(data);
+                if(json['stt'] == 1) {
+                    var printWindow = window.open('', '', 'height=670,width=1280');
+                    printWindow.document.write(json['html']);
+                    printWindow.document.close();
+                    printWindow.print();
+                }
+                else {
+                    alert('Phiếu in này bị lỗi');
+                }
+            }
+        });
+    }
+    function uploadBaoHiem(bill,imes,imes_may) {
+        $('#popup').show();
+        $('#formUploadBaoHiem #bill_id').val(bill);
+        $('#formUploadBaoHiem #imes_md').val(imes);
+        if(imes_may) {
+            $('#formUploadBaoHiem #newimei').hide();
+            $('#formUploadBaoHiem #imes_may').val(imes_may);
+        }
+        else {
+            $('#formUploadBaoHiem #newimei').show();
+            $('#formUploadBaoHiem #imes_may').val('');
+        }
+    }
+
+    $(document).on('click','#print',function(e){
+            var content = $("#phieu-content .print-content").html();
+            var printWindow = window.open('', '', 'height=670,width=1280');
+            printWindow.document.write(content);
+            printWindow.document.close();
+            printWindow.print();
+    });
+
+    $(document).on('click','#popup-overlay,#popup-close',function(e){
+        $('#popup').hide();
+    });
+
+    $(document).on('submit','#formUploadBaoHiem',function(e){
+        e.preventDefault();
+        var form = $(this);
+        var formData = new FormData(form[0]);
+        $.ajax({
+            type: "POST",
+            url: "/admin/user/guaranteepk/upload-bao-hiem",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success : function (data){
+                var json = JSON.parse(data);
+                if(json['stt'] == 1) {
+                    alert('Lưu thành công');
+                    location.reload();
+                }
+                else {
+                    alert('Lưu thất bại');
+                    console.log(data);
+                }
+            }
+        });
+    })
+
+
+    function resync_connect_viette(id){
+        var result = confirm('Bạn có chắc chắn muốn đấu nối lại');
+        if(result){
+            $('#ddelete').load('/kapi/rsync?id='+id, function (resp){
+                alert('Lưu thành công');
+                location.reload();
+            });
+        }
+    }
+
+    $("#f_tables").DataTable();
+    function saveseri(sim_number) {
+        var seri = $('.inputsim_' + sim_number).val();
+        $.post('/sim/get-seri?sim_number=' + sim_number + '&seri_sim=' + seri, $('form').serialize(), function (resp) {
+            $('.errblock').remove();
+            $.each(resp, function (i, obj) {
+                var id = obj.id;
+                var msg = obj.msg;
+                if (msg != "ok") {
+                    alert(msg);
+                    $('#' + id).focus();
+                    return false;
+                } else {
+                    alert("Đăng kí thành công");
+                    window.location.reload(true);
+                }
+
+            });
+        }, 'json');
+    }
+</script>
+<script>
+    $().ready(function () {
+        function keys(e)
+        {
+            var keyword = null;
+            if (window.event)
+            {
+                keyword = window.event.keyCode;
+            } else
+            {
+                keyword = e.which; //NON IE;
+            }
+            if (keyword < 48 || keyword > 57)
+            {
+                if (keyword == 48 || keyword == 127)
+                {
+                    return;
+                }
+                return false;
+            }
+        }
+        $(".pricing").keyup(function () {
+            var price = this.value;
+            price = price.replace(/,/gi, "");
+            price = price + ".";
+            price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            var sprice = price.split(".");
+            $(this).val(sprice[0]);
+        });
+//        $('#check_sim').change(function(){
+//            window.location = "<?= Globals::getBaseUrl(); ?>/sim/list?check_sim="+$('#check_sim').val();
+//        });
+    });
+</script>
+<style>
+    td,th {
+        vertical-align: middle !important;
+        text-align: center;
+    }
+    td:first-child,th:first-child {
+        text-align: left;
+    }
+</style>

@@ -1,0 +1,86 @@
+<?php
+    $ios =865; // ios    
+    $bbmh =890; // bao bể màn hình    
+    $bhmr =905; // BHMR 24 Tháng
+    $bhmc = 901; // Bảo hành máy cũ
+    $android = 929; // android
+//    $storeid = $this->storeid;
+    $userid = $this->userid;
+    $money_ios =0;
+    foreach ($this->list_store_by_user as $storeid){
+        $pesent_charge_ios = ($this->total_count_dv[$ios][$storeid] / $this->count_apples[$storeid]) * 100;
+        $nv_ios = 0;
+        $nvkt_ios = 0;
+        $ql_ios = 0;
+        if (round($pesent_charge_ios, 2) >= 30) { // đạt
+            $color = "#3c8dbc";
+            if (round($pesent_charge_ios, 2) <= 45) {
+                $nv_ios = 5 / 100;
+                $nvkt_ios = 35 / 100;
+                $ql_ios = 15 / 100;
+            } else {
+                $nv_ios = 7 / 100;
+                $nvkt_ios = 40 / 100;
+                $ql_ios = 18 / 100;
+            }
+        }
+
+        if($this->idregency==10){ //bán hàng
+            $money_ios += $this->sum_dv_user[$ios][$storeid][$userid] * $nv_ios;
+        }
+        if($this->idregency==11){ //quản lý
+            $money_ios += $this->total_sum_dv[$ios][$storeid]* $ql_ios;
+        }
+    }
+?>
+
+<div class="box-header panel-default">
+    <div class="col-md-5">
+        <h2 style="font-weight: bold">Target của <?php echo $this->detail_user["fullname"] ?></h2>
+    </div>
+     <form role="form" id="view-sales-day" method="get"  class="frmReport">
+        <div class="col-md-3">
+            <select class="form-control input-group-sm" name="month" id="month">
+<?php
+for($m=1;$m<= 12;$m++) {
+    $selected = '';
+    if ($this->month == $m) {
+        $selected = ' selected ="selected"';
+    }
+    ?>
+                            <option <?php echo $selected ?> value="<?php echo $m; ?>"> Tháng <?php echo $m; ?></option>
+                        <?php } ?>
+                    </select>
+        </div>
+        <div class="col-md-3">
+            <select class="form-control input-group-sm" name="year" id="year">
+                    <?php
+                    for($y=2014;$y<= date('Y') + 5;$y++) {
+                        $selected2 = '';
+                        if ($this->year == $y) {
+                            $selected2 = ' selected ="selected"';
+                        }
+                        ?>
+                        <option <?php echo $selected2 ?> value="<?php echo $y; ?>"> Năm <?php echo $y; ?></option>
+                    <?php } ?>
+                </select>
+        </div>
+        <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> Xem </i></button>
+         
+    </form>
+</div><!-- /.box-header -->
+<div class="box-body">
+    <div class="table-responsive">
+        <table class="table table-data table-striped table-bordered table-hover">
+            <tr>
+                <td>Gói cài đặt ios</td>
+                <td><?php echo number_format($money_ios) ?></td>
+            </tr>
+        </table>
+    </div>
+</div><!-- /.box-body -->
+<script>
+function show_sv(userid){
+    $('.frm_show_sv'+userid).toggle();
+}
+</script>

@@ -1,0 +1,256 @@
+    <div class="box-header">
+        <h3 class="box-title">CHECKED IN HẰNG NGÀY</h3>
+    </div><!-- /.box-header -->
+    <form runat="server" id="frmCodePC">
+        <div>
+            <script src="https://maps.google.com/maps?hl=it&amp;file=api&amp;v=2&amp;sensor=true&amp;" type="text/javascript"></script>
+            <script type="text/javascript">
+                var map;
+                var geocoder;
+
+                function addAddressToMap(response)
+                {
+                    if (!response || response.Status.code != 200)
+                    {
+                        alert("Sorry, we were unable to geocode that address");
+                    }
+                    else
+                    {
+                        place = response.Placemark[0];
+
+                        point = new GLatLng(place.Point.coordinates[1], place.Point.coordinates[0]);
+                        document.getElementById('address').innerHTML = place.address;
+                        $('#adr').val(place.address);
+                        var str = place.address;
+                        var a = str.lastIndexOf(",")
+                        a = a + 1
+                        var country = str.substring(a)
+                        document.getElementById('country').innerHTML = country;
+                        console.log(place.address);
+//                        return false;
+
+                    }
+                }
+
+
+                function searchGeolocation()
+                {
+                    if (navigator.geolocation)
+                    {
+                        navigator.geolocation.getCurrentPosition(function (position)
+                        {
+                            geocoder = new GClientGeocoder();
+                            document.getElementById('latitude').innerHTML = position.coords.latitude;
+                            document.getElementById('longitude').innerHTML = position.coords.longitude;
+                            coordinates = position.coords.latitude + "," + position.coords.longitude;
+                            geocoder.getLocations(coordinates, addAddressToMap);
+
+                        });
+                    } else
+                    {
+                        document.getElementById('latitude').innerHTML = "Unknown";
+                        document.getElementById('longitude').innerHTML = "Unknown";
+                        document.getElementById('address').innerHTML = "Unknown";
+                        alert("I'm sorry, but geolocation services are not supported by your browser.");
+                    }
+                }
+
+
+            </script>
+
+
+
+            <div id="latitude">loading...</div>
+            <div id="address" style="display: none">loading...</div>
+            <script type="text/javascript">
+                document.getElementById('latitude').style.display = 'none';
+            </script>
+
+            <div id="longitude">loading...</div>
+            <script type="text/javascript">
+                document.getElementById('longitude').style.display = 'none';
+            </script>
+
+            <div id="country">loading...</div>
+
+            <script type="text/javascript">
+                document.getElementById('country').style.display = 'none';
+            </script>
+
+
+
+
+        </div>
+
+        <div class="box-body">
+            <div class="col-md-6">
+                <p>Check in hoặc check out</p>
+                <div class="form-group">
+                    <select class="form-control" id="type" name="type" >
+                        <option value="0">-- Check in hoặc check out --</option>
+                        <option value="1">CheckIn</option>
+                        <option value="2">CheckOut</option>
+                    </select>
+                </div>
+                <p>Họ tên của bạn</p>
+                <div class="form-group">
+                    <input type="text" placeholder="Họ tên của bạn" disabled="true" class="form-control" value="<?php echo $this->f_name; ?>" />
+                </div>
+                <p>Địa điểm công ty hoặc ngoài công ty</p>
+                <div class="form-group">
+                        <select name="location" <?php echo $this->disabled; ?> id="location" class="form-control">
+                            <option value="0">--Địa điểm công ty hoặc ngoài công ty--</option>
+                            <?php
+                            foreach ($this->location as $key => $item) {
+                                ?>
+                                <option value="<?php echo $key ?>"><?php echo $item ?></option>
+                            <?php } ?>
+                        </select>
+                </div>
+                <p>Mô tả thêm(nếu có)</p>
+                <div class="form-group">
+                    <textarea placeholder="Mô tả thêm(nếu có)" class="form-control" name="des" id="des" ></textarea>
+                </div>
+            </div>
+            <!--<div class="clearfix"></div>-->
+            <div class="col-md-6">
+                <div  id="pcBlock">
+                    <!-- campture for destop -->
+                    <video style="border:1px solid #CCCCCC;width: 100%" id="video"  autoplay></video>
+                    <br />
+                    <p><button style="display: none;" type="button" class="btn btn-primary" id="snap0">Đang xử lý...</button></p>
+                    <p><button class="btn btn-danger" id="snap"><i class="fa fa-camera"></i> CHỤP HÌNH</button></p>
+                    <canvas style="display:none;" id="canvas" width="640" height="480"></canvas>
+                    <!-- campture for destop -->
+                </div>
+            </div>
+
+        </div>
+        <div class="box-footer">
+            <span style="color: red">
+                <strong>Lưu ý:</strong><br/>
+                + Bạn phải nhập thông tin đầy đủ ở phía trên <br/>
+                + Phải chụp hình trước khi hoàn tất.<br/>
+                </span>
+            <button type="submit" id="btnSave" class="btn btn-primary"><i class="fa fa-save"></i> Hoàn tất</button>
+            <button type="button" id="btnwaiting" style="display: none;" class="btn btn-primary">Đang xử lý...</button>
+            <input type="hidden" name="adr" id="adr" />
+            <input type="hidden" name="imageSrc" id="imageSrc" value=""/>
+                   <input type="hidden" name="link" id="link" value="<?php echo $this->link; ?>" />
+        </div>
+
+
+    </form>
+<script>
+    $().ready(function () {
+        $('#btnSave').click(function (e) {
+            e.preventDefault();
+            $('#btnwaiting').show();
+            $('#btnSave').hide();
+            var adr = $('#adr').val();
+            $.post("/admin/user/users/save-check-in", $('form').serialize(), function (resp) {
+                $.each(resp, function (i, obj) {
+                    var id = obj.id;
+                    var msg = obj.msg;
+                    if (msg != "ok") {
+                        alert(msg);
+                        $('#btnwaiting').hide();
+                        $('#btnSave').show();
+                        $('#' + id).focus();
+                        return false;
+                    } else {
+                        alert('Lưu thành công !');
+                        window.location ='/admin/user/users/detail-check-in';
+                        $('#btnwaiting').hide();
+                        $('#btnSave').show();
+                    }
+                });
+            }, 'json');
+        });
+    });
+    // Put event listeners into place
+    window.addEventListener("DOMContentLoaded", function () {
+        // Grab elements, create settings, etc.
+        var canvas = document.getElementById("canvas"),
+                context = canvas.getContext("2d"),
+                video = document.getElementById("video"),
+                videoObj = {"video": true},
+        errBack = function (error) {
+            console.log("Video capture error: ", error.code);
+        };
+        // Put video listeners into place
+        // mobile
+        if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia(videoObj).then(function(stream) {
+                    video.src = window.URL.createObjectURL(stream);
+                    video.play();
+                });
+            }else{ // end mobile
+                if (navigator.getUserMedia) { // Standard
+                    navigator.getUserMedia(videoObj, function (stream) {
+                        video.src = stream;
+                        video.play();
+                    }, errBack);
+                } else if (navigator.webkitGetUserMedia) { // WebKit-prefixed
+                    navigator.webkitGetUserMedia(videoObj, function (stream) {
+                        video.src = window.URL.createObjectURL(stream);
+                        video.play();
+                    }, errBack);
+                }
+                else if (navigator.mozGetUserMedia) { // Firefox-prefixed
+                    navigator.mozGetUserMedia(videoObj, function (stream) {
+                        video.src = window.URL.createObjectURL(stream);
+                        video.play();
+                    }, errBack);
+                }
+            }
+        // Trigger photo take
+        document.getElementById("snap").addEventListener("click", function (e) {
+            e.preventDefault();
+            searchGeolocation();
+            $("#snap").hide();
+            $("#snap0").show();
+            context.drawImage(video, 0, 0, 640, 480);
+            var image = convertCanvasToImage(canvas);
+            var imageSrc = $(image).attr("src");
+            $("#imageSrc").val(imageSrc);
+            var link = $('#link').val();
+            $.post("/admin/user/users/capture-check-in", $("#frmCodePC").serialize(), function (resp) {
+                $.each(resp, function (i, obj) {
+                    var id = obj.id;
+                    var msg = obj.msg;
+                    if (msg != "ok") {
+                        alert(msg);
+                        return false;
+                    } else {
+                        if (resp != "") {
+                            //ok
+                            $("#snap").show();
+                            $("#snap0").hide();
+                            //các tham số gọi API []
+
+                            //ex: /api/process?id=[ID]&type=[TYPE]&imgResult=[RESP]
+                            //gọi ajax cập nhật DB
+                            $('#img').attr('src', link);
+                            alert("Upload Thành công!");
+                        } else {
+                            alert("Lỗi trong quá trình chụp ảnh!");
+                        }
+                    }
+                });
+
+
+
+
+            }, "json");
+        });
+    }, false);
+    function convertCanvasToImage(canvas) {
+        var image = new Image();
+        image.src = canvas.toDataURL("image/png");
+        return image;
+    }
+//                "*,*": {
+//                    "media-stream-camera": 1
+//                  }
+</script>  

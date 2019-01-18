@@ -1,0 +1,118 @@
+    <div class="box-header">
+        <form>
+            <div class="col-md-5">
+                <h2 style="font-weight: bold">REPORT</h2> 
+            </div>
+            <div class="form-group col-md-3">
+                    <select name="storeid"  id="storeid" class="selects input-sm">
+                                <option value=""> Tất cả chi nhánh</option>
+                                <?php
+                                foreach ($this->list_store as $items) {
+                                    $sl = '';
+                                    if ($this->storeid == $items["userid"]) {
+                                        $sl = 'selected = selected';
+                                    }
+                                    ?>
+                                    <option  <?php echo $sl ?> value="<?php echo $items["userid"] ?>"> <?php echo $items["storename"] ?></option>
+                                <?php } ?>
+
+                            </select>
+                </div>
+            <div class="form-group col-md-4">
+                <div class="input-group input-group-sm">
+                    <?php
+                    $start_end = 'Date range picker';
+                    if ($this->start_end != null) {
+                        $start_end = $this->start_end;
+                    }
+                    ?>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default pull-right" id="daterange-btn">
+                            <i class="fa fa-calendar"></i> <span id="showdate"><?php echo $start_end ?></span>
+                            <input type="hidden" name="start_end" value="<?php echo $start_end ?>" id="start_end" />
+                            <i class="fa fa-caret-down"></i>
+                        </button>
+                    </span>
+
+                    <span class="input-group-btn">
+                        <button type="submit"  class="btn btn-info btn-flat"><i class="fa fa-search"> Xem </i></button>
+                    </span>
+                </div>
+            </div>
+        </form>
+
+    </div><!-- /.box-header -->
+    <div class="clearfix"></div>
+    <div class="box-body">
+        <table class="table table-condensed table-striped">
+            <tr>
+                <th></th>
+                <th colspan="2">CÔNG TY</th>
+                <th colspan="2">HNAM</th>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Tiền</td>
+                <td>Số lượng</td>
+                <td>Tiền</td>
+                <td>Số lượng</td>
+            </tr>
+            <?php 
+            $apple=1;
+            $orther =0;
+            $mtb = 5;
+            $phone = 3;
+            $laptop = 6;
+            $watch = 8;
+            ?>
+            <tr>
+                <td>Điện thoại apple</td>
+                <td><?php echo number_format($this->sum[$apple][$phone]); ?></td>
+                <td><?php echo number_format($this->total[$apple][$phone]); ?></td>
+                <td><?php echo number_format($this->sum_hnam[$apple][$phone]); ?></td>
+                <td><?php echo number_format($this->total_hnam[$apple][$phone]); ?></td>
+            </tr>
+            <tr>
+                <td>Điện thoại khác</td>
+                <td><?php echo number_format($this->sum[$orther][$phone]); ?></td>
+                <td><?php echo number_format($this->total[$orther][$phone]); ?></td>
+                <td><?php echo number_format($this->sum_hnam[$orther][$phone]); ?></td>
+                <td><?php echo number_format($this->total_hnam[$orther][$phone]); ?></td>
+            </tr>
+            <tr>
+                <td>Máy tính bảng Apple</td>
+                <td><?php echo number_format($this->sum[$apple][$mtb]); ?></td>
+                <td><?php echo number_format($this->total[$apple][$mtb]); ?></td>
+                <td><?php echo number_format($this->sum_hnam[$apple][$mtb]); ?></td>
+                <td><?php echo number_format($this->total_hnam[$apple][$mtb]); ?></td>
+            </tr>
+            <tr>
+                <td>Máy tính bảng Khác</td>
+                <td><?php echo number_format($this->sum[$orther][$mtb]); ?></td>
+                <td><?php echo number_format($this->total[$orther][$mtb]); ?></td>
+                <td><?php echo number_format($this->sum_hnam[$orther][$mtb]); ?></td>
+                <td><?php echo number_format($this->total_hnam[$orther][$mtb]); ?></td>
+            </tr>
+            <tr>
+                <td>Laptop</td>
+                <td><?php echo number_format($this->sum[$orther][$laptop]+$this->sum[$apple][$laptop]); ?></td>
+                <td><?php echo number_format($this->total[$orther][$laptop]+$this->total[$apple][$laptop]); ?></td>
+                <td><?php echo number_format($this->sum_hnam[$orther][$laptop]+$this->sum_hnam[$apple][$laptop]); ?></td>
+                <td><?php echo number_format($this->total_hnam[$orther][$laptop]+$this->total_hnam[$apple][$laptop]); ?></td>
+            </tr>
+            <tr>
+                <td>Đồng hồ thông minh</td>
+                <td><?php echo number_format($this->sum[$orther][$watch]+$this->sum[$apple][$watch]); ?></td>
+                <td><?php echo number_format($this->total[$orther][$watch]+$this->total[$apple][$laptop]); ?></td>
+                <td><?php echo number_format($this->sum_hnam[$orther][$watch]+$this->sum_hnam[$apple][$watch]); ?></td>
+                <td><?php echo number_format($this->total_hnam[$orther][$watch]+$this->total_hnam[$apple][$watch]); ?></td>
+            </tr>
+            <tr>
+                <td>Tổng</td>
+                <td><?php echo number_format($this->sum[$apple][$phone]+$this->sum[$orther][$phone] +$this->sum[$apple][$mtb] +$this->sum[$orther][$mtb]+$this->sum[$orther][$laptop]+$this->sum[$apple][$laptop]+$this->sum[$orther][$watch]+$this->sum[$apple][$watch]); ?></td>
+                <td><?php echo number_format($this->total[$apple][$phone]+$this->total[$orther][$phone] +$this->total[$apple][$mtb] +$this->total[$orther][$mtb]+$this->total[$orther][$laptop]+$this->total[$apple][$laptop]+$this->total[$orther][$watch]+$this->total[$apple][$watch]); ?></td>
+                <td><?php echo number_format($this->sum_hnam[$apple][$phone]+$this->sum_hnam[$orther][$phone] + $this->sum_hnam[$apple][$mtb] +$this->sum_hnam[$orther][$mtb]+$this->sum_hnam[$orther][$laptop]+$this->sum_hnam[$apple][$laptop]+$this->sum_hnam[$orther][$watch]+$this->sum_hnam[$apple][$watch]); ?></td>
+                <td><?php echo number_format($this->total_hnam[$apple][$phone]+$this->total_hnam[$orther][$phone] +$this->total_hnam[$apple][$mtb] +$this->total_hnam[$orther][$mtb]+$this->total_hnam[$orther][$laptop]+$this->total_hnam[$apple][$laptop]+$this->total_hnam[$orther][$watch]+$this->total_hnam[$apple][$watch]); ?></td>
+            </tr>
+        </table>
+    </div>

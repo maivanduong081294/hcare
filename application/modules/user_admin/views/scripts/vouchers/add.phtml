@@ -1,0 +1,298 @@
+<form  name="data_frm" id="formData" method="post" target="hiddenIF"  enctype="multipart/form-data">
+    <iframe  name="hiddenIF" style="display: none" scrolling="auto"></iframe>
+    <div class="box-body">
+        <div class="box-header">
+            <h3 class="box-title">TẠO VOUCHER CHO CÁC CHƯƠNG TRÌNH</h3>
+        </div><!-- /.box-header -->
+        <div id="frm_add" style="display: none">
+            <div class="col-md-4">
+                <div class="panel panel-default panel-success">
+                    <div class="panel-heading">THÔNG TIN VOUCHER</div>
+                        <div class="panel-body">
+                            <span>Tên chương trình voucher:</span>
+                            <input type="text" class="form-control" name="note" id="note" required="required" placeholder="Tên chương trình voucher...">
+                            <!--//-->
+                            <span>Loại voucher:</span>
+                            <select name="type_ctkm" id="type_ctkm" class="form-control" >
+                                <?php foreach ($this->list_type_ctkm as $key=> $val){ 
+                                    $sl='';
+                                    if($this->type_ctkm == $key){
+                                        $sl='selected="selected"';
+                                    }
+                                    ?>
+                                <option <?php echo $sl; ?> value="<?php echo $key ?>"><?php echo $val ?></option>
+                                <?php }?>
+                            </select>
+                            <!--//-->
+                            <span>Theo cateid website:</span>
+                            <input type="text" class="form-control" name="cateid" id="cateid"  placeholder="Theo cateid(nếu có)...">
+                            
+                            <!--//-->
+                            <span>Mã sản phẩm A(nếu có) :</span>
+                            <input type="text" class="form-control" name="itemid" id="itemid"  placeholder="Mã sản phẩm(nếu có)...">
+                            
+                            <!--//-->
+                            <span>Áp dụng mã sản phẩm đầu ra B (nếu có) :</span>
+                            <input type="text" class="form-control" name="itemid_tmp" id="itemid_tmp"  placeholder="Áp dụng mã sản phẩm đầu ra...">
+                            <span>Hình thức Giảm Giá:</span>
+                            <select name="code_type" id="code_type" class="form-control">
+                                <?php foreach ($this->list_cate as $key=> $items){ ?>
+                                <option value="<?php echo $key ?>"><?php echo $items ?></option>
+                                <?php }?>
+                            </select>
+                            <span>Trị giá:</span>
+                            <input type="text" class="form-control" name="code_value" id="code_value" placeholder="Giá trị" >
+                            <span>Ngày hết hạn hiệu lực (Nếu có)</span>
+                            <input type="date" class="form-control" name="code_expired" id="code_expired" placeholder="Ngày hết hạn..." />
+                            
+                            
+                        </div>
+                 </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default panel-success">
+                    <div class="panel-heading">THÔNG TIN VOUCHER</div>
+                        <div class="panel-body">
+                            <span>Loại Hàng CTY,HNAM:</span>
+                            <select data-placeholder="Cty/Hnam ..." style="width: 100%"  class="selects" name="flag" id="flag">
+                                <option value=0">Hàng Cty/Hnam</option>
+                                <option value="1">Công ty</option>
+                                <option value="2">Hnam</option>
+                            </select>
+                            <!--//-->
+                            <span>Nhóm (ĐT,MTB,PK...) :</span>
+                            <select data-placeholder="Khuyến mãi áp dụng cho nhóm sản phẩm ..." style="width: 100%"  class="selects" name="productsid[]" id="productsid"  multiple>
+                                <?php foreach ($this->list_productsid as $key=> $items){ ?>
+                                <option value="<?php echo $key; ?>"><?php echo $items; ?></option>
+                                <?php }?>
+                            </select>
+                            <!--//-->
+                            <span>Loại (Demo,Line New,SR...) :</span>
+                            <select data-placeholder="Khuyến mãi áp dụng cho loại sản phẩm ..." style="width: 100%"  class="selects" multiple name="istype[]" id="istype">
+                                <?php foreach ($this->lis_istype as $key=> $items){ ?>
+                                <option value="<?php echo $key; ?>"><?php echo $items; ?></option>
+                                <?php }?>
+                            </select>
+                            <!--//-->
+                            <span>Đặc biệt (Phụ kiện,MTB,ĐT...) :</span>
+                            <select  class="form-control" name="is_special" id="is_special">
+                                <option value="0">Thường</option>
+                                <option value="1">Đặc biệt</option>
+                            </select>
+                            
+                            <span>Số lần sử dụng theo phone:(/Tháng)</span>
+                            <input type="number" min="0" value="1" class="form-control" name="number_used" id="number_used"  placeholder="Số lần sử dụng trong tháng áp dụng với 1 số điện thoại...">
+                            <span>Số lần sử dụng:</span>
+                            <input type="number" value="1" min="0" class="form-control" name="nb_used" id="nb_used"  placeholder="Số lần sử dụng của mã voucher được cấp ra.Mặc định là sử dụng 1 lần.">
+                            <span>Các chương trình không áp dụng kèm</span>
+                            <select style="width: 100%" name="id_ctkm[]" data-placeholder="Chương trình khuyến mãi ..." class="selects" multiple id="id_ctkm">
+                                <option value="0">Áp dụng tất cả</option>
+                                <?php foreach ($this->list_ctkm as $key=> $km){ ?>
+                                <option value="<?php echo $km["id"] ?>">Không áp dụng <?php echo $km["name"]; ?></option>
+                                <?php }?>
+                            </select>
+                            <span>Áp dụng khuyến mãi:</span>
+                            <select style="width: 100%" name="nokm[]" data-placeholder="Khuyến mãi áp dụng ..." class="selects" multiple id="nokm">
+                                <option value="-1">Tất cả</option>
+                                <?php foreach ($this->km as $key=> $km){ ?>
+                                <option value="<?php echo $key ?>">Không áp dụng <?php echo $km; ?></option>
+                                <?php }?>
+                            </select>
+                        </div>
+                 </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default panel-success">
+                    <div class="panel-heading">THÔNG TIN VOUCHER</div>
+                        <div class="panel-body">
+                            <span>Giới hạn trên:</span>
+                            <input type="number" min="0" class="form-control" name="limit_up" id="limit_up"  placeholder="Giới hạn trên...">
+                            <span>Giới hạn dưới:</span>
+                            <input type="number" min="0" class="form-control" name="limit_down" id="limit_down"  placeholder="Giới hạn dưới...">
+                            <span>Tiền tố (nếu có):</span>
+                            <input type="text" class="form-control" name="tiento" id="tiento" value="" placeholder="Nhập tiền tố nếu có" />
+                            <span>Áp dụng theo số điện thoại:</span>
+                            <select class="form-control" id="access_phone" name="access_phone">
+                                <option value="0">Không</option>
+                                <option value="1">Có</option>
+                            </select>
+                            <span>Nhập nội dung tin nhắn SMS : </span>
+                            <textarea class="form-control" onKeyDown="CountLeft(this.form.sms, this.form.csms,512);" onKeyUp="CountLeft(this.form.sms,this.form.csms,512);" rows="4" cols="50" id="sms" name="sms" placeholder="Nhập nội dung tin nhắn SMS..."></textarea>
+                            <p><input class="form-control right" style="width: 50px" readonly disabled="disabled" type="text" name="csms" /></p>
+                            <p class="color_red">* VOUCHERHNAM2016 : Mã code tự phát sinh</p>
+                            <span>Trạng thái kích hoạt:</span>
+                            <label> <input type="radio" name="enabled" checked value="0" id="" /> Không kích hoạt</label>
+                            <label> <input type="radio" name="enabled" value="1" id="" /> Kích hoạt</label>
+                         </div>
+                 </div>
+            </div>
+        </div>
+        <div class="box-footer" align="right">
+            <b id="complete" align="center" class="color_red size20"></b>
+            <button type="submit" id="show" onclick="shows();return false;" class="btn btn-primary"><i class="fa fa-plus"> Thêm voucher </i></button>
+            <button type="submit" style="display: none" id="save" class="btn btn-primary"><i class="fa fa-floppy-o"> Lưu </i></button>
+            <button type="submit" style="display: none" id="close" onclick="closes();return false;" class="btn btn-danger"><i class="fa fa-times"> Đóng... </i></button>
+            <button style="display: none" type="button" id="wt" class="btn btn-primary"><i class="fa fa-spinner"> Đang xử lý</i></button>
+                    <input type="hidden" name="id" id="id" value="<?= $this->detail["id"]; ?>" />
+                </div>
+</form>
+        <div class="table-responsive">
+        <table id="f_table" class="table table-data table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th width="10">STT</th>
+                    <th>Tên CT voucher</th>
+                    <th width="100">Theo cateid</th>
+                    <th width="200">Mã sản phẩm</th>
+                    <th width="200">Sản phẩm AD</th>
+                    <th>Nhóm</th>
+                    <th>Loại sản phẩm</th>
+                    <th>Cty/Hnam</th>
+                    <th width="80">Giá trị</th>
+                    <th width="120">Ngày hết hạn</th>
+                    <th width="80">Chặn trên</th>
+                    <th width="80">Chặn dưới</th>
+                    <th width="40"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($this->list as $items){
+                    $___id = $items["id"];
+                    $productsid =explode(",", $items["productsid"]);
+                    $type = explode(",", $items["istype"]);
+                    
+                    $code_expired = '';
+                    if($items["code_expired"] != NULL && $items["code_expired"] != '0000-00-00 00:00:00'){
+                        $code_expired = date('d/m/Y',  strtotime($items["code_expired"]));
+                    }
+                    ?>
+                <tr>
+                    <td><?php echo ++$stt; ?></td>
+                    <td><a href="/admin/user/vouchers/edit/?id=<?php echo $items["id"]; ?>"><?php echo $items["note"]; ?></a></td>
+                    <td><?php echo $items["cateid"]; ?></td>
+                    <td>
+                        <textarea id="itemid<?php echo $___id; ?>"  class="form-control"><?php echo $items["itemid"]; ?></textarea><button onclick="save_itemid(<?php echo $___id; ?>);return false;" class="btn btn-sm btn-primary"><i class="fa fa-save"></i></button>
+                    </td>
+                    <td>
+                        <textarea class="form-control"><?php echo $items["itemid_tmp"]; ?></textarea>
+                    </td>
+                    <td>
+                        <?php
+                       foreach ($productsid as $val){
+                        echo $this->list_productsid[$val].",";
+                    } ?>
+                    
+                    </td>
+                    <td>
+                        <?php
+                       foreach ($type as $val){
+                        echo $this->lis_istype[$val].",";
+                    } ?>
+                    </td>
+                    <td><?php echo $this->cty_hnam[$items["flag"]] ?></td>
+                    <td><?php echo number_format($items["code_value"]); ?></td>
+                    
+                    <td><?php echo $code_expired; ?></td>
+                    <td><?php echo number_format($items["limit_down"]); ?></td>
+                    <td><?php echo number_format($items["limit_up"]); ?></td>
+                    <td>
+                        <?php if($items["enabled"]==1){ ?>
+                        <a onclick="del(<?php echo $items["id"] ?>,0);return false;" title="Delete" class="btn btn-danger btn-sm" data-toggle="tooltip" href="#"><i class="fa fa-trash-o"></i></a>
+                        <?php } else{?>
+                        <a onclick="del(<?php echo $items["id"] ?>,1);return false;" title="Đã hủy" class="btn btn-warning btn-sm" data-toggle="tooltip" href="#"><i class="fa fa-undo"></i></a>
+                        <?php }?>
+                    </td>
+                </tr>
+                <?php }?>
+            </tbody>
+        </table> 
+</div>
+</div>
+<div id="del" style="display:none;"></div>
+<script>
+    function save_itemid(id){
+        var itemid = $('#itemid'+id).val();
+        var itemid2 = encodeURIComponent(itemid);
+        var result = confirm('Bạn chắc chắn muốn lưu thông tin này không ?');
+        if (result)
+            $('#del').load('/admin/user/vouchers/saveitemid?&id=' + id+"&itemid="+itemid2, function () {
+                alert('Lưu  thành công.');
+                window.location.reload(true);
+            });
+    }
+    function shows(){
+        $('#save').hide();
+        $('#wt').show();
+    }
+    function hides(){
+        $('#save').show();
+        $('#wt').hide();
+    }
+    function CountLeft(field, count, max) {
+        if (field.value.length > max)
+        field.value = field.value.substring(0, max);
+        else
+        count.value = field.value.length;
+    }
+    function notifications (msg,id){
+        $('.tb').html('');
+        $('#'+id).focus(); 
+        alert(msg);
+        var msg_add = '<i class="fa fa-times-circle-o"> '+msg+' </i>';
+        $('#'+id+"_tb").html(msg_add);   
+//        location.reload();
+    }
+    function completes(msg){
+        $('.tb').html('');
+        var msg_add = '<i class="fa fa-check" aria-hidden="true"> </i>'+msg+'';
+        $('#complete').html(msg_add);
+        alert('Tạo voucher cho chương trình thành công.\nNếu có thắc mắc liên hệ bộ phận IT để được hỗ trợ');
+        window.location.reload(true);
+    }
+    function shows(){
+        $('#frm_add').show();
+        $('#show').hide();
+        $('#save').show();
+        $('#close').show();
+    }
+    function closes(){
+        window.location.href = "/admin/user/vouchers/add";
+    }
+    function del(id,eb) {
+        if (id != '')
+            result = confirm('Bạn chắc chắn muốn huỷ thông tin này không ?');
+        if (result)
+            $('#del').load('/admin/user/vouchers/del?&id=' + id+"&enabled="+eb, function () {
+                alert('Huỷ  thành công.');
+                window.location.reload(true);
+            });
+    }
+    
+    $().ready(function () {
+        //select
+        $(".pricing").keyup(function () {
+            var price = this.value;
+            price = price.replace(/,/gi, "");
+            price = price + ".";
+            price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            var sprice = price.split(".");
+            $(this).val(sprice[0]);
+        });
+        
+
+        $("#f_table").DataTable({
+                "pageLength": 1000,});
+    });
+function format_number(nStr)
+{
+	nStr += '';
+	x = nStr.split('.');
+	x1 = x[0];
+	x2 = x.length > 1 ? '.' + x[1] : '';
+	var rgx = /(\d+)(\d{3})/;
+	while (rgx.test(x1)) {
+		x1 = x1.replace(rgx, '$1' + ',' + '$2');
+	}
+	return x1 + x2;
+}
+</script>

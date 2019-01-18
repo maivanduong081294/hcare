@@ -1,0 +1,490 @@
+<?php
+$_scty =0;
+$_tl =1;
+    foreach ($this->ptype as $key => $items) {
+        if($key ==1 || $key ==4){
+            $others +=  $this->sum_cty[$key];
+            $others_tg +=  $this->money_cty[$key];
+        }
+        if($key ==2 || $key ==5){
+            $apples +=  $this->sum_cty[$key];
+            $apples_tg +=  $this->money_cty[$key];
+        }
+        if($key ==1 || $key ==2 || $key ==4 || $key ==5){
+            $_scty +=  $this->sum_cty[$key];
+            $_mcty +=  $this->money_cty[$key];
+            $_pt_phone_other = round($this->sum_cty[$key]/$this->money_cty[$key]*100,2);
+//            if($_pt_phone_other <75){
+//               $_tl =0; 
+//            }
+        }
+        if($key==3 || $key==9 || $key ==6){
+            continue;
+        } else {
+            $m_hnam +=$this->totals_hnam[$key];
+            $tg_hnam += $this->total_hnam[$key];
+            
+        }
+    }
+    if(round($others/$others_tg*100,2) < 75 || round($apples/$apples_tg*100,2) <75){
+        $_tl =0; 
+    }
+
+        $_thuongthem = 0;
+        $_percent = round($_scty/$_mcty * 100, 2);
+        if ($_tl == 1 && $_percent >= 80) {
+            if ($_percent >= 80) {
+                $_thuongthem = 1000000;
+            }
+            $_them = $_percent - 100;
+            if ($_them >= 5) {
+                $_thuongthem += floor($_them / 5) * 500000;
+            }
+        }
+        //
+        if ($m_hnam/$tg_hnam * 100 >= 120) {
+            $number = 10000;
+        } else {
+            $number = 5000;
+        }
+        $_percent_other =  round($others/$others_tg*100,2);
+        $_percent_apple =  round($apples/$apples_tg*100,2);
+?>
+
+
+<?php
+$_other_target = $this->money_cty[1] + $this->money_cty[4];
+$_apple_target = $this->money_cty[2] + $this->money_cty[5];
+$_target = $_other_target + $_apple_target;
+
+$_other_sales = $this->sum_cty[1] + $this->sum_cty[4];
+$_apple_sales = $this->sum_cty[2] + $this->sum_cty[5];
+$_sales = $_other_sales + $_apple_sales;
+
+$pk_sales_hnam = $this->sum_hnam[3];
+$pk_target_hnam = $this->money_hnam[3];
+
+$pk_sales_cty = $this->sum_cty[3];
+$pk_target_cty = $this->money_cty[3];
+
+
+foreach ($this->ptype as $key => $items) {
+    foreach ($this->member as  $_items) {
+        $___often[$_items["userid"]][$key] = 0;
+        $___often_hnam[$_items["userid"]][$key] = 0;
+        if ($key == 1 || $key == 2 || $key == 4 || $key == 5) {
+            if($_sales / $_target * 100 >= 80){
+                if ($key == 1 || $key == 4) {
+                    $often = 0.3;
+                } else {
+                    $often = 0.1;
+                }
+            }else{
+                if ($key == 1 || $key == 4) {
+                    $often = 0.15;
+                } else {
+                    $often = 0.05;
+                }
+            }
+
+            $___often[$_items["userid"]][$key] = $this->scty[$_items["userid"]][$key] * $often / 100;
+            $___often_hnam[$_items["userid"]][$key] = $this->tt_hnam[$_items["userid"]][$key] * $number;
+        }
+        if ($key == 6) {
+            $___often[$_items["userid"]][$key] = floor($this->scty[$_items["userid"]][$key] / 1000000) * 10000;
+            $___often_hnam[$_items["userid"]][$key] = floor($this->shnam[$_items["userid"]][$key] / 1000000) * 10000;
+        }
+        if ($key == 7 || $key == 8 || $key == 11) {
+            $___often[$_items["userid"]][$key] = $this->tt_cty[$_items["userid"]][$key] * 5000;
+            $___often_hnam[$_items["userid"]][$key] = $this->tt_hnam[$_items["userid"]][$key] * 5000;
+        }
+        if($key ==3){
+            if($pk_sales_hnam/$pk_target_hnam*100 >=70 && $pk_sales_hnam/$pk_target_hnam*100 <=80){
+                $___often_hnam[$_items["userid"]][$key] = $this->shnam[$_items["userid"]][3] *1.5/100;
+            }else{
+                if($pk_sales_hnam/$pk_target_hnam*100 >80){
+                    $___often_hnam[$_items["userid"]][$key] = $this->shnam[$_items["userid"]][3] *3/100;
+                }
+            }
+        }
+
+    }
+}
+
+
+?>
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="ion ion-clipboard"></i>
+        <h3 class="box-title">Tiền thưởng hàng tháng</h3>
+    </div><!-- /.box-header -->
+    <form role="form" id="view-sales-day" method="get"  class="frmReport">
+        <div class="box-body">
+            <div style="float: left" class="form-group">
+                <div class="input-group input-group-sm" style="width: 600px">
+                    <?php if($this->bgd ==1){ ?>
+                    <div class="input-group-addon">
+                        <i class="fa fa-star-half-o"></i>
+                    </div>
+                    <select name="storeid" <?php echo $this->disabled; ?> id="storeid" class="form-control">
+                        <option value="0">Lựa chọn tên chi nhánh</option>
+<?php
+foreach ($this->list_store as $list) {
+    $select0 = '';
+    if ($this->storeid == $list["userid"]) {
+        $select0 = 'selected="selected"';
+    }
+    ?>
+                            <option <?php echo $select0; ?> value="<?php echo $list['userid'] ?>"><?php echo $list['storename'] ?></option>
+                        <?php } ?>
+                    </select>
+                    <?php }?>
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <select class="form-control" name="month" id="month">
+<?php
+foreach ($this->months as $m) {
+    $selected = '';
+    if ($this->month == $m) {
+        $selected = ' selected ="selected"';
+    }
+    ?>
+                            <option <?php echo $selected ?> value="<?php echo $m; ?>"> Tháng <?php echo $m; ?></option>
+                        <?php } ?>
+                    </select>
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <select class="form-control" name="year" id="year">
+                        <?php
+                        foreach ($this->years as $y) {
+                            $selected2 = '';
+                            if ($this->year == $y) {
+                                $selected2 = ' selected ="selected"';
+                            }
+                            ?>
+                            <option <?php echo $selected2 ?> value="<?php echo $y; ?>"> Năm <?php echo $y; ?></option>
+                        <?php } ?>
+                    </select>
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-info btn-flat"><i class="fa fa-search"> Xem </i></button>
+                    </span>
+                </div><!-- /.input group -->
+            </div>
+        </div><!-- /.box-body -->
+
+    </form>
+
+    <div class="box-body">
+        
+        <div class="col-md-8">
+            <div class="table-responsive">
+                <b style="color: red;font-size: 15px">Tổng tiền doanh số là <?php echo number_format($this->total_money); ?></b><br/>
+                <b style="color: red;font-size: 15px">Tổng tiền thưởng PS <?php echo number_format($this->detail_recipe["often_store"]); ?></b>
+                <table class="table table-data table-striped table-bordered table-hover">
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên</th>
+                        <th>Tỷ trọng</th>
+                        <th>Tổng tiền</th>
+                        <th>Số nhân viên</th>
+                        <th>Tiền mỗi nhân viên(trung bình)</th>
+                    </tr>
+                    <?php
+                    foreach ($this->slist_reciped as $key => $items) {
+                        
+                        $link = '';
+                        $money = ($this->total_money * $items["tytrong"] / 100) / $this->arr_mb[$items["idregency"]];
+                        if ($items["idregency"] == 10) {
+//                            $link ='<a target="_blank" href="/admin/user/target/listmb">Xem chi tiết</a>';
+                            $this->arr_mb[$items["idregency"]] = $this->number_mb;
+                            $of = $items["tytrong"] / 100;
+                        }
+                        $often_store = 0;
+                        $dh='';
+                        if ($items["idregency"] == 11) {
+                            $often_store = $this->detail_recipe["often_store"];
+                            $dh='(Đã cộng Tiền PS '.number_format($often_store).')';
+                        }
+                        
+                        $moneys_member = number_format($money+$often_store);
+                        if($items["idregency"] == 10){
+                            $moneys_member = '<a onclick="views(1);return false;" id="show1" >Xem chi tiết</a><a style="display:none" id="show0" onclick="views(0);return false;" >Ẩn</a>';
+                        }
+                        
+                        ?>
+                        <tr>
+                            <td><?php echo ++$stt ?></td>
+                            <td><?php echo $items["name"]; ?></td>
+                            <td><?php echo $items["tytrong"] ?>%</td>
+                            <td><?php echo number_format(($this->total_money * $items["tytrong"] / 100) + $often_store); ?><?php echo $dh ?></td>
+                            <td><?php echo number_format($this->arr_mb[$items["idregency"]]) ?></td>
+                            <td><?php echo $moneys_member ?></td>
+                            <!--<td><?php // echo number_format($money)  ?>  <?php // echo $link;  ?></td>-->
+                        </tr>
+                    <?php } ?>
+                </table>
+            </div>
+        </div>
+        <div class="views" style="display: none">
+        <div class="col-md-12">
+            <b class="size30" style="color: red"> CTY</b>
+            <table class="table table-bordered table-striped table-condensed">
+                <tr>
+                    <th width="200"></th>
+                    <?php
+                    foreach ($this->member as $_items) {
+                        $fullname = $_items["fullname"];
+                        if ($fullname == null) {
+                            $fullname = $_items["username"];
+                        }
+                        ?>
+                        <th><?php echo $fullname ?></th>
+                <?php } ?>
+                </tr>
+                <?php
+                $ret2 = array();
+                $i=$j=0;
+                foreach ($this->ptype as $key => $items) {
+                    ?>
+                    <tr>
+                        <td><?php echo $items ?></td>
+                        <?php foreach ($this->member as  $_items) { 
+                           
+                            ?>
+                            <td>
+                                <?php // echo $of; ?>
+                                <?php // echo "thuong- ".$___often[$key]; ?> 
+                                <?php // echo "sum all- ".$this->sum_cty[$key] ?>
+                                <?php // echo "nhan vien- ".$this->scty[$_items["userid"]][$key]; ?> 
+                                <?php echo number_format($___often[$_items["userid"]][$key] * $of); ?>
+                                <?php
+                                if($key  !=6){ // trừ line new và SR
+                                $ret2[$i][$j] = $___often[$_items["userid"]][$key] * $of;
+                                }
+                                ?>
+                            </td>
+
+                        <?php 
+                        $j++;
+                        if($j>count($this->member)-1){
+                            $j=0;
+                        }
+                        } ?>
+
+                    </tr>
+
+                <?php 
+                $i++;
+                        } ?>
+                    <?php for($k=0;$k<count($this->ptype);$k++){ 
+                        for($h=0;$h<count($this->member);$h++){
+                              $kh[$h] += $ret2[$k][$h]; 
+                        }
+                        ?>
+                    <?php }?>
+                <tr>
+                    <td>Tổng</td>
+                    <?php for($g=0;$g<count($this->member);$g++){ ?>
+                    <td>
+                        <?php echo number_format($kh[$g]); ?>
+                     </td>
+                    <?php }?>
+                </tr>
+            </table>
+        </div>
+        
+       
+        <div class="col-md-12">
+            <b class="size30" style="color: red"> HNAM</b>
+            <table class="table table-bordered table-striped table-condensed">
+                <tr>
+                    <th width="200"></th>
+                    <?php
+                    foreach ($this->member as $_items) {
+                        $fullname = $_items["fullname"];
+                        if ($fullname == null) {
+                            $fullname = $_items["username"];
+                        }
+                        ?>
+                        <th><?php echo $fullname ?></th>
+                <?php } ?>
+                </tr>
+                <?php
+                $ret2 = array();
+                $i=$j=0;
+                foreach ($this->ptype as $key => $items) { 
+                    ?>
+                    <tr>
+                        <td><?php echo $items ?></td>
+                        <?php foreach ($this->member as  $_items) { 
+                            ?>
+                            <td>
+                                <?php // echo $of; ?>
+                                <?php // echo "thuong- ".$___often_hnam[$key]; ?>
+                                <?php // echo "sum all- ".$this->sum_hnam[$key] ?>
+                                <?php // echo "nhan vien- ".$this->shnam[$_items["userid"]][$key]; ?>
+                                <?php echo number_format($___often_hnam[$_items["userid"]][$key] * $of); ?>
+                                <?php
+                                if($key  !=6){ // trừ line new và SR
+                                $ret3[$i][$j] = $___often_hnam[$_items["userid"]][$key] * $of;
+                                }
+                                ?>
+                            </td>
+
+                        <?php 
+                        $j++;
+                        if($j>count($this->member)-1){
+                            $j=0;
+                        }
+                        } ?>
+
+                    </tr>
+
+                <?php 
+                $i++;
+                        } ?>
+                    <?php for($k=0;$k<count($this->ptype);$k++){ 
+                        for($h=0;$h<count($this->member);$h++){
+                              $kh2[$h] += $ret3[$k][$h]; 
+                        }
+                        ?>
+                    <?php }?>
+                <tr>
+                    <td>Tổng</td>
+                    <?php for($g=0;$g<count($this->member);$g++){ ?>
+                    <td>
+                        <?php echo number_format($kh2[$g]); ?>
+                     </td>
+                    <?php }?>
+                </tr>
+            </table>
+            <?php for($i=0;$i<count($this->member);$i++){ 
+                $__sum +=$kh[$i] + $kh2[$i];
+                } 
+                ?>
+            <b class="size30" style="color: red"> TỔNG</b>
+            <table class="table table-condensed table-bordered table-striped">
+                <tr>
+                    <th width="200">Nhân viên</th>
+                    <?php foreach ($this->member as $key=> $items){
+                        $_color='';
+                        if($items["is_actived"]==1){
+                            $_color = '#090;color:#fff';
+                        }else{
+                            $_color = 'red;color:#fff';
+                        }
+                        $fullname = $items["fullname"];
+                        if($fullname == null){
+                            $fullname = $items["username"];
+                        }
+                        
+                        $phtr = ($kh[$key] + $kh2[$key])/$__sum;
+                        ?>
+                    <th style="background: <?php echo $_color;?>"><?php echo $fullname ?> (<?php echo round($phtr * 100, 2); ?>%)->(<?php echo $this->storename[$items["parentid"]] ?>)</th>
+                    <?php }?>
+                </tr>
+                <tr>
+                    <td>Tổng</td>
+                    <?php for($i=0;$i<count($this->member);$i++){ ?>
+                    <td><?php echo number_format($kh[$i] + $kh2[$i]) ?></td>
+                    <?php } ?>
+                </tr>
+            </table>
+            <div class="btn btn-sm" style="background: #090;color: #fff"> <i class="fa fa-thumbs-up"> Kích hoạt</i></div>
+            <div class="btn btn-sm nodat"><i class="fa fa-thumbs-down"> Hủy kích hoạt </i></div>
+        </div>
+        </div>
+        <hr/>
+        <form name="">
+            <input type="hidden" name="id_recipe" id="id_recipe" value="<?php echo $this->detail_recipe["id"] ?>" />
+            <div class="col-md-8">
+                <div class="list-group">
+                <a class="list-group-item active">
+                    <b>XÁC NHẬN CHI VÀ THU HỒI TIỀN THƯỞNG HNAMMOBILE.COM</b>
+                </a>
+                    <a class="list-group-item">
+                        <div class="form-group">
+                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Số tiền thu hồi : </label>
+                            <div  class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-star"></i></span>
+                                <input type="text" style="font-size: 17px;color: red;" class="form-control prs0" onkeyup="format_price(0);return false;" name="money_retrieve" id="money_retrieve" value="<?php echo number_format($this->detail_recipe["money_retrieve"]); ?>" placeholder="Ví dụ : 850.000">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="warranty_info_id" class="col-sm-3 control-label" id="text-align-label">Nội dung thu hồi : </label>
+                            <div  class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-star"></i></span>
+                                <textarea rows="4" class="form-control" name="des_retrieve" id="des_retrieve" placeholder="Nhập nội dung thu hồi tiền vào đây nhé...." ><?php echo $this->detail_recipe["des_retrieve"]; ?></textarea>
+                            </div>
+                        </div>
+
+                    </a>
+                <a class="list-group-item">
+                        <div class="input-group input-group-sm col-md-4">
+                            <input disabled="true" type="text" style="font-size: 20px;color: red;font-weight: bold;" value="<?php echo number_format($this->total_money + $this->detail_recipe["often_store"] - $this->detail_recipe["money_retrieve"]); ?>" placeholder="Số tiền cần phải chi là" class="form-control">
+                                <span class="input-group-btn">
+                                  <button  type="button" id="complete" onclick="completes(<?php echo $this->detail_recipe["id"] ?>);return false;" class="btn btn-danger"><i class="fa fa-floppy-o"> Xác nhận hoàn tất(đã chi)</i></button>
+                                </span>
+                          </div>
+                        <button  type="button" style="display: none" id="wt" class="btn btn-primary right"><i class="fa fa-spinner"> Đang xử lý...</i></button>
+                        <button  type="button" id="save" onclick="saves();return false;" class="btn btn-primary right"><i class="fa fa-floppy-o"> Lưu</i></button>
+                </a>
+              </div>
+            </div>
+        </form>
+    </div><!-- /.box-body -->
+</div><!-- /.box -->
+<div id="del" style="display:none;"></div>
+<script>
+    function views(id){
+        if(id==1){
+            $('#show0').show();
+            $('#show1').hide();
+        }else{
+            $('#show1').show();
+            $('#show0').hide();
+        }
+        $(".views").toggle();
+    }
+    function format_price(id){
+        var price = $(".prs"+id).val();
+        price = price.replace(/,/gi, "");
+        price = price + ".";
+        price = price.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        var sprice = price.split(".");
+        $(".prs"+id).val(sprice[0]);
+    }
+    function completes(id){
+        var result = confirm('Bạn chắc chắn muốn kích hoạt không?');
+        if (result)
+        $('#del').load('/admin/user/target/complete-retrieve?id='+id, function (){
+            alert('Xác nhận thành công.');
+            window.location.reload(true);
+        });
+    }
+    
+function saves(){
+        $('#save').hide();
+        $('#wt').show();
+        $.post("/admin/user/target/save-recipe-retrieve", $('form').serialize(), function (resp) {
+            $.each(resp, function (i, obj) {
+                var id = obj.id;
+                var msg = obj.msg;
+                if (msg != "ok") {
+                    alert(msg);
+                    $('#save').show();
+                    $('#wt').hide();
+                    $('#' + id).focus();
+                    return false;
+                } else {
+                    alert('Lưu thành công');
+                    location.reload();
+                }
+
+            });
+        }, 'json');
+    }
+</script>
