@@ -9,7 +9,9 @@ class Hnamcare_IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $this->view->classBody = 'home';
+        $page = 'home';
+        $this->view->classBody = $page;
+        $this->view->menu_actived = $page;
         $seo = array(
             'seo_title' => 'HCare - Trung tâm bảo hành sửa chữa',
             'seo_description' => 'HCare - Trung tâm bảo hành sửa chữa uy tín, chất lượng tại TPHCM',

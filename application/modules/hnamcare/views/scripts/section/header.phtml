@@ -26,6 +26,7 @@ $base_url = isset($configuration->staticurl)?$configuration->staticurl:'/';
 		<meta property="og:title" content="<?php echo SEOPlugin::getTitle(); ?>" />
 		<meta property="og:description" content="<?php echo SEOPlugin::getDescriptions(); ?>" />
 		<meta property="fb:app_id" content="228843560823977" />
+		<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;subset=vietnamese" rel="stylesheet">
 		<?php
 		if(isset($_GET['css']) and $_GET['css'] == 1) {
 			echo $this->headLink();
@@ -57,14 +58,13 @@ $base_url = isset($configuration->staticurl)?$configuration->staticurl:'/';
 			<div class="header-top">
 				<div class="container">
 					<div class="header-top-wrapper">
-						<button id="menu-icon"><i class="fa fa-bars"></i></button>
-						<div class="row align-items-lg-center justify-content-lg-between">
-							<div class="logo col-lg-auto">
+						<div class="row align-items-sm-center justify-content-sm-between">
+							<div class="logo col-sm-auto">
 								<a href="<?php echo $base_url; ?>" id="logo">
 									<img src="<?php echo $base_url; ?>/hcare/images/logo.png">
 								</a>
 							</div>
-							<div class="search col-lg-auto">
+							<div class="search col-sm-auto">
 								<form id="search-form" action="/tim-kiem" method="GET">
 									<div class="search-form-wrapper">
 										<input type="text" name="keyword" id="search-keyword" placeholder="Tra cứu dịch vụ sửa chữa">
@@ -79,5 +79,91 @@ $base_url = isset($configuration->staticurl)?$configuration->staticurl:'/';
 					</div>
 				</div>
 			</div>
+			<div class="header-bottom">
+				<div class="container">
+					<div class="header-bottom-wrapper">
+						<div id="main-menu" class="d-flex align-items-lg-center">
+							<div class="service-menu">
+								<button id="menu-icon"><i class="fa fa-bars"></i><span>Danh mục dịch vụ</span></button>
+								<ul>
+									<?php foreach ($this->service_menu as $key => $menu): ?>
+										<li>
+											<a href="<?php echo (isset($menu['link']) and $menu['link'])?$menu['link']:'#'; ?>"><?php echo $menu['title']; ?></a>
+											<?php if(isset($menu['menu']) and $menu['menu']): ?>
+												<button class="service-menu-button"><i class="fa fa-angle-right" aria-hidden="true"></i></button>
+												<div class="service-menu-wrapper d-lg-flex">
+													<?php foreach ($menu['menu'] as $subkey => $sub): ?>
+														<div class="service-menu-list col-lg">
+															<?php if(isset($sub['title']) and trim($sub['title'])): ?>
+																<h3>
+																	<a href="<?php echo (isset($sub['link']) and $sub['link'])?$sub['link']:'#'; ?>"><?php echo $sub['title']; ?></a>
+																</h3>
+															<?php endif; ?>
+															<ul>
+																<?php foreach ($sub['menu'] as $sub2key => $sub2): ?>
+																	<li><a href="<?php echo (isset($sub2['link']) and $sub2['link'])?$sub2['link']:'#'; ?>"><?php echo $sub2['title']; ?></a></li>
+																<?php endforeach ?>
+															</ul>
+														</div>
+													<?php endforeach ?>
+												</div>
+											<?php endif; ?>
+										</li>
+									<?php endforeach; ?>
+								</ul>
+							</div>
+							<ul class="main-menu">
+								<?php foreach ($this->main_menu as $key => $menu): ?>
+									<li<?php if($key == $this->menu_actived) echo ' class="actived"'; ?>><a href="<?php echo (isset($menu['link']) and $menu['link'])?$menu['link']:'#'; ?>"><?php echo $menu['title']; ?></a></li>
+								<?php endforeach; ?>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
 		</header>
-		<section id="content">
+		<div id="content">
+			<section id="banner">
+				<div class="container">
+					<div class="banner-wrapper">
+						<div class="banner-list">
+							<div class="banner-list-image">
+								<div class="banner-item-image">
+									<a href="<?php echo $base_url; ?>">
+										<img data-lazy="<?php echo $base_url; ?>/hcare/images/slide-01-w960.jpg" src="<?php echo $base_url; ?>/hcare/images/slide-01-w960.jpg"/>
+									</a>
+								</div>
+								<div class="banner-item-image">
+									<a href="<?php echo $base_url; ?>">
+										<img data-lazy="<?php echo $base_url; ?>/hcare/images/slide-02-w960.jpg"/>
+									</a>
+								</div>
+								<div class="banner-item-image">
+									<a href="<?php echo $base_url; ?>">
+										<img data-lazy="<?php echo $base_url; ?>/hcare/images/slide-03-w960.jpg"/>
+									</a>
+								</div>
+								<div class="banner-item-image">
+									<a href="<?php echo $base_url; ?>">
+										<img data-lazy="<?php echo $base_url; ?>/hcare/images/slide-04-w960.jpg"/>
+									</a>
+								</div>
+							</div>
+							<div class="banner-list-title">
+								<div class="banner-item-title">
+									<div class="d-flex align-items-center text-center justify-content-center"><h4>Thay mặt kính màn hình</h4></div>
+								</div>
+								<div class="banner-item-title">
+									<div class="d-flex align-items-center text-center justify-content-center"><h4>Thay vỏ, độ vỏ, lên đời iPhone</h4></div>
+								</div>
+								<div class="banner-item-title">
+									<div class="d-flex align-items-center text-center justify-content-center"><h4>Tuyển dụng kỹ thuật viên sửa chữa</h4></div>
+								</div>
+								<div class="banner-item-title">
+									<div class="d-flex align-items-center text-center justify-content-center"><h4>Giới thiệu</h4></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
